@@ -1,9 +1,9 @@
-body {
+.App {
   margin: 0;
   font-family: Arial, sans-serif;
   display: flex;
-  height: 100vh;
   flex-direction: row;
+  height: 100vh;
 }
 
 .top-bar {
@@ -148,4 +148,229 @@ body {
 .sidebar button:hover span {
   display: block;
   visibility: visible;
+}
+
+.main {
+  flex: 2;
+  background-color: #f8f5f2;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin-top: 60px;
+  /* Height of top-bar */
+  height: calc(100vh - 60px);
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.title-edit {
+  width: 100%;
+  background-color: #d9d9d9;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+  border: #ccc 2px solid;
+  box-sizing: border-box;
+  margin-bottom: 1.5rem;
+}
+
+.title-edit-bar {
+  background-color: #d9d9d9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.title-edit-bar .title-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  flex: 1;
+  color: #00143f;
+  border: none;
+  background: transparent;
+  outline: none;
+}
+
+.title-edit-bar .arrow-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+.title-edit-dropdown {
+  background-color: #f0f0f0;
+  padding: 1rem;
+  border-radius: 0 0 6px 6px;
+  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-top: 1px solid #ccc;
+}
+
+.title-edit-dropdown.active {
+  display: flex;
+}
+
+.title-edit-dropdown input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.title-edit-dropdown .edit-btn {
+  align-self: flex-end;
+  background-color: #00143f;
+  color: white;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.question-box {
+  background-color: #001233;
+  color: #f8f5f2;
+  width: 100%;
+  max-width: 800px;
+  margin: 1.5rem auto 1.5rem auto;
+  /* Centered with margin on top/bottom */
+  padding: 1rem;
+  border-radius: 8px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.question-box label {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.question-box textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 1rem;
+  background-color: #f8f5f2;
+  color: #001233;
+  border: none;
+  border-radius: 6px;
+  resize: vertical;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.progress {
+  width: 100%;
+  margin: 0 0 2rem 0;
+  border: #ccc 2px solid;
+  border-radius: 8px;
+  background: #d9d9d9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.progress-line-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: #d9d9d9;
+  cursor: pointer;
+  user-select: none;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.progress-title {
+  color: #001233;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.arrow-btn-progress {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  color: #001233;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.progress-line {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1.5rem 0;
+  background: #f8f5f2;
+  transition: max-height 0.3s, opacity 0.3s;
+  max-height: 500px;
+  opacity: 1;
+  overflow: hidden;
+}
+
+.progress-line:not(.active) {
+  max-height: 0;
+  opacity: 0;
+  padding: 0;
+  border: none;
+}
+
+.progress-line .circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #d1d1d1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #001233;
+  border: 2px solid #001233;
+  transition: background 0.2s, color 0.2s;
+}
+
+.progress-line .circle.active {
+  background-color: #001233;
+  color: #fff;
+  border: 2px solid #001233;
+}
+
+.progress-line span {
+  color: #001233;
+  font-size: 1.5rem;
+  font-weight: bold;
+  user-select: none;
+}
+
+.nav-buttons {
+  display: flex;
+  margin-top: auto;
+  align-self: flex-end;
+  padding: 1.5rem;
+  gap: 1rem;
+}
+
+.nav-buttons button {
+  background-color: #001233;
+  color: #f8f5f2;
+  padding: 1rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
