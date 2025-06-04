@@ -20,7 +20,7 @@ body {
   padding: 0 2rem;
   z-index: 1000;
   box-sizing: border-box;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .top-bar-title {
@@ -42,7 +42,7 @@ body {
   height: 100%;
 }
 
-.top-bar-buttons button{
+.top-bar-buttons button {
   background-color: #d9d9d9;
   color: #f8f5f2;
   border: none;
@@ -51,7 +51,7 @@ body {
   border-radius: 50%;
   cursor: pointer;
   transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
   outline: none;
   padding: 0;
   position: relative;
@@ -77,11 +77,75 @@ body {
   white-space: nowrap;
   font-size: 1rem;
   font-weight: 500;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   z-index: 100;
   pointer-events: none;
 }
 
 .top-bar-buttons button:hover span {
   display: block;
+}
+
+.sidebar {
+  background-color: #192947;
+  color: white;
+  padding: 1rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 60px;
+  /* Adjust for top bar height */
+  min-width: 80px;
+  height: calc(100vh - 60px);
+  box-sizing: border-box;
+  border-right: 2px solid #ccc;
+  box-shadow: 2px 0 8px rgba(73, 73, 73, 0.1);
+}
+
+.sidebar button {
+  background-color: #d9d9d9;
+  color: #f8f5f2;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+  outline: none;
+  padding: 0;
+}
+
+.sidebar button:hover {
+  background-color: #a2a2a2;
+}
+
+.sidebar button span {
+  display: none;
+  visibility: hidden;
+  position: absolute;
+  left: 110%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  color: #001233;
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.sidebar button:hover span {
+  display: block;
+  visibility: visible;
 }
