@@ -1,5 +1,4 @@
- /* Wrapper to center the form on screen */
-.wrapper {
+ .wrapper {
   height: 100vh;
   width: 100vw;
   background-color: #f8f5f2;
@@ -8,7 +7,6 @@
   justify-content: center;
 }
 
-/* Card-like white container */
 .container {
    background: #ffffff;
   width: 340px;
@@ -20,7 +18,6 @@
   gap: 12px;
 }
 
-/* Header text */
 .header {
   text-align: center;
 }
@@ -45,7 +42,6 @@
   left: 0;
 }
 
-/* Input group */
 .inputs {
   display: flex;
   flex-direction: column;
@@ -66,7 +62,6 @@
   font-size: 13px;
 }
 
-/* Forgot password */
 .forgot-password {
   font-size: 13px;
   color: #555;
@@ -78,7 +73,7 @@
   font-weight: 500;
 }
 
-/* Submit buttons */
+
 .submit-container {
   display: flex;
   justify-content: space-between;
