@@ -1,25 +1,28 @@
 import React from 'react';
 import './LandingPage.css';
+import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
   return (
     <div className="landing-container">
       {/* Header */}
       <header className="header">
-        <div className="logo"> RESUMIX </div>
-        <nav>
-          <ul>
-            <li>Resume</li>
-            <li>Resources</li>
-            <li>Premium Services</li>
-            
-          </ul>
-        </nav>
-        <div className="auth-buttons">
-          <button className="login-btn">Login</button>
-          <button className="register-btn">Signup</button>
-        </div>
-      </header>
+  <div className="header-left logo">RESUMIX</div>
+
+  <div className="header-center">
+    <ul>
+      <li>Resume</li>
+      <li>Resources</li>
+      <li>Premium Services</li>
+    </ul>
+  </div>
+
+  <div className="auth-buttons">
+    <Link to="/login" className="login-btn">Login</Link>
+    <Link to="/signup" className="register-btn">Signup</Link>
+  </div>
+</header>
+
 
       {/* Hero Section */}
       <section className="hero">

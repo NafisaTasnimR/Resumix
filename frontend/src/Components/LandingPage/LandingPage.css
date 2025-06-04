@@ -1,3 +1,4 @@
+/* Global Reset */
 * {
   margin: 0;
   padding: 0;
@@ -10,10 +11,14 @@ body {
   color: #1a1a1a;
 }
 
+/* Main Container */
 .landing-container {
   width: 100%;
 }
 
+/* ============================= */
+/*           HEADER              */
+/* ============================= */
 .header {
   display: flex;
   justify-content: space-between;
@@ -22,56 +27,66 @@ body {
   border-bottom: 1px solid #eee;
 }
 
-.logo {
+/* Left Logo */
+.header-left {
   font-size: 26px;
   font-weight: 700;
   color: #656D4A;
+  flex-shrink: 0;
 }
 
-.logo span {
-  color: #656D4A;
+/* Center Nav */
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
 
-nav ul {
+.header-center ul {
   list-style: none;
   display: flex;
   gap: 30px;
 }
 
+.header-center li {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Right Buttons */
 .auth-buttons {
   display: flex;
   gap: 15px;
+  flex-shrink: 0;
 }
 
-.login-btn {
-  background: none;
-  border: none;
-  color: #656D4A;
-  cursor: pointer;
-  font-size: 16px;
-}
-
+.login-btn,
 .register-btn {
-  background: none;
-  border: 2px solid #656D4A;
-  color: #656D4A;
+  background-color: #656D4A;
+  color: white;
   padding: 6px 16px;
+  border: none;
   border-radius: 25px;
+  font-size: 16px;
   cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  min-width: 90px;
+  text-align: center;
+  transition: background-color 0.3s ease;
 }
 
+.login-btn:hover,
+.register-btn:hover {
+  background-color: #4d5636;
+}
+
+/* ============================= */
+/*           HERO                */
+/* ============================= */
 .hero {
   text-align: center;
   padding: 70px 20px;
-}
-
-.tagline {
-  font-weight: 500;
-  margin-bottom: 30px;
-}
-
-.tagline span {
-  color: #656D4A;
 }
 
 .hero h1 {
@@ -93,39 +108,16 @@ nav ul {
   border-radius: 20px;
   font-size: 16px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .primary-btn:hover {
-  background-color: #656D4A;
+  background-color: #4d5636;
 }
 
-.steps {
-  text-align: center;
-  padding: 50px 20px;
-}
-
-.step-intro {
-  max-width: 700px;
-  margin: auto;
-  margin-bottom: 40px;
-}
-
-.step-boxes {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-
-.step {
-  background-color: #f2f2f2;
-  padding: 20px;
-  width: 200px;
-  border-radius: 10px;
-  font-size: 18px;
-  font-weight: bold;
-}
-
+/* ============================= */
+/*         PREVIEW SECTION       */
+/* ============================= */
 .preview {
   text-align: center;
   padding: 70px 20px;
@@ -143,6 +135,33 @@ nav ul {
   margin-bottom: 25px;
 }
 
+/* ============================= */
+/*         STEPS SECTION         */
+/* ============================= */
+.steps {
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.step-boxes {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.step {
+  background-color: #f2f2f2;
+  padding: 20px;
+  width: 200px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* ============================= */
+/*       TEMPLATE SECTION        */
+/* ============================= */
 .templates {
   text-align: center;
   padding: 60px 20px;
@@ -151,6 +170,12 @@ nav ul {
 
 .templates h4 {
   color: #656D4A;
+  margin-bottom: 10px;
+}
+
+.templates h2 {
+  font-size: 26px;
+  font-weight: 700;
   margin-bottom: 10px;
 }
 

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './LoginSignup.css';
 
-export const LoginSignup = () => {
-  const [action, setAction] = useState("Sign Up");
+const LoginSignup = ({ mode }) => {
+  const [action, setAction] = useState(mode === "login" ? "Login" : "Sign Up");
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -84,3 +84,5 @@ export const LoginSignup = () => {
     </div>
   );
 };
+
+export default LoginSignup;
