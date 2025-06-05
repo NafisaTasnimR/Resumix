@@ -1,4 +1,7 @@
 import React from 'react';
+import home from './assets/icons8-home-48.png'
+import account from './assets/icons8-account-48.png'
+
 
 const TopBar = () => (
   <div className="top-bar">
@@ -7,11 +10,11 @@ const TopBar = () => (
     </div>
     <div className="top-bar-buttons">
       <button>
-        <img src="./icons8-home-48.png" alt="Home" width="30" height="30" />
+        <img src={home} alt="Home" width="30" height="30" />
         <span>Home</span>
       </button>
       <button>
-        <img src="./icons8-test-account-48.png" alt="Account" width="30" height="30" />
+        <img src={account} alt="Account" width="30" height="30" />
         <span>Account</span>
       </button>
     </div>
