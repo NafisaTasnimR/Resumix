@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
+import QuestionBox from './QuestionBox';
+import Preview from './Preview';
+
+const questions = [
+  "Your Work Experience?",
+  "Your Education?",
+  "Your Skills?",
+  "Your Projects?",
+];
 
 const ResumeEditor = () => {
   const [title, setTitle] = useState('Untitled');
   const [titleDropdownOpen, setTitleDropdownOpen] = useState(false);
-  const [progressOpen, setProgressOpen] = useState(true);
+
+  // Lifted state for answers and current question
+  const [current, setCurrent] = useState(0);
+  const [answers, setAnswers] = useState(Array(questions.length).fill(""));
 
   const toggleTitleEdit = () => setTitleDropdownOpen(!titleDropdownOpen);
-  const toggleProgressLine = () => setProgressOpen(!progressOpen);
   const saveTitle = (e) => {
     e.stopPropagation();
     const value = document.getElementById('titleInput').value;
@@ -14,48 +25,42 @@ const ResumeEditor = () => {
     setTitleDropdownOpen(false);
   };
 
+  // Handler to update answers
+  const handleAnswerChange = (value) => {
+    const updated = [...answers];
+    updated[current] = value;
+    setAnswers(updated);
+  };
+
   return (
-    <div className="main">
-      <div className="title-edit">
-        <div className="title-edit-bar" onClick={toggleTitleEdit}>
-          <span className="title-text" id="titleDisplay">{title}</span>
-          <button className="arrow-btn">{titleDropdownOpen ? '▲' : '▼'}</button>
-        </div>
-        {titleDropdownOpen && (
-          <div className="title-edit-dropdown active" id="titleDropdown">
-            <input type="text" id="titleInput" defaultValue={title} />
-            <button className="edit-btn" onClick={saveTitle}>Edit</button>
+    <div className='resume-editor'>
+      <div className="main">
+        <div className="title-edit">
+          <div className="title-edit-bar" onClick={toggleTitleEdit}>
+            <span className="title-text" id="titleDisplay">{title}</span>
+            <button className="arrow-btn">{titleDropdownOpen ? '▲' : '▼'}</button>
           </div>
-        )}
-      </div>
-
-      <div className="question-box">
-        <label htmlFor="work-exp">Your Work Experience?</label>
-        <textarea id="work-exp" defaultValue="Worked"></textarea>
-      </div>
-
-      <div className="progress">
-        <div className="progress-line-header" onClick={toggleProgressLine}>
-          <span className="progress-title">Progress Line</span>
-          <button className="arrow-btn-progress">{progressOpen ? '▲' : '▼'}</button>
+          {titleDropdownOpen && (
+            <div className="title-edit-dropdown active" id="titleDropdown">
+              <input type="text" id="titleInput" defaultValue={title} />
+              <button className="edit-btn" onClick={saveTitle}>Edit</button>
+            </div>
+          )}
         </div>
-        <div className={`progress-line${progressOpen ? ' active' : ''}`} id="progressLineDropdown">
-          <span>--</span>
-          <div className="circle">2</div>
-          <span>--</span>
-          <div className="circle active">PLI</div>
-          <span>--</span>
-          <div className="circle">4</div>
-          <span>--</span>
-        </div>
-      </div>
 
-      <div className="nav-buttons">
-        <button>&larr;</button>
-        <button>Edit</button>
-        <button>Skip</button>
-        <button>&rarr;</button>
+        <QuestionBox
+          questions={questions}
+          current={current}
+          setCurrent={setCurrent}
+          answers={answers}
+          onAnswerChange={handleAnswerChange}
+          title={title}
+        />
       </div>
+      <Preview
+        title={title}
+        answers={answers}
+      />
     </div>
   );
 };
