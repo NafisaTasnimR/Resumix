@@ -24,14 +24,15 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 20px 60px;
-  border-bottom: 1px solid #eee;
+  background-color: #656D4A;
+  border-bottom: none;
 }
 
 /* Left Logo */
 .header-left {
   font-size: 26px;
   font-weight: 700;
-  color: #656D4A;
+  color: white; 
   flex-shrink: 0;
 }
 
@@ -51,6 +52,7 @@ body {
 .header-center li {
   font-size: 16px;
   cursor: pointer;
+  color: white;
 }
 
 /* Right Buttons */
@@ -62,12 +64,13 @@ body {
 
 .login-btn,
 .register-btn {
-  background-color: #656D4A;
-  color: white;
+  background-color: white;
+  color: #656D4A;
   padding: 6px 16px;
   border: none;
   border-radius: 25px;
   font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
   text-decoration: none;
   display: inline-block;
@@ -78,7 +81,7 @@ body {
 
 .login-btn:hover,
 .register-btn:hover {
-  background-color: #4d5636;
+  background-color: #a4ac86;
 }
 
 /* ============================= */
