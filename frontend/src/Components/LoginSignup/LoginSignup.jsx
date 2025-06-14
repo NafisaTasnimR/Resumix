@@ -11,7 +11,7 @@ const LoginSignup = ({ mode }) => {
   return (
     <div className="wrapper">
       <div className="container">
-        <div className="header">
+        <div className="form-header">
           <div className="text">
             {action}
             <div className="underline"></div>
