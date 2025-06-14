@@ -27,7 +27,7 @@
 .text {
   font-size: 24px;
   font-weight: bold;
-  color: #001233;
+  color: #656D4A;
   position: relative;
   text-align: center;
   display: inline-block;
@@ -42,7 +42,7 @@
   height: 4px;
   width: 100%;
   max-width: 80px; 
-  background-color: #001233;
+  background-color: #656D4A;
   border-radius: 2px;
 }
 
@@ -73,7 +73,7 @@
 }
 
 .forgot-password span {
-  color: #001233;
+  color: #656D4A;
   cursor: pointer;
   font-weight: 500;
 }
@@ -89,7 +89,7 @@
 
 .submit {
   flex: 1;
-  background-color: #001233; 
+  background-color: #656D4A; 
   color: white;
   text-align: center;
   padding: 12px 0;
@@ -103,7 +103,7 @@
 }
 
 .submit:hover {
-  background-color: #00195f;
+  background-color: #a4ac86;
 }
 
 .divider {
@@ -130,12 +130,12 @@
 .switch-action {
   text-align: center;
   font-size: 13px;
-  color: #555; /* same as forgot-password */
+  color: #555; 
   margin-top: 10px;
 }
 
 .switch-action span {
-  color: #001233;
+  color: #656D4A;
   cursor: pointer;
   font-weight: 600;
 }
@@ -153,7 +153,7 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
   background-color: white;
-  width: 100%;               /* ⬅️ Full width like submit */
+  width: 100%;             
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
