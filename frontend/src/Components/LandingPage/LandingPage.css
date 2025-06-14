@@ -142,24 +142,63 @@ body {
 /*         STEPS SECTION         */
 /* ============================= */
 .steps {
+  padding: 60px 40px;
+  background-color: #c2c5aa;
   text-align: center;
-  padding: 40px 20px;
 }
 
-.step-boxes {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.step {
-  background-color: #f2f2f2;
-  padding: 20px;
-  width: 200px;
-  border-radius: 10px;
-  font-size: 18px;
+.steps-title {
+  font-size: 2rem;
   font-weight: bold;
+  color: black;
+  margin-bottom: 40px;
+}
+
+.step-boxes-visual {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.step-card {
+  flex: 1 1 250px;
+  max-width: 260px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 25px 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-5px);
+}
+
+.step-card img {
+  width: 90px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.step-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.step-card h3 {
+  font-size: 1.2rem;
+  color: black;
+  margin-bottom: 10px;
+}
+
+.step-card p {
+  font-size: 0.95rem;
+  color: #4a4a4a;
 }
 
 /* ============================= */

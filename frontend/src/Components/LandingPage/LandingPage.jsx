@@ -43,13 +43,36 @@ const LandingPage = () => {
 
       {/* Steps Section */}
       <section className="steps">
-        
-        <div className="step-boxes">
-          <div className="step">1. <p>Choose a Free Resume Template</p></div>
-          <div className="step">2. <p>Fill in Your Details</p></div>
-          <div className="step">3. <p>Customize Your Resume</p></div>
-          <div className="step">4. <p>Share as PDF or Web</p></div>
+        <h2 className="steps-title">Create a Perfect Resume in 4 easy steps:</h2>
+        <div className="step-boxes-visual">
+        <div className="step-card">
+        <img src="/images/step1.png" alt="Pick a Template" />
+        <div className="step-label">STEP 1</div>
+        <h3>Choose a Free Template</h3>
+        <p>Choose from templates crafted by career professionals to help you land the interview.</p>
         </div>
+
+        <div className="step-card">
+        <img src="/images/step2.png" alt="Add Expert Content" />
+        <div className="step-label">STEP 2</div>
+        <h3>Fill in Your Details</h3>
+        <p>With just a few clicks, add tailored, job-specific contents.</p>
+        </div>
+
+        <div className="step-card">
+        <img src="/images/step3.png" alt="Make it Yours" />
+        <div className="step-label">STEP 3</div>
+        <h3>Customize Your Resume</h3>
+        <p>Adjust the colors, fonts, and layout with user-friendly interface.</p>
+        </div>
+
+        <div className="step-card">
+        <img src="/images/step4.png" alt="Download" />
+        <div className="step-label">STEP 4</div>
+        <h3>Share as PDF or Web</h3>
+        <p>Download your polished resume in the preferred file format.</p>
+        </div>
+         </div>
       </section>
 
 
