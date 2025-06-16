@@ -25,11 +25,11 @@ const LandingPage = () => {
 
 
       {/* Hero Section */}
-      <section className="hero">
+    <section className="hero">
         <h1>Create a Job-Ready Resume in Few Minutes.</h1>
         <p className="subtext">Create your resume with our free builder and professional templates.</p>
         <button className="primary-btn">Build Your Resume</button>
-      </section>
+      </section> 
 
 
       {/* Live Preview */}

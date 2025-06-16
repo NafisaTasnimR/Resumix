@@ -87,10 +87,11 @@ body {
 /* ============================= */
 /*           HERO                */
 /* ============================= */
+
 .hero {
   text-align: center;
   padding: 60px 20px;
-}
+} 
 
 .hero h1 {
   font-size: 40px;
@@ -143,14 +144,14 @@ body {
 /* ============================= */
 .steps {
   padding: 60px 40px;
-  background-color: #c2c5aa;
+  background-color: #a4ac86;
   text-align: center;
 }
 
 .steps-title {
   font-size: 2rem;
   font-weight: bold;
-  color: black;
+  color: white;
   margin-bottom: 40px;
 }
 
