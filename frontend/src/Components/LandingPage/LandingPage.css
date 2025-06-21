@@ -1,0 +1,270 @@
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9;
+  color: #1a1a1a;
+}
+
+/* Main Container */
+.landing-container {
+  width: 100%;
+}
+
+/*           HEADER              */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+  background-color: #656D4A;
+  border-bottom: none;
+}
+
+/* Left Logo */
+.header-left {
+  font-size: 26px;
+  font-weight: 700;
+  color: white; 
+  flex-shrink: 0;
+}
+
+/* Center Nav */
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.header-center ul {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+}
+
+.header-center li {
+  font-size: 16px;
+  cursor: pointer;
+  color: white;
+}
+
+/* Right Buttons */
+.auth-buttons {
+  display: flex;
+  gap: 15px;
+  flex-shrink: 0;
+}
+
+.login-btn,
+.register-btn {
+  background-color: white;
+  color: #656D4A;
+  padding: 6px 16px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  min-width: 80px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.login-btn:hover,
+.register-btn:hover {
+  background-color: #a4ac86;
+}
+
+/*     COMBINED HERO & PREVIEW    */
+
+.hero-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 20px;
+  color: black; 
+}
+
+.image-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-container img {
+  width: 100%;  
+  max-width: 500px;
+  height: auto;
+}
+
+.content-container {
+   
+  flex: 1;
+  text-align: left;
+  padding: 40px 60px;
+  color: #1a1a1a;
+}
+
+.hero-preview h1 {
+  font-size: 44px;
+  line-height: 1.2;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #2b2b2b;
+}
+
+.hero-preview .subtext {
+  font-size: 17px;
+  margin-bottom: 40px; 
+}
+
+.primary-btn {
+  background-color: #656D4A;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+.primary-btn:hover {
+  background-color: #4d5636;
+}
+
+.hero-preview h1:last-of-type {
+  font-size: 32px;
+  font-weight: 700;
+  color: #444;
+  margin-top: 40px;
+
+}
+
+.hero-preview .subtext:last-of-type {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 20px; 
+}
+
+/*         STEPS SECTION         */
+
+.steps {
+  padding: 60px 40px;
+  background-color: #a4ac86;
+  text-align: center;
+}
+
+.steps-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 40px;
+}
+
+.step-boxes-visual {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.step-card {
+  flex: 1 1 250px;
+  max-width: 260px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 25px 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-5px);
+}
+
+.step-card img {
+  width: 90px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.step-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.step-card h3 {
+  font-size: 1.2rem;
+  color: black;
+  margin-bottom: 10px;
+}
+
+.step-card p {
+  font-size: 0.95rem;
+  color: #4a4a4a;
+}
+
+/*       TEMPLATE SECTION     */
+
+
+.template-section {
+  text-align: center;
+  padding: 60px 40px;
+  background-color: #ffffff;
+  color: #222;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+
+.template-section h2 {
+  font-size: 32px;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 16px;
+}
+
+.template-section p {
+  font-size: 18px;
+  color: #444;
+  max-width: 700px;
+  margin: 0 auto 30px auto;
+}
+.template-section .features {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.template-section .feature {
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  background-color: #656d4a;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.template-section .feature:hover {
+  background-color: #a4ac86;
+  color: white;
+  border-color: #a4ac86;
+}
