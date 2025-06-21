@@ -26,7 +26,7 @@ const Dashboard = () => {
     },
     {
       title: "Download Resume",
-      description: "Download your resume in PDF format.",
+      description: "Download your resume in PDF format or get a URL link.",
       image: "/download.png",
       action: () => alert("Download feature coming soon!"),
     },

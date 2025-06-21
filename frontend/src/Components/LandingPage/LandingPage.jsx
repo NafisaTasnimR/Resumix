@@ -11,8 +11,8 @@ const LandingPage = () => {
 
         <div className="header-center">
           <ul>
-            <li>Resume</li>
-            <li>Resources</li>
+            <li>Resumes</li>
+            <li>Templates</li>
             <li>Premium Services</li>
           </ul>
         </div>
@@ -42,7 +42,7 @@ const LandingPage = () => {
 
       {/* Steps Section */}
       <section className="steps">
-        <h2 className="steps-title">Create a Perfect Resume in 4 easy steps:</h2>
+        <h2 className="steps-title">Create a Perfect Resume in 4 Easy Steps:</h2>
         <div className="step-boxes-visual">
           <div className="step-card">
             <img src="/file.png" alt="Pick a Template" />
