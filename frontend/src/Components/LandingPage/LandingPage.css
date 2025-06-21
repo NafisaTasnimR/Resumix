@@ -221,50 +221,60 @@ body {
 
 /*       TEMPLATE SECTION     */
 
-
-.template-section {
-  text-align: center;
+.template-features {
   padding: 60px 40px;
-  background-color: #ffffff;
-  color: #222;
-  font-family: 'Segoe UI', sans-serif;
+  background-color: #fff;
+  color: black;
+  text-align: center;
 }
 
-
-.template-section h2 {
-  font-size: 32px;
-  font-weight: 800;
-  color: #111;
-  margin-bottom: 16px;
+.section-title {
+  font-size: 35px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: black;
 }
 
-.template-section p {
+.section-description {
   font-size: 18px;
-  color: #444;
-  max-width: 700px;
-  margin: 0 auto 30px auto;
+  color: #555;
+  margin-bottom: 40px;
 }
-.template-section .features {
+
+.feature-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px 60px;
+  justify-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.feature {
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 18px;
+  align-items: flex-start;
+  gap: 16px;
 }
 
-.template-section .feature {
-  padding: 10px 20px;
-  border: 1px solid #ddd;
-  border-radius: 999px;
-  background-color: #656d4a;
-  color: white;
-  font-size: 15px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  cursor: default;
+.feature img {
+  width: 60px;
+  height: 55px;
+  object-fit: contain;
+  margin-top: 4px;
 }
 
-.template-section .feature:hover {
-  background-color: #a4ac86;
-  color: white;
-  border-color: #a4ac86;
+.feature h3 {
+  margin: 0;
+  font-size: 25px;
+  font-weight: 750;
+  color: black;
+  margin-bottom: 10px;
+}
+
+.feature p {
+  margin: 4px 0 0;
+  font-size: 16px;
+  color: #4a4a4a;
+  margin-bottom: 35px;
 }
