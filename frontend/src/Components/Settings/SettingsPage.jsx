@@ -10,6 +10,8 @@ const SettingsPage = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [prevPassword, setPrevPassword] = useState('');
+  const [passwordStrength, setPasswordStrength] = useState('');
 
   const openModal = (type) => {
     setModalType(type);
@@ -29,15 +31,26 @@ const SettingsPage = () => {
     closeModal();
   };
 
-  const savePassword = () => {
-    if (newPassword === confirmPassword && newPassword.length > 0) {
-      setPassword('*******');
-      setPasswordError('');
-      closeModal();
-    } else {
-      setPasswordError('Passwords do not match');
-    }
+  const evaluatePasswordStrength = (password) => {
+  if (password.length < 6) return 'weak';
+  if (password.match(/[A-Z]/) && password.match(/[0-9]/) && password.length >= 8) return 'strong';
+  return 'medium';
   };
+
+
+  const savePassword = () => {
+  const actualCurrentPassword = '*******'; 
+
+  if (prevPassword !== actualCurrentPassword) {
+    setPasswordError('Previous password is incorrect');
+  } else if (newPassword === confirmPassword && newPassword.length > 0) {
+    setPassword('*******'); 
+    setPasswordError('');
+    closeModal();
+  } else {
+    setPasswordError('Passwords do not match');
+  }
+};
 
   return (
     <div className="settings-container">
@@ -93,30 +106,50 @@ const SettingsPage = () => {
 
       {/* Password Modal */}
       {modalType === 'password' && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <button className="close-btn" onClick={closeModal}>×</button>
-            <h2>Password</h2>
-            <p className="modal-label">CHANGE YOUR PASSWORD</p>
-            <input
-              type="password"
-              className="modal-input"
-              placeholder="Enter new password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-            <input
-              type="password"
-              className="modal-input"
-              placeholder="Confirm new password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-            {passwordError && <p className="password-error">{passwordError}</p>}
-            <button className="modal-save-btn" onClick={savePassword}>Save</button>
-          </div>
-        </div>
+      <div className="modal-overlay">
+      <div className="modal">
+      <button className="close-btn" onClick={closeModal}>×</button>
+      <h2>Password</h2>
+      <p className="modal-label">CHANGE YOUR PASSWORD</p>
+
+      <input
+        type="password"
+        className="modal-input"
+        placeholder="Enter current password"
+        value={prevPassword}
+        onChange={(e) => setPrevPassword(e.target.value)}
+      />
+
+      <input
+        type="password"
+        className="modal-input"
+        placeholder="Enter new password"
+        value={newPassword}
+        onChange={(e) => {
+        const value = e.target.value;
+        setNewPassword(value);
+        setPasswordStrength(evaluatePasswordStrength(value));
+         }}
+      />
+      {newPassword && (
+        <p className={`password-strength ${passwordStrength.toLowerCase()}`}>
+        Password strength is {passwordStrength}
+        </p>
       )}
+
+      <input
+        type="password"
+        className="modal-input"
+        placeholder="Confirm new password"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+      />
+      {passwordError && <p className="password-error">{passwordError}</p>}
+      <button className="modal-save-btn" onClick={savePassword}>Save</button>
+    </div>
+  </div>
+       )}
+
     </div>
   );
 };

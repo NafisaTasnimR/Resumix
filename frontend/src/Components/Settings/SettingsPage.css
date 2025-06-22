@@ -140,6 +140,7 @@
   font-size: 13px;
   color: #666;
   margin: 12px 0 6px;
+  margin-bottom: 16px;
 }
 
 .modal-input {
@@ -172,4 +173,23 @@
   font-size: 14px;
   margin: -8px 0 12px;
   text-align: left;
+}
+
+.password-strength {
+  margin-top: 2px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.password-strength.weak {
+  color: red;
+}
+
+.password-strength.medium {
+  color: orange;
+}
+
+.password-strength.strong {
+  color: green;
 }
