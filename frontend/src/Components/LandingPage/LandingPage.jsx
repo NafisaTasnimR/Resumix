@@ -1,5 +1,6 @@
 import React from 'react';
 import './LandingPage.css';
+import PostLoginHeader from '../PostLoginHeader/PostLoginHeader';
 import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
@@ -121,4 +122,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+export default LandingPage; 
