@@ -1,7 +1,9 @@
 import './PostLoginHeader.css';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const PostLoginHeader = () => {
+    const [dropdownOpen, setDropdownOpen] = useState(false);
   return (
     <>
       <header className="postlogin-header">
@@ -15,16 +17,23 @@ const PostLoginHeader = () => {
     </div>
     <div className="nav-right">
       <div className="user-dropdown">
-        <div className="user-trigger">
-          <span className="user-avatar">🔵</span>
-          <span className="user-name">Username</span>
-          <span className="dropdown-arrow">▾</span>
-        </div>
-        <div className="dropdown-content">
-          <Link to="/settings"><span role="img" aria-label="settings">⚙️</span> Settings</Link>
-          <Link to="/signout"><span role="img" aria-label="signout">↩️</span> Sign Out</Link>
-        </div>
-      </div>
+  <div className="user-trigger" onClick={() => setDropdownOpen(!dropdownOpen)}>
+    <span className="user-avatar">🔵</span>
+    <span className="user-name">Username</span>
+    <span className="dropdown-arrow">▾</span>
+  </div>
+  {dropdownOpen && (
+    <div className="dropdown-content">
+      <Link to="/settings">
+        <span role="img" aria-label="settings">⚙️</span> Settings
+      </Link>
+      <Link to="/signout">
+        <span role="img" aria-label="signout">↩️</span> Sign Out
+      </Link>
+    </div>
+  )}
+</div>
+
     </div>
   </nav>
 </header>

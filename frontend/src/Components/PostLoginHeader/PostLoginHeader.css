@@ -73,9 +73,7 @@
   font-size: 18px;
   color: white;
 }
-
 .dropdown-content {
-  display: none;
   position: absolute;
   top: 40px;
   right: 0;
@@ -86,11 +84,8 @@
   width: 200px;
   z-index: 1000;
   padding: 10px 0;
-  flex-direction: column;
-}
-
-.user-dropdown:hover .dropdown-content {
   display: flex;
+  flex-direction: column;
 }
 
 .dropdown-content a {
