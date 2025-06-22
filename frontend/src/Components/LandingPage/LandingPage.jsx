@@ -14,7 +14,7 @@ const LandingPage = () => {
           <ul>
             <li>Resumes</li>
             <li>Templates</li>
-            <li>Premium Services</li>
+            <li>Subscription</li>
           </ul>
         </div>
 

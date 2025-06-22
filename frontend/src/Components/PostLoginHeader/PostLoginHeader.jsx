@@ -9,9 +9,9 @@ const PostLoginHeader = () => {
     <div className="header-left logo">RESUMIX</div>
     
     <div className="nav-center">
-      <Link to="/resumes">RESUMES</Link>
-      <Link to="/templates">TEMPLATES</Link>
-      <Link to="/subscription">SUBSCRIPTION</Link>
+      <Link to="/resumes">Resumes</Link>
+      <Link to="/templates">Templates</Link>
+      <Link to="/subscription">Subscription</Link>
     </div>
     <div className="nav-right">
       <div className="user-dropdown">
