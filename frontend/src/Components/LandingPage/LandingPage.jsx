@@ -13,7 +13,7 @@ const LandingPage = () => {
           <ul>
             <li>Resumes</li>
             <li>Templates</li>
-            <li>Premium Services</li>
+            <li>Subscription</li>
           </ul>
         </div>
 
@@ -30,8 +30,7 @@ const LandingPage = () => {
         <div className="content-container">
           <h1>Create a Job-Ready Resume in Few Minutes</h1>
           <p className="subtext">Create your resume with our free builder and professional templates</p>
-          <button className="primary-btn">Build Your Resume</button>
-
+          <button className="primary-btn">Build Your Resume </button>
           {/* Live Preview Section */}
           <h1>Quick, Easy And Flexible Editing With Live Preview</h1>
           <p className="subtext">
@@ -121,4 +120,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+export default LandingPage; 
