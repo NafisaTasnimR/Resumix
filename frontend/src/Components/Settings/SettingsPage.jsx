@@ -51,6 +51,12 @@ const SettingsPage = () => {
         </div>
 
         <div className="settings-row">
+          <span className="label">Username:</span>
+          <span className="value">Nishat</span>
+          <div style={{ width: '50px' }}></div>
+        </div>
+
+        <div className="settings-row">
           <span className="label">Email ID:</span>
           <span className="value">{email}</span>
           <button className="edit-btn" onClick={() => openModal('email')}>
