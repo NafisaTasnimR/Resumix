@@ -27,13 +27,12 @@ const PostLoginHeader = () => {
       <Link to="/settings">
         <span role="img" aria-label="settings">⚙️</span> Settings
       </Link>
-      <Link to="/signout">
+      <Link to="/">
         <span role="img" aria-label="signout">↩️</span> Sign Out
       </Link>
     </div>
   )}
-</div>
-
+    </div>
     </div>
   </nav>
 </header>
