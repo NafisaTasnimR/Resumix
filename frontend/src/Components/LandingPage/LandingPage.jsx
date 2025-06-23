@@ -11,9 +11,9 @@ const LandingPage = () => {
 
         <div className="header-center">
           <ul>
-            <li>Resume</li>
-            <li>Resources</li>
-            <li>Premium Services</li>
+            <li>Resumes</li>
+            <li>Templates</li>
+            <li>Subscription</li>
           </ul>
         </div>
 
@@ -30,8 +30,7 @@ const LandingPage = () => {
         <div className="content-container">
           <h1>Create a Job-Ready Resume in Few Minutes</h1>
           <p className="subtext">Create your resume with our free builder and professional templates</p>
-          <button className="primary-btn">Build Your Resume</button>
-
+          <button className="primary-btn">Build Your Resume </button>
           {/* Live Preview Section */}
           <h1>Quick, Easy And Flexible Editing With Live Preview</h1>
           <p className="subtext">
@@ -42,7 +41,7 @@ const LandingPage = () => {
 
       {/* Steps Section */}
       <section className="steps">
-        <h2 className="steps-title">Create a Perfect Resume in 4 easy steps:</h2>
+        <h2 className="steps-title">Create a Perfect Resume in 4 Easy Steps:</h2>
         <div className="step-boxes-visual">
           <div className="step-card">
             <img src="/file.png" alt="Pick a Template" />
@@ -75,19 +74,50 @@ const LandingPage = () => {
       </section>
 
       {/* Templates Section */}
-      <section class="template-section">
-  <h2>Make Your Resume With Proven And Professional Templates</h2>
-  <p>Use one of our field-tested resume templates, designed by experts and typographers.</p>
-  <div class="features">
-    <div class="feature">ATS-Friendly</div>
-    <div class="feature">Professional</div>
-    <div class="feature">Modern</div>
-    <div class="feature">Creative</div>
+      <section className="template-features">
+  <div className="template-header">
+    <h2 className="section-title">Make Your Resume With Proven And Professional Templates</h2>
+    <p className="section-description">
+      Use one of our field-tested resume templates, designed by experts and typographers.
+    </p>
+  </div>
+
+  <div className="feature-row">
+    <div className="feature">
+      <img src="/checked.png" alt="ATS" />
+      <div>
+        <h3>ATS-Friendly</h3>
+        <p>Tick every box and make sure your resume is never filtered out by the hiring software.</p>
+      </div>
+    </div>
+    <div className="feature">
+      <img src="/badge.png" alt="Professional" />
+      <div>
+        <h3>Professional</h3>
+        <p>Formal layouts ideal for corporate jobs. Clean typography makes a big impact.</p>
+      </div>
+    </div>
+  </div>
+
+  <div className="feature-row">
+    <div className="feature">
+      <img src="/technology.png" alt="Modern" />
+      <div>
+        <h3>Modern</h3>
+        <p>Sleek and minimalist designs that feel current and stylish.</p>
+      </div>
+    </div>
+    <div className="feature">
+      <img src="/idea.png" alt="Creative" />
+      <div>
+        <h3>Creative</h3>
+        <p>For roles that value uniqueness. Bold designs that let you stand out.</p>
+      </div>
+    </div>
   </div>
 </section>
-
     </div>
   );
 };
 
-export default LandingPage;
+export default LandingPage; 
