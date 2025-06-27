@@ -499,12 +499,12 @@ const SubscriptionPage = () => {
                 color: '#212529',
                 marginBottom: '16px',
                 lineHeight: 1.3
-              }}>Resume & Cover Letter Builder</h3>
+              }}>Resume Check</h3>
               <p style={{
                 color: '#6c757d',
                 lineHeight: 1.6,
                 fontSize: '15px'
-              }}>Create unlimited resumes and matching cover letters in just minutes</p>
+              }}>ATS Checker that checks more than 30+ common issues and improvements</p>
             </div>
             
             <div style={{

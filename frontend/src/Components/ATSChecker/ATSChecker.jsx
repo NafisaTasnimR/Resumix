@@ -3,242 +3,228 @@ import './ATSChecker.css';
 
 const ATSChecker = () => {
   const [jobDescription, setJobDescription] = useState('');
-  const [expandedSections, setExpandedSections] = useState({});
 
-  const handleJobDescriptionChange = (e) => {
-    setJobDescription(e.target.value);
+  const scoreData = {
+    overall: 72,
+    totalIssues: 11,
+    categories: {
+      tailoring: { score: 100, status: 'good' },
+      content: { score: 70, status: 'warning' },
+      format: { score: 40, status: 'error' },
+      sections: { score: 89, status: 'good' },
+      style: { score: 86, status: 'good' }
+    },
+    issues: [
+      { name: 'ATS Parse Rate', status: 'good', icon: '✓' },
+      { name: 'Quantifying Impact', status: 'warning', icon: '⚠' },
+      { name: 'Repetition', status: 'good', icon: '✓' },
+      { name: 'Spelling & Grammar', status: 'warning', icon: '⚠' }
+    ]
   };
 
-  const toggleSection = (sectionId) => {
-    setExpandedSections(prev => ({
-      ...prev,
-      [sectionId]: !prev[sectionId]
-    }));
+  const getScoreColor = (score) => {
+    if (score >= 80) return '#10B981';
+    if (score >= 60) return '#F59E0B';
+    return '#EF4444';
   };
 
-  const handleSampleJobPost = (e) => {
-    e.preventDefault();
-    const sampleJob = `Senior Software Engineer - Full Stack
-
-We are looking for a Senior Software Engineer to join our dynamic team. You will be responsible for developing and maintaining web applications using modern technologies.
-
-Requirements:
-- 5+ years of experience in full-stack development
-- Proficiency in JavaScript, React, Node.js
-- Experience with cloud platforms (AWS, Azure)
-- Strong problem-solving skills
-- Bachelor's degree in Computer Science or related field
-
-Responsibilities:
-- Design and develop scalable web applications
-- Collaborate with cross-functional teams
-- Write clean, maintainable code
-- Participate in code reviews
-- Mentor junior developers
-
-We offer competitive salary, health benefits, and flexible working arrangements.`;
-    
-    setJobDescription(sampleJob);
-  };
-
-  const handleGetInsights = () => {
-    if (jobDescription.trim()) {
-      alert('Analyzing job description...\n\nThis would typically generate tailored insights based on the job requirements and compare them with your resume content.');
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'good': return '#10B981';
+      case 'warning': return '#F59E0B';
+      case 'error': return '#EF4444';
+      default: return '#6B7280';
     }
   };
-
-  const handleMetricClick = (metric) => {
-    alert(`This would expand to show detailed breakdown of the ${metric} metric.`);
-  };
-
-  const metricsData = [
-    { label: 'TAILORING', value: '100%', type: 'percentage-100' },
-    { label: 'CONTENT', value: '70%', type: 'percentage-70' },
-    { label: 'ATS Parse Rate', icon: '✓', status: 'status-good' },
-    { label: 'Quantifying Impact', icon: '⚠', status: 'status-warning' },
-    { label: 'Repetition', icon: '✓', status: 'status-good' },
-    { label: 'Spelling & Grammar', icon: '⚠', status: 'status-warning' },
-    { label: 'FORMAT', value: '40%', type: 'percentage-40' },
-    { label: 'SECTIONS', value: '89%', type: 'percentage-89' },
-    { label: 'STYLE', value: '86%', type: 'percentage-86' }
-  ];
-
-  const sectionsData = [
-    {
-      id: 'content',
-      name: 'CONTENT',
-      score: '70%',
-      scoreClass: 'percentage-70',
-      description: 'Your content analysis shows room for improvement in several key areas. Focus on quantifying your achievements with specific metrics and numbers.',
-      issues: [
-        { type: 'warning', text: 'Add more quantified achievements to demonstrate impact' },
-        { type: 'warning', text: 'Include industry-specific keywords from job description' },
-        { type: 'error', text: 'Remove redundant information between sections' }
-      ]
-    },
-    {
-      id: 'format',
-      name: 'FORMAT',
-      score: '40%',
-      scoreClass: 'percentage-40',
-      description: 'Your resume format needs significant improvements to ensure ATS compatibility and professional appearance.',
-      issues: [
-        { type: 'error', text: 'Use standard section headers (Experience, Education, Skills)' },
-        { type: 'error', text: 'Ensure consistent font sizes and spacing' },
-        { type: 'warning', text: 'Optimize white space for better readability' }
-      ]
-    },
-    {
-      id: 'sections',
-      name: 'SECTIONS',
-      score: '89%',
-      scoreClass: 'percentage-89',
-      description: 'Great job! Your resume has most of the essential sections. Consider adding a few optional sections to stand out.',
-      issues: [
-        { type: 'good', text: 'Professional experience section is well-structured' },
-        { type: 'good', text: 'Education section includes relevant details' },
-        { type: 'warning', text: 'Consider adding a "Projects" or "Certifications" section' }
-      ]
-    }
-  ];
 
   return (
-    <div className="ats-resume-checker">
-      <header className="header">
-        <div className="header-content">
-        </div>
-      </header>
-
+    <div className="resume-checker">
       <div className="main-container">
-        <aside className="sidebar">
+        {/* Left Sidebar */}
+        <div className="left-sidebar">
           <div className="score-section">
-            <h2 className="score-title">Your Score</h2>
-            <div className="score-display">72/100</div>
-            <div className="issues-count">11 Issues</div>
-          </div>
-
-          <div className="metrics-section">
-            {metricsData.map((metric, index) => (
-              <div key={index} className="metric-item">
-                <div className="metric-label">
-                  {metric.icon && (
-                    <span className={`status-icon ${metric.status}`}>
-                      {metric.icon}
-                    </span>
-                  )}
-                  {metric.label}
-                </div>
-                <div className="metric-value">
-                  {metric.value && (
-                    <>
-                      <span className={`percentage ${metric.type}`}>
-                        {metric.value}
-                      </span>
-                      <span 
-                        className="chevron"
-                        onClick={() => handleMetricClick(metric.label)}
-                      >
-                        ▼
-                      </span>
-                    </>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <button className="btn btn-primary unlock-btn">
-            Unlock Full Report 🚀
-          </button>
-        </aside>
-
-        <main className="main-content">
-          <div className="content-header">
-            <div className="content-icon">🎯</div>
-            <div>
-              <h1 className="content-title">RESUME TAILORING</h1>
-              <p className="content-subtitle">
-                Paste <strong>the job you're applying for</strong> and our checker will give you job-specific resume tailoring suggestions.
-              </p>
+            <h2>Your Score</h2>
+            <div className="score-display">
+              <span className="score-number">{scoreData.overall}</span>
+              <span className="score-total">/100</span>
             </div>
+            <p className="issues-count">{scoreData.totalIssues} Issues</p>
           </div>
 
-          <div className="content-body">
-            <div className="job-input-section">
-              <label className="input-label">Get a job-specific report</label>
-              <div className="job-input-container">
-                <textarea 
-                  className="job-textarea" 
-                  placeholder="Paste job description here..."
-                  value={jobDescription}
-                  onChange={handleJobDescriptionChange}
-                />
-              </div>
-              <div className="input-actions">
-                <a href="#" className="sample-job-link" onClick={handleSampleJobPost}>
-                  📄 Use a Sample Job Post
-                </a>
-                <button 
-                  className={`btn ${jobDescription.trim() ? 'btn-primary' : 'get-insights-btn'}`}
-                  disabled={!jobDescription.trim()}
-                  onClick={handleGetInsights}
-                >
-                  🎯 Get Tailored Insights
-                </button>
-              </div>
-            </div>
-
-            <div className="skills-section">
-              <div className="skills-header">
-                <h3 className="skills-title">
-                  🔒 HARD SKILLS
-                </h3>
-                <div className="premium-badge">
-                  ⭐ PREMIUM
-                </div>
-              </div>
-
-              {sectionsData.map((section) => (
-                <div key={section.id} className="expandable-section">
-                  <div 
-                    className="section-header" 
-                    onClick={() => toggleSection(section.id)}
+          <div className="categories-section">
+            <div className="category-item">
+              <div className="category-header">
+                <span className="category-name">TAILORING</span>
+                <div className="category-score-container">
+                  <span 
+                    className="category-score"
+                    style={{ backgroundColor: getScoreColor(scoreData.categories.tailoring.score) }}
                   >
-                    <div className="section-title-with-score">
-                      <span>{section.name}</span>
-                      <span className={`section-score ${section.scoreClass}`}>
-                        {section.score}
-                      </span>
-                    </div>
-                    <span className={`chevron ${expandedSections[section.id] ? 'expanded' : ''}`}>
-                      ▼
-                    </span>
-                  </div>
-                  <div className={`section-content ${expandedSections[section.id] ? 'expanded' : ''}`}>
-                    <p style={{ color: '#4a5568', lineHeight: '1.6' }}>
-                      {section.description}
-                    </p>
-                    <ul className="issue-list">
-                      {section.issues.map((issue, index) => (
-                        <li key={index} className="issue-item">
-                          <span className={`status-icon status-${issue.type}`}>
-                            {issue.type === 'good' ? '✓' : issue.type === 'warning' ? '⚠' : '✗'}
-                          </span>
-                          <span>{issue.text}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                    {scoreData.categories.tailoring.score}%
+                  </span>
+                  <span className="chevron">▼</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="category-item">
+              <div className="category-header">
+                <span className="category-name">CONTENT</span>
+                <div className="category-score-container">
+                  <span 
+                    className="category-score"
+                    style={{ backgroundColor: getScoreColor(scoreData.categories.content.score) }}
+                  >
+                    {scoreData.categories.content.score}%
+                  </span>
+                  <span className="chevron">▼</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="issues-list">
+              {scoreData.issues.map((issue, index) => (
+                <div key={index} className="issue-item">
+                  <span 
+                    className="issue-icon" 
+                    style={{ color: getStatusColor(issue.status) }}
+                  >
+                    {issue.icon}
+                  </span>
+                  <span className="issue-name">{issue.name}</span>
                 </div>
               ))}
             </div>
 
-            <div className="bottom-actions">
-              <button className="btn edit-fix-btn">Edit & Fix Resume</button>
-              <button className="btn delete-btn">Permanently Delete Report Data</button>
+            <div className="category-item">
+              <div className="category-header">
+                <span className="category-name">FORMAT</span>
+                <div className="category-score-container">
+                  <span 
+                    className="category-score"
+                    style={{ backgroundColor: getScoreColor(scoreData.categories.format.score) }}
+                  >
+                    {scoreData.categories.format.score}%
+                  </span>
+                  <span className="chevron">▼</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="category-item">
+              <div className="category-header">
+                <span className="category-name">SECTIONS</span>
+                <div className="category-score-container">
+                  <span 
+                    className="category-score"
+                    style={{ backgroundColor: getScoreColor(scoreData.categories.sections.score) }}
+                  >
+                    {scoreData.categories.sections.score}%
+                  </span>
+                  <span className="chevron">▼</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="category-item">
+              <div className="category-header">
+                <span className="category-name">STYLE</span>
+                <div className="category-score-container">
+                  <span 
+                    className="category-score"
+                    style={{ backgroundColor: getScoreColor(scoreData.categories.style.score) }}
+                  >
+                    {scoreData.categories.style.score}%
+                  </span>
+                  <span className="chevron">▼</span>
+                </div>
+              </div>
             </div>
           </div>
-        </main>
+
+          <button className="unlock-report-btn">
+            <span className="btn-icon">🎯</span>
+            Unlock Full Report
+          </button>
+        </div>
+
+        {/* Right Content Area */}
+        <div className="content-area">
+          <div className="resume-tailoring-section">
+            <div className="tailoring-header">
+              <div className="tailoring-icon">🎯</div>
+              <div className="tailoring-content">
+                <h2>RESUME TAILORING</h2>
+                <p>Paste <strong>the job you're applying for</strong> and our checker will give you job-specific resume tailoring suggestions.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="job-report-section">
+            <h3>Get a job-specific report</h3>
+            <textarea
+              className="job-description-input"
+              placeholder="Paste job description here..."
+              value={jobDescription}
+              onChange={(e) => setJobDescription(e.target.value)}
+            />
+            
+            <div className="action-buttons">
+              <button className="sample-job-btn">
+                📄 Use a Sample Job Post
+              </button>
+              <button className="tailored-insights-btn">
+                <span className="btn-icon">🎯</span>
+                Get Tailored Insights
+              </button>
+            </div>
+          </div>
+
+          <div className="hard-skills-section">
+            <div className="premium-badge">
+              <span className="lock-icon">🔒</span>
+              <span>PREMIUM</span>
+            </div>
+            <h3>🔒 HARD SKILLS</h3>
+            
+            <div className="skills-categories">
+              <div className="skill-category">
+                <div className="skill-header">
+                  <span>CONTENT</span>
+                  <div className="skill-right">
+                    <span className="skill-score" style={{ backgroundColor: getScoreColor(70) }}>70%</span>
+                    <span className="chevron">▼</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="skill-category">
+                <div className="skill-header">
+                  <span>FORMAT</span>
+                  <div className="skill-right">
+                    <span className="skill-score" style={{ backgroundColor: getScoreColor(40) }}>40%</span>
+                    <span className="chevron">▼</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="skill-category">
+                <div className="skill-header">
+                  <span>SECTIONS</span>
+                  <div className="skill-right">
+                    <span className="skill-score" style={{ backgroundColor: getScoreColor(89) }}>89%</span>
+                    <span className="chevron">▼</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bottom-actions">
+            <button className="edit-resume-btn">Edit & Fix Resume</button>
+            <button className="delete-data-btn">Permanently Delete Report Data</button>
+          </div>
+        </div>
       </div>
     </div>
   );
