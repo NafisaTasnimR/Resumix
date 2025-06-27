@@ -157,6 +157,8 @@
   position: absolute;
   bottom: 30px;
   right: 30px;
+  display: flex;
+  gap: 15px;
 }
 
 .nav-button {
@@ -180,6 +182,39 @@
 .arrow {
   font-size: 18px;
   font-weight: bold;
+}
+
+.current-job-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 15px;
+  background-color: rgba(164, 172, 134, 0.4);
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+.checkbox-input {
+  width: 18px;
+  height: 18px;
+  accent-color: #4a90e2;
+}
+
+.checkbox-label {
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.textarea-field {
+  min-height: 100px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.next-button {
+  margin-left: 15px;
 }
 
 /* Responsive Design */
