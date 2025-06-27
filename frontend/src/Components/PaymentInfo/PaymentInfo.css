@@ -40,7 +40,7 @@ body {
 }
 
 .step.completed {
-  color: #28a745;
+  color: #656d4a;
 }
 
 .step.active {
@@ -62,7 +62,7 @@ body {
 }
 
 .step.completed .step-icon {
-  background-color: #28a745;
+  background-color: #656d4a;
   color: white;
 }
 
