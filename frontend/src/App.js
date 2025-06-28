@@ -5,6 +5,7 @@ import LoginSignup from './Components/LoginSignup/LoginSignup';
 import SettingsPage from './Components/Settings/SettingsPage';
 import PostLoginHeader from './Components/PostLoginHeader/PostLoginHeader';
 import RoutingComponent from './Components/RoutingComponent';
+import PostLandingComponent from './Components/PostLandingComponent';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/postlogin/" element={<PostLoginHeader />} />
       </Routes>
       <RoutingComponent />
+      <PostLandingComponent />
      
     </Router>
   );
