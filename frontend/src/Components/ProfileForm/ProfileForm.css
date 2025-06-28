@@ -184,26 +184,61 @@
 }
 
 .nav-button {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
+  padding: 12px 24px;
+  border-radius: 25px;
   border: 2px solid #333;
   background-color: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: 80px;
 }
 
 .nav-button:hover {
   background-color: #333;
   color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.arrow {
-  font-size: 18px;
-  font-weight: bold;
+.prev-button {
+  background-color: #a4ac86;
+  border-color: #a4ac86;
+  color: white;
+}
+
+.prev-button:hover {
+  background-color: #656d4a;
+  color: white;
+}
+
+.next-button {
+  margin-left: 15px;
+  background-color: #a4ac86;
+  border-color: #a4ac86;
+  color: white;
+}
+
+.next-button:hover {
+ background-color: #656d4a;
+  color: white;
+}
+
+.submit-nav-button {
+  margin-left: 15px;
+  background-color: #28a745;
+  border-color: #28a745;
+  color: white;
+  font-weight: 700;
+}
+
+.submit-nav-button:hover {
+  background-color: #218838;
+  border-color: #218838;
 }
 
 .current-job-checkbox {
@@ -243,7 +278,7 @@
 
 .submit-button {
   padding: 15px 40px;
-  background-color: #4a90e2;
+  background-color: #a4ac86;
   color: white;
   border: none;
   border-radius: 6px;
@@ -255,7 +290,7 @@
 }
 
 .submit-button:hover {
-  background-color: #357abd;
+  background-color: #656d4a;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
@@ -263,6 +298,19 @@
 .submit-button:active {
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.submit-nav-button {
+  margin-left: 15px;
+  background-color: #a4ac86;
+  border-color: #a4ac86;
+  color: white;
+  font-weight: 700;
+}
+
+.submit-nav-button:hover {
+  background-color: #656d4a;
+  border-color: #a4ac86;
 }
 
 .submit-section {
@@ -273,7 +321,7 @@
 
 .submit-button {
   padding: 15px 40px;
-  background-color: #A4AC86;
+  background-color: #a4ac86;
   color: white;
   border: none;
   border-radius: 6px;
@@ -285,7 +333,7 @@
 }
 
 .submit-button:hover {
-  background-color: #656D4a;
+  background-color: #656d4a;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
@@ -293,10 +341,6 @@
 .submit-button:active {
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.next-button {
-  margin-left: 15px;
 }
 
 /* Responsive Design */

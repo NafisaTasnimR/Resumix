@@ -216,12 +216,6 @@ const ProfileForm = () => {
             <label htmlFor="currentInstitute" className="checkbox-label">Set as Current Institute</label>
           </div>
         </div>
-
-        <div className="field-group submit-section">
-          <button className="submit-button" onClick={handleSubmit}>
-            Submit
-          </button>
-        </div>
       </div>
     </>
   );
@@ -229,7 +223,6 @@ const ProfileForm = () => {
   return (
     <div className="resume-container">
       <div className="resume-header">
-        
         <div className="header-line"></div>
       </div>
 
@@ -276,13 +269,23 @@ const ProfileForm = () => {
 
       <div className="navigation">
         {(currentPage === 'experience' || currentPage === 'education') && (
-          <button className="nav-button" onClick={handlePrevPage}>
-            <span className="arrow">←</span>
+          <button className="nav-button prev-button" onClick={handlePrevPage}>
+            Prev
           </button>
         )}
-        {(currentPage === 'personal' || currentPage === 'experience') && (
+        {currentPage === 'personal' && (
           <button className="nav-button next-button" onClick={handleNextPage}>
-            <span className="arrow">→</span>
+            Next
+          </button>
+        )}
+        {currentPage === 'experience' && (
+          <button className="nav-button next-button" onClick={handleNextPage}>
+            Next
+          </button>
+        )}
+        {currentPage === 'education' && (
+          <button className="nav-button submit-nav-button" onClick={handleSubmit}>
+            Submit
           </button>
         )}
       </div>
