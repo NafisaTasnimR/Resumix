@@ -219,7 +219,7 @@ const ProfileForm = () => {
 
         <div className="field-group submit-section">
           <button className="submit-button" onClick={handleSubmit}>
-            Submit 
+            Submit
           </button>
         </div>
       </div>
@@ -229,13 +229,42 @@ const ProfileForm = () => {
   return (
     <div className="resume-container">
       <div className="resume-header">
-      
+        
         <div className="header-line"></div>
       </div>
 
       <div className="content-wrapper">
         <div className="left-section">
-          <div className="photo-placeholder"></div>
+          <div className="photo-placeholder">
+            {currentPage === 'personal' && (
+              <div className="page-icon">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span className="icon-label">Personal Info</span>
+              </div>
+            )}
+            {currentPage === 'experience' && (
+              <div className="page-icon">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                <span className="icon-label">Work Experience</span>
+              </div>
+            )}
+            {currentPage === 'education' && (
+              <div className="page-icon">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                  <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                </svg>
+                <span className="icon-label">Education</span>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="right-section">
