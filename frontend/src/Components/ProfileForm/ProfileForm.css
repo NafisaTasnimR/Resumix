@@ -27,11 +27,7 @@
   margin-bottom: 10px;
 }
 
-.header-line {
-  height: 3px;
-  background-color: #4a90e2;
-  width: 100%;
-}
+
 
 .content-wrapper {
   display: flex;

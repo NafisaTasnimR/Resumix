@@ -10,17 +10,25 @@ const ProfileForm = () => {
   };
 
   const handleNextPage = () => {
-    setCurrentPage('experience');
+    if (currentPage === 'personal') {
+      setCurrentPage('experience');
+    } else if (currentPage === 'experience') {
+      setCurrentPage('education');
+    }
   };
 
   const handlePrevPage = () => {
-    setCurrentPage('personal');
+    if (currentPage === 'experience') {
+      setCurrentPage('personal');
+    } else if (currentPage === 'education') {
+      setCurrentPage('experience');
+    }
   };
 
   return (
     <div className="resume-container">
       <div className="resume-header">
-        <h1>RESUMIX</h1>
+       
         <div className="header-line"></div>
       </div>
 
@@ -100,7 +108,7 @@ const ProfileForm = () => {
                 )}
               </div>
             </>
-          ) : (
+          ) : currentPage === 'experience' ? (
             <>
               <div className="personal-info-header">
                 <h2>Experience</h2>
@@ -153,22 +161,75 @@ const ProfileForm = () => {
                 </div>
               </div>
             </>
+          ) : (
+            <>
+              <div className="personal-info-header">
+                <h2>Education</h2>
+                <div className="info-line"></div>
+              </div>
+
+              <div className="form-fields">
+                <div className="field-group">
+                  <label>School Name:</label>
+                  <input type="text" className="input-field" />
+                </div>
+
+                <div className="field-group">
+                  <label>Degree:</label>
+                  <input type="text" className="input-field" />
+                </div>
+
+                <div className="field-group">
+                  <label>Field of Study:</label>
+                  <input type="text" className="input-field" />
+                </div>
+
+                <div className="field-group">
+                  <label>Graduation</label>
+                  <input type="date" className="input-field" />
+                </div>
+
+                <div className="field-row">
+                  <div className="field-group half-width">
+                    <label>City:</label>
+                    <input type="text" className="input-field" />
+                  </div>
+                  <div className="field-group half-width">
+                    <label>State:</label>
+                    <input type="text" className="input-field" />
+                  </div>
+                </div>
+
+                <div className="field-row">
+                  <div className="field-group half-width">
+                    <label>Start Date</label>
+                    <input type="date" className="input-field" />
+                  </div>
+                  <div className="field-group half-width">
+                    <label>End Date:</label>
+                    <input type="date" className="input-field" />
+                  </div>
+                </div>
+
+                <div className="field-group">
+                  <div className="current-job-checkbox">
+                    <input type="checkbox" id="currentInstitute" className="checkbox-input" />
+                    <label htmlFor="currentInstitute" className="checkbox-label">Set as Current Institute</label>
+                  </div>
+                </div>
+              </div>
+            </>
           )}
         </div>
       </div>
 
       <div className="navigation">
-        {currentPage === 'experience' && (
+        {(currentPage === 'experience' || currentPage === 'education') && (
           <button className="nav-button" onClick={handlePrevPage}>
             <span className="arrow">←</span>
           </button>
         )}
-        {currentPage === 'personal' && (
-          <button className="nav-button" onClick={handleNextPage}>
-            <span className="arrow">→</span>
-          </button>
-        )}
-        {currentPage === 'experience' && (
+        {(currentPage === 'personal' || currentPage === 'experience') && (
           <button className="nav-button next-button" onClick={handleNextPage}>
             <span className="arrow">→</span>
           </button>
