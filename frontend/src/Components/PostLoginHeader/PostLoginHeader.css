@@ -1,6 +1,6 @@
 /* ====== POST LOGIN HEADER ====== */
 .postlogin-header {
-  background: #656D4A;
+  background: white;
   padding: 14px 40px;
   border-bottom: 1px solid #eee;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
@@ -17,8 +17,8 @@
 
 .header-left {
   font-size: 26px;
-  font-weight: 700;
-  color: white; 
+  font-weight: 900;
+  color: #656D4A; 
   flex-shrink: 0;
 }
 
@@ -31,14 +31,16 @@
 
 .nav-center a {
   text-decoration: none;
-  color: white;
+  font-weight: bold;
+  color: #656D4A;
   font-size: 16px;
   cursor: pointer;
   transition: color 0.2s ease;
 }
 
 .nav-center a:hover {
-  color: #d0d0d0; 
+  color: #656D4A;
+  text-decoration: underline; 
 }
 
 
@@ -66,12 +68,12 @@
 
 .user-name {
   font-weight: 600;
-  color: white;
+  color: #656D4A;
 }
 
 .dropdown-arrow {
   font-size: 18px;
-  color: white;
+  color: #656D4A;
 }
 .dropdown-content {
   position: absolute;
