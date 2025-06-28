@@ -1,0 +1,101 @@
+.font-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.3);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.font-popup {
+  background: #f8f4f1;
+  border-radius: 10px;
+  padding: 24px;
+  width: 90%;
+  max-width: 700px;
+  margin: 40px auto;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.font-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.font-popup-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.search-section {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  gap: 10px;
+}
+
+.font-search {
+  flex: 1;
+  padding: 8px 14px;
+  border-radius: 15px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.search-btn {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: none;
+  background-color: #ccc;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.font-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.font-card {
+  background-color: #dedede;
+  border-radius: 6px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 8px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.font-preview {
+  font-size: 18px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid #333;
+}
+
+.font-name {
+  font-size: 12px;
+  font-weight: bold;
+}
+.font-card:hover {
+  background-color: #c0c0c0;
+}

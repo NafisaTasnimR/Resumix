@@ -1,12 +1,66 @@
 import React, { useState } from 'react';
 import './LoginSignup.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const LoginSignup = ({ mode }) => {
   const [action, setAction] = useState(mode === "login" ? "Login" : "Sign Up");
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const isMismatch = action === "Sign Up" && confirmPassword && password !== confirmPassword;
+
+  const handleSubmit = async () => {
+    if (loading) return;
+    setError('');
+    setMessage('');
+    setLoading(true);
+
+    if (isMismatch) {
+      setError('Passwords do not match');
+      return;
+    }
+    let body;
+    const endpoint = action === "Login" ? "/login" : "/signup";
+    if (action === "Sign Up") {
+      const extractedUsername = email.split('@')[0];
+      body = { username: extractedUsername, email, password };
+    } else {
+      body = { email, password };
+    }
+
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/auth${endpoint}`,
+        body,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }
+      );
+
+      setMessage(response.data.message || 'Success!');
+      setEmail('');
+      navigate('/');
+
+    } catch (err) {
+      if (err.response) {
+        setError(err.response.data.message || 'An error occurred');
+      } else {
+        setError('Network error, please try again later');
+      }
+      setMessage('');
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <div className="wrapper">
@@ -20,7 +74,12 @@ const LoginSignup = ({ mode }) => {
 
         <div className="inputs">
           <div className="input">
-            <input type="email" placeholder="Email" />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
           <div className="input">
             <input
@@ -45,9 +104,11 @@ const LoginSignup = ({ mode }) => {
           {isMismatch && (
             <div className="error-text">Passwords do not match</div>
           )}
+          {error && <div className="error-text">{error}</div>}
+          {message && <div className="success-text">{message}</div>}
 
           <div className="submit-container">
-            <div className="submit">Submit</div>
+            <div className="submit" onClick={handleSubmit}>Submit</div>
           </div>
         </div>
 

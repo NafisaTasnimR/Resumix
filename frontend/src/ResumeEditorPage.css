@@ -1,10 +1,12 @@
-.App {
+.ResumeEditorPage {
   margin: 0;
   font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: row;
   height: 100vh;
 }
 
-/*.top-bar {
+.top-bar {
   position: fixed;
   top: 0;
   left: 0;
@@ -250,7 +252,7 @@
   max-width: 800px;
   margin: 1.5rem auto 1.5rem auto;
   /* Centered with margin on top/bottom */
-  /*padding: 1rem;
+  padding: 1rem;
   border-radius: 8px;
   box-sizing: border-box;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -412,5 +414,5 @@
 .preview-box p {
   text-align: justify;
   /* wrap the text on overflow */
- /* word-wrap: break-word;
-}*/
+  word-wrap: break-word;
+}
