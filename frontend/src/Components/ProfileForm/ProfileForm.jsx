@@ -219,7 +219,7 @@ const ProfileForm = () => {
 
         <div className="field-group submit-section">
           <button className="submit-button" onClick={handleSubmit}>
-            Submit Resume
+            Submit 
           </button>
         </div>
       </div>
