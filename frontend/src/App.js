@@ -12,7 +12,6 @@ function App() {
         <Route path="/login" element={<LoginSignup mode="login" />} />
         <Route path="/signup" element={<LoginSignup mode="signup" />} />
         <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/postlogin" element={<PostLoginHeader />} />
 
       </Routes>
     </Router>
