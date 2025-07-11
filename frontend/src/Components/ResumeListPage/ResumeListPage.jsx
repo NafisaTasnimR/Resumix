@@ -16,9 +16,6 @@ const ResumeListPage = () => {
       <div className="resume-header">
         <h2>My Resumes</h2>
         <div className="header-actions">
-          <span className="view-label">VIEW :</span>
-          <button className="view-btn selected">≡</button>
-          <button className="view-btn">▦</button>
           <button className="create-btn">Create New Resume</button>
         </div>
       </div>

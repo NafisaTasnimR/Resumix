@@ -31,26 +31,6 @@ body {
   gap: 12px;
 }
 
-.view-label {
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.view-btn {
-  border: none;
-  background-color: #fff;
-  font-size: 18px;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  color: #656D4A;
-}
-
-.view-btn.selected {
-  background-color: #f6f8ff;
-  box-shadow: 0 0 0 2px #e0e7ff;
-}
-
 .create-btn {
   padding: 10px 22px;
   font-size: 15px;

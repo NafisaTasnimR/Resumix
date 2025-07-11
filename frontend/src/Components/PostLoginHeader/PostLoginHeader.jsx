@@ -18,12 +18,15 @@ const PostLoginHeader = () => {
     <div className="nav-right">
       <div className="user-dropdown">
   <div className="user-trigger" onClick={() => setDropdownOpen(!dropdownOpen)}>
-    <span className="user-avatar">🔵</span>
+    <span className="user-avatar"></span>
     <span className="user-name">Username</span>
     <span className="dropdown-arrow">▾</span>
   </div>
   {dropdownOpen && (
     <div className="dropdown-content">
+      <Link to="/resumes">
+        <span role="img" aria-label="dashboard">👤</span> Dashboard
+      </Link>
       <Link to="/settings">
         <span role="img" aria-label="settings">⚙️</span> Settings
       </Link>
