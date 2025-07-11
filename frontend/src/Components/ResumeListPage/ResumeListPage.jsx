@@ -1,5 +1,6 @@
 import React from 'react';
 import './ResumeListPage.css';
+import { Link } from 'react-router-dom';
 
 const ResumeListPage = () => {
   const resumes = [
@@ -34,13 +35,13 @@ const ResumeListPage = () => {
             <span>{resume.modificationDate}</span>
             <span>{resume.creationDate}</span>
             <span className="strength-badge">{resume.strength}</span>
+          
             <span className="actions">
 
-              <span className="action-label">Edit</span>
-
-              <span className="action-label">Download</span>
-
-              <span className="action-label">More</span>
+            <Link to="">Edit</Link>
+            <Link to="">Download</Link>
+            <Link to="">Link</Link>
+            <Link to="">Remove</Link>
             </span>
 
           </div>

@@ -108,17 +108,18 @@ body {
   white-space: nowrap;
   font-size: 13px;
   font-weight: 500;
-  color: #0075ff;
+  color: black; 
+  position: relative;
 }
 
-.action-combo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-  color: #0075ff;
+.actions a {
+  text-decoration: none; 
+  color: inherit;
 }
 
+.actions a:hover {
+  text-decoration: underline; 
+}
 
 .label {
   margin-top: 3px;
