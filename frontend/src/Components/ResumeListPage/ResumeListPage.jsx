@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ResumeListPage.css';
-import { Link } from 'react-router-dom';
+import DeleteConfirmationModal from './DeleteConfirmationModal';  
 
 const ResumeListPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedResume, setSelectedResume] = useState(null);
+
   const resumes = [
     {
       name: 'Nishat_Tasnim_R...',
@@ -10,14 +13,31 @@ const ResumeListPage = () => {
       creationDate: '5/14/2025',
       strength: 45,
     },
+    
   ];
+
+  const handleRemoveClick = (resume) => {
+    setSelectedResume(resume);
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = () => {
+    // Simulate the delete action 
+    console.log(`Deleted resume: ${selectedResume.name}`);
+    setIsModalOpen(false);
+
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="resume-fullpage">
       <div className="resume-header">
         <h2>My Resumes</h2>
         <div className="header-actions">
-          <Link to="/resumebuilder" className="create-btn">Create New Resume</Link>
+          <button className="create-btn">Create New Resume</button>
         </div>
       </div>
 
@@ -35,18 +55,23 @@ const ResumeListPage = () => {
             <span>{resume.modificationDate}</span>
             <span>{resume.creationDate}</span>
             <span className="strength-badge">{resume.strength}</span>
-          
+
             <span className="actions">
-
-            <Link to="">Edit</Link>
-            <Link to="">Download</Link>
-            <Link to="">Link</Link>
-            <Link to="">Remove</Link>
+              <button>Edit</button>
+              <button>Download</button>
+              <button>Link</button>
+              <button onClick={() => handleRemoveClick(resume)}>Remove</button>
             </span>
-
           </div>
         ))}
       </div>
+
+   
+      <DeleteConfirmationModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onDelete={handleDelete}
+      />
     </div>
   );
 };
