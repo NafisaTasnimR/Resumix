@@ -41,10 +41,10 @@ const PaymentInfo = () => {
                 <div className="section-header">
                   <span>Card Information</span>
                   <div className="card-icons">
-                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAzMiAyMCIgZmlsbD0ibm9uZSI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjIwIiByeD0iNCIgZmlsbD0iIzE0MzQ4NyIvPjx0ZXh0IHg9IjUiIHk9IjE0IiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSI4Ij5WSVNBPC90ZXh0Pjwvc3ZnPg==" alt="Visa" />
-                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAzMiAyMCIgZmlsbD0ibm9uZSI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjIwIiByeD0iNCIgZmlsbD0iI0VCMDAxQiIvPjx0ZXh0IHg9IjEwIiB5PSIxNCIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iOCI+TUM8L3RleHQ+PC9zdmc+" alt="Mastercard" />
-                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAzMiAyMCIgZmlsbD0ibm9uZSI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjIwIiByeD0iNCIgZmlsbD0iI0ZGNjAwMCIvPjx0ZXh0IHg9IjgiIHk9IjE0IiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSI4Ij5ESVNDT1ZFUjwvdGV4dD48L3N2Zz4=" alt="Discover" />
-                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAzMiAyMCIgZmlsbD0ibm9uZSI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjIwIiByeD0iNCIgZmlsbD0iIzAwNkZDRiIvPjx0ZXh0IHg9IjQiIHk9IjE0IiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSI4Ij5BTUVYPC90ZXh0Pjwvc3ZnPg==" alt="American Express" />
+                    <img src="/Visa.jpg" alt="Visa" />
+                    <img src="/MasterCard.jpg" alt="Mastercard" />
+                    <img src="/Paypal.jpg" alt="Paypal" />
+                    <img src="/AmericanExpress.jpg" alt="American Express" />
                   </div>
                 </div>
 
