@@ -10,9 +10,9 @@ const LandingPage = () => {
         <div className="header-left logo">RESUMIX</div>
 
         <div className="header-center">
-            <Link to="/resumes">Resumes</Link>
-            <Link to="/templates">Templates</Link>
-            <Link to="/subscription">Subscription</Link>
+          <Link to="/resumes">Resumes</Link>
+          <Link to="/templates">Templates</Link>
+          <Link to="/subscription">Subscription</Link>
         </div>
 
         <div className="auth-buttons">
@@ -28,7 +28,7 @@ const LandingPage = () => {
         <div className="content-container">
           <h1>Create a Job-Ready Resume in Few Minutes</h1>
           <p className="subtext">Create your resume with our free builder and professional templates</p>
-          <button className="primary-btn">Build Your Resume </button>
+         <Link to="/resumebuilder" className="primary-btn">Build Your Resume</Link>
           {/* Live Preview Section */}
           <h1>Quick, Easy And Flexible Editing With Live Preview</h1>
           <p className="subtext">

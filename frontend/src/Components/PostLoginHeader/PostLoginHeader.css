@@ -147,7 +147,10 @@
   margin-bottom: 40px;
 }
 
-.primary-btn {
+.primary-btn,
+.primary-btn:link,
+.primary-btn:visited {
+  display: inline-block;
   background-color: #656D4A;
   color: white;
   padding: 12px 24px;
@@ -155,6 +158,8 @@
   border-radius: 20px;
   font-size: 16px;
   cursor: pointer;
+  text-align: center;
+  text-decoration: none; 
   transition: background-color 0.3s ease;
   margin-top: 20px;
 }
