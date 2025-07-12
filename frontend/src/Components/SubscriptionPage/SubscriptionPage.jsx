@@ -43,7 +43,7 @@ const SubscriptionPage = () => {
           backgroundColor: '#656d4a',
           color: 'white'
         }}>✓</div>
-        <span>Builder</span>
+        <span>Home Page</span>
       </div>
       
       <div style={{
@@ -91,7 +91,7 @@ const SubscriptionPage = () => {
           backgroundColor: '#e9ecef',
           color: '#6c757d'
         }}>3</div>
-        <span>PAYMENT DETAILS</span>
+        <span>Payment Details</span>
       </div>
       
       <div style={{

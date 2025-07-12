@@ -112,7 +112,7 @@
 }
 
 .load-more-btn {
-  background: #A4AC86;
+  background: #656D4A;
   color: white;
   border: none;
   padding: 1rem 2.5rem;
@@ -124,6 +124,6 @@
 }
 
 .load-more-btn:hover {
-  background: #656D4A;
+  background: #a4ac86;
   transform: translateY(-2px);
 }

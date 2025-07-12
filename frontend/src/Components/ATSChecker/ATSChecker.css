@@ -125,7 +125,7 @@
 
 .unlock-report-btn {
   width: 100%;
-  background: #8b9969;
+  background: #656D4a;
   color: white;
   border: none;
   border-radius: 8px;
@@ -141,7 +141,7 @@
 }
 
 .unlock-report-btn:hover {
-  background: #7a8a5c;
+  background: #A4AC86;
 }
 
 .btn-icon {
@@ -359,7 +359,7 @@
 }
 
 .edit-resume-btn {
-  background: #8b9969;
+  background: #656D4a;
   color: white;
   border: none;
   border-radius: 8px;
@@ -372,11 +372,11 @@
 }
 
 .edit-resume-btn:hover {
-  background: #7a8a5c;
+  background: #A4AC86;
 }
 
 .delete-data-btn {
-  background: #A4AC86;
+  background: #656D4a;
   color: white;
   border: none;
   border-radius: 8px;
@@ -389,5 +389,5 @@
 }
 
 .delete-data-btn:hover {
-  background: #656D4a;
+  background: #A4AC86;
 }

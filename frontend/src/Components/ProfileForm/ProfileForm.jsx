@@ -255,7 +255,7 @@ const ProfileForm = () => {
   return (
     <div className="resume-container">
       <div className="resume-header">
-        <h1>RESUMIX</h1>
+        
         <div className="header-line"></div>
       </div>
 

@@ -15,16 +15,16 @@ const PaymentInfo = () => {
       <div className="progress-steps">
         <div className="step completed">
           <div className="step-icon">✓</div>
-          <span>Builder</span>
+          <span>Home page</span>
         </div>
         <div className="step completed">
           <div className="step-icon">✓</div>
           <span>Choose Access</span>
         </div>
-        <div className="step active">
-          <div className="step-number">3</div>
-          <span>PAYMENT DETAILS</span>
-        </div>
+        <div className="step active" style={{color: '#007bff'}}>
+  <div className="step-number" style={{backgroundColor: '#007bff', color: 'white'}}>3</div>
+  <span>Payment Details</span>
+</div>
         <div className="step">
           <div className="step-number">4</div>
           <span>Finished!</span>

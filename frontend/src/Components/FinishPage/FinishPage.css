@@ -66,7 +66,7 @@ body {
 }
 
 .step.active {
-  color: #656d4a; /* Changed to green for completed state */
+  color: #007bff; /* Changed to green for completed state */
   font-weight: 600;
 }
 
@@ -89,7 +89,7 @@ body {
 }
 
 .step.active .step-number {
-  background-color: #656d4a; /* Green background for finished state */
+  background-color: #007bff; /* Green background for finished state */
   color: white;
 }
 

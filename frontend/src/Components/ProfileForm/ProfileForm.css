@@ -12,7 +12,7 @@
   min-height: 100vh;
   position: relative;
   font-family: 'Times New Roman', serif;
-  padding-bottom: 100px; /* Add space for navigation button */
+  padding-bottom: 100px; 
 }
 
 .resume-header {
@@ -20,18 +20,7 @@
   background-color: #f5f5f5;
 }
 
-.resume-header h1 {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10px;
-}
 
-.header-line {
-  height: 3px;
-  background-color: #4a90e2;
-  width: 100%;
-}
 
 .content-wrapper {
   display: flex;
@@ -150,7 +139,7 @@
 }
 
 .city-field {
-  border: 2px solid #4a90e2;
+  
   background-color: rgba(164, 172, 134, 0.6);
 }
 
@@ -217,39 +206,39 @@
 }
 
 .prev-button {
-  background-color: #f5f5f5;
-  border-color: #666;
-  color: #666;
+  background-color: #656d4a;
+  border-color: #656d4a;
+  color: white;
 }
 
 .prev-button:hover {
-  background-color: #666;
+  background-color: #a4ac86;
   color: white;
 }
 
 .next-button {
   margin-left: 15px;
-  background-color: #4a90e2;
-  border-color: #4a90e2;
+  background-color: #656d4a;
+  border-color: #656d4a;
   color: white;
 }
 
 .next-button:hover {
-  background-color: #357abd;
-  border-color: #357abd;
+  background-color: #a4ac86;
+  border-color: #a4ac86;
 }
 
 .submit-nav-button {
   margin-left: 15px;
-  background-color: #28a745;
-  border-color: #28a745;
+  background-color: #656d4a;
+  border-color: #656d4a;
   color: white;
   font-weight: 700;
 }
 
 .submit-nav-button:hover {
-  background-color: #218838;
-  border-color: #218838;
+  background-color: #a4ac86;
+  border-color: #a4ac86;
 }
 
 .current-job-checkbox {
@@ -277,7 +266,7 @@
 .checkbox-input {
   width: 18px;
   height: 18px;
-  accent-color: #4a90e2;
+  accent-color: #28a745;
 }
 
 .checkbox-label {
@@ -301,7 +290,7 @@
 
 .submit-button {
   padding: 15px 40px;
-  background-color: #4a90e2;
+  background-color: #656d4a;
   color: white;
   border: none;
   border-radius: 6px;
@@ -313,7 +302,7 @@
 }
 
 .submit-button:hover {
-  background-color: #357abd;
+  background-color: #a4ac86;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
@@ -325,15 +314,15 @@
 
 .submit-nav-button {
   margin-left: 15px;
-  background-color: #28a745;
-  border-color: #28a745;
+  background-color: #656d4a;
+  border-color: #656d4a;
   color: white;
   font-weight: 700;
 }
 
 .submit-nav-button:hover {
-  background-color: #218838;
-  border-color: #218838;
+  background-color: #a4ac86;
+  border-color: #a4ac86;
 }
 
 .submit-section {
@@ -344,7 +333,7 @@
 
 .submit-button {
   padding: 15px 40px;
-  background-color: #4a90e2;
+  background-color: #656d4a;
   color: white;
   border: none;
   border-radius: 6px;
@@ -356,7 +345,7 @@
 }
 
 .submit-button:hover {
-  background-color: #357abd;
+  background-color: #a4ac86;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }

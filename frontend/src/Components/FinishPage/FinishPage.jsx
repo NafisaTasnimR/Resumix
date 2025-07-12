@@ -8,7 +8,7 @@ const FinishPage = () => {
       <div className="progress-steps">
         <div className="step completed">
           <div className="step-icon">✓</div>
-          <span>Builder</span>
+          <span>Home Page</span>
         </div>
         <div className="step completed">
           <div className="step-icon">✓</div>
@@ -16,10 +16,10 @@ const FinishPage = () => {
         </div>
         <div className="step completed">
           <div className="step-icon">✓</div>
-          <span>PAYMENT DETAILS</span>
+          <span>Payment Details</span>
         </div>
         <div className="step active">
-          <div className="step-number">✓</div>
+          <div className="step-number">4</div>
           <span>Finished!</span>
         </div>
       </div>
