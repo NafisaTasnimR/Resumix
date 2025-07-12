@@ -13,8 +13,8 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onDelete }) => {
         </div>
         <p>This action cannot be undone.</p>
         <div className="modal-actions">
-          <button className="yes-btn" onClick={onDelete}>YES, DELETE</button>
-          <button className="no-btn" onClick={onClose}>NO, DO NOT DELETE</button>
+          <button className="yes-btn" onClick={onDelete}>Yes, Delete</button>
+          <button className="no-btn" onClick={onClose}>No, Do Not Delete</button>
         </div>
       </div>
     </div>

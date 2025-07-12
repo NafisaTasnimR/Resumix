@@ -1,10 +1,14 @@
+// ResumeListPage.jsx
 import React, { useState } from 'react';
 import './ResumeListPage.css';
-import DeleteConfirmationModal from './DeleteConfirmationModal';  
+import ShareResumeModal from './ShareResumeModal';  // Import new modal component
+import DeleteConfirmationModal from './DeleteConfirmationModal';
 
 const ResumeListPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);  // State for share modal
   const [selectedResume, setSelectedResume] = useState(null);
+  const [resumeLink, setResumeLink] = useState('https://myresume.com/resume12345');  // Sample link
 
   const resumes = [
     {
@@ -13,7 +17,6 @@ const ResumeListPage = () => {
       creationDate: '5/14/2025',
       strength: 45,
     },
-    
   ];
 
   const handleRemoveClick = (resume) => {
@@ -22,14 +25,17 @@ const ResumeListPage = () => {
   };
 
   const handleDelete = () => {
-    // Simulate the delete action 
     console.log(`Deleted resume: ${selectedResume.name}`);
     setIsModalOpen(false);
+  };
 
+  const handleShareClick = () => {
+    setIsShareModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setIsShareModalOpen(false); 
   };
 
   return (
@@ -59,14 +65,18 @@ const ResumeListPage = () => {
             <span className="actions">
               <button>Edit</button>
               <button>Download</button>
-              <button>Link</button>
+              <button onClick={handleShareClick}>Link</button> 
               <button onClick={() => handleRemoveClick(resume)}>Remove</button>
             </span>
           </div>
         ))}
       </div>
 
-   
+      <ShareResumeModal 
+        isOpen={isShareModalOpen} 
+        onClose={handleCloseModal} 
+        resumeLink={resumeLink} 
+      />
       <DeleteConfirmationModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
