@@ -47,7 +47,7 @@ const LoginSignup = ({ mode }) => {
 
       setMessage(response.data.message || 'Success!');
       setEmail('');
-      navigate('/');
+      navigate('/postlogin');
 
     } catch (err) {
       if (err.response) {

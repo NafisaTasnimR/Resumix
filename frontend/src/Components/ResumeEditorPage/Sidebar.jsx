@@ -1,8 +1,8 @@
 import React from 'react';
-import resume from './assets/icons8-resume-48.png'; 
-import font from './assets/icons8-font-style-formatting-48.png'
-import color from './assets/icons8-color-palette-48.png'
-import ats_checker from './assets/icons8-check-document-48.png'
+import resume from '../../assets/icons8-resume-48.png'; 
+import font from '../../assets/icons8-font-style-formatting-48.png'
+import color from '../../assets/icons8-color-palette-48.png'
+import ats_checker from '../../assets/icons8-check-document-48.png'
 
 
 
