@@ -49,7 +49,7 @@ body {
 }
 
 .header a:hover {
-  color: #656D4A;
+  color: #6b7a4d;
   text-decoration: underline;
 }
 
@@ -78,7 +78,7 @@ body {
 
 .login-btn:hover,
 .register-btn:hover {
-  background-color: #a4ac86;
+  background-color: #6b7a4d;
 }
 
 
@@ -130,7 +130,7 @@ body {
 .primary-btn:link,
 .primary-btn:visited {
   display: inline-block;
-  background-color: #656D4A;
+  background-color: #4d5636;
   color: white;
   padding: 12px 24px;
   border: none;
@@ -144,7 +144,7 @@ body {
 }
 
 .primary-btn:hover {
-  background-color: #4d5636;
+  background-color: #6b7a4d;
 }
 
 .hero-preview h1:last-of-type {
