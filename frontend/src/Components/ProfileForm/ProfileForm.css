@@ -206,25 +206,25 @@
 }
 
 .prev-button {
-  background-color: #a4ac86;
-  border-color: #a4ac86;
+  background-color: #656d4a;
+  border-color: #656d4a;
   color: white;
 }
 
 .prev-button:hover {
-  background-color: #656d4a;
+  background-color: #a4ac86;
   color: white;
 }
 
 .next-button {
   margin-left: 15px;
-  background-color: #a4ac86;
-  border-color: #a4ac86;
+  background-color: #656d4a;
+  border-color: #656d4a;
   color: white;
 }
 
 .next-button:hover {
- background-color: #656d4a;
+ background-color: #a4ac86;
   color: white;
 }
 
@@ -278,7 +278,7 @@
 
 .submit-button {
   padding: 15px 40px;
-  background-color: #a4ac86;
+  background-color: #656d4a;
   color: white;
   border: none;
   border-radius: 6px;
@@ -290,7 +290,7 @@
 }
 
 .submit-button:hover {
-  background-color: #656d4a;
+  background-color: #a4ac86;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
