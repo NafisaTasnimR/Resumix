@@ -1,4 +1,3 @@
-// DownloadResumeModal.jsx
 import React from 'react';
 import './DownloadResumeModal.css';
 

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './ResumeListPage.css';
+import { Link } from 'react-router-dom'; 
 import ShareResumeModal from './ShareResumeModal';
-import DownloadResumeModal from './DownloadResumeModal'; 
+import DownloadResumeModal from './DownloadResumeModal';  
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 
 const ResumeListPage = () => {
@@ -9,12 +10,12 @@ const ResumeListPage = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false); 
   const [selectedResume, setSelectedResume] = useState(null);
-  const [resumeName, setResumeName] = useState('Nishat_Tasnim_Resume'); 
-  const [downloadLink, setDownloadLink] = useState('https://myresume.com/resume12345'); 
+  const [resumeName, setResumeName] = useState('Nishat_Tasnim_Resume');
+  const [downloadLink, setDownloadLink] = useState('https://myresume.com/resume12345.pdf'); 
 
   const resumes = [
     {
-      name: 'Nishat_Tasnim_Resume',
+      name: 'Nishat_Tasnim_R...',
       modificationDate: '5/16/2025',
       creationDate: '5/14/2025',
       strength: 45,
@@ -37,7 +38,7 @@ const ResumeListPage = () => {
 
   const handleDownloadClick = (resume) => {
     setResumeName(resume.name);
-    setDownloadLink(`https://myresume.com/${resume.name}.pdf`);
+    setDownloadLink(`https://myresume.com/${resume.name}_Resume.pdf`);
     setIsDownloadModalOpen(true);
   };
 
@@ -52,7 +53,7 @@ const ResumeListPage = () => {
       <div className="resume-header">
         <h2>My Resumes</h2>
         <div className="header-actions">
-          <button className="create-btn">Create New Resume</button>
+          <Link to="/resumebuilder" className="create-btn">Create New Resume</Link>
         </div>
       </div>
 
@@ -73,7 +74,7 @@ const ResumeListPage = () => {
 
             <span className="actions">
               <button>Edit</button>
-              <button onClick={() => handleDownloadClick(resume)}>Download</button> {/* Open download modal */}
+              <button onClick={() => handleDownloadClick(resume)}>Download</button>
               <button onClick={() => handleShareClick()}>Link</button>
               <button onClick={() => handleRemoveClick(resume)}>Remove</button>
             </span>
@@ -84,7 +85,6 @@ const ResumeListPage = () => {
       <ShareResumeModal 
         isOpen={isShareModalOpen} 
         onClose={handleCloseModal} 
-        resumeLink={downloadLink} 
       />
       <DownloadResumeModal 
         isOpen={isDownloadModalOpen} 

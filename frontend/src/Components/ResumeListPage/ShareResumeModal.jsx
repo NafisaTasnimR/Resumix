@@ -4,10 +4,6 @@ import './ShareResumeModal.css';
 const ShareResumeModal = ({ isOpen, onClose, resumeLink }) => {
   if (!isOpen) return null;
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(resumeLink);
-  };
-
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -20,10 +16,12 @@ const ShareResumeModal = ({ isOpen, onClose, resumeLink }) => {
           <input
             type="text"
             readOnly
-            value={resumeLink}
+            value="Your unique resume link will appear here"
             className="resume-link"
           />
-          <button className="copy-btn" onClick={handleCopy}>Copy Link</button>
+          <button className="copy-btn" onClick={() => { /* Copy link functionality */ }}>
+            Copy Link
+          </button>
         </div>
       </div>
     </div>
