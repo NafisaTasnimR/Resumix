@@ -15,7 +15,7 @@ const ResumeListPage = () => {
 
   const resumes = [
     {
-      name: 'Nishat_Tasnim_R...',
+      name: 'Nishat_Tasnim_Resume',
       modificationDate: '5/16/2025',
       creationDate: '5/14/2025',
       strength: 45,

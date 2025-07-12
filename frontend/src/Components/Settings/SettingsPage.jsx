@@ -2,34 +2,13 @@ import React, { useState, useEffect } from 'react';
 import './SettingsPage.css';
 
 const SettingsPage = () => {
-  const [email, setEmail] = useState('*****@gmail.com');
   const [password, setPassword] = useState('*******');
-
   const [modalType, setModalType] = useState(null); 
-  const [tempEmail, setTempEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [prevPassword, setPrevPassword] = useState('');
   const [passwordStrength, setPasswordStrength] = useState('');
-
-  const openModal = (type) => {
-    setModalType(type);
-    if (type === 'email') setTempEmail(email);
-  };
-
-  const closeModal = () => {
-    setModalType(null);
-    setTempEmail('');
-    setNewPassword('');
-    setConfirmPassword('');
-    setPasswordError('');
-  };
-
-  const saveEmail = () => {
-    setEmail(tempEmail);
-    closeModal();
-  };
 
   const evaluatePasswordStrength = (password) => {
     if (password.length < 6) return 'weak';
@@ -37,7 +16,6 @@ const SettingsPage = () => {
     return 'medium';
   };
 
-  // 💡 New: Check if passwords match whenever they change
   useEffect(() => {
     if (confirmPassword && newPassword !== confirmPassword) {
       setPasswordError('Passwords do not match');
@@ -47,14 +25,13 @@ const SettingsPage = () => {
   }, [newPassword, confirmPassword]);
 
   const savePassword = () => {
-    const actualCurrentPassword = '*******'; // hardcoded for example
+    const actualCurrentPassword = '*******';
 
     if (prevPassword !== actualCurrentPassword) {
       setPasswordError('Previous password is incorrect');
     } else if (newPassword === confirmPassword && newPassword.length > 0) {
-      setPassword('*******'); 
+      setPassword('*******');
       setPasswordError('');
-      closeModal();
     } else {
       setPasswordError('Passwords do not match');
     }
@@ -68,55 +45,31 @@ const SettingsPage = () => {
         <div className="settings-row">
           <span className="label">Account ID:</span>
           <span className="value">22*******</span>
-          <div style={{ width: '50px' }}></div>
         </div>
 
         <div className="settings-row">
           <span className="label">Username:</span>
           <span className="value">Nishat</span>
-          <div style={{ width: '50px' }}></div>
         </div>
 
         <div className="settings-row">
           <span className="label">Email ID:</span>
-          <span className="value">{email}</span>
-          <button className="edit-btn" onClick={() => openModal('email')}>
-            <span className="edit-icon">✏️</span> <span className="edit-text">edit</span>
-          </button>
+          <span className="value">*****@gmail.com</span>
         </div>
 
         <div className="settings-row">
           <span className="label">Password:</span>
           <span className="value">{password}</span>
-          <button className="edit-btn" onClick={() => openModal('password')}>
+          <button className="edit-btn" onClick={() => setModalType('password')}> 
             <span className="edit-icon">✏️</span> <span className="edit-text">edit</span>
           </button>
         </div>
       </div>
 
-      {/* Email Modal */}
-      {modalType === 'email' && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <button className="close-btn" onClick={closeModal}>×</button>
-            <h2>Account Email</h2>
-            <p className="modal-label">EDIT YOUR ACCOUNT EMAIL ADDRESS</p>
-            <input
-              type="email"
-              className="modal-input"
-              value={tempEmail}
-              onChange={(e) => setTempEmail(e.target.value)}
-            />
-            <button className="modal-save-btn" onClick={saveEmail}>Save</button>
-          </div>
-        </div>
-      )}
-
-      {/* Password Modal */}
       {modalType === 'password' && (
         <div className="modal-overlay">
           <div className="modal">
-            <button className="close-btn" onClick={closeModal}>×</button>
+            <button className="close-btn" onClick={() => setModalType(null)}>×</button>
             <h2>Password</h2>
             <p className="modal-label">CHANGE YOUR PASSWORD</p>
 
