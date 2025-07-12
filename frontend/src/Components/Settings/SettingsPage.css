@@ -153,8 +153,8 @@
 }
 
 .modal-save-btn {
-  background-color: #a4ac86;
-  color: #000;
+  background-color: #4d5636;
+  color: white;
   padding: 10px 28px;
   border: none;
   border-radius: 100px;
@@ -165,7 +165,7 @@
 }
 
 .modal-save-btn:hover {
-  background-color: #aac86c;
+  background-color: #6b7a4d;
 }
 
 .password-error {

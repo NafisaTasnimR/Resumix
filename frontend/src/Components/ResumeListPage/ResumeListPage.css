@@ -34,9 +34,9 @@ body {
 .create-btn {
   padding: 10px 22px;
   font-size: 15px;
-  border: 1px solid #1a237e;
+  border: 1px solid #a4ac86;
   color: #fff;
-  background-color: #656D4A;
+  background-color: #4d5636;
   border-radius: 30px;
   font-weight: 500;
   cursor: pointer;
@@ -45,7 +45,7 @@ body {
 }
 
 .create-btn:hover {
-  background-color: #4d5636;
+  background-color: #6b7a4d;
 }
 
 .resume-table {
@@ -93,12 +93,12 @@ body {
   font-weight: 700;
   color: #0c1232;
   font-size: 18px;
-  border-radius: 40%; 
+  border-radius: 40%;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 45px;  
-  height: 35px; 
+  width: 45px;
+  height: 35px;
   text-align: center;
 }
 
@@ -109,17 +109,24 @@ body {
   white-space: nowrap;
   font-size: 13px;
   font-weight: 500;
-  color: black; 
+  color: black;
   position: relative;
 }
 
-.actions a {
-  text-decoration: none; 
+.actions button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
   color: inherit;
 }
 
-.actions a:hover {
-  text-decoration: underline; 
+.actions button:hover {
+  text-decoration: underline;
+}
+
+.actions button:focus {
+  outline: none;
 }
 
 .label {
