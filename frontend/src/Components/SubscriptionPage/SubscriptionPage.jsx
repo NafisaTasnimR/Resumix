@@ -216,7 +216,7 @@ const SubscriptionPage = () => {
                   fontSize: '18px',
                   marginTop: '2px'
                 }}>✓</span>
-                Create matching cover letters
+                Unlimited Edits and Template Access
               </div>
               <div style={{
                 display: 'flex',
@@ -233,7 +233,7 @@ const SubscriptionPage = () => {
                   fontSize: '18px',
                   marginTop: '2px'
                 }}>✓</span>
-                After 14 days, auto-renews at $23.95 billed every 4 weeks
+                Auto-renews at $3.40 billed every 4 weeks
               </div>
               <div style={{
                 display: 'flex',
@@ -304,7 +304,7 @@ const SubscriptionPage = () => {
               marginBottom: '40px',
               lineHeight: 1
             }}>
-              $5.95
+              $2.95
               <span style={{
                 fontSize: '1.2rem',
                 color: '#6c757d',
@@ -322,23 +322,7 @@ const SubscriptionPage = () => {
                 lineHeight: 1.5,
                 color: '#495057'
               }}>
-                <span style={{
-                  color: '#28a745',
-                  fontWeight: 'bold',
-                  fontSize: '18px',
-                  marginTop: '2px'
-                }}>✓</span>
-                Priority customer support
-              </div>
-              <div style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '12px',
-                marginBottom: '16px',
-                fontSize: '16px',
-                lineHeight: 1.5,
-                color: '#495057'
-              }}>
+                
                 <span style={{
                   color: '#28a745',
                   fontWeight: 'bold',

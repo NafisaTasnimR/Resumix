@@ -114,22 +114,18 @@ const PaymentInfo = () => {
 
               <div className="terms-section">
                 <p>
-                  By clicking "Get My Subscription" below you agree to be charged $1.70 (which includes unlimited edits, downloads, and emails). You also agree to our Terms of Use and Privacy Policy. After 14 days you will be billed $23.95 every 4 weeks until your subscription ends. <strong>you can cancel at any time</strong>
+                  By clicking "Get My Subscription" below you agree to be charged $1.70 (which includes unlimited edits, downloads, and emails). You also agree to our Terms of Use and Privacy Policy. After 14 days you will be billed $3.40 every 4 weeks until your subscription ends. <strong>you can cancel at any time</strong>
                 </p>
               </div>
 
               <button className="subscribe-btn">Get My Subscription</button>
 
-              <div className="secure-checkout">
-                <span className="lock-icon">🔒</span>
-                <span>SECURE CHECKOUT</span>
-                <span className="powered-by">DigiCert</span>
-              </div>
+              
 
               <div className="cancel-section">
                 <h3>How Would I Cancel?</h3>
                 <p>
-                  We'd be sorry to see you go! You can cancel at any time online or by phone. If you're not satisfied during your 14 days trial, let us know and we'll refund your money.
+                  We'd be sorry to see you go! You can cancel at any time online.
                 </p>
               </div>
             </div>
