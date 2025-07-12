@@ -11,130 +11,120 @@ const SubscriptionPage = () => {
       margin: 0,
       padding: 0
     }}>
-      {/* Progress Steps */}
+    {/* Progress Steps - FIXED TO MATCH PAYMENT PAGE */}
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: '40px',
+      padding: '20px 0',
+      borderBottom: '1px solid #e9ecef',
+      backgroundColor: '#f8f9fa',
+      marginTop: '20px'
+    }}>
       <div style={{
         display: 'flex',
-        justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white',
-        padding: '30px 20px',
-        borderBottom: '1px solid #e9ecef',
-        gap: '60px'
+        margin: '0 30px',
+        color: '#656d4a',
+        fontSize: '14px',
+        fontWeight: 500
       }}>
         <div style={{
+          width: '32px',
+          height: '32px',
+          borderRadius: '50%',
           display: 'flex',
-          flexDirection: 'column',
           alignItems: 'center',
-          gap: '8px',
-          opacity: 1
-        }}>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 'bold',
-            fontSize: '16px',
-            backgroundColor: '#6c7a3a',
-            color: 'white'
-          }}>✓</div>
-          <span style={{
-            fontSize: '12px',
-            fontWeight: 600,
-            letterSpacing: '0.5px',
-            color: '#495057'
-          }}>HOME PAGE</span>
-        </div>
-        
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '8px',
-          opacity: 1
-        }}>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 'bold',
-            fontSize: '16px',
-            backgroundColor: '#007bff',
-            color: 'white'
-          }}>2</div>
-          <span style={{
-            fontSize: '12px',
-            fontWeight: 600,
-            letterSpacing: '0.5px',
-            color: '#495057'
-          }}>CHOOSE ACCESS</span>
-        </div>
-        
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '8px',
-          opacity: 0.4
-        }}>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 'bold',
-            fontSize: '16px',
-            backgroundColor: '#e9ecef',
-            color: '#6c757d'
-          }}>3</div>
-          <span style={{
-            fontSize: '12px',
-            fontWeight: 600,
-            letterSpacing: '0.5px',
-            color: '#495057'
-          }}>PAYMENT DETAILS</span>
-        </div>
-        
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '8px',
-          opacity: 0.4
-        }}>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 'bold',
-            fontSize: '16px',
-            backgroundColor: '#e9ecef',
-            color: '#6c757d'
-          }}>4</div>
-          <span style={{
-            fontSize: '12px',
-            fontWeight: 600,
-            letterSpacing: '0.5px',
-            color: '#495057'
-          }}>FINISHED!</span>
-        </div>
+          justifyContent: 'center',
+          marginRight: '8px',
+          fontSize: '14px',
+          fontWeight: 'bold',
+          backgroundColor: '#656d4a',
+          color: 'white'
+        }}>✓</div>
+        <span>Builder</span>
       </div>
+      
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        margin: '0 30px',
+        color: '#007bff',
+        fontSize: '14px',
+        fontWeight: 600
+      }}>
+        <div style={{
+          width: '32px',
+          height: '32px',
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginRight: '8px',
+          fontSize: '14px',
+          fontWeight: 'bold',
+          backgroundColor: '#007bff',
+          color: 'white'
+        }}>2</div>
+        <span>Choose Access</span>
+      </div>
+      
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        margin: '0 30px',
+        color: '#6c757d',
+        fontSize: '14px',
+        fontWeight: 500
+      }}>
+        <div style={{
+          width: '32px',
+          height: '32px',
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginRight: '8px',
+          fontSize: '14px',
+          fontWeight: 'bold',
+          backgroundColor: '#e9ecef',
+          color: '#6c757d'
+        }}>3</div>
+        <span>PAYMENT DETAILS</span>
+      </div>
+      
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        margin: '0 30px',
+        color: '#6c757d',
+        fontSize: '14px',
+        fontWeight: 500
+      }}>
+        <div style={{
+          width: '32px',
+          height: '32px',
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginRight: '8px',
+          fontSize: '14px',
+          fontWeight: 'bold',
+          backgroundColor: '#e9ecef',
+          color: '#6c757d'
+        }}>4</div>
+        <span>Finished!</span>
+      </div>
+    </div>
+       
 
       {/* Main Content */}
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: '60px 20px'
+        padding: '20px 20px 60px 20px'
       }}>
         <h1 style={{
           textAlign: 'center',

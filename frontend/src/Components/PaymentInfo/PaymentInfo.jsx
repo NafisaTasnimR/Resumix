@@ -43,7 +43,7 @@ const PaymentInfo = () => {
                   <div className="card-icons">
                     <img src="/Visa.jpg" alt="Visa" />
                     <img src="/MasterCard.jpg" alt="Mastercard" />
-                    <img src="/Paypal.jpg" alt="Paypal" />
+                    <img src="/JCB.jpg" alt="JCB" />
                     <img src="/AmericanExpress.jpg" alt="American Express" />
                   </div>
                 </div>
