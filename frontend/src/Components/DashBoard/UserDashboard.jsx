@@ -75,40 +75,44 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="info-section">
-          <div id="personal" className="info-block" ref={personalRef}>
-            <h3>Personal Information</h3>
-            <p><strong>Name:</strong></p>
-            <p><strong>Email:</strong></p>
-            <p><strong>Date of Birth:</strong></p>
-            <p><strong>Phone:</strong></p>
-            <p><strong>Address:</strong></p>
-            <p><strong>City:</strong></p>
-            <p><strong>District:</strong></p>
-            <p><strong>Country:</strong></p>
-          </div>
+        <div className="info-wrapper">
+          <h2 className="info-main-header">YOUR INFORMATION</h2>
 
-          <div id="education" className="info-block" ref={educationRef}>
-            <h3>Education Information</h3>
-            <p><strong>School Name:</strong></p>
-            <p><strong>Degree:</strong></p>
-            <p><strong>Field of Study:</strong></p>
-            <p><strong>Graduation:</strong></p>
-            <p><strong>City:</strong></p>
-            <p><strong>State:</strong></p>
-            <p><strong>Start Date:</strong></p>
-            <p><strong>End Date:</strong></p>
-          </div>
+          <div className="info-section">
+            <div id="personal" className="info-block" ref={personalRef}>
+              <h3>Personal Information</h3>
+              <p><strong>Name:</strong></p>
+              <p><strong>Email:</strong></p>
+              <p><strong>Date of Birth:</strong></p>
+              <p><strong>Phone:</strong></p>
+              <p><strong>Address:</strong></p>
+              <p><strong>City:</strong></p>
+              <p><strong>District:</strong></p>
+              <p><strong>Country:</strong></p>
+            </div>
 
-          <div id="experience" className="info-block" ref={experienceRef}>
-            <h3>Experience</h3>
-            <p><strong>Employer Name:</strong></p>
-            <p><strong>Job Title:</strong></p>
-            <p><strong>City:</strong></p>
-            <p><strong>State:</strong></p>
-            <p><strong>Start Date:</strong></p>
-            <p><strong>End Date:</strong></p>
-            <p><strong>Job Description:</strong></p>
+            <div id="education" className="info-block" ref={educationRef}>
+              <h3>Education Information</h3>
+              <p><strong>School Name:</strong></p>
+              <p><strong>Degree:</strong></p>
+              <p><strong>Field of Study:</strong></p>
+              <p><strong>Graduation:</strong></p>
+              <p><strong>City:</strong></p>
+              <p><strong>State:</strong></p>
+              <p><strong>Start Date:</strong></p>
+              <p><strong>End Date:</strong></p>
+            </div>
+
+            <div id="experience" className="info-block" ref={experienceRef}>
+              <h3>Experience</h3>
+              <p><strong>Employer Name:</strong></p>
+              <p><strong>Job Title:</strong></p>
+              <p><strong>City:</strong></p>
+              <p><strong>State:</strong></p>
+              <p><strong>Start Date:</strong></p>
+              <p><strong>End Date:</strong></p>
+              <p><strong>Job Description:</strong></p>
+            </div>
           </div>
         </div>
       </div>
