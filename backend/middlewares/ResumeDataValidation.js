@@ -30,3 +30,8 @@ const validateInformationUpdate = (req, res, next) => {
 
     next();
 };
+
+module.exports = {
+    verifyToken,
+    validateInformationUpdate
+};
