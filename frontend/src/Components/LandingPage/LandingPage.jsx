@@ -1,19 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './LandingPage.css';
 import { Link } from 'react-router-dom';
+import NoAccountPage from '../NoAccountPage/NoAccountPage';
 
 const LandingPage = () => {
+  const [showPopup, setShowPopup] = useState(false);
+
+  const openPopup = () => setShowPopup(true);
+  const closePopup = () => setShowPopup(false);
+
   return (
     <div className="landing-container">
+      {showPopup && <NoAccountPage handleClose={closePopup} />}
+
       {/* Header */}
       <header className="header">
         <div className="header-left logo">RESUMIX</div>
 
         <div className="header-center">
-          <Link to="/resumes">Resumes</Link>
-          <Link to="/templates">Templates</Link>
-          <Link to="/subscription">Subscription</Link>
+          <span className="nav-item" onClick={openPopup} style={{ cursor: 'pointer' }}>Resumes</span>
+          <Link to="/templates" className="nav-item">Templates</Link>
+          <span className="nav-item" onClick={openPopup} style={{ cursor: 'pointer' }}>Subscription</span>
         </div>
+
 
         <div className="auth-buttons">
           <Link to="/login" className="login-btn">Login</Link>
@@ -28,8 +37,7 @@ const LandingPage = () => {
         <div className="content-container">
           <h1>Create a Job-Ready Resume in Few Minutes</h1>
           <p className="subtext">Create your resume with our free builder and professional templates</p>
-         <Link to="/resumebuilder" className="primary-btn">Build Your Resume</Link>
-          {/* Live Preview Section */}
+          <span onClick={openPopup} className="primary-btn" style={{ cursor: 'pointer' }}>Build Your Resume</span>
           <h1>Quick, Easy And Flexible Editing With Live Preview</h1>
           <p className="subtext">
             Choose font types, sizes, and spacing. You can bold, underline, and italicize your text
@@ -118,4 +126,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage; 
+export default LandingPage;

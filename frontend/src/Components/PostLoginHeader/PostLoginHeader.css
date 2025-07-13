@@ -25,17 +25,16 @@
 .nav-center {
   display: flex;
   justify-content: center;
-  gap: 40px; 
+  gap: 60px; 
   flex: 1;
 }
 
 .nav-center a {
+  color: #4d5636;
   text-decoration: none;
-  font-weight: bold;
-  color: #656D4A;
-  font-size: 16px;
-  cursor: pointer;
-  transition: color 0.2s ease;
+  font-size: 17px;
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 .nav-center a:hover {
@@ -45,6 +44,7 @@
 
 
 .nav-right {
+  font-size: 17px;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -63,7 +63,7 @@
 }
 
 .user-avatar {
-  font-size: 16px;
+  font-size: 17px;
 }
 
 .user-name {

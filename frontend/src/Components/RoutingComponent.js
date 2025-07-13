@@ -5,6 +5,7 @@ import ResumeTemplates from './ResumeTemplates/ResumeTemplates';
 import ResumeListPage from './ResumeListPage/ResumeListPage';
 import SettingsPage from './Settings/SettingsPage';
 import ResumeEditor from './ResumeEditorPage/ResumeEditorPage';
+import NoAccountPage from './NoAccountPage/NoAccountPage';
 
 const RoutingComponent = () => {
     return (
@@ -14,6 +15,8 @@ const RoutingComponent = () => {
             <Route path="/resumes" element={<ResumeListPage />} />
             <Route path="/settings" element={<SettingsPage />} /> 
             <Route path="/resumebuilder" element={<ResumeEditor />} />
+            <Route path="/noaccount" element={<NoAccountPage />} />
+            {/* Add other routes as needed */}
 
         </Routes>
     );
