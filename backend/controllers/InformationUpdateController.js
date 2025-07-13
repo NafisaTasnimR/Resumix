@@ -5,10 +5,11 @@ const updateInformation = async (req, res) => {
     try {
         const userId = req.user.userId;
         const updateFields = {};
-        for(const key in req.body){
-            if (req.body[key] !== undefined) {
-                updateFields[key] = req.body[key];
-            }
+        if (req.body.username !== undefined) {
+            updateFields.username = req.body.username;
+        }
+        if (req.body.defaultResumeData !== undefined) {
+            updateFields.defaultResumeData = req.body.defaultResumeData;
         }
 
         const updateUser = await user.findByIdAndUpdate(
