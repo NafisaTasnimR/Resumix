@@ -10,11 +10,9 @@ const LandingPage = () => {
         <div className="header-left logo">RESUMIX</div>
 
         <div className="header-center">
-          <ul>
-            <li>Resumes</li>
-            <li>Templates</li>
-            <li>Subscription</li>
-          </ul>
+          <Link to="/resumes">Resumes</Link>
+          <Link to="/templates">Templates</Link>
+          <Link to="/subscription">Subscription</Link>
         </div>
 
         <div className="auth-buttons">
@@ -30,7 +28,7 @@ const LandingPage = () => {
         <div className="content-container">
           <h1>Create a Job-Ready Resume in Few Minutes</h1>
           <p className="subtext">Create your resume with our free builder and professional templates</p>
-          <button className="primary-btn">Build Your Resume </button>
+         <Link to="/resumebuilder" className="primary-btn">Build Your Resume</Link>
           {/* Live Preview Section */}
           <h1>Quick, Easy And Flexible Editing With Live Preview</h1>
           <p className="subtext">
@@ -75,47 +73,47 @@ const LandingPage = () => {
 
       {/* Templates Section */}
       <section className="template-features">
-  <div className="template-header">
-    <h2 className="section-title">Make Your Resume With Proven And Professional Templates</h2>
-    <p className="section-description">
-      Use one of our field-tested resume templates, designed by experts and typographers.
-    </p>
-  </div>
+        <div className="template-header">
+          <h2 className="section-title">Make Your Resume With Proven And Professional Templates</h2>
+          <p className="section-description">
+            Use one of our field-tested resume templates, designed by experts and typographers.
+          </p>
+        </div>
 
-  <div className="feature-row">
-    <div className="feature">
-      <img src="/checked.png" alt="ATS" />
-      <div>
-        <h3>ATS-Friendly</h3>
-        <p>Tick every box and make sure your resume is never filtered out by the hiring software.</p>
-      </div>
-    </div>
-    <div className="feature">
-      <img src="/badge.png" alt="Professional" />
-      <div>
-        <h3>Professional</h3>
-        <p>Formal layouts ideal for corporate jobs. Clean typography makes a big impact.</p>
-      </div>
-    </div>
-  </div>
+        <div className="feature-row">
+          <div className="feature">
+            <img src="/checked.png" alt="ATS" />
+            <div>
+              <h3>ATS-Friendly</h3>
+              <p>Tick every box and make sure your resume is never filtered out by the hiring software.</p>
+            </div>
+          </div>
+          <div className="feature">
+            <img src="/badge.png" alt="Professional" />
+            <div>
+              <h3>Professional</h3>
+              <p>Formal layouts ideal for corporate jobs. Clean typography makes a big impact.</p>
+            </div>
+          </div>
+        </div>
 
-  <div className="feature-row">
-    <div className="feature">
-      <img src="/technology.png" alt="Modern" />
-      <div>
-        <h3>Modern</h3>
-        <p>Sleek and minimalist designs that feel current and stylish.</p>
-      </div>
-    </div>
-    <div className="feature">
-      <img src="/idea.png" alt="Creative" />
-      <div>
-        <h3>Creative</h3>
-        <p>For roles that value uniqueness. Bold designs that let you stand out.</p>
-      </div>
-    </div>
-  </div>
-</section>
+        <div className="feature-row">
+          <div className="feature">
+            <img src="/technology.png" alt="Modern" />
+            <div>
+              <h3>Modern</h3>
+              <p>Sleek and minimalist designs that feel current and stylish.</p>
+            </div>
+          </div>
+          <div className="feature">
+            <img src="/idea.png" alt="Creative" />
+            <div>
+              <h3>Creative</h3>
+              <p>For roles that value uniqueness. Bold designs that let you stand out.</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

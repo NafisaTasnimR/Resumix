@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import './LoginSignup.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { signInWithPopup } from 'firebase/auth';
+import { auth, provider } from '../../utils/Firebase'; // Adjust the import path as necessary   
+
 
 const LoginSignup = ({ mode }) => {
   const [action, setAction] = useState(mode === "login" ? "Login" : "Sign Up");
@@ -47,7 +50,7 @@ const LoginSignup = ({ mode }) => {
 
       setMessage(response.data.message || 'Success!');
       setEmail('');
-      navigate('/');
+      navigate('/postlogin');
 
     } catch (err) {
       if (err.response) {
@@ -61,6 +64,45 @@ const LoginSignup = ({ mode }) => {
     }
   };
 
+
+  // Google Sign-In handler
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      console.log('Google Sign-In successful:', result);
+      const user = result.user;
+      const endpoint = action === "Login" ? "/login" : "/signup";
+      let body;
+      if (action === "Sign Up") {
+        body = {
+          username: user.displayName || user.email.split('@')[0],
+          email: user.email,
+          password: 'google-auth' // Placeholder, as we don't use password for Google sign-in
+        };
+      } else {
+        body = {
+          email: user.email,
+          password: 'google-auth'
+        }; // Placeholder, as we don't use password for Google sign-in
+      }
+
+      const response = await axios.post(
+        `http://localhost:5000/auth${endpoint}`,
+        body,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }
+      );
+      setMessage(response.data.message || 'Google Sign-In successful!');
+      setEmail('');
+      navigate('/');     
+    } catch (err) {
+      setError('Google sign-in failed. Please try again.');
+      console.error('Google Sign-In error:', err);
+    }
+  };
 
   return (
     <div className="wrapper">
@@ -125,7 +167,7 @@ const LoginSignup = ({ mode }) => {
         </div>
 
         <div className="google-signin">
-          <div className="google-signin-btn">
+          <div className="google-signin-btn" onClick={handleGoogleSignIn} style={{ cursor: 'pointer' }}>
             <img
               src="https://developers.google.com/identity/images/g-logo.png"
               alt="Google Logo"

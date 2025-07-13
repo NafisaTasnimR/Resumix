@@ -1,0 +1,43 @@
+.modal-header h3 {
+  font-size: 25px;
+}
+
+.modal-image {
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.modal-image img {
+  width: 60px;  
+  height: 60px; 
+  object-fit: contain;
+}
+
+.modal-body {
+  margin-bottom: 30px;
+}
+
+.modal-body p {
+  margin-bottom: 20px; 
+}
+
+.download-btn {
+  background-color: #4d5636;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+  margin-top: 2opx;
+}
+
+.download-btn:hover {
+  background-color: #6b7a4d;
+}
+
+.download-btn:focus {
+  outline: none;
+}

@@ -1,6 +1,6 @@
 import React from 'react';
-import home from './assets/icons8-home-48.png'
-import account from './assets/icons8-account-48.png'
+import home from '../../assets/icons8-home-48.png'
+import account from '../../assets/icons8-account-48.png'
 
 
 const TopBar = () => (

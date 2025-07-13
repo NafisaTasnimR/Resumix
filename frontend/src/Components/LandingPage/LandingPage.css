@@ -22,39 +22,37 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 60px;
-  background-color: #656D4A;
-  border-bottom: none;
+  padding: 16px 40px;
 }
 
-/* Left Logo */
-.header-left {
+.header-left.logo {
   font-size: 26px;
-  font-weight: 700;
-  color: white; 
-  flex-shrink: 0;
+  font-weight: 900;
+  color: #656D4A;
+  text-transform: uppercase;
+  cursor: pointer;
 }
 
-/* Center Nav */
 .header-center {
   flex: 1;
   display: flex;
   justify-content: center;
-}
-
-.header-center ul {
-  list-style: none;
-  display: flex;
   gap: 30px;
 }
 
-.header-center li {
+.header a {
+  color: #4d5636;
+  text-decoration: none;
   font-size: 16px;
-  cursor: pointer;
-  color: white;
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
-/* Right Buttons */
+.header a:hover {
+  color: #6b7a4d;
+  text-decoration: underline;
+}
+
 .auth-buttons {
   display: flex;
   gap: 15px;
@@ -63,8 +61,8 @@ body {
 
 .login-btn,
 .register-btn {
-  background-color: white;
-  color: #656D4A;
+  background-color: #656D4A ;
+  color: white !important;
   padding: 6px 16px;
   border: none;
   border-radius: 25px;
@@ -80,8 +78,9 @@ body {
 
 .login-btn:hover,
 .register-btn:hover {
-  background-color: #a4ac86;
+  background-color: #6b7a4d;
 }
+
 
 /*     COMBINED HERO & PREVIEW    */
 
@@ -127,20 +126,25 @@ body {
   margin-bottom: 40px; 
 }
 
-.primary-btn {
-  background-color: #656D4A;
+.primary-btn,
+.primary-btn:link,
+.primary-btn:visited {
+  display: inline-block;
+  background-color: #4d5636;
   color: white;
   padding: 12px 24px;
   border: none;
   border-radius: 20px;
   font-size: 16px;
   cursor: pointer;
+  text-align: center;
+  text-decoration: none; 
   transition: background-color 0.3s ease;
   margin-top: 20px;
 }
 
 .primary-btn:hover {
-  background-color: #4d5636;
+  background-color: #6b7a4d;
 }
 
 .hero-preview h1:last-of-type {
