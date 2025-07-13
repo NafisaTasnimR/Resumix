@@ -1,13 +1,24 @@
 import React, { useState } from 'react';
 import './PaymentInfo.css';
+// *** ADDED: Import useNavigate for navigation ***
+import { useNavigate } from 'react-router-dom';
 
 const PaymentInfo = () => {
+  // *** ADDED: Initialize navigation hook ***
+  const navigate = useNavigate();
+  
   const [currentStep, setCurrentStep] = useState(3);
   const [cardNumber, setCardNumber] = useState('1234 5678 6789 7890');
   const [cvv, setCvv] = useState('123');
   const [nameOnCard, setNameOnCard] = useState('MRITTIKA JAHAN');
   const [month, setMonth] = useState('Month');
   const [year, setYear] = useState('Year');
+
+  // *** ADDED: Function to handle subscription button click ***
+  const handleSubscription = () => {
+    
+    navigate('/m/final');
+  };
 
   return (
     <div className="payment-container">
@@ -22,9 +33,9 @@ const PaymentInfo = () => {
           <span>Choose Access</span>
         </div>
         <div className="step active" style={{color: '#007bff'}}>
-  <div className="step-number" style={{backgroundColor: '#007bff', color: 'white'}}>3</div>
-  <span>Payment Details</span>
-</div>
+        <div className="step-number" style={{backgroundColor: '#007bff', color: 'white'}}>3</div>
+            <span>Payment Details</span>
+        </div>
         <div className="step">
           <div className="step-number">4</div>
           <span>Finished!</span>
@@ -118,7 +129,13 @@ const PaymentInfo = () => {
                 </p>
               </div>
 
-              <button className="subscribe-btn">Get My Subscription</button>
+              {/* *** MODIFIED: Added onClick handler to navigate to final page *** */}
+              <button 
+                className="subscribe-btn"
+                onClick={handleSubscription}
+              >
+                Get My Subscription
+              </button>
 
               
 

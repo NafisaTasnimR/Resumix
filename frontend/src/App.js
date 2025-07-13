@@ -4,6 +4,8 @@ import LandingPage from './Components/LandingPage/LandingPage';
 import LoginSignup from './Components/LoginSignup/LoginSignup';
 import PostLoginHeader from './Components/PostLoginHeader/PostLoginHeader';
 import RoutingComponent from './Components/RoutingComponent';
+import MRoutingComponent from './Components/MRoutingComponent';
+import ProfileForm from './Components/ProfileForm/ProfileForm';
 
 function App() {
   return (
@@ -13,7 +15,9 @@ function App() {
         <Route path="/login" element={<LoginSignup mode="login" />} />
         <Route path="/signup" element={<LoginSignup mode="signup" />} />
         <Route path="/postlogin/" element={<PostLoginHeader />} />
-        <Route path="*" element={<RoutingComponent />} />
+        <Route path="/profile" element={<ProfileForm />} />
+        <Route path="/m/*" element={<MRoutingComponent />} />
+        <Route path="/*" element={<RoutingComponent />} />
       </Routes>
     </Router>
   );

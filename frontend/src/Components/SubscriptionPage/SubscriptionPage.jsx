@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 
 const SubscriptionPage = () => {
   const [selectedPlan, setSelectedPlan] = useState('14-day');
+  const navigate = useNavigate(); 
+
+  
+  const handleContinue = () => {
+    navigate('/m/payment', { state: { selectedPlan } });
+  };
 
   return (
     <div style={{
@@ -11,7 +18,7 @@ const SubscriptionPage = () => {
       margin: 0,
       padding: 0
     }}>
-    {/* Progress Steps - FIXED TO MATCH PAYMENT PAGE */}
+    
     <div style={{
       display: 'flex',
       alignItems: 'center',
@@ -258,7 +265,11 @@ const SubscriptionPage = () => {
                 backgroundColor: selectedPlan === '14-day' ? '#6c7a3a' : '#e9ecef',
                 color: selectedPlan === '14-day' ? 'white' : '#6c757d'
               }}
-              onClick={() => setSelectedPlan('14-day')}
+              onClick={(e) => {
+                e.stopPropagation(); 
+                setSelectedPlan('14-day');
+                handleContinue(); 
+              }}
             >
               CONTINUE
             </button>
@@ -371,7 +382,11 @@ const SubscriptionPage = () => {
                 backgroundColor: selectedPlan === 'annual' ? '#6c7a3a' : '#e9ecef',
                 color: selectedPlan === 'annual' ? 'white' : '#6c757d'
               }}
-              onClick={() => setSelectedPlan('annual')}
+              onClick={(e) => {
+                e.stopPropagation(); 
+                setSelectedPlan('annual');
+                handleContinue(); 
+              }}
             >
               CONTINUE
             </button>
