@@ -5,8 +5,7 @@ const ResumeTemplates = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentFilter, setCurrentFilter] = useState('popular');
   const [visibleCount, setVisibleCount] = useState(3);
-
-  // Sample templates data
+      
   const templatesData = [
     { id: 1, category: 'popular', name: 'Template 1' },
     { id: 2, category: 'popular', name: 'Template 2' },
@@ -18,40 +17,47 @@ const ResumeTemplates = () => {
     { id: 8, category: 'popular', name: 'Template 8' },
     { id: 9, category: 'new', name: 'Template 9' },
   ];
-
+   
   const filteredTemplates = templatesData.filter(template => {
     const matchesFilter = currentFilter === 'all' || template.category === currentFilter || template.category === 'all';
     const matchesSearch = searchTerm === '' || 
-      template.name.toLowerCase().includes(searchTerm.toLowerCase());
+       template.name.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
   });
-
+   
   const visibleTemplates = searchTerm ? filteredTemplates : filteredTemplates.slice(0, visibleCount);
-
+   
   const handleFilterChange = (filter) => {
     setCurrentFilter(filter);
     setVisibleCount(3);
   };
-
+   
   const handleLoadMore = () => {
     setVisibleCount(prev => prev + 3);
   };
-
+   
   return (
     <div className="page-wrapper">
-      <h1 className="page-title">Resume Templates</h1>
-      
+      <div className="green-header">
+        <h1 className="page-title">Templates</h1>
+      </div>
+             
       <div className="search-bar-container">
         <input 
-          type="text" 
-          className="search-bar" 
-          placeholder="Search here..." 
+          type="text"
+          className="search-bar"
+          placeholder="Search here..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <span className="search-icon">🔍</span>
+        <span className="search-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="8" stroke="black" strokeWidth="2"/>
+            <path d="m21 21-4.35-4.35" stroke="black" strokeWidth="2"/>
+          </svg>
+        </span>
       </div>
-      
+             
       <div className="tabs">
         <div 
           className={`tab ${currentFilter === 'popular' ? 'active' : ''}`}

@@ -1,4 +1,27 @@
-/* PaymentPage.css */
+/* FORCE OVERRIDE STYLES */
+div.payment-container {
+  width: 100% !important;
+  max-width: 800px !important;
+  margin: 0 auto !important;
+  padding: 20px !important;
+}
+
+div.main-content {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+div.left-section {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+div.payment-form {
+  width: 100% !important;
+}
+
+/* PaymentInfo.css */
 
 * {
   margin: 0;
@@ -13,11 +36,11 @@ body {
 }
 
 .payment-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 900px; /* Set a good width */
+  margin: 0 auto; /* Center it */
   padding: 20px;
-  background-color: white;
-  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* Progress Steps */
@@ -40,7 +63,7 @@ body {
 }
 
 .step.completed {
-  color: #28a745;
+  color: #656d4a;
 }
 
 .step.active {
@@ -62,7 +85,7 @@ body {
 }
 
 .step.completed .step-icon {
-  background-color: #28a745;
+  background-color: #656d4a;
   color: white;
 }
 
@@ -78,18 +101,20 @@ body {
 
 /* Main Content Layout */
 .main-content {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  display: block;
+  width: 100%;
 }
 
 .left-section {
   width: 100%;
-  max-width: 700px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 /* Payment Form */
+.payment-form {
+  width: 100%;
+}
+
 .payment-form h2 {
   font-size: 28px;
   font-weight: 600;
@@ -116,31 +141,35 @@ body {
 
 .card-icons {
   display: flex;
-  gap: 8px;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .card-icons img {
-  width: 40px;
-  height: 24px;
+  width: 100%;
+  height: auto;
+  max-width: 40px;
   border-radius: 4px;
 }
 
 .form-row {
   display: flex;
-  gap: 16px;
+  gap: 20px;
+  width: 100%;
 }
 
 .form-group {
   margin-bottom: 20px;
   position: relative;
+  flex: 1; /* This ensures form groups take available space */
 }
 
 .form-group.card-number {
-  flex: 2;
+  flex: 2.5; /* Card number takes more space */
 }
 
 .form-group.cvv {
-  flex: 1;
+  flex: 1; /* CVV takes less space */
   position: relative;
 }
 
@@ -159,6 +188,7 @@ body {
   border-radius: 6px;
   font-size: 16px;
   transition: border-color 0.2s;
+  box-sizing: border-box;
 }
 
 .form-group input:focus {
@@ -179,6 +209,7 @@ body {
   font-size: 16px;
   background-color: white;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .info-icon {
@@ -217,12 +248,12 @@ body {
 .subscribe-btn {
   width: 100%;
   padding: 16px 24px;
-  background: linear-gradient(135deg, #ffd700, #ffed4a);
+  background: #656d4a;
   border: none;
   border-radius: 8px;
   font-size: 18px;
   font-weight: 600;
-  color: #2c3e50;
+  color: white;
   cursor: pointer;
   margin-bottom: 20px;
   transition: transform 0.2s, box-shadow 0.2s;
@@ -230,7 +261,7 @@ body {
 
 .subscribe-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+  background: #A4ac86;
 }
 
 /* Secure Checkout */
@@ -273,13 +304,15 @@ body {
   color: #495057;
 }
 
-
-
 /* Responsive Design */
 @media (max-width: 768px) {
   .main-content {
     flex-direction: column;
     gap: 20px;
+  }
+  
+  .left-section {
+    max-width: 100%;
   }
   
   .progress-steps {

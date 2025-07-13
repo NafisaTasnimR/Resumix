@@ -15,16 +15,16 @@ const PaymentInfo = () => {
       <div className="progress-steps">
         <div className="step completed">
           <div className="step-icon">✓</div>
-          <span>Builder</span>
+          <span>Home page</span>
         </div>
         <div className="step completed">
           <div className="step-icon">✓</div>
           <span>Choose Access</span>
         </div>
-        <div className="step active">
-          <div className="step-number">3</div>
-          <span>PAYMENT DETAILS</span>
-        </div>
+        <div className="step active" style={{color: '#007bff'}}>
+  <div className="step-number" style={{backgroundColor: '#007bff', color: 'white'}}>3</div>
+  <span>Payment Details</span>
+</div>
         <div className="step">
           <div className="step-number">4</div>
           <span>Finished!</span>
@@ -41,10 +41,10 @@ const PaymentInfo = () => {
                 <div className="section-header">
                   <span>Card Information</span>
                   <div className="card-icons">
-                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAzMiAyMCIgZmlsbD0ibm9uZSI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjIwIiByeD0iNCIgZmlsbD0iIzE0MzQ4NyIvPjx0ZXh0IHg9IjUiIHk9IjE0IiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSI4Ij5WSVNBPC90ZXh0Pjwvc3ZnPg==" alt="Visa" />
-                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAzMiAyMCIgZmlsbD0ibm9uZSI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjIwIiByeD0iNCIgZmlsbD0iI0VCMDAxQiIvPjx0ZXh0IHg9IjEwIiB5PSIxNCIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iOCI+TUM8L3RleHQ+PC9zdmc+" alt="Mastercard" />
-                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAzMiAyMCIgZmlsbD0ibm9uZSI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjIwIiByeD0iNCIgZmlsbD0iI0ZGNjAwMCIvPjx0ZXh0IHg9IjgiIHk9IjE0IiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSI4Ij5ESVNDT1ZFUjwvdGV4dD48L3N2Zz4=" alt="Discover" />
-                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAzMiAyMCIgZmlsbD0ibm9uZSI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjIwIiByeD0iNCIgZmlsbD0iIzAwNkZDRiIvPjx0ZXh0IHg9IjQiIHk9IjE0IiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSI4Ij5BTUVYPC90ZXh0Pjwvc3ZnPg==" alt="American Express" />
+                    <img src="/Visa.jpg" alt="Visa" />
+                    <img src="/MasterCard.jpg" alt="Mastercard" />
+                    <img src="/JCB.jpg" alt="JCB" />
+                    <img src="/AmericanExpress.jpg" alt="American Express" />
                   </div>
                 </div>
 
@@ -114,22 +114,18 @@ const PaymentInfo = () => {
 
               <div className="terms-section">
                 <p>
-                  By clicking "Get My Subscription" below you agree to be charged $1.70 (which includes unlimited edits, downloads, and emails). You also agree to our Terms of Use and Privacy Policy. After 14 days you will be billed $23.95 every 4 weeks until your subscription ends. <strong>you can cancel at any time</strong>
+                  By clicking "Get My Subscription" below you agree to be charged $1.70 (which includes unlimited edits, downloads, and emails). You also agree to our Terms of Use and Privacy Policy. After 14 days you will be billed $3.40 every 4 weeks until your subscription ends. <strong>you can cancel at any time</strong>
                 </p>
               </div>
 
               <button className="subscribe-btn">Get My Subscription</button>
 
-              <div className="secure-checkout">
-                <span className="lock-icon">🔒</span>
-                <span>SECURE CHECKOUT</span>
-                <span className="powered-by">DigiCert</span>
-              </div>
+              
 
               <div className="cancel-section">
                 <h3>How Would I Cancel?</h3>
                 <p>
-                  We'd be sorry to see you go! You can cancel at any time online or by phone. If you're not satisfied during your 14 days trial, let us know and we'll refund your money.
+                  We'd be sorry to see you go! You can cancel at any time online.
                 </p>
               </div>
             </div>
