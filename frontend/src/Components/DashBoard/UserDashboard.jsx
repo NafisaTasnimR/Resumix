@@ -117,6 +117,8 @@ const Dashboard = () => {
         </div>
       </div>
 
+      <button className="update-info-btn">Update your information →</button>
+
       <ShareResumeModal 
         isOpen={isShareModalOpen} 
         onClose={handleCloseModal} 
