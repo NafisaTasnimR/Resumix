@@ -24,7 +24,7 @@ const PostLoginHeader = () => {
   </div>
   {dropdownOpen && (
     <div className="dropdown-content">
-      <Link to="/resumes">
+      <Link to="/dashboard">
         <span role="img" aria-label="dashboard">👤</span> Dashboard
       </Link>
       <Link to="/settings">
