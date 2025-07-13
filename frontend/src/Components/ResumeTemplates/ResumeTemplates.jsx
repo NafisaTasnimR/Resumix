@@ -39,7 +39,7 @@ const ResumeTemplates = () => {
   return (
     <div className="page-wrapper">
       <div className="green-header">
-        <h1 className="page-title">Resume Templates</h1>
+        <h1 className="page-title">Templates</h1>
       </div>
              
       <div className="search-bar-container">
