@@ -14,3 +14,19 @@ const verifyToken = (req, res, next) => {
     }
 };
 
+const validateInformationUpdate = (req, res, next) => {
+    const updateUserSchema = Joi.object({
+        name: Joi.string().min(2).max(50),
+        email: Joi.string().email(),
+        phone: Joi.string().pattern(/^\+?\d{10,15}$/).message("Invalid phone number"),
+        address: Joi.string().max(100)
+    }).min(1);
+    const { error } = updateUserSchema.validate(req.body, { abortEarly: false });
+
+    if (error) {
+        const errorMessages = error.details.map((detail) => detail.message);
+        return res.status(400).json({ errors: errorMessages });
+    }
+
+    next();
+};
