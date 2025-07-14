@@ -5,6 +5,7 @@ import Experience from './Experience';
 import Education from './Education';
 import Skills from './Skills';
 import Achievements from './Achievements';
+import References from './References';
 
 const ProfileForm = () => {
   const [currentPage, setCurrentPage] = useState('personal');
@@ -69,6 +70,23 @@ const ProfileForm = () => {
   ]);
   const [currentAchievementIndex, setCurrentAchievementIndex] = useState(0);
 
+  // References state
+  const [references, setReferences] = useState([
+    {
+      id: 1,
+      firstName: '',
+      lastName: '',
+      jobTitle: '',
+      company: '',
+      email: '',
+      phone: '',
+      relationship: '',
+      description: '',
+      canContact: false
+    }
+  ]);
+  const [currentReferenceIndex, setCurrentReferenceIndex] = useState(0);
+
   // Navigation functions
   const handleNextPage = () => {
     if (currentPage === 'personal') {
@@ -79,6 +97,8 @@ const ProfileForm = () => {
       setCurrentPage('skills');
     } else if (currentPage === 'skills') {
       setCurrentPage('achievements');
+    } else if (currentPage === 'achievements') {
+      setCurrentPage('references');
     }
   };
 
@@ -91,6 +111,8 @@ const ProfileForm = () => {
       setCurrentPage('education');
     } else if (currentPage === 'achievements') {
       setCurrentPage('skills');
+    } else if (currentPage === 'references') {
+      setCurrentPage('achievements');
     }
   };
 
@@ -220,6 +242,41 @@ const ProfileForm = () => {
     setAchievements(updatedAchievements);
   };
 
+  // References functions
+  const addNewReference = () => {
+    const newReference = {
+      id: references.length + 1,
+      firstName: '',
+      lastName: '',
+      jobTitle: '',
+      company: '',
+      email: '',
+      phone: '',
+      relationship: '',
+      description: '',
+      canContact: false
+    };
+    setReferences([...references, newReference]);
+    setCurrentReferenceIndex(references.length);
+  };
+
+  const removeReference = (index) => {
+    if (references.length > 1) {
+      const newReferences = references.filter((_, i) => i !== index);
+      setReferences(newReferences);
+      setCurrentReferenceIndex(Math.max(0, index - 1));
+    }
+  };
+
+  const updateReference = (field, value) => {
+    const updatedReferences = [...references];
+    updatedReferences[currentReferenceIndex] = {
+      ...updatedReferences[currentReferenceIndex],
+      [field]: value
+    };
+    setReferences(updatedReferences);
+  };
+
   const updateSkill = (field, value) => {
     const updatedSkills = [...skills];
     updatedSkills[currentSkillIndex] = {
@@ -282,6 +339,17 @@ const ProfileForm = () => {
             removeAchievement={removeAchievement}
           />
         );
+      case 'references':
+        return (
+          <References 
+            references={references}
+            currentReferenceIndex={currentReferenceIndex}
+            setCurrentReferenceIndex={setCurrentReferenceIndex}
+            updateReference={updateReference}
+            addNewReference={addNewReference}
+            removeReference={removeReference}
+          />
+        );
       default:
         return null;
     }
@@ -341,6 +409,15 @@ const ProfileForm = () => {
                 />
               </div>
             )}
+            {currentPage === 'references' && (
+              <div className="page-image">
+                <img 
+                  src="/References.png" 
+                  alt="References" 
+                  className="page-img"
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -350,7 +427,7 @@ const ProfileForm = () => {
       </div>
 
       <div className="navigation">
-        {(currentPage === 'experience' || currentPage === 'education' || currentPage === 'skills' || currentPage === 'achievements') && (
+        {(currentPage === 'experience' || currentPage === 'education' || currentPage === 'skills' || currentPage === 'achievements' || currentPage === 'references') && (
           <button className="nav-button prev-button" onClick={handlePrevPage}>
             Prev
           </button>
@@ -376,6 +453,11 @@ const ProfileForm = () => {
           </button>
         )}
         {currentPage === 'achievements' && (
+          <button className="nav-button next-button" onClick={handleNextPage}>
+            Next
+          </button>
+        )}
+        {currentPage === 'references' && (
           <button className="nav-button submit-nav-button" onClick={handleSubmit}>
             Submit
           </button>
