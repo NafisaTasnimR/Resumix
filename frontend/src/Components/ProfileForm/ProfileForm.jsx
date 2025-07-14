@@ -1,21 +1,134 @@
 import React, { useState } from 'react';
 import './ProfileForm.css';
+import PersonalInfo from './PersonalInfo';
+import Experience from './Experience';
+import Education from './Education';
+import Skills from './Skills';
+import Achievements from './Achievements';
+import References from './References';
+import Hobbies from './Hobbies';
+import AdditionalInfo from './AdditionalInfo';
 
 const ProfileForm = () => {
   const [currentPage, setCurrentPage] = useState('personal');
   const [showAddressDetails, setShowAddressDetails] = useState(false);
-  const [isCurrentJob, setIsCurrentJob] = useState(true);
-  const [isCurrentInstitute, setIsCurrentInstitute] = useState(false);
+  
+  // Experience state
+  const [experiences, setExperiences] = useState([
+    {
+      id: 1,
+      employer: '',
+      jobTitle: '',
+      city: '',
+      state: '',
+      startDate: '',
+      endDate: '',
+      isCurrent: false,
+      description: ''
+    }
+  ]);
+  const [currentExperienceIndex, setCurrentExperienceIndex] = useState(0);
 
-  const handleAddressClick = () => {
-    setShowAddressDetails(true);
-  };
+  // Education state
+  const [educations, setEducations] = useState([
+    {
+      id: 1,
+      schoolName: '',
+      degree: '',
+      fieldOfStudy: '',
+      graduation: '',
+      city: '',
+      state: '',
+      startDate: '',
+      endDate: '',
+      isCurrent: false
+    }
+  ]);
+  const [currentEducationIndex, setCurrentEducationIndex] = useState(0);
 
+  // Skills state
+  const [skills, setSkills] = useState([
+    {
+      id: 1,
+      skillName: '',
+      proficiency: '',
+      yearsOfExperience: '',
+      description: ''
+    }
+  ]);
+  const [currentSkillIndex, setCurrentSkillIndex] = useState(0);
+
+  // Achievements state
+  const [achievements, setAchievements] = useState([
+    {
+      id: 1,
+      title: '',
+      organization: '',
+      dateReceived: '',
+      category: '',
+      description: '',
+      website: ''
+    }
+  ]);
+  const [currentAchievementIndex, setCurrentAchievementIndex] = useState(0);
+
+  // References state
+  const [references, setReferences] = useState([
+    {
+      id: 1,
+      firstName: '',
+      lastName: '',
+      jobTitle: '',
+      company: '',
+      email: '',
+      phone: '',
+      relationship: '',
+      description: '',
+      canContact: false
+    }
+  ]);
+  const [currentReferenceIndex, setCurrentReferenceIndex] = useState(0);
+
+  // Hobbies state
+  const [hobbies, setHobbies] = useState([
+    {
+      id: 1,
+      hobbyName: '',
+      experienceLevel: '',
+      yearsInvolved: '',
+      category: '',
+      description: '',
+      achievements: ''
+    }
+  ]);
+  const [currentHobbyIndex, setCurrentHobbyIndex] = useState(0);
+
+  // Additional Info state
+  const [additionalInfos, setAdditionalInfos] = useState([
+    {
+      id: 1,
+      title: '',
+      content: ''
+    }
+  ]);
+  const [currentAdditionalInfoIndex, setCurrentAdditionalInfoIndex] = useState(0);
+
+  // Navigation functions
   const handleNextPage = () => {
     if (currentPage === 'personal') {
       setCurrentPage('experience');
     } else if (currentPage === 'experience') {
       setCurrentPage('education');
+    } else if (currentPage === 'education') {
+      setCurrentPage('skills');
+    } else if (currentPage === 'skills') {
+      setCurrentPage('achievements');
+    } else if (currentPage === 'achievements') {
+      setCurrentPage('references');
+    } else if (currentPage === 'references') {
+      setCurrentPage('hobbies');
+    } else if (currentPage === 'hobbies') {
+      setCurrentPage('additional');
     }
   };
 
@@ -24,6 +137,16 @@ const ProfileForm = () => {
       setCurrentPage('personal');
     } else if (currentPage === 'education') {
       setCurrentPage('experience');
+    } else if (currentPage === 'skills') {
+      setCurrentPage('education');
+    } else if (currentPage === 'achievements') {
+      setCurrentPage('skills');
+    } else if (currentPage === 'references') {
+      setCurrentPage('achievements');
+    } else if (currentPage === 'hobbies') {
+      setCurrentPage('references');
+    } else if (currentPage === 'additional') {
+      setCurrentPage('hobbies');
     }
   };
 
@@ -31,231 +154,326 @@ const ProfileForm = () => {
     alert('Resume submitted successfully!');
   };
 
-  const handleCurrentJobChange = (e) => {
-    setIsCurrentJob(e.target.checked);
+  // Experience functions
+  const addNewExperience = () => {
+    const newExperience = {
+      id: experiences.length + 1,
+      employer: '',
+      jobTitle: '',
+      city: '',
+      state: '',
+      startDate: '',
+      endDate: '',
+      isCurrent: false,
+      description: ''
+    };
+    setExperiences([...experiences, newExperience]);
+    setCurrentExperienceIndex(experiences.length);
   };
 
-  const handleCurrentInstituteChange = (e) => {
-    setIsCurrentInstitute(e.target.checked);
+  const removeExperience = (index) => {
+    if (experiences.length > 1) {
+      const newExperiences = experiences.filter((_, i) => i !== index);
+      setExperiences(newExperiences);
+      setCurrentExperienceIndex(Math.max(0, index - 1));
+    }
   };
 
-  const renderPersonalPage = () => (
-    <>
-      <div className="personal-info-header">
-        <h2>Personal Information</h2>
-        <div className="info-line"></div>
-      </div>
+  const updateExperience = (field, value) => {
+    const updatedExperiences = [...experiences];
+    updatedExperiences[currentExperienceIndex] = {
+      ...updatedExperiences[currentExperienceIndex],
+      [field]: value
+    };
+    setExperiences(updatedExperiences);
+  };
 
-      <div className="form-fields">
-        <div className="field-group">
-          <label>Name:</label>
-          <input type="text" className="input-field" placeholder="Sal Khan" />
-        </div>
+  // Education functions
+  const addNewEducation = () => {
+    const newEducation = {
+      id: educations.length + 1,
+      schoolName: '',
+      degree: '',
+      fieldOfStudy: '',
+      graduation: '',
+      city: '',
+      state: '',
+      startDate: '',
+      endDate: '',
+      isCurrent: false
+    };
+    setEducations([...educations, newEducation]);
+    setCurrentEducationIndex(educations.length);
+  };
 
-        <div className="field-group">
-          <label>Email:</label>
-          <input type="email" className="input-field" placeholder="hello@khanacademy.org" />
-        </div>
+  const removeEducation = (index) => {
+    if (educations.length > 1) {
+      const newEducations = educations.filter((_, i) => i !== index);
+      setEducations(newEducations);
+      setCurrentEducationIndex(Math.max(0, index - 1));
+    }
+  };
 
-        <div className="field-group">
-          <label>Date of Birth:</label>
-          <input type="date" className="input-field" placeholder="1976-10-11" />
-        </div>
+  const updateEducation = (field, value) => {
+    const updatedEducations = [...educations];
+    updatedEducations[currentEducationIndex] = {
+      ...updatedEducations[currentEducationIndex],
+      [field]: value
+    };
+    setEducations(updatedEducations);
+  };
 
-        <div className="field-group">
-          <label>Phone:</label>
-          <input type="tel" className="input-field" placeholder="(123) 456-7890" />
-        </div>
+  // Skills functions
+  const addNewSkill = () => {
+    const newSkill = {
+      id: skills.length + 1,
+      skillName: '',
+      proficiency: '',
+      yearsOfExperience: '',
+      description: ''
+    };
+    setSkills([...skills, newSkill]);
+    setCurrentSkillIndex(skills.length);
+  };
 
-        <div className="field-group">
-          <label>Address:</label>
-          <input 
-            type="text" 
-            className={`input-field ${showAddressDetails ? 'expanded' : ''}`}
-            onClick={handleAddressClick}
-            placeholder="123 Main Street"
-            
+  const removeSkill = (index) => {
+    if (skills.length > 1) {
+      const newSkills = skills.filter((_, i) => i !== index);
+      setSkills(newSkills);
+      setCurrentSkillIndex(Math.max(0, index - 1));
+    }
+  };
+
+  // Achievements functions
+  const addNewAchievement = () => {
+    const newAchievement = {
+      id: achievements.length + 1,
+      title: '',
+      organization: '',
+      dateReceived: '',
+      category: '',
+      description: '',
+      website: ''
+    };
+    setAchievements([...achievements, newAchievement]);
+    setCurrentAchievementIndex(achievements.length);
+  };
+
+  const removeAchievement = (index) => {
+    if (achievements.length > 1) {
+      const newAchievements = achievements.filter((_, i) => i !== index);
+      setAchievements(newAchievements);
+      setCurrentAchievementIndex(Math.max(0, index - 1));
+    }
+  };
+
+  const updateAchievement = (field, value) => {
+    const updatedAchievements = [...achievements];
+    updatedAchievements[currentAchievementIndex] = {
+      ...updatedAchievements[currentAchievementIndex],
+      [field]: value
+    };
+    setAchievements(updatedAchievements);
+  };
+
+  // References functions
+  const addNewReference = () => {
+    const newReference = {
+      id: references.length + 1,
+      firstName: '',
+      lastName: '',
+      jobTitle: '',
+      company: '',
+      email: '',
+      phone: '',
+      relationship: '',
+      description: '',
+      canContact: false
+    };
+    setReferences([...references, newReference]);
+    setCurrentReferenceIndex(references.length);
+  };
+
+  const removeReference = (index) => {
+    if (references.length > 1) {
+      const newReferences = references.filter((_, i) => i !== index);
+      setReferences(newReferences);
+      setCurrentReferenceIndex(Math.max(0, index - 1));
+    }
+  };
+
+  const updateReference = (field, value) => {
+    const updatedReferences = [...references];
+    updatedReferences[currentReferenceIndex] = {
+      ...updatedReferences[currentReferenceIndex],
+      [field]: value
+    };
+    setReferences(updatedReferences);
+  };
+
+  // Hobbies functions
+  const addNewHobby = () => {
+    const newHobby = {
+      id: hobbies.length + 1,
+      hobbyName: '',
+      experienceLevel: '',
+      yearsInvolved: '',
+      category: '',
+      description: '',
+      achievements: ''
+    };
+    setHobbies([...hobbies, newHobby]);
+    setCurrentHobbyIndex(hobbies.length);
+  };
+
+  const removeHobby = (index) => {
+    if (hobbies.length > 1) {
+      const newHobbies = hobbies.filter((_, i) => i !== index);
+      setHobbies(newHobbies);
+      setCurrentHobbyIndex(Math.max(0, index - 1));
+    }
+  };
+
+  const updateHobby = (field, value) => {
+    const updatedHobbies = [...hobbies];
+    updatedHobbies[currentHobbyIndex] = {
+      ...updatedHobbies[currentHobbyIndex],
+      [field]: value
+    };
+    setHobbies(updatedHobbies);
+  };
+
+  // Additional Info functions
+  const addNewAdditionalInfo = () => {
+    const newAdditionalInfo = {
+      id: additionalInfos.length + 1,
+      title: '',
+      content: ''
+    };
+    setAdditionalInfos([...additionalInfos, newAdditionalInfo]);
+    setCurrentAdditionalInfoIndex(additionalInfos.length);
+  };
+
+  const removeAdditionalInfo = (index) => {
+    if (additionalInfos.length > 1) {
+      const newAdditionalInfos = additionalInfos.filter((_, i) => i !== index);
+      setAdditionalInfos(newAdditionalInfos);
+      setCurrentAdditionalInfoIndex(Math.max(0, index - 1));
+    }
+  };
+
+  const updateAdditionalInfo = (field, value) => {
+    const updatedAdditionalInfos = [...additionalInfos];
+    updatedAdditionalInfos[currentAdditionalInfoIndex] = {
+      ...updatedAdditionalInfos[currentAdditionalInfoIndex],
+      [field]: value
+    };
+    setAdditionalInfos(updatedAdditionalInfos);
+  };
+
+  const updateSkill = (field, value) => {
+    const updatedSkills = [...skills];
+    updatedSkills[currentSkillIndex] = {
+      ...updatedSkills[currentSkillIndex],
+      [field]: value
+    };
+    setSkills(updatedSkills);
+  };
+
+  const renderCurrentPage = () => {
+    switch (currentPage) {
+      case 'personal':
+        return (
+          <PersonalInfo 
+            showAddressDetails={showAddressDetails}
+            setShowAddressDetails={setShowAddressDetails}
           />
-        </div>
-
-        {showAddressDetails && (
-          <div className="address-details">
-            <div className="field-group">
-              <label>City:</label>
-              <input type="text" className="input-field city-field" placeholder="Mountain View" />
-            </div>
-
-            <div className="field-row">
-              <div className="field-group half-width">
-                <label>District:</label>
-                <input type="text" className="input-field" placeholder="Santa Clara County" />
-              </div>
-              <div className="field-group half-width">
-                <label>Country:</label>
-                <input type="text" className="input-field" placeholder="USA" />
-              </div>
-            </div>
-
-            <div className="field-group">
-              <label>Zip Code:</label>
-              <input type="text" className="input-field" placeholder="94041" />
-            </div>
-
-            <div className="field-group">
-              <label>Country:</label>
-              <input type="text" className="input-field" placeholder="United States" />
-            </div>
-          </div>
-        )}
-      </div>
-    </>
-  );
-
-  const renderExperiencePage = () => (
-    <>
-      <div className="personal-info-header">
-        <h2>Experience</h2>
-        <div className="info-line"></div>
-      </div>
-
-      <div className="form-fields">
-        <div className="field-group">
-          <label>Employer Name:</label>
-          <input type="text" className="input-field" placeholder="Khan Academy" />
-        </div>
-
-        <div className="field-group">
-          <label>Job Title:</label>
-          <input type="text" className="input-field" placeholder="Founder & CEO" />
-        </div>
-
-        <div className="field-row">
-          <div className="field-group half-width">
-            <label>City:</label>
-            <input type="text" className="input-field" placeholder="Mountain View" />
-          </div>
-          <div className="field-group half-width">
-            <label>State:</label>
-            <input type="text" className="input-field" placeholder="California" />
-          </div>
-        </div>
-
-        <div className="field-row">
-          <div className="field-group half-width">
-            <label>Start Date</label>
-            <input type="date" className="input-field" placeholder="2008-01-01" />
-          </div>
-          <div className="field-group half-width">
-            <label>End Date:</label>
-            <input 
-              type="date" 
-              className={`input-field ${isCurrentJob ? 'disabled-field' : ''}`}
-              placeholder="2024-12-31" 
-              disabled={isCurrentJob}
-            />
-          </div>
-        </div>
-
-        <div className="field-group">
-          <div className="current-job-checkbox">
-            <input 
-              type="checkbox" 
-              id="currentJob" 
-              className="checkbox-input" 
-              checked={isCurrentJob}
-              onChange={handleCurrentJobChange}
-            />
-            <label htmlFor="currentJob" className="checkbox-label">Set as Current Job</label>
-          </div>
-        </div>
-
-        <div className="field-group">
-          <label>Job Description</label>
-          <textarea 
-            className="input-field textarea-field" 
-            rows="4" 
-            placeholder="Founded and led Khan Academy, a non-profit educational organization. Developed innovative online learning platform serving millions of students worldwide. Created comprehensive curriculum covering mathematics, science, and humanities."
-          ></textarea>
-        </div>
-      </div>
-    </>
-  );
-
-  const renderEducationPage = () => (
-    <>
-      <div className="personal-info-header">
-        <h2>Education</h2>
-        <div className="info-line"></div>
-      </div>
-
-      <div className="form-fields">
-        <div className="field-group">
-          <label>School Name:</label>
-          <input type="text" className="input-field" placeholder="Harvard Business School" />
-        </div>
-
-        <div className="field-group">
-          <label>Degree:</label>
-          <input type="text" className="input-field" placeholder="Master of Business Administration" />
-        </div>
-
-        <div className="field-group">
-          <label>Field of Study:</label>
-          <input type="text" className="input-field" placeholder="Business Administration" />
-        </div>
-
-        <div className="field-group">
-          <label>Graduation</label>
-          <input type="date" className="input-field" placeholder="2003-05-15" />
-        </div>
-
-        <div className="field-row">
-          <div className="field-group half-width">
-            <label>City:</label>
-            <input type="text" className="input-field" placeholder="Boston" />
-          </div>
-          <div className="field-group half-width">
-            <label>State:</label>
-            <input type="text" className="input-field" placeholder="Massachusetts" />
-          </div>
-        </div>
-
-        <div className="field-row">
-          <div className="field-group half-width">
-            <label>Start Date</label>
-            <input type="date" className="input-field" placeholder="2001-09-01" />
-          </div>
-          <div className="field-group half-width">
-            <label>End Date:</label>
-            <input 
-              type="date" 
-              className={`input-field ${isCurrentInstitute ? 'disabled-field' : ''}`}
-              placeholder="2003-05-15" 
-              disabled={isCurrentInstitute}
-            />
-          </div>
-        </div>
-
-        <div className="field-group">
-          <div className="current-job-checkbox">
-            <input 
-              type="checkbox" 
-              id="currentInstitute" 
-              className="checkbox-input" 
-              checked={isCurrentInstitute}
-              onChange={handleCurrentInstituteChange}
-            />
-            <label htmlFor="currentInstitute" className="checkbox-label">Set as Current Institute</label>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+        );
+      case 'experience':
+        return (
+          <Experience 
+            experiences={experiences}
+            currentExperienceIndex={currentExperienceIndex}
+            setCurrentExperienceIndex={setCurrentExperienceIndex}
+            updateExperience={updateExperience}
+            addNewExperience={addNewExperience}
+            removeExperience={removeExperience}
+          />
+        );
+      case 'education':
+        return (
+          <Education 
+            educations={educations}
+            currentEducationIndex={currentEducationIndex}
+            setCurrentEducationIndex={setCurrentEducationIndex}
+            updateEducation={updateEducation}
+            addNewEducation={addNewEducation}
+            removeEducation={removeEducation}
+          />
+        );
+      case 'skills':
+        return (
+          <Skills 
+            skills={skills}
+            currentSkillIndex={currentSkillIndex}
+            setCurrentSkillIndex={setCurrentSkillIndex}
+            updateSkill={updateSkill}
+            addNewSkill={addNewSkill}
+            removeSkill={removeSkill}
+          />
+        );
+      case 'achievements':
+        return (
+          <Achievements 
+            achievements={achievements}
+            currentAchievementIndex={currentAchievementIndex}
+            setCurrentAchievementIndex={setCurrentAchievementIndex}
+            updateAchievement={updateAchievement}
+            addNewAchievement={addNewAchievement}
+            removeAchievement={removeAchievement}
+          />
+        );
+      case 'references':
+        return (
+          <References 
+            references={references}
+            currentReferenceIndex={currentReferenceIndex}
+            setCurrentReferenceIndex={setCurrentReferenceIndex}
+            updateReference={updateReference}
+            addNewReference={addNewReference}
+            removeReference={removeReference}
+          />
+        );
+      case 'hobbies':
+        return (
+          <Hobbies 
+            hobbies={hobbies}
+            currentHobbyIndex={currentHobbyIndex}
+            setCurrentHobbyIndex={setCurrentHobbyIndex}
+            updateHobby={updateHobby}
+            addNewHobby={addNewHobby}
+            removeHobby={removeHobby}
+          />
+        );
+      case 'additional':
+        return (
+          <AdditionalInfo 
+            additionalInfos={additionalInfos}
+            currentAdditionalInfoIndex={currentAdditionalInfoIndex}
+            setCurrentAdditionalInfoIndex={setCurrentAdditionalInfoIndex}
+            updateAdditionalInfo={updateAdditionalInfo}
+            addNewAdditionalInfo={addNewAdditionalInfo}
+            removeAdditionalInfo={removeAdditionalInfo}
+          />
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="resume-container">
       <div className="resume-header">
-        
         <div className="header-line"></div>
       </div>
 
@@ -269,7 +487,6 @@ const ProfileForm = () => {
                   alt="Personal Information" 
                   className="page-img"
                 />
-                
               </div>
             )}
             {currentPage === 'experience' && (
@@ -279,7 +496,6 @@ const ProfileForm = () => {
                   alt="Work Experience" 
                   className="page-img"
                 />
-                
               </div>
             )}
             {currentPage === 'education' && (
@@ -289,21 +505,63 @@ const ProfileForm = () => {
                   alt="Education" 
                   className="page-img"
                 />
-                
+              </div>
+            )}
+            {currentPage === 'skills' && (
+              <div className="page-image">
+                <img 
+                  src="/Skills.png" 
+                  alt="Skills" 
+                  className="page-img"
+                />
+              </div>
+            )}
+            {currentPage === 'achievements' && (
+              <div className="page-image">
+                <img 
+                  src="/Achievements.png" 
+                  alt="Achievements" 
+                  className="page-img"
+                />
+              </div>
+            )}
+            {currentPage === 'references' && (
+              <div className="page-image">
+                <img 
+                  src="/References.png" 
+                  alt="References" 
+                  className="page-img"
+                />
+              </div>
+            )}
+            {currentPage === 'hobbies' && (
+              <div className="page-image">
+                <img 
+                  src="/Hobbies.png" 
+                  alt="Hobbies" 
+                  className="page-img"
+                />
+              </div>
+            )}
+            {currentPage === 'additional' && (
+              <div className="page-image">
+                <img 
+                  src="/Additional.png" 
+                  alt="Additional Information" 
+                  className="page-img"
+                />
               </div>
             )}
           </div>
         </div>
 
         <div className="right-section">
-          {currentPage === 'personal' && renderPersonalPage()}
-          {currentPage === 'experience' && renderExperiencePage()}
-          {currentPage === 'education' && renderEducationPage()}
+          {renderCurrentPage()}
         </div>
       </div>
 
       <div className="navigation">
-        {(currentPage === 'experience' || currentPage === 'education') && (
+        {(currentPage === 'experience' || currentPage === 'education' || currentPage === 'skills' || currentPage === 'achievements' || currentPage === 'references' || currentPage === 'hobbies' || currentPage === 'additional') && (
           <button className="nav-button prev-button" onClick={handlePrevPage}>
             Prev
           </button>
@@ -319,6 +577,31 @@ const ProfileForm = () => {
           </button>
         )}
         {currentPage === 'education' && (
+          <button className="nav-button next-button" onClick={handleNextPage}>
+            Next
+          </button>
+        )}
+        {currentPage === 'skills' && (
+          <button className="nav-button next-button" onClick={handleNextPage}>
+            Next
+          </button>
+        )}
+        {currentPage === 'achievements' && (
+          <button className="nav-button next-button" onClick={handleNextPage}>
+            Next
+          </button>
+        )}
+        {currentPage === 'references' && (
+          <button className="nav-button next-button" onClick={handleNextPage}>
+            Next
+          </button>
+        )}
+        {currentPage === 'hobbies' && (
+          <button className="nav-button next-button" onClick={handleNextPage}>
+            Next
+          </button>
+        )}
+        {currentPage === 'additional' && (
           <button className="nav-button submit-nav-button" onClick={handleSubmit}>
             Submit
           </button>

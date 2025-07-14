@@ -196,9 +196,15 @@ body {
   border-color: #007bff;
 }
 
-.form-group input.validated {
-  border-color: #28a745;
-  background-color: #f8fff9;
+/* Sample data styling - makes sample data appear lighter/grayed out */
+.form-group input.sample-data {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.form-group input.sample-data:focus {
+  color: #333;
+  font-style: normal;
 }
 
 .form-group select {

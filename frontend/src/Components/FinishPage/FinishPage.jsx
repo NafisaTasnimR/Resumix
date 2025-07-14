@@ -1,7 +1,18 @@
 import React from 'react';
 import './FinishPage.css';
+// *** ADDED: Import useNavigate for navigation ***
+import { useNavigate } from 'react-router-dom';
 
 const FinishPage = () => {
+  // *** ADDED: Initialize navigation hook ***
+  const navigate = useNavigate();
+
+  // *** ADDED: Function to handle home page navigation ***
+  const handleGoToHome = () => {
+    // Navigate to the post login page
+    navigate('/postlogin/');
+  };
+
   return (
     <div className="finish-container">
       {/* Progress Steps */}
@@ -58,14 +69,20 @@ const FinishPage = () => {
                   <p>Access all premium templates, unlimited downloads, and advanced features immediately.</p>
                 </div>
               </div>
-              
             </div>
           </div>
 
           {/* Action Buttons */}
           <div className="action-buttons">
-            <div className="primary-btn" role="button" tabIndex="0">
-              Go to Homepage
+            {/* *** MODIFIED: Added onClick handler and changed from Link to button *** */}
+            <div 
+              className="primary-btn" 
+              role="button" 
+              tabIndex="0"
+              onClick={handleGoToHome}
+              style={{ cursor: 'pointer' }}
+            >
+              Go to Home Page
             </div>
           </div>
 

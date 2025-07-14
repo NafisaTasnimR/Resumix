@@ -1,13 +1,30 @@
 import React, { useState } from 'react';
 import './PaymentInfo.css';
 
+import { useNavigate } from 'react-router-dom';
+
 const PaymentInfo = () => {
+ 
+  const navigate = useNavigate();
+  
   const [currentStep, setCurrentStep] = useState(3);
   const [cardNumber, setCardNumber] = useState('1234 5678 6789 7890');
   const [cvv, setCvv] = useState('123');
   const [nameOnCard, setNameOnCard] = useState('MRITTIKA JAHAN');
   const [month, setMonth] = useState('Month');
   const [year, setYear] = useState('Year');
+
+  // Sample data values for comparison
+  const sampleData = {
+    cardNumber: '1234 5678 6789 7890',
+    cvv: '123',
+    nameOnCard: 'MRITTIKA JAHAN'
+  };
+
+  const handleSubscription = () => {
+    
+    navigate('/m/final');
+  };
 
   return (
     <div className="payment-container">
@@ -22,9 +39,9 @@ const PaymentInfo = () => {
           <span>Choose Access</span>
         </div>
         <div className="step active" style={{color: '#007bff'}}>
-  <div className="step-number" style={{backgroundColor: '#007bff', color: 'white'}}>3</div>
-  <span>Payment Details</span>
-</div>
+        <div className="step-number" style={{backgroundColor: '#007bff', color: 'white'}}>3</div>
+            <span>Payment Details</span>
+        </div>
         <div className="step">
           <div className="step-number">4</div>
           <span>Finished!</span>
@@ -56,6 +73,7 @@ const PaymentInfo = () => {
                       value={cardNumber}
                       onChange={(e) => setCardNumber(e.target.value)}
                       placeholder="1234 5678 6789 7890"
+                      className={cardNumber === sampleData.cardNumber ? 'sample-data' : ''}
                     />
                   </div>
                   <div className="form-group cvv">
@@ -65,6 +83,7 @@ const PaymentInfo = () => {
                       value={cvv}
                       onChange={(e) => setCvv(e.target.value)}
                       placeholder="123"
+                      className={cvv === sampleData.cvv ? 'sample-data' : ''}
                     />
                     <div className="info-icon">?</div>
                   </div>
@@ -76,7 +95,7 @@ const PaymentInfo = () => {
                     type="text"
                     value={nameOnCard}
                     onChange={(e) => setNameOnCard(e.target.value)}
-                    className="validated"
+                    className={nameOnCard === sampleData.nameOnCard ? 'sample-data validated' : 'validated'}
                   />
                 </div>
 
@@ -114,11 +133,16 @@ const PaymentInfo = () => {
 
               <div className="terms-section">
                 <p>
-                  By clicking "Get My Subscription" below you agree to be charged $1.70 (which includes unlimited edits, downloads, and emails). You also agree to our Terms of Use and Privacy Policy. After 14 days you will be billed $3.40 every 4 weeks until your subscription ends. <strong>you can cancel at any time</strong>
+                  By clicking "Get My Subscription" below you agree to be charged <strong>$1.70</strong> (which includes unlimited edits, downloads, and emails). You also agree to our Terms of Use and Privacy Policy. <strong>you can cancel at any time</strong>
                 </p>
               </div>
 
-              <button className="subscribe-btn">Get My Subscription</button>
+              <button 
+                className="subscribe-btn"
+                onClick={handleSubscription}
+              >
+                Get My Subscription
+              </button>
 
               
 
