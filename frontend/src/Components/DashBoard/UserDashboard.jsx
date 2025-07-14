@@ -13,6 +13,11 @@ const Dashboard = () => {
   const personalRef = useRef(null);
   const educationRef = useRef(null);
   const experienceRef = useRef(null);
+  const skillsRef = useRef(null);
+  const achievementsRef = useRef(null);
+  const referencesRef = useRef(null);
+  const hobbiesRef = useRef(null);
+  const additonalsRef = useRef(null);
 
   const handleShareClick = () => {
     setIsShareModalOpen(true);
@@ -73,61 +78,122 @@ const Dashboard = () => {
           <div className="sidebar-item" onClick={() => scrollToSection(experienceRef)}>
             Experience
           </div>
+          <div className="sidebar-item" onClick={() => scrollToSection(skillsRef)}>
+            Skills
+          </div>
+          <div className="sidebar-item" onClick={() => scrollToSection(achievementsRef)}>
+            Achievements
+          </div>
+          <div className="sidebar-item" onClick={() => scrollToSection(referencesRef)}>
+            References
+          </div>
+          <div className="sidebar-item" onClick={() => scrollToSection(hobbiesRef)}>
+            Hobbies
+          </div>
+          <div className="sidebar-item" onClick={() => scrollToSection(additonalsRef)}>
+            Additional Info
+            </div>
         </div>
 
         <div className="info-wrapper">
           <h2 className="info-main-header">YOUR INFORMATION</h2>
-
           <div className="info-section">
-            <div id="personal" className="info-block" ref={personalRef}>
+            <div className="info-box" ref={personalRef}>
               <h3>Personal Information</h3>
-              <p><strong>Name:</strong></p>
-              <p><strong>Email:</strong></p>
-              <p><strong>Date of Birth:</strong></p>
-              <p><strong>Phone:</strong></p>
-              <p><strong>Address:</strong></p>
-              <p><strong>City:</strong></p>
-              <p><strong>District:</strong></p>
-              <p><strong>Country:</strong></p>
+              <div className="info-line">Name:</div>
+              <div className="info-line">Email:</div>
+              <div className="info-line">Date of Birth:</div>
+              <div className="info-line">Phone:</div>
+              <div className="info-line">Address:</div>
+              <div className="info-line">City:</div>
+              <div className="info-line">District:</div>
+              <div className="info-line">Country:</div>
             </div>
-
-            <div id="education" className="info-block" ref={educationRef}>
+            <div className="info-box" ref={educationRef}>
               <h3>Education Information</h3>
-              <p><strong>School Name:</strong></p>
-              <p><strong>Degree:</strong></p>
-              <p><strong>Field of Study:</strong></p>
-              <p><strong>Graduation:</strong></p>
-              <p><strong>City:</strong></p>
-              <p><strong>State:</strong></p>
-              <p><strong>Start Date:</strong></p>
-              <p><strong>End Date:</strong></p>
+              <div className="info-line">School Name:</div>
+              <div className="info-line">Degree:</div>
+              <div className="info-line">Field of Study:</div>
+              <div className="info-line">Graduation:</div>
+              <div className="info-line">City:</div>
+              <div className="info-line">State:</div>
+              <div className="info-line">Start Date:</div>
+              <div className="info-line">End Date:</div>
+            </div>
+            <div className="info-box" ref={experienceRef}>
+              <h3>Experience</h3>
+              <div className="info-line">Employer Name:</div>
+              <div className="info-line">Job Title:</div>
+              <div className="info-line">City:</div>
+              <div className="info-line">State:</div>
+              <div className="info-line">Start Date:</div>
+              <div className="info-line">End Date:</div>
+              <div className="info-line">Job Description:</div>
             </div>
 
-            <div id="experience" className="info-block" ref={experienceRef}>
-              <h3>Experience</h3>
-              <p><strong>Employer Name:</strong></p>
-              <p><strong>Job Title:</strong></p>
-              <p><strong>City:</strong></p>
-              <p><strong>State:</strong></p>
-              <p><strong>Start Date:</strong></p>
-              <p><strong>End Date:</strong></p>
-              <p><strong>Job Description:</strong></p>
+            <div className="info-box" ref={skillsRef}>
+              <h3>Skills</h3>
+              <div className="info-line">Skill Name: </div>
+              <div className="info-line">Proficiency Level: </div>
+              <div className="info-line">Years of Experience: </div>
+              <div className="info-line">Description: </div>
             </div>
+
+            {/* Achievements block */}
+            <div className="info-box" ref={achievementsRef}>
+              <h3>Achievements</h3>
+              <div className="info-line">Title: </div>
+              <div className="info-line">Organization: </div>
+              <div className="info-line">Date Received: </div>
+              <div className="info-line">Category: </div>
+              <div className="info-line">Description: </div>
+              <div className="info-line">Link: </div>
+            </div>
+
+            {/* References block */}
+            <div className="info-box" ref={referencesRef}>
+              <h3>References</h3>
+              <div className="info-line">First Name: </div>
+              <div className="info-line">Last Name: </div>
+              <div className="info-line">Job Title: </div>
+              <div className="info-line">Company: </div>
+              <div className="info-line">Email: </div>
+              <div className="info-line">Phone: </div>
+              <div className="info-line">Relationship: </div>
+              <div className="info-line">How do you know this person?: </div>
+            </div>
+
+            {/* Hobbies block */}
+            <div className="info-box" ref={hobbiesRef}>
+              <h3>Hobbies</h3>
+              <div className="info-line">Hobby Name: </div>
+              <div className="info-line">Experience Level: </div>
+              <div className="info-line">Years Involved: </div>
+              <div className="info-line">Category: </div>
+              <div className="info-line">Description: </div>
+              <div className="info-line">Achievements: </div>
+            </div>
+            <div className="info-box" ref={additonalsRef}>
+              <h3>Additional Information</h3>
+              <div className="info-line">Section Title:</div>  
+              <div className="info-line">Information:</div>
+              </div>
+            
           </div>
         </div>
       </div>
 
       <button className="update-info-btn">Update your information →</button>
 
-      <ShareResumeModal 
-        isOpen={isShareModalOpen} 
-        onClose={handleCloseModal} 
+      <ShareResumeModal
+        isOpen={isShareModalOpen}
+        onClose={handleCloseModal}
       />
-      <DownloadResumeModal 
-        isOpen={isDownloadModalOpen} 
-        onClose={handleCloseModal} 
-        resumeName={resumeName} 
-        downloadLink={downloadLink} 
+      <DownloadResumeModal
+        isOpen={isDownloadModalOpen}
+        onClose={handleCloseModal}
+        resumeName={resumeName}
+        downloadLink={downloadLink}
       />
     </div>
   );
