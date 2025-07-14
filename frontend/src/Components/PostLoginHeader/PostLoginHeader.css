@@ -72,8 +72,8 @@
 }
 
 .dropdown-arrow {
-  font-size: 18px;
-  color: #656D4A;
+  font-size: 24px;
+  color: #4d5636;
 }
 .dropdown-content {
   position: absolute;
@@ -299,4 +299,33 @@
   font-size: 16px;
   color: #4a4a4a;
   margin-bottom: 35px;
+}
+
+.account-button {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  color: #4d5636; 
+  padding: 8px 16px;
+  border: 2px solid #6b7a4d; 
+  border-radius: 20px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.account-button:hover {
+  background-color: white;
+}
+
+.account-icon {
+  width: 29px;
+  height: 29px;
+  margin-right: 1px;
+}
+
+.dropdown-arrow {
+  margin-left: 4px;
+  margin-right: 1px;
 }
