@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 
 const SubscriptionPage = () => {
-  const [selectedPlan, setSelectedPlan] = useState('14-day');
+  const [selectedPlan, setSelectedPlan] = useState('free');
   const navigate = useNavigate(); 
 
   
@@ -142,16 +142,71 @@ const SubscriptionPage = () => {
           lineHeight: 1.1
         }}>Subscription Plans</h1>
         
-        {/* Pricing Plans */}
+        {/* Pricing Plans - Side by Side */}
         <div style={{
           display: 'flex',
-          gap: '40px',
           justifyContent: 'center',
-          alignItems: 'flex-start',
-          margin: '0 auto 80px auto',
-          width: '100%',
-          maxWidth: '900px'
+          gap: '30px',
+          marginBottom: '80px',
+          flexWrap: 'wrap'
         }}>
+          {/* Free User Plan */}
+          <div 
+            style={{
+              background: 'white',
+              borderRadius: '16px',
+              padding: '40px 30px',
+              width: '400px',
+              position: 'relative',
+              border: selectedPlan === 'free' ? '3px solid #6c7a3a' : '3px solid transparent',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between'
+            }}
+            onClick={() => setSelectedPlan('free')}
+          >
+            <div>
+              <h2 style={{
+                fontSize: '2rem',
+                fontWeight: 700,
+                color: '#212529',
+                margin: '20px 0 30px 0',
+                textAlign: 'center'
+              }}>Free User</h2>
+              
+              <div style={{
+                fontSize: '4rem',
+                fontWeight: 800,
+                color: '#6c757d',
+                textAlign: 'center',
+                marginBottom: '40px',
+                lineHeight: 1
+              }}>
+                $0
+              </div>
+
+              <div>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', fontSize: '16px', lineHeight: 1.5, color: '#495057' }}>
+                  <span style={{ color: '#28a745', fontWeight: 'bold', fontSize: '18px', marginTop: '2px' }}>✓</span>
+                  Basic resume builder access
+                </div>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', fontSize: '16px', lineHeight: 1.5, color: '#495057' }}>
+                  <span style={{ color: '#28a745', fontWeight: 'bold', fontSize: '18px', marginTop: '2px' }}>✓</span>
+                  Limited templates
+                </div>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', fontSize: '16px', lineHeight: 1.5, color: '#495057' }}>
+                  <span style={{ color: '#28a745', fontWeight: 'bold', fontSize: '18px', marginTop: '2px' }}>✓</span>
+                  Upgrade anytime
+                </div>
+              </div>
+            </div>
+
+            {/* Empty placeholder to match button height */}
+            <div style={{ height: '52px' }}></div>
+          </div>
+
           {/* 14-Day Access Plan */}
           <div 
             style={{
@@ -162,95 +217,47 @@ const SubscriptionPage = () => {
               position: 'relative',
               border: selectedPlan === '14-day' ? '3px solid #6c7a3a' : '3px solid transparent',
               boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between'
             }}
             onClick={() => setSelectedPlan('14-day')}
           >
-            <div style={{
-              position: 'absolute',
-              top: '-12px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              backgroundColor: '#6c7a3a',
-              color: 'white',
-              padding: '8px 24px',
-              borderRadius: '20px',
-              fontSize: '12px',
-              fontWeight: 700,
-              letterSpacing: '0.5px'
-            }}>MOST POPULAR</div>
-            
-            <h2 style={{
-              fontSize: '2rem',
-              fontWeight: 700,
-              color: '#212529',
-              margin: '20px 0 30px 0',
-              textAlign: 'center'
-            }}>14-Day Access</h2>
-            
-            <div style={{
-              fontSize: '4rem',
-              fontWeight: 800,
-              color: '#6c7a3a',
-              textAlign: 'center',
-              marginBottom: '40px',
-              lineHeight: 1
-            }}>$1.70</div>
-            
-            <div style={{ marginBottom: '40px' }}>
+            <div>
+              <h2 style={{
+                fontSize: '2rem',
+                fontWeight: 700,
+                color: '#212529',
+                margin: '20px 0 30px 0',
+                textAlign: 'center'
+              }}>14-Day Access</h2>
+              
               <div style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '12px',
-                marginBottom: '16px',
-                fontSize: '16px',
-                lineHeight: 1.5,
-                color: '#495057'
-              }}>
-                <span style={{
-                  color: '#28a745',
-                  fontWeight: 'bold',
-                  fontSize: '18px',
-                  marginTop: '2px'
-                }}>✓</span>
-                Unlimited Edits and Template Access
-              </div>
-              <div style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '12px',
-                marginBottom: '16px',
-                fontSize: '16px',
-                lineHeight: 1.5,
-                color: '#495057'
-              }}>
-                <span style={{
-                  color: '#28a745',
-                  fontWeight: 'bold',
-                  fontSize: '18px',
-                  marginTop: '2px'
-                }}>✓</span>
-                Auto-renews at $3.40 billed every 4 weeks
-              </div>
-              <div style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '12px',
-                marginBottom: '16px',
-                fontSize: '16px',
-                lineHeight: 1.5,
-                color: '#495057'
-              }}>
-                <span style={{
-                  color: '#28a745',
-                  fontWeight: 'bold',
-                  fontSize: '18px',
-                  marginTop: '2px'
-                }}>✓</span>
-                <strong>Cancel anytime</strong>
+                fontSize: '4rem',
+                fontWeight: 800,
+                color: '#6c7a3a',
+                textAlign: 'center',
+                marginBottom: '40px',
+                lineHeight: 1
+              }}>$1.70</div>
+
+              <div>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', fontSize: '16px', lineHeight: 1.5, color: '#495057' }}>
+                  <span style={{ color: '#28a745', fontWeight: 'bold', fontSize: '18px', marginTop: '2px' }}>✓</span>
+                  Unlimited Edits and Template Access
+                </div>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', fontSize: '16px', lineHeight: 1.5, color: '#495057' }}>
+                  <span style={{ color: '#28a745', fontWeight: 'bold', fontSize: '18px', marginTop: '2px' }}>✓</span>
+                  Unlimited Downloads
+                </div>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', fontSize: '16px', lineHeight: 1.5, color: '#495057' }}>
+                  <span style={{ color: '#28a745', fontWeight: 'bold', fontSize: '18px', marginTop: '2px' }}>✓</span>
+                  <strong>Cancel anytime</strong>
+                </div>
               </div>
             </div>
-            
+
             <button 
               style={{
                 width: '100%',
@@ -268,123 +275,6 @@ const SubscriptionPage = () => {
               onClick={(e) => {
                 e.stopPropagation(); 
                 setSelectedPlan('14-day');
-                handleContinue(); 
-              }}
-            >
-              CONTINUE
-            </button>
-          </div>
-
-          {/* Annual Access Plan */}
-          <div 
-            style={{
-              background: 'white',
-              borderRadius: '16px',
-              padding: '40px 30px',
-              width: '400px',
-              position: 'relative',
-              border: selectedPlan === 'annual' ? '3px solid #6c7a3a' : '3px solid transparent',
-              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
-              cursor: 'pointer'
-            }}
-            onClick={() => setSelectedPlan('annual')}
-          >
-            <h2 style={{
-              fontSize: '2rem',
-              fontWeight: 700,
-              color: '#212529',
-              margin: '20px 0 30px 0',
-              textAlign: 'center'
-            }}>Annual Access</h2>
-            
-            <div style={{
-              fontSize: '4rem',
-              fontWeight: 800,
-              color: '#6c7a3a',
-              textAlign: 'center',
-              marginBottom: '40px',
-              lineHeight: 1
-            }}>
-              $2.95
-              <span style={{
-                fontSize: '1.2rem',
-                color: '#6c757d',
-                fontWeight: 400
-              }}>/month</span>
-            </div>
-            
-            <div style={{ marginBottom: '40px' }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '12px',
-                marginBottom: '16px',
-                fontSize: '16px',
-                lineHeight: 1.5,
-                color: '#495057'
-              }}>
-                
-                <span style={{
-                  color: '#28a745',
-                  fontWeight: 'bold',
-                  fontSize: '18px',
-                  marginTop: '2px'
-                }}>✓</span>
-                Early access to new features
-              </div>
-              <div style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '12px',
-                marginBottom: '16px',
-                fontSize: '16px',
-                lineHeight: 1.5,
-                color: '#495057'
-              }}>
-                <span style={{
-                  color: '#28a745',
-                  fontWeight: 'bold',
-                  fontSize: '18px',
-                  marginTop: '2px'
-                }}>✓</span>
-                No auto-renewal surprises
-              </div>
-              <div style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '12px',
-                marginBottom: '16px',
-                fontSize: '16px',
-                lineHeight: 1.5,
-                color: '#495057'
-              }}>
-                <span style={{
-                  color: '#28a745',
-                  fontWeight: 'bold',
-                  fontSize: '18px',
-                  marginTop: '2px'
-                }}>✓</span>
-                <strong>Best value for long-term use</strong>
-              </div>
-            </div>
-            
-            <button 
-              style={{
-                width: '100%',
-                padding: '16px 24px',
-                border: 'none',
-                borderRadius: '12px',
-                fontSize: '16px',
-                fontWeight: 700,
-                letterSpacing: '0.5px',
-                cursor: 'pointer',
-                textTransform: 'uppercase',
-                backgroundColor: selectedPlan === 'annual' ? '#6c7a3a' : '#e9ecef',
-                color: selectedPlan === 'annual' ? 'white' : '#6c757d'
-              }}
-              onClick={(e) => {
-                e.stopPropagation(); 
-                setSelectedPlan('annual');
                 handleContinue(); 
               }}
             >

@@ -181,10 +181,7 @@ const ATSChecker = () => {
           </div>
 
           <div className="hard-skills-section">
-            <div className="premium-badge">
-              <span className="lock-icon">🔒</span>
-              <span>PREMIUM</span>
-            </div>
+           
             <h3>🔒 HARD SKILLS</h3>
             
             <div className="skills-categories">
