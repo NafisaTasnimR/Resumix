@@ -240,6 +240,7 @@
   font-weight: 700;
 }
 
+
 .submit-nav-button:hover {
   background-color: #a4ac86;
   border-color: #a4ac86;
@@ -403,4 +404,79 @@
   .personal-info-header h2 {
     font-size: 18px;
   }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.add-button {
+  padding: 12px 20px;
+  background-color: #656d4a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-button:hover {
+  background-color: #a4ac86;
+  transform: translateY(-1px);
+}
+
+.remove-button {
+  padding: 12px 20px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.remove-button:hover {
+  background-color: #c82333;
+  transform: translateY(-1px);
+}
+
+.experience-navigation {
+  margin-bottom: 20px;
+}
+
+.experience-tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.tab-button {
+  padding: 8px 16px;
+  background-color: rgba(164, 172, 134, 0.3);
+  border: 2px solid rgba(164, 172, 134, 0.5);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tab-button:hover {
+  background-color: rgba(164, 172, 134, 0.5);
+}
+
+.tab-button.active {
+  background-color: #656d4a;
+  border-color: #656d4a;
+  color: white;
 }
