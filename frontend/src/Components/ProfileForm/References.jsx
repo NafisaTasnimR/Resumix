@@ -13,7 +13,7 @@ const References = ({
   return (
     <>
       <div className="personal-info-header">
-        <h2>References {currentReferenceIndex + 1} of {references.length}</h2>
+        <h2>References </h2>
         <div className="info-line"></div>
       </div>
 

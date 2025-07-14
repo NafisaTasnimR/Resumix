@@ -196,10 +196,7 @@ body {
   border-color: #007bff;
 }
 
-.form-group input.validated {
-  border-color: #28a745;
-  background-color: #f8fff9;
-}
+
 
 .form-group select {
   width: 100%;

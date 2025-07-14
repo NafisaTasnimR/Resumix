@@ -15,14 +15,14 @@ const ProfileForm = () => {
   const [experiences, setExperiences] = useState([
     {
       id: 1,
-      employer: 'Khan Academy',
-      jobTitle: 'Founder & CEO',
-      city: 'Mountain View',
-      state: 'California',
-      startDate: '2008-01-01',
-      endDate: '2024-12-31',
-      isCurrent: true,
-      description: 'Founded and led Khan Academy, a non-profit educational organization. Developed innovative online learning platform serving millions of students worldwide. Created comprehensive curriculum covering mathematics, science, and humanities.'
+      employer: '',
+      jobTitle: '',
+      city: '',
+      state: '',
+      startDate: '',
+      endDate: '',
+      isCurrent: false,
+      description: ''
     }
   ]);
   const [currentExperienceIndex, setCurrentExperienceIndex] = useState(0);
@@ -31,14 +31,14 @@ const ProfileForm = () => {
   const [educations, setEducations] = useState([
     {
       id: 1,
-      schoolName: 'Harvard Business School',
-      degree: 'Master of Business Administration',
-      fieldOfStudy: 'Business Administration',
-      graduation: '2003-05-15',
-      city: 'Boston',
-      state: 'Massachusetts',
-      startDate: '2001-09-01',
-      endDate: '2003-05-15',
+      schoolName: '',
+      degree: '',
+      fieldOfStudy: '',
+      graduation: '',
+      city: '',
+      state: '',
+      startDate: '',
+      endDate: '',
       isCurrent: false
     }
   ]);
@@ -48,10 +48,10 @@ const ProfileForm = () => {
   const [skills, setSkills] = useState([
     {
       id: 1,
-      skillName: 'JavaScript',
-      proficiency: 'Expert',
-      yearsOfExperience: '10',
-      description: 'Full-stack JavaScript development including React, Node.js, and modern frameworks'
+      skillName: '',
+      proficiency: '',
+      yearsOfExperience: '',
+      description: ''
     }
   ]);
   const [currentSkillIndex, setCurrentSkillIndex] = useState(0);
@@ -60,12 +60,12 @@ const ProfileForm = () => {
   const [achievements, setAchievements] = useState([
     {
       id: 1,
-      title: 'Forbes 30 Under 30',
-      organization: 'Forbes Magazine',
-      dateReceived: '2010-12-01',
-      category: 'Education',
-      description: 'Recognized for revolutionary impact on education through Khan Academy, transforming how millions learn mathematics and science globally.',
-      website: 'https://forbes.com/30-under-30/education'
+      title: '',
+      organization: '',
+      dateReceived: '',
+      category: '',
+      description: '',
+      website: ''
     }
   ]);
   const [currentAchievementIndex, setCurrentAchievementIndex] = useState(0);
