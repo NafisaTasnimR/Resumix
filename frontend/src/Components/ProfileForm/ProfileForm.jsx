@@ -4,6 +4,7 @@ import PersonalInfo from './PersonalInfo';
 import Experience from './Experience';
 import Education from './Education';
 import Skills from './Skills';
+import Achievements from './Achievements';
 
 const ProfileForm = () => {
   const [currentPage, setCurrentPage] = useState('personal');
@@ -54,6 +55,20 @@ const ProfileForm = () => {
   ]);
   const [currentSkillIndex, setCurrentSkillIndex] = useState(0);
 
+  // Achievements state
+  const [achievements, setAchievements] = useState([
+    {
+      id: 1,
+      title: 'Forbes 30 Under 30',
+      organization: 'Forbes Magazine',
+      dateReceived: '2010-12-01',
+      category: 'Education',
+      description: 'Recognized for revolutionary impact on education through Khan Academy, transforming how millions learn mathematics and science globally.',
+      website: 'https://forbes.com/30-under-30/education'
+    }
+  ]);
+  const [currentAchievementIndex, setCurrentAchievementIndex] = useState(0);
+
   // Navigation functions
   const handleNextPage = () => {
     if (currentPage === 'personal') {
@@ -62,6 +77,8 @@ const ProfileForm = () => {
       setCurrentPage('education');
     } else if (currentPage === 'education') {
       setCurrentPage('skills');
+    } else if (currentPage === 'skills') {
+      setCurrentPage('achievements');
     }
   };
 
@@ -72,6 +89,8 @@ const ProfileForm = () => {
       setCurrentPage('experience');
     } else if (currentPage === 'skills') {
       setCurrentPage('education');
+    } else if (currentPage === 'achievements') {
+      setCurrentPage('skills');
     }
   };
 
@@ -169,6 +188,38 @@ const ProfileForm = () => {
     }
   };
 
+  // Achievements functions
+  const addNewAchievement = () => {
+    const newAchievement = {
+      id: achievements.length + 1,
+      title: '',
+      organization: '',
+      dateReceived: '',
+      category: '',
+      description: '',
+      website: ''
+    };
+    setAchievements([...achievements, newAchievement]);
+    setCurrentAchievementIndex(achievements.length);
+  };
+
+  const removeAchievement = (index) => {
+    if (achievements.length > 1) {
+      const newAchievements = achievements.filter((_, i) => i !== index);
+      setAchievements(newAchievements);
+      setCurrentAchievementIndex(Math.max(0, index - 1));
+    }
+  };
+
+  const updateAchievement = (field, value) => {
+    const updatedAchievements = [...achievements];
+    updatedAchievements[currentAchievementIndex] = {
+      ...updatedAchievements[currentAchievementIndex],
+      [field]: value
+    };
+    setAchievements(updatedAchievements);
+  };
+
   const updateSkill = (field, value) => {
     const updatedSkills = [...skills];
     updatedSkills[currentSkillIndex] = {
@@ -218,6 +269,17 @@ const ProfileForm = () => {
             updateSkill={updateSkill}
             addNewSkill={addNewSkill}
             removeSkill={removeSkill}
+          />
+        );
+      case 'achievements':
+        return (
+          <Achievements 
+            achievements={achievements}
+            currentAchievementIndex={currentAchievementIndex}
+            setCurrentAchievementIndex={setCurrentAchievementIndex}
+            updateAchievement={updateAchievement}
+            addNewAchievement={addNewAchievement}
+            removeAchievement={removeAchievement}
           />
         );
       default:
@@ -270,6 +332,15 @@ const ProfileForm = () => {
                 />
               </div>
             )}
+            {currentPage === 'achievements' && (
+              <div className="page-image">
+                <img 
+                  src="/Achievements.png" 
+                  alt="Achievements" 
+                  className="page-img"
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -279,7 +350,7 @@ const ProfileForm = () => {
       </div>
 
       <div className="navigation">
-        {(currentPage === 'experience' || currentPage === 'education' || currentPage === 'skills') && (
+        {(currentPage === 'experience' || currentPage === 'education' || currentPage === 'skills' || currentPage === 'achievements') && (
           <button className="nav-button prev-button" onClick={handlePrevPage}>
             Prev
           </button>
@@ -300,6 +371,11 @@ const ProfileForm = () => {
           </button>
         )}
         {currentPage === 'skills' && (
+          <button className="nav-button next-button" onClick={handleNextPage}>
+            Next
+          </button>
+        )}
+        {currentPage === 'achievements' && (
           <button className="nav-button submit-nav-button" onClick={handleSubmit}>
             Submit
           </button>
