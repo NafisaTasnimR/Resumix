@@ -1,16 +1,17 @@
 import React from 'react';
 import './ResumeViewPage.css';
+import { Link } from 'react-router-dom';
 
 const ResumeViewPage = () => {
   return (
     <div className="resume-page-container">
-      <header className="resume-header">
+      <header className="resume-view-header">
         <h1 className="resume-title">Nishat_Tasnim_Resume</h1>
-        <button className="edit-btn">Edit</button>
+        <Link to="/resumebuilder" className="edit-btn">Edit</Link>
       </header>
       <div className="resume-image-container">
         <img
-          src=""
+          src="sampleR.png"
           alt="Resume Preview"
           className="resume-image"
         />

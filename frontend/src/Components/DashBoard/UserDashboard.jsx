@@ -51,7 +51,7 @@ const Dashboard = () => {
           <span>ACTIONS</span>
         </div>
         <div className="resume-table-row">
-          <span>Nishat_Tasnim_Resume</span>
+          <Link to="/resumeview" className="resume-name-link">Nishat_Tasnim_Resume</Link>
           <span>5/16/2025</span>
           <span>5/14/2025</span>
           <span className="strength-badge">45</span>

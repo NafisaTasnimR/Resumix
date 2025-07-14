@@ -3,7 +3,7 @@
   height: 100%;
 }
 
-.resume-header {
+.resume-view-header {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,19 +23,26 @@
   right: 20px;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #a4ac86;
+  background-color: #4d5636;
   color: #fff;
-  padding: 10px 20px;
+  padding: 12px 35px; 
   border: none;
-  border-radius: 20px;
+  border-radius: 30px; 
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, text-decoration 0.2s;
+  font-size: 20px;
+  text-decoration: none;
 }
 
 .edit-btn:hover {
-  background-color: #8a946d;
+  background-color: #6b7a4d;
 }
+
+.edit-btn:active {
+  text-decoration: underline; 
+}
+
 
 .resume-image-container {
   display: flex;
@@ -44,8 +51,9 @@
 }
 
 .resume-image {
-  max-width: 90%;
+  max-width: 50%;
   height: auto;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+

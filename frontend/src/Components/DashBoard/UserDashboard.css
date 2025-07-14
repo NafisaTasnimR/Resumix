@@ -104,3 +104,15 @@
 .update-info-btn:hover {
   background-color: #6b7a4d;
 }
+
+.resume-name-link {
+  color: #2d336b;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.resume-name-link:hover {
+  color: #4d5636;
+  text-decoration: underline;
+}
