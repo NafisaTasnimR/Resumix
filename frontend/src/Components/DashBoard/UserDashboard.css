@@ -131,15 +131,20 @@
 }
 
 .info-line {
-  padding: 12px 20px;
+  display: flex;              
+  align-items: center;       
+  width: 100%;
+  padding: 16px 20px;        
   font-weight: 600;
   color: #0a1f44;
+  box-sizing: border-box;
 }
 
+
 .info-line:nth-child(odd) {
-  background-color: #f3f2ed; /* soft gray background for odd rows */
+  background-color: #f3f2ed; 
 }
 
 .info-line:nth-child(even) {
-  background-color: #ffffff; /* white background for even rows */
+  background-color: #ffffff; 
 }

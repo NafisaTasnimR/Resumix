@@ -8,11 +8,13 @@ import Achievements from './Achievements';
 import References from './References';
 import Hobbies from './Hobbies';
 import AdditionalInfo from './AdditionalInfo';
+import { Link } from 'react-router-dom';
+
 
 const ProfileForm = () => {
   const [currentPage, setCurrentPage] = useState('personal');
   const [showAddressDetails, setShowAddressDetails] = useState(false);
-  
+
   // Experience state
   const [experiences, setExperiences] = useState([
     {
@@ -384,14 +386,14 @@ const ProfileForm = () => {
     switch (currentPage) {
       case 'personal':
         return (
-          <PersonalInfo 
+          <PersonalInfo
             showAddressDetails={showAddressDetails}
             setShowAddressDetails={setShowAddressDetails}
           />
         );
       case 'experience':
         return (
-          <Experience 
+          <Experience
             experiences={experiences}
             currentExperienceIndex={currentExperienceIndex}
             setCurrentExperienceIndex={setCurrentExperienceIndex}
@@ -402,7 +404,7 @@ const ProfileForm = () => {
         );
       case 'education':
         return (
-          <Education 
+          <Education
             educations={educations}
             currentEducationIndex={currentEducationIndex}
             setCurrentEducationIndex={setCurrentEducationIndex}
@@ -413,7 +415,7 @@ const ProfileForm = () => {
         );
       case 'skills':
         return (
-          <Skills 
+          <Skills
             skills={skills}
             currentSkillIndex={currentSkillIndex}
             setCurrentSkillIndex={setCurrentSkillIndex}
@@ -424,7 +426,7 @@ const ProfileForm = () => {
         );
       case 'achievements':
         return (
-          <Achievements 
+          <Achievements
             achievements={achievements}
             currentAchievementIndex={currentAchievementIndex}
             setCurrentAchievementIndex={setCurrentAchievementIndex}
@@ -435,7 +437,7 @@ const ProfileForm = () => {
         );
       case 'references':
         return (
-          <References 
+          <References
             references={references}
             currentReferenceIndex={currentReferenceIndex}
             setCurrentReferenceIndex={setCurrentReferenceIndex}
@@ -446,7 +448,7 @@ const ProfileForm = () => {
         );
       case 'hobbies':
         return (
-          <Hobbies 
+          <Hobbies
             hobbies={hobbies}
             currentHobbyIndex={currentHobbyIndex}
             setCurrentHobbyIndex={setCurrentHobbyIndex}
@@ -457,7 +459,7 @@ const ProfileForm = () => {
         );
       case 'additional':
         return (
-          <AdditionalInfo 
+          <AdditionalInfo
             additionalInfos={additionalInfos}
             currentAdditionalInfoIndex={currentAdditionalInfoIndex}
             setCurrentAdditionalInfoIndex={setCurrentAdditionalInfoIndex}
@@ -482,72 +484,72 @@ const ProfileForm = () => {
           <div className="photo-placeholder">
             {currentPage === 'personal' && (
               <div className="page-image">
-                <img 
-                  src="/Personaldata.png" 
-                  alt="Personal Information" 
+                <img
+                  src="/Personaldata.png"
+                  alt="Personal Information"
                   className="page-img"
                 />
               </div>
             )}
             {currentPage === 'experience' && (
               <div className="page-image">
-                <img 
+                <img
                   src="/Experience.png"
-                  alt="Work Experience" 
+                  alt="Work Experience"
                   className="page-img"
                 />
               </div>
             )}
             {currentPage === 'education' && (
               <div className="page-image">
-                <img 
-                  src="/Education.png" 
-                  alt="Education" 
+                <img
+                  src="/Education.png"
+                  alt="Education"
                   className="page-img"
                 />
               </div>
             )}
             {currentPage === 'skills' && (
               <div className="page-image">
-                <img 
-                  src="/Skills.png" 
-                  alt="Skills" 
+                <img
+                  src="/Skills.png"
+                  alt="Skills"
                   className="page-img"
                 />
               </div>
             )}
             {currentPage === 'achievements' && (
               <div className="page-image">
-                <img 
-                  src="/Achievements.png" 
-                  alt="Achievements" 
+                <img
+                  src="/Achievements.png"
+                  alt="Achievements"
                   className="page-img"
                 />
               </div>
             )}
             {currentPage === 'references' && (
               <div className="page-image">
-                <img 
-                  src="/References.png" 
-                  alt="References" 
+                <img
+                  src="/References.png"
+                  alt="References"
                   className="page-img"
                 />
               </div>
             )}
             {currentPage === 'hobbies' && (
               <div className="page-image">
-                <img 
-                  src="/Hobbies.png" 
-                  alt="Hobbies" 
+                <img
+                  src="/Hobbies.png"
+                  alt="Hobbies"
                   className="page-img"
                 />
               </div>
             )}
             {currentPage === 'additional' && (
               <div className="page-image">
-                <img 
-                  src="/Additional.png" 
-                  alt="Additional Information" 
+                <img
+                  src="/Additional.png"
+                  alt="Additional Information"
                   className="page-img"
                 />
               </div>
@@ -602,9 +604,11 @@ const ProfileForm = () => {
           </button>
         )}
         {currentPage === 'additional' && (
-          <button className="nav-button submit-nav-button" onClick={handleSubmit}>
-            Submit
-          </button>
+          <Link to="/dashboard">
+            <button className="nav-button submit-nav-button">
+              Submit
+            </button>
+          </Link>
         )}
       </div>
     </div>

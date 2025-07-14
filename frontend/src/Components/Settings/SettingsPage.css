@@ -46,7 +46,7 @@
   text-align: left;
 }
 
-.edit-btn {
+.edit-btn2 {
   background: none;
   border: none;
   cursor: pointer;
@@ -63,7 +63,7 @@
   transition: all 0.2s ease;
 }
 
-.edit-btn:hover .edit-text {
+.edit-btn2:hover .edit-text {
   text-decoration: underline;
 }
 
