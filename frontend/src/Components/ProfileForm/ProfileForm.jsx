@@ -7,6 +7,7 @@ import Skills from './Skills';
 import Achievements from './Achievements';
 import References from './References';
 import Hobbies from './Hobbies';
+import AdditionalInfo from './AdditionalInfo';
 
 const ProfileForm = () => {
   const [currentPage, setCurrentPage] = useState('personal');
@@ -102,6 +103,16 @@ const ProfileForm = () => {
   ]);
   const [currentHobbyIndex, setCurrentHobbyIndex] = useState(0);
 
+  // Additional Info state
+  const [additionalInfos, setAdditionalInfos] = useState([
+    {
+      id: 1,
+      title: '',
+      content: ''
+    }
+  ]);
+  const [currentAdditionalInfoIndex, setCurrentAdditionalInfoIndex] = useState(0);
+
   // Navigation functions
   const handleNextPage = () => {
     if (currentPage === 'personal') {
@@ -116,6 +127,8 @@ const ProfileForm = () => {
       setCurrentPage('references');
     } else if (currentPage === 'references') {
       setCurrentPage('hobbies');
+    } else if (currentPage === 'hobbies') {
+      setCurrentPage('additional');
     }
   };
 
@@ -132,6 +145,8 @@ const ProfileForm = () => {
       setCurrentPage('achievements');
     } else if (currentPage === 'hobbies') {
       setCurrentPage('references');
+    } else if (currentPage === 'additional') {
+      setCurrentPage('hobbies');
     }
   };
 
@@ -328,6 +343,34 @@ const ProfileForm = () => {
     setHobbies(updatedHobbies);
   };
 
+  // Additional Info functions
+  const addNewAdditionalInfo = () => {
+    const newAdditionalInfo = {
+      id: additionalInfos.length + 1,
+      title: '',
+      content: ''
+    };
+    setAdditionalInfos([...additionalInfos, newAdditionalInfo]);
+    setCurrentAdditionalInfoIndex(additionalInfos.length);
+  };
+
+  const removeAdditionalInfo = (index) => {
+    if (additionalInfos.length > 1) {
+      const newAdditionalInfos = additionalInfos.filter((_, i) => i !== index);
+      setAdditionalInfos(newAdditionalInfos);
+      setCurrentAdditionalInfoIndex(Math.max(0, index - 1));
+    }
+  };
+
+  const updateAdditionalInfo = (field, value) => {
+    const updatedAdditionalInfos = [...additionalInfos];
+    updatedAdditionalInfos[currentAdditionalInfoIndex] = {
+      ...updatedAdditionalInfos[currentAdditionalInfoIndex],
+      [field]: value
+    };
+    setAdditionalInfos(updatedAdditionalInfos);
+  };
+
   const updateSkill = (field, value) => {
     const updatedSkills = [...skills];
     updatedSkills[currentSkillIndex] = {
@@ -412,6 +455,17 @@ const ProfileForm = () => {
             removeHobby={removeHobby}
           />
         );
+      case 'additional':
+        return (
+          <AdditionalInfo 
+            additionalInfos={additionalInfos}
+            currentAdditionalInfoIndex={currentAdditionalInfoIndex}
+            setCurrentAdditionalInfoIndex={setCurrentAdditionalInfoIndex}
+            updateAdditionalInfo={updateAdditionalInfo}
+            addNewAdditionalInfo={addNewAdditionalInfo}
+            removeAdditionalInfo={removeAdditionalInfo}
+          />
+        );
       default:
         return null;
     }
@@ -489,6 +543,15 @@ const ProfileForm = () => {
                 />
               </div>
             )}
+            {currentPage === 'additional' && (
+              <div className="page-image">
+                <img 
+                  src="/Additional.png" 
+                  alt="Additional Information" 
+                  className="page-img"
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -498,7 +561,7 @@ const ProfileForm = () => {
       </div>
 
       <div className="navigation">
-        {(currentPage === 'experience' || currentPage === 'education' || currentPage === 'skills' || currentPage === 'achievements' || currentPage === 'references' || currentPage === 'hobbies') && (
+        {(currentPage === 'experience' || currentPage === 'education' || currentPage === 'skills' || currentPage === 'achievements' || currentPage === 'references' || currentPage === 'hobbies' || currentPage === 'additional') && (
           <button className="nav-button prev-button" onClick={handlePrevPage}>
             Prev
           </button>
@@ -534,6 +597,11 @@ const ProfileForm = () => {
           </button>
         )}
         {currentPage === 'hobbies' && (
+          <button className="nav-button next-button" onClick={handleNextPage}>
+            Next
+          </button>
+        )}
+        {currentPage === 'additional' && (
           <button className="nav-button submit-nav-button" onClick={handleSubmit}>
             Submit
           </button>

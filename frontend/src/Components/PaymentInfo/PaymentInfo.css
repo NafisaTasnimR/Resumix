@@ -196,7 +196,16 @@ body {
   border-color: #007bff;
 }
 
+/* Sample data styling - makes sample data appear lighter/grayed out */
+.form-group input.sample-data {
+  color: #9ca3af;
+  font-style: italic;
+}
 
+.form-group input.sample-data:focus {
+  color: #333;
+  font-style: normal;
+}
 
 .form-group select {
   width: 100%;

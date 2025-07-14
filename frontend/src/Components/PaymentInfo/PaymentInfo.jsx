@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import './PaymentInfo.css';
-// *** ADDED: Import useNavigate for navigation ***
+
 import { useNavigate } from 'react-router-dom';
 
 const PaymentInfo = () => {
-  // *** ADDED: Initialize navigation hook ***
+ 
   const navigate = useNavigate();
   
   const [currentStep, setCurrentStep] = useState(3);
@@ -14,7 +14,13 @@ const PaymentInfo = () => {
   const [month, setMonth] = useState('Month');
   const [year, setYear] = useState('Year');
 
-  // *** ADDED: Function to handle subscription button click ***
+  // Sample data values for comparison
+  const sampleData = {
+    cardNumber: '1234 5678 6789 7890',
+    cvv: '123',
+    nameOnCard: 'MRITTIKA JAHAN'
+  };
+
   const handleSubscription = () => {
     
     navigate('/m/final');
@@ -67,6 +73,7 @@ const PaymentInfo = () => {
                       value={cardNumber}
                       onChange={(e) => setCardNumber(e.target.value)}
                       placeholder="1234 5678 6789 7890"
+                      className={cardNumber === sampleData.cardNumber ? 'sample-data' : ''}
                     />
                   </div>
                   <div className="form-group cvv">
@@ -76,6 +83,7 @@ const PaymentInfo = () => {
                       value={cvv}
                       onChange={(e) => setCvv(e.target.value)}
                       placeholder="123"
+                      className={cvv === sampleData.cvv ? 'sample-data' : ''}
                     />
                     <div className="info-icon">?</div>
                   </div>
@@ -87,7 +95,7 @@ const PaymentInfo = () => {
                     type="text"
                     value={nameOnCard}
                     onChange={(e) => setNameOnCard(e.target.value)}
-                    className="validated"
+                    className={nameOnCard === sampleData.nameOnCard ? 'sample-data validated' : 'validated'}
                   />
                 </div>
 
