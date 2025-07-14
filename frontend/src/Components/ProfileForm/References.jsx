@@ -42,7 +42,7 @@ const References = ({
               className="input-field" 
               value={currentReference.firstName}
               onChange={(e) => updateReference('firstName', e.target.value)}
-              placeholder="Bill" 
+              placeholder="Quamrul" 
             />
           </div>
           <div className="field-group half-width">
@@ -52,7 +52,7 @@ const References = ({
               className="input-field" 
               value={currentReference.lastName}
               onChange={(e) => updateReference('lastName', e.target.value)}
-              placeholder="Gates" 
+              placeholder="Ahmed" 
             />
           </div>
         </div>
@@ -64,7 +64,7 @@ const References = ({
             className="input-field" 
             value={currentReference.jobTitle}
             onChange={(e) => updateReference('jobTitle', e.target.value)}
-            placeholder="Co-founder, Bill & Melinda Gates Foundation" 
+            placeholder="Professor of Chemistry" 
           />
         </div>
 
@@ -75,7 +75,7 @@ const References = ({
             className="input-field" 
             value={currentReference.company}
             onChange={(e) => updateReference('company', e.target.value)}
-            placeholder="Microsoft Corporation" 
+            placeholder="Dhaka University" 
           />
         </div>
 
@@ -87,7 +87,7 @@ const References = ({
               className="input-field" 
               value={currentReference.email}
               onChange={(e) => updateReference('email', e.target.value)}
-              placeholder="bill.gates@microsoft.com" 
+              placeholder="quamrul.ahmed@du-dhaka.edu" 
             />
           </div>
           <div className="field-group half-width">
@@ -128,7 +128,7 @@ const References = ({
             rows="3" 
             value={currentReference.description}
             onChange={(e) => updateReference('description', e.target.value)}
-            placeholder="Bill mentored me during the early development of Khan Academy and provided strategic guidance on scaling educational technology platforms."
+            placeholder="Quamrul mentored me during the early development of Bandi Pathshala and provided strategic guidance on scaling the educational technology platform."
           ></textarea>
         </div>
 
