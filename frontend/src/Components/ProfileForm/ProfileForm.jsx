@@ -31,8 +31,18 @@ const ProfileForm = () => {
       isCurrent: false
     }
   ]);
+  const [skills, setSkills] = useState([
+    {
+      id: 1,
+      skillName: 'JavaScript',
+      proficiency: 'Expert',
+      yearsOfExperience: '10',
+      description: 'Full-stack JavaScript development including React, Node.js, and modern frameworks'
+    }
+  ]);
   const [currentExperienceIndex, setCurrentExperienceIndex] = useState(0);
   const [currentEducationIndex, setCurrentEducationIndex] = useState(0);
+  const [currentSkillIndex, setCurrentSkillIndex] = useState(0);
 
   const handleAddressClick = () => {
     setShowAddressDetails(true);
@@ -43,6 +53,8 @@ const ProfileForm = () => {
       setCurrentPage('experience');
     } else if (currentPage === 'experience') {
       setCurrentPage('education');
+    } else if (currentPage === 'education') {
+      setCurrentPage('skills');
     }
   };
 
@@ -51,6 +63,8 @@ const ProfileForm = () => {
       setCurrentPage('personal');
     } else if (currentPage === 'education') {
       setCurrentPage('experience');
+    } else if (currentPage === 'skills') {
+      setCurrentPage('education');
     }
   };
 
@@ -91,6 +105,18 @@ const ProfileForm = () => {
     setCurrentEducationIndex(educations.length);
   };
 
+  const addNewSkill = () => {
+    const newSkill = {
+      id: skills.length + 1,
+      skillName: '',
+      proficiency: '',
+      yearsOfExperience: '',
+      description: ''
+    };
+    setSkills([...skills, newSkill]);
+    setCurrentSkillIndex(skills.length);
+  };
+
   const removeExperience = (index) => {
     if (experiences.length > 1) {
       const newExperiences = experiences.filter((_, i) => i !== index);
@@ -104,6 +130,14 @@ const ProfileForm = () => {
       const newEducations = educations.filter((_, i) => i !== index);
       setEducations(newEducations);
       setCurrentEducationIndex(Math.max(0, index - 1));
+    }
+  };
+
+  const removeSkill = (index) => {
+    if (skills.length > 1) {
+      const newSkills = skills.filter((_, i) => i !== index);
+      setSkills(newSkills);
+      setCurrentSkillIndex(Math.max(0, index - 1));
     }
   };
 
@@ -123,6 +157,15 @@ const ProfileForm = () => {
       [field]: value
     };
     setEducations(updatedEducations);
+  };
+
+  const updateSkill = (field, value) => {
+    const updatedSkills = [...skills];
+    updatedSkills[currentSkillIndex] = {
+      ...updatedSkills[currentSkillIndex],
+      [field]: value
+    };
+    setSkills(updatedSkills);
   };
 
   const renderPersonalPage = () => (
@@ -194,7 +237,104 @@ const ProfileForm = () => {
         )}
       </div>
     </>
-  );
+    );
+  
+
+  const renderSkillsPage = () => {
+    const currentSkill = skills[currentSkillIndex];
+    
+    return (
+      <>
+        <div className="personal-info-header">
+          <h2>Skills </h2>
+          <div className="info-line"></div>
+        </div>
+
+        <div className="form-fields">
+          <div className="experience-navigation">
+            {skills.length > 1 && (
+              <div className="experience-tabs">
+                {skills.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`tab-button ${index === currentSkillIndex ? 'active' : ''}`}
+                    onClick={() => setCurrentSkillIndex(index)}
+                  >
+                    Skill {index + 1}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="field-group">
+            <label>Skill Name:</label>
+            <input 
+              type="text" 
+              className="input-field" 
+              value={currentSkill.skillName}
+              onChange={(e) => updateSkill('skillName', e.target.value)}
+              placeholder="JavaScript" 
+            />
+          </div>
+
+          <div className="field-row">
+            <div className="field-group half-width">
+              <label>Proficiency Level:</label>
+              <select 
+                className="input-field" 
+                value={currentSkill.proficiency}
+                onChange={(e) => updateSkill('proficiency', e.target.value)}
+              >
+                <option value="">Select Level</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+                <option value="Expert">Expert</option>
+              </select>
+            </div>
+            <div className="field-group half-width">
+              <label>Years of Experience:</label>
+              <input 
+                type="number" 
+                className="input-field" 
+                value={currentSkill.yearsOfExperience}
+                onChange={(e) => updateSkill('yearsOfExperience', e.target.value)}
+                placeholder="10" 
+                min="0"
+                max="50"
+              />
+            </div>
+          </div>
+
+          <div className="field-group">
+            <label>Skill Description</label>
+            <textarea 
+              className="input-field textarea-field" 
+              rows="4" 
+              value={currentSkill.description}
+              onChange={(e) => updateSkill('description', e.target.value)}
+              placeholder="Full-stack JavaScript development including React, Node.js, and modern frameworks"
+            ></textarea>
+          </div>
+
+          <div className="action-buttons">
+            <button className="add-button" onClick={addNewSkill}>
+              + Add Another Skill
+            </button>
+            {skills.length > 1 && (
+              <button 
+                className="remove-button" 
+                onClick={() => removeSkill(currentSkillIndex)}
+              >
+                Remove This Skill
+              </button>
+            )}
+          </div>
+        </div>
+      </>
+    );
+  };
 
   const renderExperiencePage = () => {
     const currentExp = experiences[currentExperienceIndex];
@@ -202,7 +342,7 @@ const ProfileForm = () => {
     return (
       <>
         <div className="personal-info-header">
-          <h2>Experience {currentExperienceIndex + 1} of {experiences.length}</h2>
+          <h2>Experience </h2>
           <div className="info-line"></div>
         </div>
 
@@ -338,7 +478,7 @@ const ProfileForm = () => {
     return (
       <>
         <div className="personal-info-header">
-          <h2>Education {currentEducationIndex + 1} of {educations.length}</h2>
+          <h2>Education </h2>
           <div className="info-line"></div>
         </div>
 
@@ -514,6 +654,15 @@ const ProfileForm = () => {
                 />
               </div>
             )}
+            {currentPage === 'skills' && (
+              <div className="page-image">
+                <img 
+                  src="/Skills.png" 
+                  alt="Skills" 
+                  className="page-img"
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -521,21 +670,32 @@ const ProfileForm = () => {
           {currentPage === 'personal' && renderPersonalPage()}
           {currentPage === 'experience' && renderExperiencePage()}
           {currentPage === 'education' && renderEducationPage()}
+          {currentPage === 'skills' && renderSkillsPage()}
         </div>
       </div>
 
       <div className="navigation">
-        {(currentPage === 'experience' || currentPage === 'education') && (
+        {(currentPage === 'experience' || currentPage === 'education' || currentPage === 'skills') && (
           <button className="nav-button prev-button" onClick={handlePrevPage}>
             Prev
           </button>
         )}
-        {(currentPage === 'personal' || currentPage === 'experience') && (
+        {currentPage === 'personal' && (
+          <button className="nav-button next-button" onClick={handleNextPage}>
+            Next
+          </button>
+        )}
+        {currentPage === 'experience' && (
           <button className="nav-button next-button" onClick={handleNextPage}>
             Next
           </button>
         )}
         {currentPage === 'education' && (
+          <button className="nav-button next-button" onClick={handleNextPage}>
+            Next
+          </button>
+        )}
+        {currentPage === 'skills' && (
           <button className="nav-button submit-nav-button" onClick={handleSubmit}>
             Submit
           </button>
