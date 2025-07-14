@@ -1,0 +1,47 @@
+/* Remove background and fullscreen container */
+
+.no-account-container {
+  position: fixed; /* Make it float on top */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000; /* Ensure it’s above everything else */
+}
+
+/* Card styling remains similar */
+.no-account-card {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 350px;
+}
+
+.no-account-card h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  color: #4b5320;
+}
+
+.no-account-card p {
+  font-size: 16px;
+  color: #333;
+}
+
+.no-account-image {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 16px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}

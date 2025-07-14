@@ -67,13 +67,13 @@ const ResumeListPage = () => {
         </div>
         {resumes.map((resume, index) => (
           <div className="resume-table-row" key={index}>
-            <span>{resume.name}</span>
+            <Link to="/resumeview" className="resume-name-link">Nishat_Tasnim_Resume</Link>
             <span>{resume.modificationDate}</span>
             <span>{resume.creationDate}</span>
             <span className="strength-badge">{resume.strength}</span>
 
             <span className="actions">
-              <button>Edit</button>
+              <Link to="/resumebuilder" className="action-link-btn">Edit</Link>
               <button onClick={() => handleDownloadClick(resume)}>Download</button>
               <button onClick={() => handleShareClick()}>Link</button>
               <button onClick={() => handleRemoveClick(resume)}>Remove</button>

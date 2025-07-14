@@ -1,45 +1,69 @@
 import './PostLoginHeader.css';
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import userIcon from '../../assets/icons8-account-48.png';
 
 const PostLoginHeader = () => {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    if (dropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [dropdownOpen]);
+
   return (
     <>
       <header className="postlogin-header">
-  <nav className="navbar">
-    <div className="header-left logo">RESUMIX</div>
-    
-    <div className="nav-center">
-      <Link to="/resumes">Resumes</Link>
-      <Link to="/templates">Templates</Link>
-      <Link to="/subscription">Subscription</Link>
-    </div>
-    <div className="nav-right">
-      <div className="user-dropdown">
-  <div className="user-trigger" onClick={() => setDropdownOpen(!dropdownOpen)}>
-    <span className="user-avatar"></span>
-    <span className="user-name">Username</span>
-    <span className="dropdown-arrow">▾</span>
-  </div>
-  {dropdownOpen && (
-    <div className="dropdown-content">
-      <Link to="/resumes">
-        <span role="img" aria-label="dashboard">👤</span> Dashboard
-      </Link>
-      <Link to="/settings">
-        <span role="img" aria-label="settings">⚙️</span> Settings
-      </Link>
-      <Link to="/">
-        <span role="img" aria-label="signout">↩️</span> Sign Out
-      </Link>
-    </div>
-  )}
-    </div>
-    </div>
-  </nav>
-</header>
+        <nav className="navbar">
+          <div className="header-left logo">RESUMIX</div>
 
+          <div className="nav-center">
+            <Link to="/resumes">Resumes</Link>
+            <Link to="/templates">Templates</Link>
+            <Link to="/subscription">Subscription</Link>
+          </div>
+          <div className="nav-right">
+            <div className="user-dropdown" ref={dropdownRef}>
+              <div className="user-trigger" onClick={() => setDropdownOpen(!dropdownOpen)}>
+                <span className="user-avatar">
+                  <img src={userIcon} alt="Account Icon" className="account-icon" />
+                </span>
+                <button className="account-button">
+                  MY ACCOUNT 
+                  <span className="dropdown-arrow">▾</span>
+                </button>
+              </div>
+              {dropdownOpen && (
+                <div className="dropdown-content">
+                  <Link to="/dashboard">
+                    <span role="img" aria-label="dashboard">👤</span> Dashboard
+                  </Link>
+                  <Link to="/settings">
+                    <span role="img" aria-label="settings">⚙️</span> Settings
+                  </Link>
+                  <Link to="/">
+                    <span role="img" aria-label="signout">↩️</span> Sign Out
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        </nav>
+      </header>
 
       {/* Hero Section */}
       <section className="hero-preview">

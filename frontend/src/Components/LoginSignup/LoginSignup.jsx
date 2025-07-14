@@ -97,7 +97,7 @@ const LoginSignup = ({ mode }) => {
       );
       setMessage(response.data.message || 'Google Sign-In successful!');
       setEmail('');
-      navigate('/');     
+      navigate('/postlogin/');     
     } catch (err) {
       setError('Google sign-in failed. Please try again.');
       console.error('Google Sign-In error:', err);

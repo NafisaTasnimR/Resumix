@@ -19,11 +19,19 @@ body {
 /*           HEADER              */
 
 .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 40px;
+  padding: 14px 40px;
+  background-color: white; 
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 999; 
 }
+
 
 .header-left.logo {
   font-size: 26px;
@@ -43,7 +51,7 @@ body {
 .header a {
   color: #4d5636;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 500;
   transition: color 0.3s ease;
 }
@@ -281,4 +289,17 @@ body {
   font-size: 16px;
   color: #4a4a4a;
   margin-bottom: 35px;
+}
+
+.nav-item {
+  color: #4d5636;
+  text-decoration: none;
+  margin: 0 16px;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-item:hover {
+  color: #6b7a4d; 
+  text-decoration: underline;
 }

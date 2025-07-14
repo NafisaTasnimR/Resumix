@@ -1,0 +1,59 @@
+.resume-page-container {
+  width: 100%;
+  height: 100%;
+}
+
+.resume-view-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.resume-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2d336b;
+}
+
+.edit-btn {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #4d5636;
+  color: #fff;
+  padding: 12px 35px; 
+  border: none;
+  border-radius: 30px; 
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, text-decoration 0.2s;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+.edit-btn:hover {
+  background-color: #6b7a4d;
+}
+
+.edit-btn:active {
+  text-decoration: underline; 
+}
+
+
+.resume-image-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.resume-image {
+  max-width: 50%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
