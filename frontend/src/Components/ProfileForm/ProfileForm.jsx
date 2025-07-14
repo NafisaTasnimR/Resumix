@@ -6,6 +6,7 @@ import Education from './Education';
 import Skills from './Skills';
 import Achievements from './Achievements';
 import References from './References';
+import Hobbies from './Hobbies';
 
 const ProfileForm = () => {
   const [currentPage, setCurrentPage] = useState('personal');
@@ -87,6 +88,20 @@ const ProfileForm = () => {
   ]);
   const [currentReferenceIndex, setCurrentReferenceIndex] = useState(0);
 
+  // Hobbies state
+  const [hobbies, setHobbies] = useState([
+    {
+      id: 1,
+      hobbyName: '',
+      experienceLevel: '',
+      yearsInvolved: '',
+      category: '',
+      description: '',
+      achievements: ''
+    }
+  ]);
+  const [currentHobbyIndex, setCurrentHobbyIndex] = useState(0);
+
   // Navigation functions
   const handleNextPage = () => {
     if (currentPage === 'personal') {
@@ -99,6 +114,8 @@ const ProfileForm = () => {
       setCurrentPage('achievements');
     } else if (currentPage === 'achievements') {
       setCurrentPage('references');
+    } else if (currentPage === 'references') {
+      setCurrentPage('hobbies');
     }
   };
 
@@ -113,6 +130,8 @@ const ProfileForm = () => {
       setCurrentPage('skills');
     } else if (currentPage === 'references') {
       setCurrentPage('achievements');
+    } else if (currentPage === 'hobbies') {
+      setCurrentPage('references');
     }
   };
 
@@ -277,6 +296,38 @@ const ProfileForm = () => {
     setReferences(updatedReferences);
   };
 
+  // Hobbies functions
+  const addNewHobby = () => {
+    const newHobby = {
+      id: hobbies.length + 1,
+      hobbyName: '',
+      experienceLevel: '',
+      yearsInvolved: '',
+      category: '',
+      description: '',
+      achievements: ''
+    };
+    setHobbies([...hobbies, newHobby]);
+    setCurrentHobbyIndex(hobbies.length);
+  };
+
+  const removeHobby = (index) => {
+    if (hobbies.length > 1) {
+      const newHobbies = hobbies.filter((_, i) => i !== index);
+      setHobbies(newHobbies);
+      setCurrentHobbyIndex(Math.max(0, index - 1));
+    }
+  };
+
+  const updateHobby = (field, value) => {
+    const updatedHobbies = [...hobbies];
+    updatedHobbies[currentHobbyIndex] = {
+      ...updatedHobbies[currentHobbyIndex],
+      [field]: value
+    };
+    setHobbies(updatedHobbies);
+  };
+
   const updateSkill = (field, value) => {
     const updatedSkills = [...skills];
     updatedSkills[currentSkillIndex] = {
@@ -350,6 +401,17 @@ const ProfileForm = () => {
             removeReference={removeReference}
           />
         );
+      case 'hobbies':
+        return (
+          <Hobbies 
+            hobbies={hobbies}
+            currentHobbyIndex={currentHobbyIndex}
+            setCurrentHobbyIndex={setCurrentHobbyIndex}
+            updateHobby={updateHobby}
+            addNewHobby={addNewHobby}
+            removeHobby={removeHobby}
+          />
+        );
       default:
         return null;
     }
@@ -418,6 +480,15 @@ const ProfileForm = () => {
                 />
               </div>
             )}
+            {currentPage === 'hobbies' && (
+              <div className="page-image">
+                <img 
+                  src="/Hobbies.png" 
+                  alt="Hobbies" 
+                  className="page-img"
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -427,7 +498,7 @@ const ProfileForm = () => {
       </div>
 
       <div className="navigation">
-        {(currentPage === 'experience' || currentPage === 'education' || currentPage === 'skills' || currentPage === 'achievements' || currentPage === 'references') && (
+        {(currentPage === 'experience' || currentPage === 'education' || currentPage === 'skills' || currentPage === 'achievements' || currentPage === 'references' || currentPage === 'hobbies') && (
           <button className="nav-button prev-button" onClick={handlePrevPage}>
             Prev
           </button>
@@ -458,6 +529,11 @@ const ProfileForm = () => {
           </button>
         )}
         {currentPage === 'references' && (
+          <button className="nav-button next-button" onClick={handleNextPage}>
+            Next
+          </button>
+        )}
+        {currentPage === 'hobbies' && (
           <button className="nav-button submit-nav-button" onClick={handleSubmit}>
             Submit
           </button>
