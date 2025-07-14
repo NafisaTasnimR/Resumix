@@ -4,8 +4,35 @@ import './ProfileForm.css';
 const ProfileForm = () => {
   const [currentPage, setCurrentPage] = useState('personal');
   const [showAddressDetails, setShowAddressDetails] = useState(false);
-  const [isCurrentJob, setIsCurrentJob] = useState(true);
-  const [isCurrentInstitute, setIsCurrentInstitute] = useState(false);
+  const [experiences, setExperiences] = useState([
+    {
+      id: 1,
+      employer: 'Khan Academy',
+      jobTitle: 'Founder & CEO',
+      city: 'Mountain View',
+      state: 'California',
+      startDate: '2008-01-01',
+      endDate: '2024-12-31',
+      isCurrent: true,
+      description: 'Founded and led Khan Academy, a non-profit educational organization. Developed innovative online learning platform serving millions of students worldwide. Created comprehensive curriculum covering mathematics, science, and humanities.'
+    }
+  ]);
+  const [educations, setEducations] = useState([
+    {
+      id: 1,
+      schoolName: 'Harvard Business School',
+      degree: 'Master of Business Administration',
+      fieldOfStudy: 'Business Administration',
+      graduation: '2003-05-15',
+      city: 'Boston',
+      state: 'Massachusetts',
+      startDate: '2001-09-01',
+      endDate: '2003-05-15',
+      isCurrent: false
+    }
+  ]);
+  const [currentExperienceIndex, setCurrentExperienceIndex] = useState(0);
+  const [currentEducationIndex, setCurrentEducationIndex] = useState(0);
 
   const handleAddressClick = () => {
     setShowAddressDetails(true);
@@ -31,12 +58,71 @@ const ProfileForm = () => {
     alert('Resume submitted successfully!');
   };
 
-  const handleCurrentJobChange = (e) => {
-    setIsCurrentJob(e.target.checked);
+  const addNewExperience = () => {
+    const newExperience = {
+      id: experiences.length + 1,
+      employer: '',
+      jobTitle: '',
+      city: '',
+      state: '',
+      startDate: '',
+      endDate: '',
+      isCurrent: false,
+      description: ''
+    };
+    setExperiences([...experiences, newExperience]);
+    setCurrentExperienceIndex(experiences.length);
   };
 
-  const handleCurrentInstituteChange = (e) => {
-    setIsCurrentInstitute(e.target.checked);
+  const addNewEducation = () => {
+    const newEducation = {
+      id: educations.length + 1,
+      schoolName: '',
+      degree: '',
+      fieldOfStudy: '',
+      graduation: '',
+      city: '',
+      state: '',
+      startDate: '',
+      endDate: '',
+      isCurrent: false
+    };
+    setEducations([...educations, newEducation]);
+    setCurrentEducationIndex(educations.length);
+  };
+
+  const removeExperience = (index) => {
+    if (experiences.length > 1) {
+      const newExperiences = experiences.filter((_, i) => i !== index);
+      setExperiences(newExperiences);
+      setCurrentExperienceIndex(Math.max(0, index - 1));
+    }
+  };
+
+  const removeEducation = (index) => {
+    if (educations.length > 1) {
+      const newEducations = educations.filter((_, i) => i !== index);
+      setEducations(newEducations);
+      setCurrentEducationIndex(Math.max(0, index - 1));
+    }
+  };
+
+  const updateExperience = (field, value) => {
+    const updatedExperiences = [...experiences];
+    updatedExperiences[currentExperienceIndex] = {
+      ...updatedExperiences[currentExperienceIndex],
+      [field]: value
+    };
+    setExperiences(updatedExperiences);
+  };
+
+  const updateEducation = (field, value) => {
+    const updatedEducations = [...educations];
+    updatedEducations[currentEducationIndex] = {
+      ...updatedEducations[currentEducationIndex],
+      [field]: value
+    };
+    setEducations(updatedEducations);
   };
 
   const renderPersonalPage = () => (
@@ -74,7 +160,6 @@ const ProfileForm = () => {
             className={`input-field ${showAddressDetails ? 'expanded' : ''}`}
             onClick={handleAddressClick}
             placeholder="123 Main Street"
-            
           />
         </div>
 
@@ -111,151 +196,291 @@ const ProfileForm = () => {
     </>
   );
 
-  const renderExperiencePage = () => (
-    <>
-      <div className="personal-info-header">
-        <h2>Experience</h2>
-        <div className="info-line"></div>
-      </div>
-
-      <div className="form-fields">
-        <div className="field-group">
-          <label>Employer Name:</label>
-          <input type="text" className="input-field" placeholder="Khan Academy" />
+  const renderExperiencePage = () => {
+    const currentExp = experiences[currentExperienceIndex];
+    
+    return (
+      <>
+        <div className="personal-info-header">
+          <h2>Experience {currentExperienceIndex + 1} of {experiences.length}</h2>
+          <div className="info-line"></div>
         </div>
 
-        <div className="field-group">
-          <label>Job Title:</label>
-          <input type="text" className="input-field" placeholder="Founder & CEO" />
+        <div className="form-fields">
+          <div className="experience-navigation">
+            {experiences.length > 1 && (
+              <div className="experience-tabs">
+                {experiences.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`tab-button ${index === currentExperienceIndex ? 'active' : ''}`}
+                    onClick={() => setCurrentExperienceIndex(index)}
+                  >
+                    Experience {index + 1}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="field-group">
+            <label>Employer Name:</label>
+            <input 
+              type="text" 
+              className="input-field" 
+              value={currentExp.employer}
+              onChange={(e) => updateExperience('employer', e.target.value)}
+              placeholder="Khan Academy" 
+            />
+          </div>
+
+          <div className="field-group">
+            <label>Job Title:</label>
+            <input 
+              type="text" 
+              className="input-field" 
+              value={currentExp.jobTitle}
+              onChange={(e) => updateExperience('jobTitle', e.target.value)}
+              placeholder="Founder & CEO" 
+            />
+          </div>
+
+          <div className="field-row">
+            <div className="field-group half-width">
+              <label>City:</label>
+              <input 
+                type="text" 
+                className="input-field" 
+                value={currentExp.city}
+                onChange={(e) => updateExperience('city', e.target.value)}
+                placeholder="Mountain View" 
+              />
+            </div>
+            <div className="field-group half-width">
+              <label>State:</label>
+              <input 
+                type="text" 
+                className="input-field" 
+                value={currentExp.state}
+                onChange={(e) => updateExperience('state', e.target.value)}
+                placeholder="California" 
+              />
+            </div>
+          </div>
+
+          <div className="field-row">
+            <div className="field-group half-width">
+              <label>Start Date</label>
+              <input 
+                type="date" 
+                className="input-field" 
+                value={currentExp.startDate}
+                onChange={(e) => updateExperience('startDate', e.target.value)}
+              />
+            </div>
+            <div className="field-group half-width">
+              <label>End Date:</label>
+              <input 
+                type="date" 
+                className={`input-field ${currentExp.isCurrent ? 'disabled-field' : ''}`}
+                value={currentExp.endDate}
+                onChange={(e) => updateExperience('endDate', e.target.value)}
+                disabled={currentExp.isCurrent}
+              />
+            </div>
+          </div>
+
+          <div className="field-group">
+            <div className="current-job-checkbox">
+              <input 
+                type="checkbox" 
+                id={`currentJob${currentExperienceIndex}`}
+                className="checkbox-input" 
+                checked={currentExp.isCurrent}
+                onChange={(e) => updateExperience('isCurrent', e.target.checked)}
+              />
+              <label htmlFor={`currentJob${currentExperienceIndex}`} className="checkbox-label">Set as Current Job</label>
+            </div>
+          </div>
+
+          <div className="field-group">
+            <label>Job Description</label>
+            <textarea 
+              className="input-field textarea-field" 
+              rows="4" 
+              value={currentExp.description}
+              onChange={(e) => updateExperience('description', e.target.value)}
+              placeholder="Founded and led Khan Academy, a non-profit educational organization..."
+            ></textarea>
+          </div>
+
+          <div className="action-buttons">
+            <button className="add-button" onClick={addNewExperience}>
+              + Add Another Experience
+            </button>
+            {experiences.length > 1 && (
+              <button 
+                className="remove-button" 
+                onClick={() => removeExperience(currentExperienceIndex)}
+              >
+                Remove This Experience
+              </button>
+            )}
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  const renderEducationPage = () => {
+    const currentEdu = educations[currentEducationIndex];
+    
+    return (
+      <>
+        <div className="personal-info-header">
+          <h2>Education {currentEducationIndex + 1} of {educations.length}</h2>
+          <div className="info-line"></div>
         </div>
 
-        <div className="field-row">
-          <div className="field-group half-width">
-            <label>City:</label>
-            <input type="text" className="input-field" placeholder="Mountain View" />
+        <div className="form-fields">
+          <div className="experience-navigation">
+            {educations.length > 1 && (
+              <div className="experience-tabs">
+                {educations.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`tab-button ${index === currentEducationIndex ? 'active' : ''}`}
+                    onClick={() => setCurrentEducationIndex(index)}
+                  >
+                    Education {index + 1}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-          <div className="field-group half-width">
-            <label>State:</label>
-            <input type="text" className="input-field" placeholder="California" />
-          </div>
-        </div>
 
-        <div className="field-row">
-          <div className="field-group half-width">
-            <label>Start Date</label>
-            <input type="date" className="input-field" placeholder="2008-01-01" />
+          <div className="field-group">
+            <label>School Name:</label>
+            <input 
+              type="text" 
+              className="input-field" 
+              value={currentEdu.schoolName}
+              onChange={(e) => updateEducation('schoolName', e.target.value)}
+              placeholder="Harvard Business School" 
+            />
           </div>
-          <div className="field-group half-width">
-            <label>End Date:</label>
+
+          <div className="field-group">
+            <label>Degree:</label>
+            <input 
+              type="text" 
+              className="input-field" 
+              value={currentEdu.degree}
+              onChange={(e) => updateEducation('degree', e.target.value)}
+              placeholder="Master of Business Administration" 
+            />
+          </div>
+
+          <div className="field-group">
+            <label>Field of Study:</label>
+            <input 
+              type="text" 
+              className="input-field" 
+              value={currentEdu.fieldOfStudy}
+              onChange={(e) => updateEducation('fieldOfStudy', e.target.value)}
+              placeholder="Business Administration" 
+            />
+          </div>
+
+          <div className="field-group">
+            <label>Graduation</label>
             <input 
               type="date" 
-              className={`input-field ${isCurrentJob ? 'disabled-field' : ''}`}
-              placeholder="2024-12-31" 
-              disabled={isCurrentJob}
+              className="input-field" 
+              value={currentEdu.graduation}
+              onChange={(e) => updateEducation('graduation', e.target.value)}
             />
           </div>
-        </div>
 
-        <div className="field-group">
-          <div className="current-job-checkbox">
-            <input 
-              type="checkbox" 
-              id="currentJob" 
-              className="checkbox-input" 
-              checked={isCurrentJob}
-              onChange={handleCurrentJobChange}
-            />
-            <label htmlFor="currentJob" className="checkbox-label">Set as Current Job</label>
+          <div className="field-row">
+            <div className="field-group half-width">
+              <label>City:</label>
+              <input 
+                type="text" 
+                className="input-field" 
+                value={currentEdu.city}
+                onChange={(e) => updateEducation('city', e.target.value)}
+                placeholder="Boston" 
+              />
+            </div>
+            <div className="field-group half-width">
+              <label>State:</label>
+              <input 
+                type="text" 
+                className="input-field" 
+                value={currentEdu.state}
+                onChange={(e) => updateEducation('state', e.target.value)}
+                placeholder="Massachusetts" 
+              />
+            </div>
+          </div>
+
+          <div className="field-row">
+            <div className="field-group half-width">
+              <label>Start Date</label>
+              <input 
+                type="date" 
+                className="input-field" 
+                value={currentEdu.startDate}
+                onChange={(e) => updateEducation('startDate', e.target.value)}
+              />
+            </div>
+            <div className="field-group half-width">
+              <label>End Date:</label>
+              <input 
+                type="date" 
+                className={`input-field ${currentEdu.isCurrent ? 'disabled-field' : ''}`}
+                value={currentEdu.endDate}
+                onChange={(e) => updateEducation('endDate', e.target.value)}
+                disabled={currentEdu.isCurrent}
+              />
+            </div>
+          </div>
+
+          <div className="field-group">
+            <div className="current-job-checkbox">
+              <input 
+                type="checkbox" 
+                id={`currentInstitute${currentEducationIndex}`}
+                className="checkbox-input" 
+                checked={currentEdu.isCurrent}
+                onChange={(e) => updateEducation('isCurrent', e.target.checked)}
+              />
+              <label htmlFor={`currentInstitute${currentEducationIndex}`} className="checkbox-label">Set as Current Institute</label>
+            </div>
+          </div>
+
+          <div className="action-buttons">
+            <button className="add-button" onClick={addNewEducation}>
+              + Add Another Education
+            </button>
+            {educations.length > 1 && (
+              <button 
+                className="remove-button" 
+                onClick={() => removeEducation(currentEducationIndex)}
+              >
+                Remove This Education
+              </button>
+            )}
           </div>
         </div>
-
-        <div className="field-group">
-          <label>Job Description</label>
-          <textarea 
-            className="input-field textarea-field" 
-            rows="4" 
-            placeholder="Founded and led Khan Academy, a non-profit educational organization. Developed innovative online learning platform serving millions of students worldwide. Created comprehensive curriculum covering mathematics, science, and humanities."
-          ></textarea>
-        </div>
-      </div>
-    </>
-  );
-
-  const renderEducationPage = () => (
-    <>
-      <div className="personal-info-header">
-        <h2>Education</h2>
-        <div className="info-line"></div>
-      </div>
-
-      <div className="form-fields">
-        <div className="field-group">
-          <label>School Name:</label>
-          <input type="text" className="input-field" placeholder="Harvard Business School" />
-        </div>
-
-        <div className="field-group">
-          <label>Degree:</label>
-          <input type="text" className="input-field" placeholder="Master of Business Administration" />
-        </div>
-
-        <div className="field-group">
-          <label>Field of Study:</label>
-          <input type="text" className="input-field" placeholder="Business Administration" />
-        </div>
-
-        <div className="field-group">
-          <label>Graduation</label>
-          <input type="date" className="input-field" placeholder="2003-05-15" />
-        </div>
-
-        <div className="field-row">
-          <div className="field-group half-width">
-            <label>City:</label>
-            <input type="text" className="input-field" placeholder="Boston" />
-          </div>
-          <div className="field-group half-width">
-            <label>State:</label>
-            <input type="text" className="input-field" placeholder="Massachusetts" />
-          </div>
-        </div>
-
-        <div className="field-row">
-          <div className="field-group half-width">
-            <label>Start Date</label>
-            <input type="date" className="input-field" placeholder="2001-09-01" />
-          </div>
-          <div className="field-group half-width">
-            <label>End Date:</label>
-            <input 
-              type="date" 
-              className={`input-field ${isCurrentInstitute ? 'disabled-field' : ''}`}
-              placeholder="2003-05-15" 
-              disabled={isCurrentInstitute}
-            />
-          </div>
-        </div>
-
-        <div className="field-group">
-          <div className="current-job-checkbox">
-            <input 
-              type="checkbox" 
-              id="currentInstitute" 
-              className="checkbox-input" 
-              checked={isCurrentInstitute}
-              onChange={handleCurrentInstituteChange}
-            />
-            <label htmlFor="currentInstitute" className="checkbox-label">Set as Current Institute</label>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+      </>
+    );
+  };
 
   return (
     <div className="resume-container">
       <div className="resume-header">
-        
         <div className="header-line"></div>
       </div>
 
@@ -269,7 +494,6 @@ const ProfileForm = () => {
                   alt="Personal Information" 
                   className="page-img"
                 />
-                
               </div>
             )}
             {currentPage === 'experience' && (
@@ -279,7 +503,6 @@ const ProfileForm = () => {
                   alt="Work Experience" 
                   className="page-img"
                 />
-                
               </div>
             )}
             {currentPage === 'education' && (
@@ -289,7 +512,6 @@ const ProfileForm = () => {
                   alt="Education" 
                   className="page-img"
                 />
-                
               </div>
             )}
           </div>
@@ -308,12 +530,7 @@ const ProfileForm = () => {
             Prev
           </button>
         )}
-        {currentPage === 'personal' && (
-          <button className="nav-button next-button" onClick={handleNextPage}>
-            Next
-          </button>
-        )}
-        {currentPage === 'experience' && (
+        {(currentPage === 'personal' || currentPage === 'experience') && (
           <button className="nav-button next-button" onClick={handleNextPage}>
             Next
           </button>
