@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './PaymentInfo.css';
+import TopBar from '../ResumeEditorPage/TopBar';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -28,6 +29,7 @@ const PaymentInfo = () => {
 
   return (
     <div className="payment-container">
+      <TopBar />
       {/* Progress Steps */}
       <div className="progress-steps">
         <div className="step completed">

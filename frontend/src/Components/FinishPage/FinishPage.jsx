@@ -1,7 +1,7 @@
 import React from 'react';
 import './FinishPage.css';
-// *** ADDED: Import useNavigate for navigation ***
 import { useNavigate } from 'react-router-dom';
+import TopBar from '../ResumeEditorPage/TopBar';
 
 const FinishPage = () => {
   // *** ADDED: Initialize navigation hook ***
@@ -15,6 +15,7 @@ const FinishPage = () => {
 
   return (
     <div className="finish-container">
+      <TopBar />
       {/* Progress Steps */}
       <div className="progress-steps">
         <div className="step completed">

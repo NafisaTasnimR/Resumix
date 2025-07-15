@@ -30,7 +30,6 @@ const SubscriptionPage = () => {
       padding: '20px 0',
       borderBottom: '1px solid #e9ecef',
       backgroundColor: '#f8f9fa',
-      marginTop: '20px',
         marginTop: '80px'
     }}>
       <div style={{
