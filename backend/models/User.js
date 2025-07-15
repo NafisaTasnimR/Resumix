@@ -34,18 +34,55 @@ const UserSchema = new schema({
   defaultResumeData: {
     personalInfo: {
       fullName: { type: String, default: '' },
-      email: { type: String, default: '' },
-      phone: { type: String, default: '' },
-      address: { type: String, default: '' },
-      summary: { type: String, default: '' }
+      email: {
+        type: String,
+        unique: true
+      },
+      dateOfBirth: {
+        type: Date
+      },
+      phone: {
+        type: String
+      },
+      address: {
+        type: String
+      },
+      city: {
+        type: String
+      },
+      district: {
+        type: String
+      },
+      country: {
+        type: String
+      },
+      zipCode: {
+        type: String
+      }
     },
     education: {
       type: [
         {
-          institution: String,
-          degree: String,
-          startYear: Number,
-          endYear: Number
+          institution: {
+            type: String
+          },
+          degree: {
+            type: String
+          },
+          fieldOfStudy: {
+            type: String
+          },
+          startDate: {
+            type: Date
+          },
+          endDate: Date,
+          graduationDate: Date,
+          isCurrentInstitute: {
+            type: Boolean,
+            default: false
+          },
+          city: String,
+          state: String
         }
       ],
       default: []
@@ -53,17 +90,73 @@ const UserSchema = new schema({
     experience: {
       type: [
         {
-          position: String,
-          company: String,
-          startDate: String,
-          endDate: String,
-          description: String
+          employerName: {
+            type: String
+          },
+          jobTitle: {
+            type: String
+          },
+          city: String,
+          state: String,
+          startDate: {
+            type: Date
+          },
+          endDate: Date,
+          isCurrentJob: {
+            type: Boolean,
+            default: false
+          }
         }
       ],
       default: []
     },
     skills: {
-      type: [String],
+      type: [
+        {
+          skillName: { type: String },
+          proficiencyLevel: { type: String }, // e.g., Beginner, Intermediate, Expert
+          yearsOfExperience: { type: Number },
+          skillDescription: { type: String }
+        }
+      ],
+      default: []
+    },
+    achievements: {
+      type: [
+        {
+          title: { type: String },
+          organization: { type: String },
+          dateReceived: { type: Date },
+          category: { type: String },
+          description: { type: String },
+          website: { type: String }
+        }
+      ],
+      default: []
+    },
+    references: {
+      type: [
+        {
+          firstName: { type: String },
+          lastName: { type: String },
+          jobTitle: { type: String },
+          company: { type: String },
+          email: { type: String },
+          phone: { type: String },
+          relationship: { type: String },
+          description: { type: String },
+          permissionToContact: { type: Boolean, default: false }
+        }
+      ],
+      default: []
+    },
+    additionalSections: {
+      type: [
+        {
+          sectionTitle: { type: String },
+          content: { type: String }
+        }
+      ],
       default: []
     },
     projects: {
@@ -75,12 +168,9 @@ const UserSchema = new schema({
         }
       ],
       default: []
-    },
-    languages: {
-      type: [String],
-      default: []
     }
   }
+
 
 });
 
