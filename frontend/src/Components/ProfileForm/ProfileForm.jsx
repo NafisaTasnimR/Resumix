@@ -9,9 +9,11 @@ import References from './References';
 import Hobbies from './Hobbies';
 import AdditionalInfo from './AdditionalInfo';
 import { Link } from 'react-router-dom';
+import TopBar from '../ResumeEditorPage/TopBar';
 
 
 const ProfileForm = () => {
+   window.scrollTo(0, 0);
   const [currentPage, setCurrentPage] = useState('personal');
   const [showAddressDetails, setShowAddressDetails] = useState(false);
 
@@ -48,7 +50,7 @@ const ProfileForm = () => {
   ]);
   const [currentEducationIndex, setCurrentEducationIndex] = useState(0);
 
-  // Skills state
+  
   const [skills, setSkills] = useState([
     {
       id: 1,
@@ -60,7 +62,6 @@ const ProfileForm = () => {
   ]);
   const [currentSkillIndex, setCurrentSkillIndex] = useState(0);
 
-  // Achievements state
   const [achievements, setAchievements] = useState([
     {
       id: 1,
@@ -68,13 +69,13 @@ const ProfileForm = () => {
       organization: '',
       dateReceived: '',
       category: '',
+      customCategory: '',
       description: '',
       website: ''
     }
   ]);
   const [currentAchievementIndex, setCurrentAchievementIndex] = useState(0);
 
-  // References state
   const [references, setReferences] = useState([
     {
       id: 1,
@@ -85,13 +86,14 @@ const ProfileForm = () => {
       email: '',
       phone: '',
       relationship: '',
+      customRelationship: '',
       description: '',
       canContact: false
     }
   ]);
   const [currentReferenceIndex, setCurrentReferenceIndex] = useState(0);
 
-  // Hobbies state
+  
   const [hobbies, setHobbies] = useState([
     {
       id: 1,
@@ -105,7 +107,7 @@ const ProfileForm = () => {
   ]);
   const [currentHobbyIndex, setCurrentHobbyIndex] = useState(0);
 
-  // Additional Info state
+ 
   const [additionalInfos, setAdditionalInfos] = useState([
     {
       id: 1,
@@ -115,8 +117,9 @@ const ProfileForm = () => {
   ]);
   const [currentAdditionalInfoIndex, setCurrentAdditionalInfoIndex] = useState(0);
 
-  // Navigation functions
+  
   const handleNextPage = () => {
+    window.scrollTo(0, 0); 
     if (currentPage === 'personal') {
       setCurrentPage('experience');
     } else if (currentPage === 'experience') {
@@ -135,6 +138,7 @@ const ProfileForm = () => {
   };
 
   const handlePrevPage = () => {
+    window.scrollTo(0, 0); 
     if (currentPage === 'experience') {
       setCurrentPage('personal');
     } else if (currentPage === 'education') {
@@ -153,6 +157,7 @@ const ProfileForm = () => {
   };
 
   const handleSubmit = () => {
+     window.scrollTo(0, 0);
     alert('Resume submitted successfully!');
   };
 
@@ -254,6 +259,7 @@ const ProfileForm = () => {
       organization: '',
       dateReceived: '',
       category: '',
+      customCategory: '',
       description: '',
       website: ''
     };
@@ -289,6 +295,7 @@ const ProfileForm = () => {
       email: '',
       phone: '',
       relationship: '',
+      customRelationship: '',
       description: '',
       canContact: false
     };
@@ -475,7 +482,9 @@ const ProfileForm = () => {
 
   return (
     <div className="resume-container">
+     
       <div className="resume-header">
+        <TopBar />
         <div className="header-line"></div>
       </div>
 

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './ATSChecker.css';
+import { useNavigate } from 'react-router-dom';
+import TopBar from '../ResumeEditorPage/TopBar';
 
 const ATSChecker = () => {
   const [jobDescription, setJobDescription] = useState('');
@@ -39,6 +41,7 @@ const ATSChecker = () => {
 
   return (
     <div className="resume-checker">
+      <TopBar />
       <div className="main-container">
         {/* Left Sidebar */}
         <div className="left-sidebar">

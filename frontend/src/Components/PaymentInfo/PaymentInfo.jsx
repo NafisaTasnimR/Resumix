@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import './PaymentInfo.css';
+import TopBar from '../ResumeEditorPage/TopBar';
 
 import { useNavigate } from 'react-router-dom';
 
 const PaymentInfo = () => {
+  window.scrollTo(0, 0);
  
   const navigate = useNavigate();
   
@@ -22,12 +24,14 @@ const PaymentInfo = () => {
   };
 
   const handleSubscription = () => {
+     
     
     navigate('/m/final');
   };
 
   return (
     <div className="payment-container">
+      <TopBar />
       {/* Progress Steps */}
       <div className="progress-steps">
         <div className="step completed">

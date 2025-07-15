@@ -12,9 +12,11 @@ const Hobbies = ({
 
   return (
     <>
+    
       <div className="personal-info-header">
+         
         <h2>Hobbies </h2>
-        <div className="info-line"></div>
+        <div className="info-line3"></div>
       </div>
 
       <div className="form-fields">
@@ -93,7 +95,6 @@ const Hobbies = ({
             <option value="Collecting">Collecting</option>
             <option value="Outdoor Activities">Outdoor Activities</option>
             <option value="Volunteering">Volunteering</option>
-            <option value="Other">Other</option>
           </select>
         </div>
 

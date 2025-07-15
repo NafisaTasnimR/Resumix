@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './SettingsPage.css';
-
+import { Link } from 'react-router-dom';
+import TopBar from '../ResumeEditorPage/TopBar';
 const SettingsPage = () => {
   const [password, setPassword] = useState('*******');
   const [modalType, setModalType] = useState(null);
@@ -47,6 +48,7 @@ const SettingsPage = () => {
 
   return (
     <div className="settings-container">
+      <TopBar/>
       <div className="settings-card">
         <h2 className="settings-title">General Account Settings</h2>
 

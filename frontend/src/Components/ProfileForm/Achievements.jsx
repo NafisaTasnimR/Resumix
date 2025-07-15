@@ -14,7 +14,7 @@ const Achievements = ({
     <>
       <div className="personal-info-header">
         <h2>Achievements </h2>
-        <div className="info-line"></div>
+        <div className="info-line3"></div>
       </div>
 
       <div className="form-fields">
@@ -85,6 +85,20 @@ const Achievements = ({
             </select>
           </div>
         </div>
+
+        {/* Custom Category Input - Shows when "Other" is selected */}
+        {currentAchievement.category === 'Other' && (
+          <div className="field-group">
+            <label>Please specify category:</label>
+            <input 
+              type="text" 
+              className="input-field" 
+              value={currentAchievement.customCategory || ''}
+              onChange={(e) => updateAchievement('customCategory', e.target.value)}
+              placeholder="Enter your custom category" 
+            />
+          </div>
+        )}
 
         <div className="field-group">
           <label>Description</label>

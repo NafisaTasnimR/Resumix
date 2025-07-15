@@ -1,15 +1,21 @@
 import React from 'react';
+import CountryDropdown from './CountryDropdown';
 
 const PersonalInfo = ({ showAddressDetails, setShowAddressDetails }) => {
   const handleAddressClick = () => {
     setShowAddressDetails(true);
   };
 
+  const handleCountrySelect = (country) => {
+    console.log('Selected country:', country);
+    // Handle country selection here
+  };
+
   return (
     <>
       <div className="personal-info-header">
         <h2>Personal Information</h2>
-        <div className="info-line"></div>
+        <div className="info-line3"></div>
       </div>
 
       <div className="form-fields">
@@ -57,18 +63,16 @@ const PersonalInfo = ({ showAddressDetails, setShowAddressDetails }) => {
               </div>
               <div className="field-group half-width">
                 <label>Country:</label>
-                <input type="text" className="input-field" placeholder="USA" />
+                <CountryDropdown 
+                  placeholder="Select Country" 
+                  onSelect={handleCountrySelect}
+                />
               </div>
             </div>
 
             <div className="field-group">
               <label>Zip Code:</label>
               <input type="text" className="input-field" placeholder="94041" />
-            </div>
-
-            <div className="field-group">
-              <label>Country:</label>
-              <input type="text" className="input-field" placeholder="United States" />
             </div>
           </div>
         )}
