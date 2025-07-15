@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
+import TopBar from '../ResumeEditorPage/TopBar';
 
 const SubscriptionPage = () => {
   const [selectedPlan, setSelectedPlan] = useState('free');
@@ -19,6 +20,8 @@ const SubscriptionPage = () => {
       padding: 0
     }}>
     
+  <TopBar />
+  
     <div style={{
       display: 'flex',
       alignItems: 'center',
@@ -27,7 +30,8 @@ const SubscriptionPage = () => {
       padding: '20px 0',
       borderBottom: '1px solid #e9ecef',
       backgroundColor: '#f8f9fa',
-      marginTop: '20px'
+      marginTop: '20px',
+        marginTop: '80px'
     }}>
       <div style={{
         display: 'flex',
