@@ -70,10 +70,10 @@ const Dashboard = () => {
       <div className="dashboard-content">
         <div className="sidebar">
           <div className="sidebar-item" onClick={() => scrollToSection(personalRef)}>
-            Personal Info
+            Personal Information
           </div>
           <div className="sidebar-item" onClick={() => scrollToSection(educationRef)}>
-            Education Info
+            Education Information
           </div>
           <div className="sidebar-item" onClick={() => scrollToSection(experienceRef)}>
             Experience
@@ -91,8 +91,8 @@ const Dashboard = () => {
             Hobbies
           </div>
           <div className="sidebar-item" onClick={() => scrollToSection(additonalsRef)}>
-            Additional Info
-            </div>
+            Additional Information
+          </div>
         </div>
 
         <div className="info-wrapper">
@@ -175,16 +175,17 @@ const Dashboard = () => {
             </div>
             <div className="info-box" ref={additonalsRef}>
               <h3>Additional Information</h3>
-              <div className="info-line">Section Title:</div>  
+              <div className="info-line">Section Title:</div>
               <div className="info-line">Information:</div>
-              </div>
-            
+            </div>
+
           </div>
         </div>
       </div>
 
-      <button className="update-info-btn">Update your information →</button>
-
+      <Link to="/profile">
+        <button className="update-info-btn">Update your information →</button>
+      </Link>
       <ShareResumeModal
         isOpen={isShareModalOpen}
         onClose={handleCloseModal}

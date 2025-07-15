@@ -60,8 +60,8 @@ const SettingsPage = () => {
         <div className="settings-row">
           <span className="label">Password:</span>
           <span className="value">{password}</span>
-          <button className="edit-btn" onClick={() => setModalType('password')}> 
-            <span className="edit-icon">✏️</span> <span className="edit-text">edit</span>
+          <button className="edit-btn2" onClick={() => setModalType('password')}> 
+            <span className="edit-icon2">✏️</span> <span className="edit-text">edit</span>
           </button>
         </div>
       </div>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import PaymentInfo from './PaymentInfo/PaymentInfo';
-import ProfileForm from './ProfileForm/ProfileForm';
 import ATSChecker from './ATSChecker/ATSChecker';
 import FinishPage from './FinishPage/FinishPage';
 

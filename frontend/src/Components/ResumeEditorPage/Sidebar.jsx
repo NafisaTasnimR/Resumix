@@ -10,7 +10,7 @@ const Sidebar = ({onFontButtonClick, onColorPaletteButtonClick}) => {
     
     return (
     <div className="sidebar">
-        <button>
+        <button onClick={() => navigate('/templates')}>
             <img src = {resume} alt="Template" width="30" height="30"/>
             <span>Template</span>
         </button>

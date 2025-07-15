@@ -253,7 +253,7 @@ const SubscriptionPage = () => {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', fontSize: '16px', lineHeight: 1.5, color: '#495057' }}>
                   <span style={{ color: '#28a745', fontWeight: 'bold', fontSize: '18px', marginTop: '2px' }}>✓</span>
-                  <strong>Cancel anytime</strong>
+                  <strong>Sharable URL</strong>
                 </div>
               </div>
             </div>
