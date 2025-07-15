@@ -15,9 +15,9 @@ const SettingsPage = () => {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const evaluatePasswordStrength = (password) => {
-    if (password.length < 6) return 'weak';
-    if (password.match(/[A-Z]/) && password.match(/[0-9]/) && password.length >= 8) return 'strong';
-    return 'medium';
+    if (password.length < 6) return 'Weak';
+    if (/[A-Z]/.test(password) && /[0-9]/.test(password) && password.length >= 8) return 'Strong';
+    return 'Medium';
   };
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const SettingsPage = () => {
   }, [newPassword, confirmPassword]);
 
   const savePassword = () => {
-    const actualCurrentPassword = '*******'; // Simulated placeholder
+    const actualCurrentPassword = '*******'; // Example placeholder
 
     if (prevPassword !== actualCurrentPassword) {
       setPasswordError('Previous password is incorrect');
@@ -49,7 +49,6 @@ const SettingsPage = () => {
     <div className="settings-container">
       <div className="settings-card">
         <h2 className="settings-title">General Account Settings</h2>
-
 
         <div className="settings-row">
           <span className="label">Username:</span>
@@ -74,10 +73,11 @@ const SettingsPage = () => {
         <div className="modal-overlay">
           <div className="modal">
             <button className="close-btn" onClick={() => setModalType(null)}>×</button>
-            <h2>Password</h2>
+            <h2>PASSWORD</h2>
             <p className="modal-label">CHANGE YOUR PASSWORD</p>
 
-            <div className="password-input-wrapper">
+            {/* Current Password */}
+            <div className="settings-password-wrapper">
               <input
                 type={showPrev ? 'text' : 'password'}
                 className="modal-input"
@@ -86,20 +86,19 @@ const SettingsPage = () => {
                 onChange={(e) => setPrevPassword(e.target.value)}
               />
               <span
-                className="eye-icon"
+                className="settings-eye-icon"
                 onClick={() => setShowPrev(!showPrev)}
               >
                 <img
                   src={showPrev ? '/view.png' : '/eyebrow.png'}
                   alt={showPrev ? 'Hide password' : 'Show password'}
-                  className="eye-img"
+                  className="settings-eye-img"
                 />
-
               </span>
-
             </div>
 
-            <div className="password-input-wrapper">
+            {/* New Password */}
+            <div className="settings-password-wrapper">
               <input
                 type={showNew ? 'text' : 'password'}
                 className="modal-input"
@@ -112,22 +111,22 @@ const SettingsPage = () => {
                 }}
               />
               <span
-                className="eye-icon"
+                className="settings-eye-icon"
                 onClick={() => setShowNew(!showNew)}
               >
                 <img
                   src={showNew ? '/view.png' : '/eyebrow.png'}
                   alt={showNew ? 'Hide password' : 'Show password'}
-                  className="eye-img"
+                  className="settings-eye-img"
                 />
               </span>
             </div>
 
             <div className="password-checks">
-              <span className={/[a-z]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Lower case</span>
-              <span className={/[A-Z]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Upper case</span>
-              <span className={/[0-9]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Numbers</span>
-              <span className={/[!@#$%^&*(),.?":{}|<>]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Symbols</span>
+              <span className={/[a-z]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Lower</span>
+              <span className={/[A-Z]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Upper</span>
+              <span className={/[0-9]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Number</span>
+              <span className={/[!@#$%^&*(),.?":{}|<>]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Symbol</span>
             </div>
 
             {newPassword && (
@@ -136,7 +135,8 @@ const SettingsPage = () => {
               </p>
             )}
 
-            <div className="password-input-wrapper">
+            {/* Confirm Password */}
+            <div className="settings-password-wrapper">
               <input
                 type={showConfirm ? 'text' : 'password'}
                 className="modal-input"
@@ -145,17 +145,15 @@ const SettingsPage = () => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
               <span
-                className="eye-icon"
+                className="settings-eye-icon"
                 onClick={() => setShowConfirm(!showConfirm)}
               >
                 <img
                   src={showConfirm ? '/view.png' : '/eyebrow.png'}
                   alt={showConfirm ? 'Hide password' : 'Show password'}
-                  className="eye-img"
+                  className="settings-eye-img"
                 />
-
               </span>
-
             </div>
 
             {passwordError && <p className="password-error">{passwordError}</p>}
