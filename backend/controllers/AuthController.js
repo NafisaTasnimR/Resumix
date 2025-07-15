@@ -4,7 +4,6 @@ const UserModel = require('../models/User'); // Assuming you have a User model d
 
 const signup = async (req, res) => {
     try {
-        // Simulate user registration logic
         const { username, email, password } = req.body;
         const user = await UserModel.findOne({ email });
         if (user) {
@@ -13,7 +12,6 @@ const signup = async (req, res) => {
         const userModel = new UserModel({ username, email, password });
         userModel.password = await bcrypt.hash(password, 10);
         await userModel.save();
-        // Here you would typically save the user to the database
         res.status(201).json({ message: 'User registered successfully', user: { username } });
     } catch (error) {
         res.status(500).json({ message: 'Internal server error', error: error.message });
