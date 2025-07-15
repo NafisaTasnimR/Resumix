@@ -193,3 +193,43 @@
 .password-strength.strong {
   color: green;
 }
+
+.password-input-wrapper {
+  position: relative;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  user-select: none;
+  font-size: 18px;
+}
+
+.eye-img {
+  width: 20px;
+  height: 20px;
+}
+
+.password-checks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.password-checks span {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.check-active {
+  color: green;
+}
+
+.check-inactive {
+  color: #bbb;
+}
+

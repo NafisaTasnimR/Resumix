@@ -3,12 +3,16 @@ import './SettingsPage.css';
 
 const SettingsPage = () => {
   const [password, setPassword] = useState('*******');
-  const [modalType, setModalType] = useState(null); 
+  const [modalType, setModalType] = useState(null);
+  const [prevPassword, setPrevPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const [prevPassword, setPrevPassword] = useState('');
   const [passwordStrength, setPasswordStrength] = useState('');
+
+  const [showPrev, setShowPrev] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const evaluatePasswordStrength = (password) => {
     if (password.length < 6) return 'weak';
@@ -25,13 +29,17 @@ const SettingsPage = () => {
   }, [newPassword, confirmPassword]);
 
   const savePassword = () => {
-    const actualCurrentPassword = '*******';
+    const actualCurrentPassword = '*******'; // Simulated placeholder
 
     if (prevPassword !== actualCurrentPassword) {
       setPasswordError('Previous password is incorrect');
     } else if (newPassword === confirmPassword && newPassword.length > 0) {
       setPassword('*******');
       setPasswordError('');
+      setModalType(null);
+      setPrevPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
     } else {
       setPasswordError('Passwords do not match');
     }
@@ -42,10 +50,6 @@ const SettingsPage = () => {
       <div className="settings-card">
         <h2 className="settings-title">General Account Settings</h2>
 
-        <div className="settings-row">
-          <span className="label">Account ID:</span>
-          <span className="value">22*******</span>
-        </div>
 
         <div className="settings-row">
           <span className="label">Username:</span>
@@ -60,7 +64,7 @@ const SettingsPage = () => {
         <div className="settings-row">
           <span className="label">Password:</span>
           <span className="value">{password}</span>
-          <button className="edit-btn2" onClick={() => setModalType('password')}> 
+          <button className="edit-btn2" onClick={() => setModalType('password')}>
             <span className="edit-icon2">✏️</span> <span className="edit-text">edit</span>
           </button>
         </div>
@@ -73,38 +77,86 @@ const SettingsPage = () => {
             <h2>Password</h2>
             <p className="modal-label">CHANGE YOUR PASSWORD</p>
 
-            <input
-              type="password"
-              className="modal-input"
-              placeholder="Enter current password"
-              value={prevPassword}
-              onChange={(e) => setPrevPassword(e.target.value)}
-            />
+            <div className="password-input-wrapper">
+              <input
+                type={showPrev ? 'text' : 'password'}
+                className="modal-input"
+                placeholder="Enter current password"
+                value={prevPassword}
+                onChange={(e) => setPrevPassword(e.target.value)}
+              />
+              <span
+                className="eye-icon"
+                onClick={() => setShowPrev(!showPrev)}
+              >
+                <img
+                  src={showPrev ? '/view.png' : '/eyebrow.png'}
+                  alt={showPrev ? 'Hide password' : 'Show password'}
+                  className="eye-img"
+                />
 
-            <input
-              type="password"
-              className="modal-input"
-              placeholder="Enter new password"
-              value={newPassword}
-              onChange={(e) => {
-                const value = e.target.value;
-                setNewPassword(value);
-                setPasswordStrength(evaluatePasswordStrength(value));
-              }}
-            />
+              </span>
+
+            </div>
+
+            <div className="password-input-wrapper">
+  <input
+    type={showNew ? 'text' : 'password'}
+    className="modal-input"
+    placeholder="Enter new password"
+    value={newPassword}
+    onChange={(e) => {
+      const value = e.target.value;
+      setNewPassword(value);
+      setPasswordStrength(evaluatePasswordStrength(value));
+    }}
+  />
+  <span
+    className="eye-icon"
+    onClick={() => setShowNew(!showNew)}
+  >
+    <img
+      src={showNew ? '/view.png' : '/eyebrow.png'}
+      alt={showNew ? 'Hide password' : 'Show password'}
+      className="eye-img"
+    />
+  </span>
+</div>
+
+<div className="password-checks">
+  <span className={/[a-z]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Lower case</span>
+  <span className={/[A-Z]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Upper case</span>
+  <span className={/[0-9]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Numbers</span>
+  <span className={/[!@#$%^&*(),.?":{}|<>]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Symbols</span>
+</div>
+
             {newPassword && (
               <p className={`password-strength ${passwordStrength.toLowerCase()}`}>
                 Password strength is {passwordStrength}
               </p>
             )}
 
-            <input
-              type="password"
-              className="modal-input"
-              placeholder="Confirm new password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
+            <div className="password-input-wrapper">
+              <input
+                type={showConfirm ? 'text' : 'password'}
+                className="modal-input"
+                placeholder="Confirm new password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <span
+                className="eye-icon"
+                onClick={() => setShowConfirm(!showConfirm)}
+              >
+                <img
+                  src={showConfirm ? '/view.png' : '/eyebrow.png'}
+                  alt={showConfirm ? 'Hide password' : 'Show password'}
+                  className="eye-img"
+                />
+
+              </span>
+
+            </div>
 
             {passwordError && <p className="password-error">{passwordError}</p>}
 
