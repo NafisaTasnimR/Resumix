@@ -100,35 +100,35 @@ const SettingsPage = () => {
             </div>
 
             <div className="password-input-wrapper">
-  <input
-    type={showNew ? 'text' : 'password'}
-    className="modal-input"
-    placeholder="Enter new password"
-    value={newPassword}
-    onChange={(e) => {
-      const value = e.target.value;
-      setNewPassword(value);
-      setPasswordStrength(evaluatePasswordStrength(value));
-    }}
-  />
-  <span
-    className="eye-icon"
-    onClick={() => setShowNew(!showNew)}
-  >
-    <img
-      src={showNew ? '/view.png' : '/eyebrow.png'}
-      alt={showNew ? 'Hide password' : 'Show password'}
-      className="eye-img"
-    />
-  </span>
-</div>
+              <input
+                type={showNew ? 'text' : 'password'}
+                className="modal-input"
+                placeholder="Enter new password"
+                value={newPassword}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setNewPassword(value);
+                  setPasswordStrength(evaluatePasswordStrength(value));
+                }}
+              />
+              <span
+                className="eye-icon"
+                onClick={() => setShowNew(!showNew)}
+              >
+                <img
+                  src={showNew ? '/view.png' : '/eyebrow.png'}
+                  alt={showNew ? 'Hide password' : 'Show password'}
+                  className="eye-img"
+                />
+              </span>
+            </div>
 
-<div className="password-checks">
-  <span className={/[a-z]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Lower case</span>
-  <span className={/[A-Z]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Upper case</span>
-  <span className={/[0-9]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Numbers</span>
-  <span className={/[!@#$%^&*(),.?":{}|<>]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Symbols</span>
-</div>
+            <div className="password-checks">
+              <span className={/[a-z]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Lower case</span>
+              <span className={/[A-Z]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Upper case</span>
+              <span className={/[0-9]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Numbers</span>
+              <span className={/[!@#$%^&*(),.?":{}|<>]/.test(newPassword) ? 'check-active' : 'check-inactive'}>Symbols</span>
+            </div>
 
             {newPassword && (
               <p className={`password-strength ${passwordStrength.toLowerCase()}`}>
