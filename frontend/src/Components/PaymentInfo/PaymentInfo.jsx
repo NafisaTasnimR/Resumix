@@ -5,6 +5,7 @@ import TopBar from '../ResumeEditorPage/TopBar';
 import { useNavigate } from 'react-router-dom';
 
 const PaymentInfo = () => {
+  window.scrollTo(0, 0);
  
   const navigate = useNavigate();
   
@@ -23,6 +24,7 @@ const PaymentInfo = () => {
   };
 
   const handleSubscription = () => {
+     
     
     navigate('/m/final');
   };

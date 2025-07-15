@@ -15,7 +15,7 @@ const Skills = ({
      
       <div className="personal-info-header">
         <h2>Skills </h2>
-        <div className="info-line"></div>
+        <div className="info-line3"></div>
       </div>
 
       <div className="form-fields">

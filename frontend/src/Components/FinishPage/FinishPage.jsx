@@ -4,12 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import TopBar from '../ResumeEditorPage/TopBar';
 
 const FinishPage = () => {
+  window.scrollTo(0, 0);
  
   const navigate = useNavigate();
 
   
   const handleGoToHome = () => {
-   
+   window.scrollTo(0, 0);
     navigate('/postlogin/');
   };
 
