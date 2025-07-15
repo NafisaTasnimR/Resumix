@@ -9,6 +9,7 @@ import References from './References';
 import Hobbies from './Hobbies';
 import AdditionalInfo from './AdditionalInfo';
 import { Link } from 'react-router-dom';
+import TopBar from '../ResumeEditorPage/TopBar';
 
 
 const ProfileForm = () => {
@@ -475,7 +476,9 @@ const ProfileForm = () => {
 
   return (
     <div className="resume-container">
+     
       <div className="resume-header">
+        <TopBar />
         <div className="header-line"></div>
       </div>
 

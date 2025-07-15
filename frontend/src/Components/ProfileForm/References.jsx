@@ -12,7 +12,9 @@ const References = ({
 
   return (
     <>
+    
       <div className="personal-info-header">
+         
         <h2>References </h2>
         <div className="info-line"></div>
       </div>

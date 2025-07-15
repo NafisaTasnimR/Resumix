@@ -12,7 +12,9 @@ const Achievements = ({
 
   return (
     <>
+    
       <div className="personal-info-header">
+         
         <h2>Achievements </h2>
         <div className="info-line"></div>
       </div>

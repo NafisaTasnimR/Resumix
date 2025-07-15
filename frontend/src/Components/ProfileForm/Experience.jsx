@@ -12,7 +12,9 @@ const Experience = ({
 
   return (
     <>
+     
       <div className="personal-info-header">
+        
         <h2>Experience </h2>
         <div className="info-line"></div>
       </div>

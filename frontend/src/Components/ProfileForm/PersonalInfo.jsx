@@ -7,7 +7,9 @@ const PersonalInfo = ({ showAddressDetails, setShowAddressDetails }) => {
 
   return (
     <>
+    
       <div className="personal-info-header">
+         
         <h2>Personal Information</h2>
         <div className="info-line"></div>
       </div>

@@ -12,7 +12,9 @@ const AdditionalInfo = ({
 
   return (
     <>
+    
       <div className="personal-info-header">
+         
         <h2>Additional Information </h2>
         <div className="info-line"></div>
       </div>

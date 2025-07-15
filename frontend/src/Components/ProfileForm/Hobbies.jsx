@@ -12,7 +12,9 @@ const Hobbies = ({
 
   return (
     <>
+    
       <div className="personal-info-header">
+         
         <h2>Hobbies </h2>
         <div className="info-line"></div>
       </div>

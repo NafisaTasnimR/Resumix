@@ -12,6 +12,7 @@ const Skills = ({
 
   return (
     <>
+     
       <div className="personal-info-header">
         <h2>Skills </h2>
         <div className="info-line"></div>

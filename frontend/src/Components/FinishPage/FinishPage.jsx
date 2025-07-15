@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import TopBar from '../ResumeEditorPage/TopBar';
 
 const FinishPage = () => {
-  // *** ADDED: Initialize navigation hook ***
+ 
   const navigate = useNavigate();
 
-  // *** ADDED: Function to handle home page navigation ***
+  
   const handleGoToHome = () => {
-    // Navigate to the post login page
+   
     navigate('/postlogin/');
   };
 
