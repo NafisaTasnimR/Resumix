@@ -70,10 +70,10 @@ const Dashboard = () => {
       <div className="dashboard-content">
         <div className="sidebar">
           <div className="sidebar-item" onClick={() => scrollToSection(personalRef)}>
-            Personal Info
+            Personal Information
           </div>
           <div className="sidebar-item" onClick={() => scrollToSection(educationRef)}>
-            Education Info
+            Education Information
           </div>
           <div className="sidebar-item" onClick={() => scrollToSection(experienceRef)}>
             Experience
@@ -91,7 +91,7 @@ const Dashboard = () => {
             Hobbies
           </div>
           <div className="sidebar-item" onClick={() => scrollToSection(additonalsRef)}>
-            Additional Info
+            Additional Information
           </div>
         </div>
 

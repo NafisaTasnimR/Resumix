@@ -89,7 +89,7 @@ const FinishPage = () => {
           {/* Additional Info */}
           <div className="additional-info">
             <p>
-              <strong>Remember:</strong> You can cancel your subscription at any time from your account settings.
+              <strong></strong> 
             </p>
           </div>
         </div>

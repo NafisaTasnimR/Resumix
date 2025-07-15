@@ -133,7 +133,7 @@ const PaymentInfo = () => {
 
               <div className="terms-section">
                 <p>
-                  By clicking "Get My Subscription" below you agree to be charged <strong>$1.70</strong> (which includes unlimited edits, downloads, and emails). You also agree to our Terms of Use and Privacy Policy. <strong>you can cancel at any time</strong>
+                  By clicking "Get My Subscription" below you agree to be charged <strong>$1.70</strong> (which includes unlimited edits, downloads, and emails). You also agree to our Terms of Use and Privacy Policy. <strong></strong>
                 </p>
               </div>
 
@@ -146,12 +146,7 @@ const PaymentInfo = () => {
 
               
 
-              <div className="cancel-section">
-                <h3>How Would I Cancel?</h3>
-                <p>
-                  We'd be sorry to see you go! You can cancel at any time online.
-                </p>
-              </div>
+              
             </div>
           )}
         </div>
