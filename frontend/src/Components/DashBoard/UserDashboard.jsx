@@ -3,6 +3,7 @@ import './UserDashboard.css';
 import { Link } from 'react-router-dom';
 import ShareResumeModal from '../ResumeListPage/ShareResumeModal';
 import DownloadResumeModal from '../ResumeListPage/DownloadResumeModal';
+import TopBar from '../ResumeEditorPage/TopBar';
 
 const Dashboard = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -26,6 +27,7 @@ const Dashboard = () => {
   const handleDownloadClick = (resume) => {
     setResumeName(resume.name);
     setDownloadLink(`https://myresume.com/${resume.name}_Resume.pdf`);
+    
     setIsDownloadModalOpen(true);
   };
 
@@ -40,6 +42,7 @@ const Dashboard = () => {
 
   return (
     <div className="resume-fullpage">
+      <TopBar />
       <div className="resume-header">
         <h2>My Resumes</h2>
         <div className="header-actions">
