@@ -43,7 +43,7 @@ const ResumeEditor = () => {
           {titleDropdownOpen && (
             <div className="title-edit-dropdown active" id="titleDropdown">
               <input type="text" id="titleInput" defaultValue={title} />
-              <button className="edit-btn" onClick={saveTitle}>Edit</button>
+              <button className="edit-btn1" onClick={saveTitle}>Edit</button>
             </div>
           )}
         </div>

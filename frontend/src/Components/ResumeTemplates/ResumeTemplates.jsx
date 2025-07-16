@@ -1,43 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ResumeTemplates.css';
+import TemplatePreview from './TemplatePreview';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import TopBar from '../ResumeEditorPage/TopBar';
 
 const ResumeTemplates = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentFilter, setCurrentFilter] = useState('popular');
+  const [currentFilter, setCurrentFilter] = useState('all'); // Default to 'all' to show everything
   const [visibleCount, setVisibleCount] = useState(3);
-      
-  const templatesData = [
-    { id: 1, category: 'popular', name: 'Template 1' },
-    { id: 2, category: 'popular', name: 'Template 2' },
-    { id: 3, category: 'popular', name: 'Template 3' },
-    { id: 4, category: 'new', name: 'Template 4' },
-    { id: 5, category: 'new', name: 'Template 5' },
-    { id: 6, category: 'all', name: 'Template 6' },
-    { id: 7, category: 'all', name: 'Template 7' },
-    { id: 8, category: 'popular', name: 'Template 8' },
-    { id: 9, category: 'new', name: 'Template 9' },
-  ];
-   
-  const filteredTemplates = templatesData.filter(template => {
-    const matchesFilter = currentFilter === 'all' || template.category === currentFilter || template.category === 'all';
-    const matchesSearch = searchTerm === '' || 
-       template.name.toLowerCase().includes(searchTerm.toLowerCase());
+  const [templatesData, setTemplatesData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch templates from backend on mount
+  useEffect(() => {
+  const fetchTemplates = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/preview/api/templates');
+      // If your backend returns { templates: [...] }
+      setTemplatesData(res.data || []);
+    } catch (err) {
+      setTemplatesData([]);
+      console.error('Error fetching templates:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchTemplates();
+}, []);
+
+  const normalizedTemplates = templatesData.map(template => ({
+    ...template,
+    category: template.category || 'all'
+  }));
+
+  const filteredTemplates = normalizedTemplates.filter(template => {
+    const matchesFilter =
+      currentFilter === 'all' ||
+      template.category === currentFilter;
+    const matchesSearch =
+      searchTerm === '' ||
+      (template.filename && template.filename.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (template.name && template.name.toLowerCase().includes(searchTerm.toLowerCase()));
     return matchesFilter && matchesSearch;
   });
-   
-  const visibleTemplates = searchTerm ? filteredTemplates : filteredTemplates.slice(0, visibleCount);
-   
+
+  const visibleTemplates = searchTerm
+    ? filteredTemplates
+    : filteredTemplates.slice(0, visibleCount);
+
   const handleFilterChange = (filter) => {
     setCurrentFilter(filter);
     setVisibleCount(3);
   };
-   
+
   const handleLoadMore = () => {
     setVisibleCount(prev => prev + 3);
   };
-   
+
   return (
      
     <div className="page-wrapper">
@@ -45,7 +66,7 @@ const ResumeTemplates = () => {
       <div className="green-header">
         <h1 className="page-title">Templates</h1>
       </div>
-             
+
       <div className="search-bar-container">
         <input 
           type="text"
@@ -54,14 +75,8 @@ const ResumeTemplates = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <span className="search-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="11" cy="11" r="8" stroke="black" strokeWidth="2"/>
-            <path d="m21 21-4.35-4.35" stroke="black" strokeWidth="2"/>
-          </svg>
-        </span>
       </div>
-             
+
       <div className="tabs">
         <div 
           className={`tab ${currentFilter === 'popular' ? 'active' : ''}`}
@@ -84,11 +99,17 @@ const ResumeTemplates = () => {
       </div>
 
       <div className="templates">
-        {visibleTemplates.map((template) => (
-          <div key={template.id} className="template-card">
-            <div className="template-placeholder">{template.name}</div>
-          </div>
-        ))}
+        {loading ? (
+          <div>Loading templates...</div>
+        ) : visibleTemplates.length === 0 ? (
+          <div>No templates found.</div>
+        ) : (
+          visibleTemplates.map((template) => (
+            <div key={template._id || template.id} className="template-card">
+              <TemplatePreview id={template._id || template.id} template={template} />
+            </div>
+          ))
+        )}
       </div>
 
       {!searchTerm && visibleCount < filteredTemplates.length && (

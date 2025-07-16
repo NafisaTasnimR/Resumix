@@ -66,6 +66,7 @@ const LoginSignup = ({ mode }) => {
       );
 
       setMessage(response.data.message || 'Success!');
+      localStorage.setItem('token', response.data.token);
       setEmail('');
       navigate('/postlogin');
 
@@ -111,7 +112,8 @@ const LoginSignup = ({ mode }) => {
       );
       setMessage(response.data.message || 'Google Sign-In successful!');
       setEmail('');
-      navigate('/postlogin/');
+      localStorage.setItem('token', response.data.token);
+      navigate('/postlogin/');     
     } catch (err) {
       setError('Google sign-in failed. Please try again.');
       console.error('Google Sign-In error:', err);

@@ -9,6 +9,7 @@ import References from './References';
 import Hobbies from './Hobbies';
 import AdditionalInfo from './AdditionalInfo';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import TopBar from '../ResumeEditorPage/TopBar';
 
 
@@ -16,6 +17,18 @@ const ProfileForm = () => {
    window.scrollTo(0, 0);
   const [currentPage, setCurrentPage] = useState('personal');
   const [showAddressDetails, setShowAddressDetails] = useState(false);
+
+  const [personalInfo, setPersonalInfo] = useState({
+    fullName: '',
+    email: '',
+    dateOfBirth: '',
+    phone: '',
+    address: '',
+    city: '',
+    district: '',
+    country: '',
+    zipCode: ''
+  });
 
   // Experience state
   const [experiences, setExperiences] = useState([
@@ -394,6 +407,8 @@ const ProfileForm = () => {
       case 'personal':
         return (
           <PersonalInfo
+            personalInfo={personalInfo}
+            setPersonalInfo={setPersonalInfo}
             showAddressDetails={showAddressDetails}
             setShowAddressDetails={setShowAddressDetails}
           />
@@ -477,6 +492,74 @@ const ProfileForm = () => {
         );
       default:
         return null;
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem('token'); // or from context if you're using
+      if (!token) {
+        alert("No token found, please log in again.");
+        return;
+      }
+
+      const payload = {
+        defaultResumeData: {
+          personalInfo: {
+            ...personalInfo,
+            dateOfBirth: personalInfo.dateOfBirth ? new Date(personalInfo.dateOfBirth) : null
+          },
+          education: educations.map(e => ({
+            ...e,
+            startDate: e.startDate ? new Date(e.startDate) : null,
+            endDate: e.endDate ? new Date(e.endDate) : null,
+            graduationDate: e.graduationDate ? new Date(e.graduationDate) : null
+          })),
+          experience: experiences.map(e => ({
+            ...e,
+            startDate: e.startDate ? new Date(e.startDate) : null,
+            endDate: e.endDate ? new Date(e.endDate) : null
+          })),
+          skills,
+          achievements: achievements.map(a => ({
+            ...a,
+            dateReceived: a.dateReceived ? new Date(a.dateReceived) : null
+          })),
+          references,
+          hobbies: hobbies.map(h => ({
+            hobbyName: h.hobbyName,
+            experienceLevel: h.experienceLevel,
+            yearsInvolved: h.yearsInvolved,
+            category: h.category,
+            description: h.description,
+            achievementsRecognition: h.achievements,
+            permissionToContact: h.permissionToContact || false
+          })),
+          additionalInfos
+        }
+      };
+
+
+      const response = await axios.patch(
+        'http://localhost:5000/info/update',
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      alert("Profile updated successfully!");
+      console.log(response.data);
+
+    } catch (error) {
+      console.error(error);
+      if (error.response && error.response.data && error.response.data.errors) {
+        alert("Validation errors: " + error.response.data.errors.join(", "));
+      } else {
+        alert("Failed to update profile. Please try again.");
+      }
     }
   };
 
@@ -614,7 +697,7 @@ const ProfileForm = () => {
         )}
         {currentPage === 'additional' && (
           <Link to="/dashboard">
-            <button className="nav-button submit-nav-button">
+            <button className="nav-button submit-nav-button" onClick={handleSave}>
               Submit
             </button>
           </Link>
