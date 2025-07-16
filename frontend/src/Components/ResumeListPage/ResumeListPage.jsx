@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import ShareResumeModal from './ShareResumeModal';
 import DownloadResumeModal from './DownloadResumeModal';  
 import DeleteConfirmationModal from './DeleteConfirmationModal';
+import TopBar from '../ResumeEditorPage/TopBar';
 
 const ResumeListPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,6 +52,7 @@ const ResumeListPage = () => {
   return (
     <div className="resume-fullpage">
       <div className="resume-header">
+        <TopBar/>
         <h2>My Resumes</h2>
         <div className="header-actions">
           <Link to="/resumebuilder" className="create-btn">Create New Resume</Link>

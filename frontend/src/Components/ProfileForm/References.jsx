@@ -14,7 +14,7 @@ const References = ({
     <>
       <div className="personal-info-header">
         <h2>References </h2>
-        <div className="info-line"></div>
+        <div className="info-line3"></div>
       </div>
 
       <div className="form-fields">
@@ -42,7 +42,7 @@ const References = ({
               className="input-field" 
               value={currentReference.firstName}
               onChange={(e) => updateReference('firstName', e.target.value)}
-              placeholder="Quamrul" 
+              placeholder="Bill" 
             />
           </div>
           <div className="field-group half-width">
@@ -52,7 +52,7 @@ const References = ({
               className="input-field" 
               value={currentReference.lastName}
               onChange={(e) => updateReference('lastName', e.target.value)}
-              placeholder="Ahmed" 
+              placeholder="Gates" 
             />
           </div>
         </div>
@@ -64,7 +64,7 @@ const References = ({
             className="input-field" 
             value={currentReference.jobTitle}
             onChange={(e) => updateReference('jobTitle', e.target.value)}
-            placeholder="Professor of Chemistry" 
+            placeholder="Co-founder, Bill & Melinda Gates Foundation" 
           />
         </div>
 
@@ -75,7 +75,7 @@ const References = ({
             className="input-field" 
             value={currentReference.company}
             onChange={(e) => updateReference('company', e.target.value)}
-            placeholder="Dhaka University" 
+            placeholder="Microsoft Corporation" 
           />
         </div>
 
@@ -87,7 +87,7 @@ const References = ({
               className="input-field" 
               value={currentReference.email}
               onChange={(e) => updateReference('email', e.target.value)}
-              placeholder="quamrul.ahmed@du-dhaka.edu" 
+              placeholder="bill.gates@microsoft.com" 
             />
           </div>
           <div className="field-group half-width">
@@ -121,6 +121,20 @@ const References = ({
           </select>
         </div>
 
+        {/* Custom Relationship Input - Shows when "Other" is selected */}
+        {currentReference.relationship === 'Other' && (
+          <div className="field-group">
+            <label>Please specify relationship:</label>
+            <input 
+              type="text" 
+              className="input-field" 
+              value={currentReference.customRelationship || ''}
+              onChange={(e) => updateReference('customRelationship', e.target.value)}
+              placeholder="Enter your custom relationship" 
+            />
+          </div>
+        )}
+
         <div className="field-group">
           <label>How do you know this person?</label>
           <textarea 
@@ -128,7 +142,7 @@ const References = ({
             rows="3" 
             value={currentReference.description}
             onChange={(e) => updateReference('description', e.target.value)}
-            placeholder="Quamrul mentored me during the early development of Bandi Pathshala and provided strategic guidance on scaling the educational technology platform."
+            placeholder="Bill mentored me during the early development of Khan Academy and provided strategic guidance on scaling educational technology platforms."
           ></textarea>
         </div>
 

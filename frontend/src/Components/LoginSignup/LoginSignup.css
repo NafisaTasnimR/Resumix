@@ -9,7 +9,7 @@
 
 .container {
   background: #ffffff;
-  width: 340px;
+  width: 400px;
   border-radius: 8px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
   display: flex;
@@ -173,3 +173,90 @@
   margin-bottom: 4px;
   padding-left: 6px;
 }
+
+.password-input-wrapper {
+  position: relative;
+  background-color: #eaeaea;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.password-input-wrapper input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 13px;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  user-select: none;
+}
+
+.eye-img {
+  width: 20px;
+  height: 20px;
+}
+
+.password-checks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  margin-bottom: 4px;
+}
+
+.password-checks span {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.check-active {
+  color: green;
+}
+
+.check-inactive {
+  color: #bbb;
+}
+
+.password-strength {
+  margin-top: 2px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.password-strength.weak {
+  color: red;
+}
+
+.password-strength.medium {
+  color: orange;
+}
+
+.password-strength.strong {
+  color: green;
+}
+
+.password-input-wrapper {
+  position: relative;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  user-select: none;
+}
+
+.eye-img {
+  width: 20px;
+  height: 20px;
+}
+ 

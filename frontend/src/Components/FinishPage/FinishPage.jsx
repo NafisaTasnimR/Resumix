@@ -1,20 +1,22 @@
 import React from 'react';
 import './FinishPage.css';
-// *** ADDED: Import useNavigate for navigation ***
 import { useNavigate } from 'react-router-dom';
+import TopBar from '../ResumeEditorPage/TopBar';
 
 const FinishPage = () => {
-  // *** ADDED: Initialize navigation hook ***
+  window.scrollTo(0, 0);
+ 
   const navigate = useNavigate();
 
-  // *** ADDED: Function to handle home page navigation ***
+  
   const handleGoToHome = () => {
-    // Navigate to the post login page
+   window.scrollTo(0, 0);
     navigate('/postlogin/');
   };
 
   return (
     <div className="finish-container">
+      <TopBar />
       {/* Progress Steps */}
       <div className="progress-steps">
         <div className="step completed">

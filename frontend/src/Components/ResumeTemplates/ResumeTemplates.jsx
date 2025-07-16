@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './ResumeTemplates.css';
 import TemplatePreview from './TemplatePreview';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import TopBar from '../ResumeEditorPage/TopBar';
 
 const ResumeTemplates = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -58,7 +60,9 @@ const ResumeTemplates = () => {
   };
 
   return (
+     
     <div className="page-wrapper">
+      <TopBar />
       <div className="green-header">
         <h1 className="page-title">Templates</h1>
       </div>
