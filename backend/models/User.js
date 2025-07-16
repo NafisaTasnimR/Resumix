@@ -150,7 +150,21 @@ const UserSchema = new schema({
       ],
       default: []
     },
-    additionalSections: {
+    hobbies: {
+      type: [
+        {
+          hobbyName: { type: String },
+          experienceLevel: { type: String },
+          yearsInvolved: { type: Number },
+          category: { type: String },
+          description: { type: String },
+          achievementsRecognition: { type: String },
+          permissionToContact: { type: Boolean, default: false }
+        }
+      ],
+      default: []
+    },
+    additionalInfos: {
       type: [
         {
           sectionTitle: { type: String },
