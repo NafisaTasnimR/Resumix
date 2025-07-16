@@ -17,7 +17,7 @@ const TopBar = () => {
   return (
     <div className="top-bar">
       <div className="top-bar-title">
-        <h2>Resumix</h2>
+        <h2>RESUMIX</h2>
       </div>
       <div className="top-bar-buttons">
         <button onClick={handleHomeClick}>
