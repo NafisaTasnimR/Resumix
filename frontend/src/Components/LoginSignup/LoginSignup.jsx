@@ -49,6 +49,7 @@ const LoginSignup = ({ mode }) => {
       );
 
       setMessage(response.data.message || 'Success!');
+      localStorage.setItem('token', response.data.token);
       setEmail('');
       navigate('/postlogin');
 
@@ -77,13 +78,13 @@ const LoginSignup = ({ mode }) => {
         body = {
           username: user.displayName || user.email.split('@')[0],
           email: user.email,
-          password: 'google-auth' // Placeholder, as we don't use password for Google sign-in
+          password: 'google-auth'
         };
       } else {
         body = {
           email: user.email,
           password: 'google-auth'
-        }; // Placeholder, as we don't use password for Google sign-in
+        };
       }
 
       const response = await axios.post(
@@ -97,6 +98,7 @@ const LoginSignup = ({ mode }) => {
       );
       setMessage(response.data.message || 'Google Sign-In successful!');
       setEmail('');
+      localStorage.setItem('token', response.data.token);
       navigate('/postlogin/');     
     } catch (err) {
       setError('Google sign-in failed. Please try again.');
