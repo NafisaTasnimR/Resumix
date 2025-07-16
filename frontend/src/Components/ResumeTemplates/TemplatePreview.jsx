@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 import './TemplatePreview.css';
+import ResumeEditor from '../ResumeEditorPage/ResumeEditor';
 
 const TemplatePreview = ({ id, template }) => {
   return (
     <div className="template-preview">
-      <Link to={`/editor/${id}`}>
+      <Link to={`/resumebuilder`}>
         <div className="iframe-container">
           <iframe
             src={`http://localhost:5000/preview/api/template/${id}`}
