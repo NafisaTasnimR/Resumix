@@ -79,24 +79,36 @@
 }
 
 .templates {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;           
+  margin-top: 40px;      
 }
 
-.template-card {
+/*.template-card {
   background: white;
   border-radius: 12px;
   height: 400px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.3s ease;
+}*/
+.template-card {
+  background: white;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  padding: 10px;
 }
 
 .template-card:hover {
