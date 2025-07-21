@@ -32,14 +32,18 @@ const SubscriptionPage = () => {
       backgroundColor: '#f8f9fa',
         marginTop: '80px'
     }}>
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        margin: '0 30px',
-        color: '#656d4a',
-        fontSize: '14px',
-        fontWeight: 500
-      }}>
+      <div 
+        onClick={() => navigate('/postlogin/')}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          margin: '0 30px',
+          color: '#656d4a',
+          fontSize: '14px',
+          fontWeight: 500,
+          cursor: 'pointer'
+        }}
+      >
         <div style={{
           width: '32px',
           height: '32px',

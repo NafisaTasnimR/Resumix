@@ -28,7 +28,7 @@ const PaymentInfo = () => {
     
     navigate('/m/final');
   };
-
+   
   return (
     <div className="payment-container">
       <TopBar />
@@ -56,6 +56,13 @@ const PaymentInfo = () => {
         <div className="left-section">
           {currentStep === 3 && (
             <div className="payment-form">
+     <button 
+       onClick={() => navigate('/subscription')}
+         className="previous-btn3"
+         >
+         <span className="arrow-icon3">←</span>
+      Back to plans
+    </button>
               <h2>Payment Information</h2>
               
               <div className="card-section">

@@ -1,11 +1,8 @@
 /* FORCE OVERRIDE STYLES */
 div.payment-container {
-  width: 100% !important;
-  max-width: 800px !important;
-  margin: 0 auto !important;
-  padding: 20px !important;
+  max-width: 1200px !important; /* Match subscription page */
+  padding: 20px 20px 60px 20px !important; /* Match subscription padding */
 }
-
 div.main-content {
   width: 100% !important;
   max-width: 100% !important;
@@ -340,4 +337,24 @@ body {
   .payment-form h2 {
     font-size: 24px;
   }
+  .previous-btn3 {
+    display: 'flex';
+            alignItems: 'center';
+            gap: '8px';
+            background: 'transparent';
+            border: 'none';
+            color: black;
+            fontSize: '14px';
+            fontWeight: 500;
+            cursor: 'pointer';
+            marginBottom: '40px';
+            padding: '8px 0';
+}
+
+
+
+.arrow-icon3 {
+  font-size: 16px;
+}
+
 }
