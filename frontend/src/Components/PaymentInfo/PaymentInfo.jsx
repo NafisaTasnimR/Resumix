@@ -28,17 +28,25 @@ const PaymentInfo = () => {
     
     navigate('/m/final');
   };
-   
+
   return (
     <div className="payment-container">
       <TopBar />
       {/* Progress Steps */}
       <div className="progress-steps">
-        <div className="step completed">
+        <div 
+          className="step completed"
+          onClick={() => navigate('/postlogin/')}
+          style={{cursor: 'pointer'}}
+        >
           <div className="step-icon">✓</div>
           <span>Home page</span>
         </div>
-        <div className="step completed">
+        <div 
+          className="step completed"
+          onClick={() => navigate('/subscription')}
+          style={{cursor: 'pointer'}}
+        >
           <div className="step-icon">✓</div>
           <span>Choose Access</span>
         </div>
@@ -56,13 +64,6 @@ const PaymentInfo = () => {
         <div className="left-section">
           {currentStep === 3 && (
             <div className="payment-form">
-     <button 
-       onClick={() => navigate('/subscription')}
-         className="previous-btn3"
-         >
-         <span className="arrow-icon3">←</span>
-      Back to plans
-    </button>
               <h2>Payment Information</h2>
               
               <div className="card-section">
