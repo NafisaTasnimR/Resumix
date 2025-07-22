@@ -16,6 +16,7 @@ app.use(cors());
 
 app.use('/auth',authRouter);
 app.use('/info', infoUpdateRouter);
+app.use('/viewInformation', infoUpdateRouter);
 app.use('/preview',previewRouter);
 
 app.listen(PORT, () => {
