@@ -1,15 +1,17 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './UserDashboard.css';
 import { Link } from 'react-router-dom';
 import ShareResumeModal from '../ResumeListPage/ShareResumeModal';
 import DownloadResumeModal from '../ResumeListPage/DownloadResumeModal';
 import TopBar from '../ResumeEditorPage/TopBar';
+import axios from 'axios';
 
 const Dashboard = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [resumeName, setResumeName] = useState('Nishat_Tasnim_Resume');
   const [downloadLink, setDownloadLink] = useState('https://myresume.com/resume12345.pdf');
+  const [user, setUser] = useState(null);
 
   const personalRef = useRef(null);
   const educationRef = useRef(null);
@@ -20,6 +22,26 @@ const Dashboard = () => {
   const hobbiesRef = useRef(null);
   const additonalsRef = useRef(null);
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/viewInformation/userInformation', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        setUser(res.data);
+      } catch (err) {
+        console.error("Failed to fetch user:", err);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  if (!user) return <p>Loading...</p>;
+
+
   const handleShareClick = () => {
     setIsShareModalOpen(true);
   };
@@ -27,7 +49,7 @@ const Dashboard = () => {
   const handleDownloadClick = (resume) => {
     setResumeName(resume.name);
     setDownloadLink(`https://myresume.com/${resume.name}_Resume.pdf`);
-    
+
     setIsDownloadModalOpen(true);
   };
 
@@ -101,85 +123,121 @@ const Dashboard = () => {
         <div className="info-wrapper">
           <h2 className="info-main-header">YOUR INFORMATION</h2>
           <div className="info-section">
+            {/* Personal Information */}
             <div className="info-box" ref={personalRef}>
-              <h3>Personal Information</h3>
-              <div className="info-line">Name:</div>
-              <div className="info-line">Email:</div>
-              <div className="info-line">Date of Birth:</div>
-              <div className="info-line">Phone:</div>
-              <div className="info-line">Address:</div>
-              <div className="info-line">City:</div>
-              <div className="info-line">District:</div>
-              <div className="info-line">Country:</div>
+              <h3>Personal Information of {user.username}</h3>
+              <div className="info-line">Name: {user.defaultResumeData?.personalInfo?.fullName}</div>
+              <div className="info-line">Email: {user.defaultResumeData?.personalInfo?.professionalEmail}</div>
+              <div className="info-line">Date of Birth: {new Date(user.defaultResumeData?.personalInfo?.dateOfBirth).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
+              <div className="info-line">Phone: {user.defaultResumeData?.personalInfo?.phone}</div>
+              <div className="info-line">Address: {user.defaultResumeData?.personalInfo?.address}</div>
+              <div className="info-line">City: {user.defaultResumeData?.personalInfo?.city}</div>
+              <div className="info-line">District: {user.defaultResumeData?.personalInfo?.district}</div>
+              <div className="info-line">Country: {user.defaultResumeData?.personalInfo?.country}</div>
             </div>
+
+            {/* Education */}
             <div className="info-box" ref={educationRef}>
               <h3>Education Information</h3>
-              <div className="info-line">School Name:</div>
-              <div className="info-line">Degree:</div>
-              <div className="info-line">Field of Study:</div>
-              <div className="info-line">Graduation:</div>
-              <div className="info-line">City:</div>
-              <div className="info-line">State:</div>
-              <div className="info-line">Start Date:</div>
-              <div className="info-line">End Date:</div>
+              {user.defaultResumeData?.education?.map((edu, index) => (
+                <div key={index}>
+                  <div className="info-line">School Name: {edu.institution}</div>
+                  <div className="info-line">Degree: {edu.degree}</div>
+                  <div className="info-line">Field of Study: {edu.fieldOfStudy}</div>
+                  <div className="info-line">Graduation: {edu.graduationDate}</div>
+                  <div className="info-line">City: {edu.city}</div>
+                  <div className="info-line">State: {edu.state}</div>
+                  <div className="info-line">Start Date: {edu.startDate}</div>
+                  <div className="info-line">End Date: {edu.endDate}</div>
+                </div>
+              ))}
             </div>
+
+            {/* Experience */}
             <div className="info-box" ref={experienceRef}>
               <h3>Experience</h3>
-              <div className="info-line">Employer Name:</div>
-              <div className="info-line">Job Title:</div>
-              <div className="info-line">City:</div>
-              <div className="info-line">State:</div>
-              <div className="info-line">Start Date:</div>
-              <div className="info-line">End Date:</div>
-              <div className="info-line">Job Description:</div>
+              {user.defaultResumeData?.experience?.map((exp, index) => (
+                <div key={index}>
+                  <div className="info-line">Employer Name: {exp.employerName}</div>
+                  <div className="info-line">Job Title: {exp.jobTitle}</div>
+                  <div className="info-line">City: {exp.city}</div>
+                  <div className="info-line">State: {exp.state}</div>
+                  <div className="info-line">Start Date: {exp.startDate}</div>
+                  <div className="info-line">End Date: {exp.endDate}</div>
+                  <div className="info-line">Job Description: {exp.description}</div>
+                </div>
+              ))}
             </div>
 
+            {/* Skills */}
             <div className="info-box" ref={skillsRef}>
               <h3>Skills</h3>
-              <div className="info-line">Skill Name: </div>
-              <div className="info-line">Proficiency Level: </div>
-              <div className="info-line">Years of Experience: </div>
-              <div className="info-line">Description: </div>
+              {user.defaultResumeData?.skills?.map((skill, index) => (
+                <div key={index}>
+                  <div className="info-line">Skill Name: {skill.skillName}</div>
+                  <div className="info-line">Proficiency Level: {skill.proficiencyLevel}</div>
+                  <div className="info-line">Years of Experience: {skill.yearsOfExperience}</div>
+                  <div className="info-line">Description: {skill.skillDescription}</div>
+                </div>
+              ))}
             </div>
 
-            {/* Achievements block */}
+            {/* Achievements */}
             <div className="info-box" ref={achievementsRef}>
               <h3>Achievements</h3>
-              <div className="info-line">Title: </div>
-              <div className="info-line">Organization: </div>
-              <div className="info-line">Date Received: </div>
-              <div className="info-line">Category: </div>
-              <div className="info-line">Description: </div>
-              <div className="info-line">Link: </div>
+              {user.defaultResumeData?.achievements?.map((ach, index) => (
+                <div key={index}>
+                  <div className="info-line">Title: {ach.title}</div>
+                  <div className="info-line">Organization: {ach.organization}</div>
+                  <div className="info-line">Date Received: {ach.dateReceived}</div>
+                  <div className="info-line">Category: {ach.category}</div>
+                  <div className="info-line">Description: {ach.description}</div>
+                  <div className="info-line">Link: {ach.website}</div>
+                </div>
+              ))}
             </div>
 
-            {/* References block */}
+            {/* References */}
             <div className="info-box" ref={referencesRef}>
               <h3>References</h3>
-              <div className="info-line">First Name: </div>
-              <div className="info-line">Last Name: </div>
-              <div className="info-line">Job Title: </div>
-              <div className="info-line">Company: </div>
-              <div className="info-line">Email: </div>
-              <div className="info-line">Phone: </div>
-              <div className="info-line">Relationship: </div>
-              <div className="info-line">How do you know this person?: </div>
+              {user.defaultResumeData?.references?.map((ref, index) => (
+                <div key={index}>
+                  <div className="info-line">First Name: {ref.firstName}</div>
+                  <div className="info-line">Last Name: {ref.lastName}</div>
+                  <div className="info-line">Job Title: {ref.jobTitle}</div>
+                  <div className="info-line">Company: {ref.company}</div>
+                  <div className="info-line">Email: {ref.referenceEmail}</div>
+                  <div className="info-line">Phone: {ref.phone}</div>
+                  <div className="info-line">Relationship: {ref.relationship}</div>
+                  <div className="info-line">How do you know this person?: {ref.customeRelationship}</div>
+                </div>
+              ))}
             </div>
 
-            {/* Hobbies block */}
+            {/* Hobbies */}
             <div className="info-box" ref={hobbiesRef}>
               <h3>Hobbies</h3>
-              <div className="info-line">Hobby Name: </div>
-              <div className="info-line">Experience Level: </div>
-              <div className="info-line">Years Involved: </div>
-              <div className="info-line">Category: </div>
-              <div className="info-line">Description: </div>
-              <div className="info-line">Achievements: </div>
+              {user.defaultResumeData?.hobbies?.map((hob, index) => (
+                <div key={index}>
+                  <div className="info-line">Hobby Name: {hob.hobbyName}</div>
+                  <div className="info-line">Experience Level: {hob.experienceLevel}</div>
+                  <div className="info-line">Years Involved: {hob.yearsInvolved}</div>
+                  <div className="info-line">Category: {hob.category}</div>
+                  <div className="info-line">Description: {hob.hobbyDescription}</div>
+                  <div className="info-line">Achievements: {hob.achievements}</div>
+                </div>
+              ))}
             </div>
+
+            {/* Additional Information */}
             <div className="info-box" ref={additonalsRef}>
               <h3>Additional Information</h3>
-              <div className="info-line">Section Title:</div>
-              <div className="info-line">Information:</div>
+              {user.defaultResumeData?.additionalInfos?.map((info, index) => (
+                <div key={index}>
+                  <div className="info-line">Section Title: {info.sectionTitle}</div>
+                  <div className="info-line">Information: {info.content}</div>
+                </div>
+              ))}
             </div>
 
           </div>
