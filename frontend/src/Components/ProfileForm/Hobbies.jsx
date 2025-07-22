@@ -103,8 +103,8 @@ const Hobbies = ({
           <textarea 
             className="input-field textarea-field" 
             rows="4" 
-            value={currentHobby.description}
-            onChange={(e) => updateHobby('description', e.target.value)}
+            value={currentHobby.hobbyDescription}
+            onChange={(e) => updateHobby('hobbyDescription', e.target.value)}
             placeholder="Passionate about landscape and portrait photography. Enjoy capturing natural beauty and human emotions through my lens. Have participated in several local exhibitions and love experimenting with different techniques."
           ></textarea>
         </div>

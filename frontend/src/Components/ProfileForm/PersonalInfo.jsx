@@ -1,14 +1,23 @@
 import React from 'react';
 import CountryDropdown from './CountryDropdown';
 
-const PersonalInfo = ({ showAddressDetails, setShowAddressDetails }) => {
+const PersonalInfo = ({
+  showAddressDetails,
+  setShowAddressDetails,
+  personalInfo,
+  setPersonalInfo
+}) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setPersonalInfo((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleAddressClick = () => {
     setShowAddressDetails(true);
   };
 
   const handleCountrySelect = (country) => {
-    console.log('Selected country:', country);
-    // Handle country selection here
+    setPersonalInfo((prev) => ({ ...prev, country }));
   };
 
   return (
@@ -21,31 +30,61 @@ const PersonalInfo = ({ showAddressDetails, setShowAddressDetails }) => {
       <div className="form-fields">
         <div className="field-group">
           <label>Name:</label>
-          <input type="text" className="input-field" placeholder="Sal Khan" />
+          <input
+            type="text"
+            name="fullName"
+            className="input-field"
+            placeholder="Sal Khan"
+            value={personalInfo.fullName}
+            onChange={handleChange}
+          />
         </div>
 
         <div className="field-group">
           <label>Email:</label>
-          <input type="email" className="input-field" placeholder="hello@khanacademy.org" />
+          <input
+            type="email"
+            name="professionalEmail"
+            className="input-field"
+            placeholder="hello@khanacademy.org"
+            value={personalInfo.professionalEmail}
+            onChange={handleChange}
+          />
         </div>
 
         <div className="field-group">
           <label>Date of Birth:</label>
-          <input type="date" className="input-field" placeholder="1976-10-11" />
+          <input
+            type="date"
+            name="dateOfBirth"
+            className="input-field"
+            value={personalInfo.dateOfBirth}
+            onChange={handleChange}
+          />
         </div>
 
         <div className="field-group">
           <label>Phone:</label>
-          <input type="tel" className="input-field" placeholder="(123) 456-7890" />
+          <input
+            type="tel"
+            name="phone"
+            className="input-field"
+            placeholder="(123) 456-7890"
+            value={personalInfo.phone}
+            onChange={handleChange}
+          />
         </div>
 
         <div className="field-group">
           <label>Address:</label>
-          <input 
-            type="text" 
+          <input
+            type="text"
+            name="address"
             className={`input-field ${showAddressDetails ? 'expanded' : ''}`}
-            onClick={handleAddressClick}
             placeholder="123 Main Street"
+            value={personalInfo.address}
+            onChange={handleChange}
+            onClick={handleAddressClick}
           />
         </div>
 
@@ -53,18 +92,32 @@ const PersonalInfo = ({ showAddressDetails, setShowAddressDetails }) => {
           <div className="address-details">
             <div className="field-group">
               <label>City:</label>
-              <input type="text" className="input-field city-field" placeholder="Mountain View" />
+              <input
+                type="text"
+                name="city"
+                className="input-field city-field"
+                placeholder="Mountain View"
+                value={personalInfo.city}
+                onChange={handleChange}
+              />
             </div>
 
             <div className="field-row">
               <div className="field-group half-width">
                 <label>District:</label>
-                <input type="text" className="input-field" placeholder="Santa Clara County" />
+                <input
+                  type="text"
+                  name="district"
+                  className="input-field"
+                  placeholder="Santa Clara County"
+                  value={personalInfo.district}
+                  onChange={handleChange}
+                />
               </div>
               <div className="field-group half-width">
                 <label>Country:</label>
-                <CountryDropdown 
-                  placeholder="Select Country" 
+                <CountryDropdown
+                  placeholder="Select Country"
                   onSelect={handleCountrySelect}
                 />
               </div>
@@ -72,7 +125,14 @@ const PersonalInfo = ({ showAddressDetails, setShowAddressDetails }) => {
 
             <div className="field-group">
               <label>Zip Code:</label>
-              <input type="text" className="input-field" placeholder="94041" />
+              <input
+                type="text"
+                name="zipCode"
+                className="input-field"
+                placeholder="94041"
+                value={personalInfo.zipCode}
+                onChange={handleChange}
+              />
             </div>
           </div>
         )}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ProfileForm.css';
 import PersonalInfo from './PersonalInfo';
 import Experience from './Experience';
@@ -11,16 +11,18 @@ import AdditionalInfo from './AdditionalInfo';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import TopBar from '../ResumeEditorPage/TopBar';
+import { useNavigate } from 'react-router-dom';
 
 
 const ProfileForm = () => {
-   window.scrollTo(0, 0);
+  window.scrollTo(0, 0);
   const [currentPage, setCurrentPage] = useState('personal');
   const [showAddressDetails, setShowAddressDetails] = useState(false);
+  const navigate = useNavigate();
 
   const [personalInfo, setPersonalInfo] = useState({
     fullName: '',
-    email: '',
+    professionalEmail: '',
     dateOfBirth: '',
     phone: '',
     address: '',
@@ -34,13 +36,13 @@ const ProfileForm = () => {
   const [experiences, setExperiences] = useState([
     {
       id: 1,
-      employer: '',
+      employerName: '',
       jobTitle: '',
       city: '',
       state: '',
       startDate: '',
       endDate: '',
-      isCurrent: false,
+      isCurrentJob: false,
       description: ''
     }
   ]);
@@ -50,27 +52,27 @@ const ProfileForm = () => {
   const [educations, setEducations] = useState([
     {
       id: 1,
-      schoolName: '',
+      institution: '',
       degree: '',
       fieldOfStudy: '',
-      graduation: '',
+      graduationDate: '',
       city: '',
       state: '',
       startDate: '',
       endDate: '',
-      isCurrent: false
+      isCurrentInstitution: false
     }
   ]);
   const [currentEducationIndex, setCurrentEducationIndex] = useState(0);
 
-  
+
   const [skills, setSkills] = useState([
     {
       id: 1,
       skillName: '',
-      proficiency: '',
+      proficiencyLevel: '',
       yearsOfExperience: '',
-      description: ''
+      skillDescription: ''
     }
   ]);
   const [currentSkillIndex, setCurrentSkillIndex] = useState(0);
@@ -96,17 +98,17 @@ const ProfileForm = () => {
       lastName: '',
       jobTitle: '',
       company: '',
-      email: '',
+      referenceEmail: '',
       phone: '',
       relationship: '',
       customRelationship: '',
       description: '',
-      canContact: false
+      permissionToContact: false
     }
   ]);
   const [currentReferenceIndex, setCurrentReferenceIndex] = useState(0);
 
-  
+
   const [hobbies, setHobbies] = useState([
     {
       id: 1,
@@ -114,25 +116,25 @@ const ProfileForm = () => {
       experienceLevel: '',
       yearsInvolved: '',
       category: '',
-      description: '',
+      hobbyDescription: '',
       achievements: ''
     }
   ]);
   const [currentHobbyIndex, setCurrentHobbyIndex] = useState(0);
 
- 
+
   const [additionalInfos, setAdditionalInfos] = useState([
     {
       id: 1,
-      title: '',
+      sectionTitle: '',
       content: ''
     }
   ]);
   const [currentAdditionalInfoIndex, setCurrentAdditionalInfoIndex] = useState(0);
 
-  
+
   const handleNextPage = () => {
-    window.scrollTo(0, 0); 
+    window.scrollTo(0, 0);
     if (currentPage === 'personal') {
       setCurrentPage('experience');
     } else if (currentPage === 'experience') {
@@ -151,7 +153,7 @@ const ProfileForm = () => {
   };
 
   const handlePrevPage = () => {
-    window.scrollTo(0, 0); 
+    window.scrollTo(0, 0);
     if (currentPage === 'experience') {
       setCurrentPage('personal');
     } else if (currentPage === 'education') {
@@ -170,7 +172,7 @@ const ProfileForm = () => {
   };
 
   const handleSubmit = () => {
-     window.scrollTo(0, 0);
+    window.scrollTo(0, 0);
     alert('Resume submitted successfully!');
   };
 
@@ -178,13 +180,13 @@ const ProfileForm = () => {
   const addNewExperience = () => {
     const newExperience = {
       id: experiences.length + 1,
-      employer: '',
+      employerName: '',
       jobTitle: '',
       city: '',
       state: '',
       startDate: '',
       endDate: '',
-      isCurrent: false,
+      isCurrentJob: false,
       description: ''
     };
     setExperiences([...experiences, newExperience]);
@@ -212,15 +214,15 @@ const ProfileForm = () => {
   const addNewEducation = () => {
     const newEducation = {
       id: educations.length + 1,
-      schoolName: '',
+      institution: '',
       degree: '',
       fieldOfStudy: '',
-      graduation: '',
+      graduationDate: '',
       city: '',
       state: '',
       startDate: '',
       endDate: '',
-      isCurrent: false
+      isCurrentInstitution: false
     };
     setEducations([...educations, newEducation]);
     setCurrentEducationIndex(educations.length);
@@ -248,9 +250,9 @@ const ProfileForm = () => {
     const newSkill = {
       id: skills.length + 1,
       skillName: '',
-      proficiency: '',
+      proficiencyLevel: '',
       yearsOfExperience: '',
-      description: ''
+      skillDescription: ''
     };
     setSkills([...skills, newSkill]);
     setCurrentSkillIndex(skills.length);
@@ -305,12 +307,12 @@ const ProfileForm = () => {
       lastName: '',
       jobTitle: '',
       company: '',
-      email: '',
+      referenceEmail: '',
       phone: '',
       relationship: '',
       customRelationship: '',
       description: '',
-      canContact: false
+      permissionToContact: false
     };
     setReferences([...references, newReference]);
     setCurrentReferenceIndex(references.length);
@@ -341,7 +343,7 @@ const ProfileForm = () => {
       experienceLevel: '',
       yearsInvolved: '',
       category: '',
-      description: '',
+      hobbyDescription: '',
       achievements: ''
     };
     setHobbies([...hobbies, newHobby]);
@@ -369,7 +371,7 @@ const ProfileForm = () => {
   const addNewAdditionalInfo = () => {
     const newAdditionalInfo = {
       id: additionalInfos.length + 1,
-      title: '',
+      sectionTitle: '',
       content: ''
     };
     setAdditionalInfos([...additionalInfos, newAdditionalInfo]);
@@ -497,7 +499,7 @@ const ProfileForm = () => {
 
   const handleSave = async () => {
     try {
-      const token = localStorage.getItem('token'); // or from context if you're using
+      const token = localStorage.getItem('token');
       if (!token) {
         alert("No token found, please log in again.");
         return;
@@ -531,7 +533,7 @@ const ProfileForm = () => {
             experienceLevel: h.experienceLevel,
             yearsInvolved: h.yearsInvolved,
             category: h.category,
-            description: h.description,
+            hobbyDescription: h.hobbyDescription,
             achievementsRecognition: h.achievements,
             permissionToContact: h.permissionToContact || false
           })),
@@ -550,6 +552,8 @@ const ProfileForm = () => {
         }
       );
 
+      navigate('/dashboard');
+
       alert("Profile updated successfully!");
       console.log(response.data);
 
@@ -563,9 +567,104 @@ const ProfileForm = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        await new Promise((res) => setTimeout(res, 1000));
+        const response = await axios.get('http://localhost:5000/viewInformation/userInformation', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        const resume = response?.data?.defaultResumeData;
+
+        if (!resume) {
+          console.error("No resume data found for the user.");
+          return
+        };
+
+        const formatDate = (date) => {
+          if (!date) return '';
+          const d = new Date(date);
+          return !isNaN(d) ? d.toISOString().substring(0, 10) : '';
+        };
+
+        if (resume.personalInfo) {
+          setPersonalInfo({
+            fullName: resume.personalInfo.fullName || '',
+            professionalEmail: resume.personalInfo.professionalEmail || '',
+            dateOfBirth: formatDate(resume.personalInfo.dateOfBirth),
+            phone: resume.personalInfo.phone || '',
+            address: resume.personalInfo.address || '',
+            city: resume.personalInfo.city || '',
+            district: resume.personalInfo.district || '',
+            country: resume.personalInfo.country || '',
+            zipCode: resume.personalInfo.zipCode || ''
+          });
+        }
+
+        if (Array.isArray(resume.education) && resume.education.length > 0) {
+          setEducations(
+            resume.education.map((edu) => ({
+              ...edu,
+              graduationDate: formatDate(edu.graduationDate),
+              startDate: formatDate(edu.startDate),
+              endDate: formatDate(edu.endDate),
+            }))
+          );
+        }
+
+        if (Array.isArray(resume.experience) && resume.experience.length > 0) {
+          setExperiences(
+            resume.experience.map((exp) => ({
+              ...exp,
+              startDate: formatDate(exp.startDate),
+              endDate: formatDate(exp.endDate),
+            }))
+          );
+        }
+
+        if (Array.isArray(resume.skills)) {
+          setSkills(resume.skills);
+        }
+
+        if (Array.isArray(resume.achievements)) {
+          setAchievements(
+            resume.achievements.map((a) => ({
+              ...a,
+              dateReceived: formatDate(a.dateReceived),
+            }))
+          );
+        }
+
+        if (Array.isArray(resume.references)) {
+          setReferences(resume.references);
+        }
+
+        if (Array.isArray(resume.hobbies)) {
+          setHobbies(resume.hobbies);
+        }
+
+        if (Array.isArray(resume.additionalInfos)) {
+          setAdditionalInfos(
+            resume.additionalInfos.map((info) => ({
+              sectionTitle: info.sectionTitle || '',
+              content: info.content || '',
+            }))
+          );
+        }
+      } catch (err) {
+        console.error('Error fetching user:', err);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+
   return (
     <div className="resume-container">
-     
+
       <div className="resume-header">
         <TopBar />
         <div className="header-line"></div>
@@ -696,11 +795,11 @@ const ProfileForm = () => {
           </button>
         )}
         {currentPage === 'additional' && (
-          <Link to="/dashboard">
-            <button className="nav-button submit-nav-button" onClick={handleSave}>
-              Submit
-            </button>
-          </Link>
+          //<Link to="/dashboard">
+          <button className="nav-button submit-nav-button" onClick={handleSave}>
+            Submit
+          </button>
+          //</Link>
         )}
       </div>
     </div>

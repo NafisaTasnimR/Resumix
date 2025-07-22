@@ -18,7 +18,7 @@ const validateInformationUpdate = (req, res, next) => {
   const defaultResumeDataSchema = Joi.object({
     personalInfo: Joi.object({
       fullName: Joi.string().allow('').optional(),
-      email: Joi.string().email().allow('').optional(),
+      professionalEmail: Joi.string().email().allow('').optional(),
       dateOfBirth: Joi.date().allow(null).optional(),
       phone: Joi.string().allow('').optional(),
       address: Joi.string().allow('').optional(),

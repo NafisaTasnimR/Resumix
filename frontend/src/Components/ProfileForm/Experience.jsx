@@ -41,8 +41,8 @@ const Experience = ({
           <input 
             type="text" 
             className="input-field" 
-            value={currentExp.employer}
-            onChange={(e) => updateExperience('employer', e.target.value)}
+            value={currentExp.employerName}
+            onChange={(e) => updateExperience('employerName', e.target.value)}
             placeholder="Khan Academy" 
           />
         </div>
@@ -95,10 +95,10 @@ const Experience = ({
             <label>End Date:</label>
             <input 
               type="date" 
-              className={`input-field ${currentExp.isCurrent ? 'disabled-field' : ''}`}
+              className={`input-field ${currentExp.isCurrentJob ? 'disabled-field' : ''}`}
               value={currentExp.endDate}
               onChange={(e) => updateExperience('endDate', e.target.value)}
-              disabled={currentExp.isCurrent}
+              disabled={currentExp.isCurrentJob}
             />
           </div>
         </div>
@@ -109,8 +109,8 @@ const Experience = ({
               type="checkbox" 
               id={`currentJob${currentExperienceIndex}`}
               className="checkbox-input" 
-              checked={currentExp.isCurrent}
-              onChange={(e) => updateExperience('isCurrent', e.target.checked)}
+              checked={currentExp.isCurrentJob}
+              onChange={(e) => updateExperience('isCurrentJob', e.target.checked)}
             />
             <label htmlFor={`currentJob${currentExperienceIndex}`} className="checkbox-label">Set as Current Job</label>
           </div>

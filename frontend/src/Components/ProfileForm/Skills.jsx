@@ -51,8 +51,8 @@ const Skills = ({
             <label>Proficiency Level:</label>
             <select 
               className="input-field" 
-              value={currentSkill.proficiency}
-              onChange={(e) => updateSkill('proficiency', e.target.value)}
+              value={currentSkill.proficiencyLevel}
+              onChange={(e) => updateSkill('proficiencyLevel', e.target.value)}
             >
               <option value="">Select Level</option>
               <option value="Beginner">Beginner</option>
@@ -80,8 +80,8 @@ const Skills = ({
           <textarea 
             className="input-field textarea-field" 
             rows="4" 
-            value={currentSkill.description}
-            onChange={(e) => updateSkill('description', e.target.value)}
+            value={currentSkill.skillDescription}
+            onChange={(e) => updateSkill('skillDescription', e.target.value)}
             placeholder="Full-stack JavaScript development including React, Node.js, and modern frameworks"
           ></textarea>
         </div>

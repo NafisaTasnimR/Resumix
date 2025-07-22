@@ -41,8 +41,8 @@ const Education = ({
           <input 
             type="text" 
             className="input-field" 
-            value={currentEdu.schoolName}
-            onChange={(e) => updateEducation('schoolName', e.target.value)}
+            value={currentEdu.institution}
+            onChange={(e) => updateEducation('institution', e.target.value)}
             placeholder="Harvard Business School" 
           />
         </div>
@@ -74,8 +74,8 @@ const Education = ({
           <input 
             type="date" 
             className="input-field" 
-            value={currentEdu.graduation}
-            onChange={(e) => updateEducation('graduation', e.target.value)}
+            value={currentEdu.graduationDate}
+            onChange={(e) => updateEducation('graduationDate', e.target.value)}
           />
         </div>
 
@@ -116,10 +116,10 @@ const Education = ({
             <label>End Date:</label>
             <input 
               type="date" 
-              className={`input-field ${currentEdu.isCurrent ? 'disabled-field' : ''}`}
+              className={`input-field ${currentEdu.isCurrentInstitution ? 'disabled-field' : ''}`}
               value={currentEdu.endDate}
               onChange={(e) => updateEducation('endDate', e.target.value)}
-              disabled={currentEdu.isCurrent}
+              disabled={currentEdu.isCurrentInstitution}
             />
           </div>
         </div>
@@ -130,8 +130,8 @@ const Education = ({
               type="checkbox" 
               id={`currentInstitute${currentEducationIndex}`}
               className="checkbox-input" 
-              checked={currentEdu.isCurrent}
-              onChange={(e) => updateEducation('isCurrent', e.target.checked)}
+              checked={currentEdu.isCurrentInstitution}
+              onChange={(e) => updateEducation('isCurrentInstitution', e.target.checked)}
             />
             <label htmlFor={`currentInstitute${currentEducationIndex}`} className="checkbox-label">Set as Current Institute</label>
           </div>
