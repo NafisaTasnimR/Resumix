@@ -34,31 +34,14 @@ const UserSchema = new schema({
   defaultResumeData: {
     personalInfo: {
       fullName: { type: String, default: '' },
-      email: {
-        type: String,
-        unique: true
-      },
-      dateOfBirth: {
-        type: Date
-      },
-      phone: {
-        type: String
-      },
-      address: {
-        type: String
-      },
-      city: {
-        type: String
-      },
-      district: {
-        type: String
-      },
-      country: {
-        type: String
-      },
-      zipCode: {
-        type: String
-      }
+      professionalEmail: { type: String, default: ''},
+      dateOfBirth: { type: Date },
+      phone: { type: String},
+      address: { type: String, default: '' },
+      city: { type: String, default: '' },
+      district: { type: String, default: '' },
+      country: { type: String, default: '' },
+      zipCode: { type: String, default: '' }
     },
     education: {
       type: [
@@ -114,7 +97,7 @@ const UserSchema = new schema({
       type: [
         {
           skillName: { type: String },
-          proficiencyLevel: { type: String }, // e.g., Beginner, Intermediate, Expert
+          proficiencyLevel: { type: String },
           yearsOfExperience: { type: Number },
           skillDescription: { type: String }
         }
@@ -141,11 +124,12 @@ const UserSchema = new schema({
           lastName: { type: String },
           jobTitle: { type: String },
           company: { type: String },
-          email: { type: String },
+          referenceEmail: { type: String },
           phone: { type: String },
           relationship: { type: String },
           description: { type: String },
-          permissionToContact: { type: Boolean, default: false }
+          permissionToContact: { type: Boolean, default: false },
+          customRelationship: { type: String }
         }
       ],
       default: []
@@ -176,9 +160,9 @@ const UserSchema = new schema({
     projects: {
       type: [
         {
-          title: String,
-          description: String,
-          url: String
+          title: { type: String },
+          description: { type: String },
+          url: { type: String }
         }
       ],
       default: []
