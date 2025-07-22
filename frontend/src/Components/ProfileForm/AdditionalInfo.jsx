@@ -41,8 +41,8 @@ const AdditionalInfo = ({
           <input 
             type="text" 
             className="input-field" 
-            value={currentInfo.title}
-            onChange={(e) => updateAdditionalInfo('title', e.target.value)}
+            value={currentInfo.sectionTitle}
+            onChange={(e) => updateAdditionalInfo('sectionTitle', e.target.value)}
             placeholder="Languages" 
           />
         </div>

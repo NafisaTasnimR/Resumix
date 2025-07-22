@@ -85,8 +85,8 @@ const References = ({
             <input 
               type="email" 
               className="input-field" 
-              value={currentReference.email}
-              onChange={(e) => updateReference('email', e.target.value)}
+              value={currentReference.referenceEmail}
+              onChange={(e) => updateReference('referenceEmail', e.target.value)}
               placeholder="bill.gates@microsoft.com" 
             />
           </div>
@@ -150,12 +150,12 @@ const References = ({
           <div className="current-job-checkbox">
             <input 
               type="checkbox" 
-              id={`canContact${currentReferenceIndex}`}
+              id={`permissionToContact${currentReferenceIndex}`}
               className="checkbox-input" 
-              checked={currentReference.canContact}
-              onChange={(e) => updateReference('canContact', e.target.checked)}
+              checked={currentReference.permissionToContact}
+              onChange={(e) => updateReference('permissionToContact', e.target.checked)}
             />
-            <label htmlFor={`canContact${currentReferenceIndex}`} className="checkbox-label">Permission to contact this reference</label>
+            <label htmlFor={`permissionToContact${currentReferenceIndex}`} className="checkbox-label">Permission to contact this reference</label>
           </div>
         </div>
 
