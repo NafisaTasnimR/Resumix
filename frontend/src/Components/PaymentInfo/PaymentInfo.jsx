@@ -34,11 +34,19 @@ const PaymentInfo = () => {
       <TopBar />
       {/* Progress Steps */}
       <div className="progress-steps">
-        <div className="step completed">
+        <div 
+          className="step completed"
+          onClick={() => navigate('/postlogin/')}
+          style={{cursor: 'pointer'}}
+        >
           <div className="step-icon">✓</div>
           <span>Home page</span>
         </div>
-        <div className="step completed">
+        <div 
+          className="step completed"
+          onClick={() => navigate('/subscription')}
+          style={{cursor: 'pointer'}}
+        >
           <div className="step-icon">✓</div>
           <span>Choose Access</span>
         </div>
