@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Resume Template - John Smith</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #e5eefa;
+      margin: 0;
+      padding: 0;
+    }
+    .resume-wrapper {
+      display: flex;
+      max-width: 900px;
+      margin: 36px auto;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 44, 77, 0.15);
+    }
+    .sidebar {
+      background: #1d3557;
+      color: #fff;
+      width: 260px;
+      padding: 32px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .sidebar h1 {
+      font-size: 2em;
+      margin: 0 0 8px 0;
+    }
+    .sidebar .title {
+      color: #a3cdfd;
+      font-size: 1.06em;
+      font-weight: 500;
+      margin-bottom: 18px;
+      letter-spacing: 0.5px;
+    }
+    .sidebar .contacts, .sidebar .skills, .sidebar .software {
+      margin-bottom: 30px;
+      width: 100%;
+    }
+    .sidebar .contacts a {
+      color: #a3cdfd;
+      word-break: break-all;
+      text-decoration: none;
+      display: block;
+      font-size: 0.98em;
+      margin-bottom: 5px;
+    }
+    .sidebar .icon {
+      margin-right: 9px;
+    }
+    .sidebar .section-title {
+      text-transform: uppercase;
+      font-size: 0.95em;
+      font-weight: 600;
+      color: #a3cdfd;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .sidebar li {
+      font-size: 0.98em;
+      margin-bottom: 8px;
+    }
+    .content {
+      flex: 1;
+      padding: 38px 44px 38px 38px;
+      color: #263345;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .summary {
+      margin-bottom: 14px;
+      font-size: 1.08em;
+    }
+    .timeline {
+      position: relative;
+      margin-left: 18px;
+      border-left: 3px solid #1d3557;
+      padding-left: 18px;
+    }
+    .timeline-section {
+      margin-bottom: 36px;
+    }
+    .timeline-title {
+      font-size: 1.18em;
+      font-weight: 600;
+      color: #225185;
+      margin-bottom: 8px;
+      margin-left: -37px;
+      background: #eaf3fb;
+      display: inline-block;
+      padding: 2px 14px 2px 7px;
+      border-radius: 13px;
+    }
+    .timeline-entry {
+      position: relative;
+      margin-bottom: 24px;
+    }
+    .timeline-entry:before {
+      content: '';
+      position: absolute;
+      left: -27px;
+      top: 6px;
+      width: 13px;
+      height: 13px;
+      background: #1d3557;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 0 0 3px #b5dbff;
+    }
+    .entry-header {
+      font-weight: bold;
+      margin-bottom: 2px;
+      color: #224570;
+    }
+    .entry-meta {
+      font-size: 0.97em;
+      color: #6489a8;
+      margin-bottom: 1px;
+    }
+    .entry-desc {
+      margin-bottom: 0;
+      font-size: 0.97em;
+    }
+    .skill-ratings {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 0.99em;
+      margin: 10px 0;
+    }
+    .rating-bar {
+      background: #e3edfa;
+      border-radius: 3px;
+      height: 7px;
+      width: 80px;
+      overflow: hidden;
+      margin-left: 9px;
+      display: inline-block;
+    }
+    .rating-bar-inner {
+      background: #a3cdfd;
+      height: 100%;
+      display: block;
+    }
+    @media (max-width: 830px) {
+      .resume-wrapper { flex-direction: column; }
+      .sidebar { width: 100%; align-items: center; text-align: center; }
+      .content { padding: 20px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="resume-wrapper">
+    <div class="sidebar">
+      <h1>John Smith</h1>
+      <div class="title">IT Project Manager</div>
+      <div class="contacts">
+        <div class="section-title">Contact</div>
+        <div><span class="icon"></span>774-987-4009</div>
+        <div><span class="icon"></span>jsmith@uptowork.com</div>
+        <a href="#" style="margin-left: 0"><span class="icon"></span>linkedin.com/johutw</a>
+      </div>
+      <div class="skills">
+        <div class="section-title">Skills</div>
+        <ul>
+          <li>Business Process Improvement</li>
+          <li>Vendor Management</li>
+          <li>Project Scheduling</li>
+          <li>Sales Analysis</li>
+        </ul>
+      </div>
+      <div class="software">
+        <div class="section-title">Software</div>
+        <ul>
+          <li>Microsoft Project</li>
+          <li>MS Windows Server</li>
+          <li>Linux/Unix</li>
+        </ul>
+      </div>
+    </div>
+    <div class="content">
+      <div class="summary">
+        <strong>IT Professional</strong> with over 10 years of experience specializing in <b>IT department management</b> for international logistics companies. Implement effective <b>IT strategies</b> at local and global levels. Strongest strength is business awareness, enabling the streamlining of infrastructure and applications.
+      </div>
+      <div class="timeline">
+        <div class="timeline-section">
+          <div class="timeline-title">Experience</div>
+          <div class="timeline-entry">
+            <div class="entry-header">Senior Project Manager</div>
+            <div class="entry-meta">Seton Hospital, ME | Dec 2006 – Present</div>
+            <div class="entry-desc">
+              <ul>
+                <li>Oversaw all major hospital IT projects for 10+ years; focus on cost reduction.</li>
+                <li>Created, improved, and developed IT project strategies.</li>
+                <li>Implemented Lean Training &amp; Six Sigma for all employees.</li>
+                <li>Reduced IT infrastructure costs by 5%.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="timeline-entry">
+            <div class="entry-header">Junior Project Manager</div>
+            <div class="entry-meta">Seton Hospital, ME | Sep 2004 – Nov 2006</div>
+            <div class="entry-desc">
+              <ul>
+                <li>Streamlined IT logistics, achieving 25% cost cuts.</li>
+                <li>Diagnosed hardware/OS issues and implemented new solutions.</li>
+                <li>Maintained patient database of 30,000+ entries.</li>
+                <li>Managed training for IT Support Officers.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-section">
+          <div class="timeline-title">Education</div>
+          <div class="timeline-entry">
+            <div class="entry-header">BS/MS in Computer Science</div>
+            <div class="entry-meta">University of Maryland | Sep 1996 – May 2001</div>
+            <div class="entry-desc">
+              <ul>
+                <li>Graduated Summa Cum Laude.</li>
+                <li>Student Association member, event organizer.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-section">
+          <div class="timeline-title">Certifications</div>
+          <div class="timeline-entry">
+            <div class="entry-header">PMP</div>
+            <div class="entry-meta">Project Management Institute | May 2015</div>
+          </div>
+          <div class="timeline-entry">
+            <div class="entry-header">PRINCE2 Foundation</div>
+            <div class="entry-meta">April 2014</div>
+          </div>
+        </div>
+        <div class="timeline-section">
+          <div class="timeline-title">Skill Ratings</div>
+          <div class="skill-ratings">
+            Project Scheduling
+            <div class="rating-bar"><span class="rating-bar-inner" style="width: 90%;"></span></div>
+            <span style="color: #6489a8; font-size:0.95em;">Excellent</span>
+          </div>
+          <div class="skill-ratings">
+            Vendor Management
+            <div class="rating-bar"><span class="rating-bar-inner" style="width: 80%;"></span></div>
+            <span style="color: #6489a8; font-size:0.95em;">Very Good</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
