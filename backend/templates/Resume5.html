@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Resume Template - Jane Doe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            background-color: #f0f0f0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        .resume-container {
+            display: flex;
+      flex-direction: row;
+      width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      min-height: 1120px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .content {
+            padding: 30px;
+            flex: 1;
+            font-size: 16px;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            color: #003b6f;
+        }
+
+        .header h4 {
+            font-size: 18px;
+            font-weight: normal;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #333;
+        }
+
+        .section {
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .section h3 {
+            color: #003b6f;
+            margin-bottom: 8px;
+            margin-left: 10px;
+            font-size: 18px;
+        }
+
+        .job-title {
+            font-weight: bold;
+            margin-left: 10px;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .company {
+            font-style: italic;
+            margin-left: 10px;
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+
+        .date {
+            color: gray;
+            font-size: 14px;
+            margin-bottom: 5px;
+            margin-left: 10px;
+        }
+
+        ul {
+            margin-left: 35px;
+            margin-top: 5px;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        p {
+            margin-left: 10px;
+            margin-bottom: 8px;
+        }
+
+        .section hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 10px 0;
+        }
+
+        .sidebar {
+            background-color: #005f5f;
+            color: white;
+            width: 240px;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            flex-shrink: 0;
+        }
+
+        .sidebar h4 {
+            font-size: 12px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .sidebar-section {
+            margin-top: 25px;
+        }
+
+        .achievement,
+        .references p {
+            font-size: 14px;
+            line-height: 1.4;
+            margin-bottom: 16px;
+        }
+
+        .achievement-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            position: relative;
+            padding-left: 18px;
+            margin-top: 15px;
+        }
+
+        .achievement-title::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: white;
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .achievement-desc {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .certifications ul,
+        .additional-info ul,
+        .hobbies ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .certifications ul li,
+        .additional-info ul li,
+        .hobbies ul li {
+            position: relative;
+            padding-left: 18px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .certifications ul li::before,
+        .additional-info ul li::before,
+        .hobbies ul li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: white;
+            font-size: 18px;
+            line-height: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="resume-container">
+        <div class="content">
+            <div class="header">
+                <h1>JANE DOE</h1>
+                <h4>IT Project Manager</h4>
+                <p>555-123-4567</p>
+                <p>jane.doe@email.com</p>
+                <p>linkedin.com/in/janedoe</p>
+            </div>
+
+            <div class="section">
+                <p>
+                    Seasoned IT professional with <strong>10+ years of experience</strong> leading complex IT projects
+                    across industries.
+                    Passionate about creating scalable infrastructure and automating operations for greater efficiency.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>Experience</h3>
+                <p class="job-title">IT Program Manager</p>
+                <p class="date">2015 – Present</p>
+                <p class="company">GreenTech Solutions</p>
+                <ul>
+                    <li>Led a team of 15 to deliver enterprise software within deadlines.</li>
+                    <li>Saved $200K annually through automated backup and reporting tools.</li>
+                    <li>Improved uptime to 99.9% through proactive system monitoring.</li>
+                </ul>
+
+                <p class="job-title">Systems Analyst</p>
+                <p class="date">2010 – 2015</p>
+                <p class="company">NorthBridge Health</p>
+                <ul>
+                    <li>Designed patient scheduling system used by 20+ hospitals.</li>
+                    <li>Led agile team for mobile-first transformation initiative.</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3>Education</h3>
+                <p class="job-title">BSc in Information Systems</p>
+                <p class="date">2006 – 2010</p>
+                <p class="company">University of Washington</p>
+                <ul>
+                    <li>Graduated Magna Cum Laude</li>
+                    <li>President of Women in Tech Club</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3>Skills</h3>
+                <ul>
+                    <li><strong>Agile Leadership</strong> – Managed cross-functional scrum teams</li>
+                    <li><strong>Cloud Infrastructure</strong> – AWS, Azure, GCP experience</li>
+                    <li><strong>Process Automation</strong> – Built internal tools to cut 300+ hrs/yr</li>
+                    <li><strong>Stakeholder Communication</strong> – Aligned dev work to business goals</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="achievements">
+                <h4>Key Achievements</h4>
+                <div class="achievement">
+                    <div class="achievement-title">Cloud Migration</div>
+                    <div class="achievement-desc">Migrated 20+ systems to cloud with 0 downtime.</div>
+                </div>
+                <div class="achievement">
+                    <div class="achievement-title">Cost Optimization</div>
+                    <div class="achievement-desc">Cut infrastructure spend by 15% via refactoring.</div>
+                </div>
+                <div class="achievement">
+                    <div class="achievement-title">Award Winner</div>
+                    <div class="achievement-desc">Received “Best Innovator 2023” at GreenTech.</div>
+                </div>
+            </div>
+
+            <div class="certifications sidebar-section">
+                <h4>Certifications</h4>
+                <ul>
+                    <li>PMP – PMI</li>
+                    <li>Scrum Master – Scrum Alliance</li>
+                </ul>
+            </div>
+
+            <div class="references sidebar-section">
+                <h4>References</h4>
+                <p><strong>Emily Rogers</strong><br>
+                    CIO, GreenTech<br>
+                    emily.rogers@greentech.com
+                </p>
+                <p><strong>Alan Smith</strong><br>
+                    Director, NorthBridge<br>
+                    alan.smith@northbridge.com
+                </p>
+            </div>
+
+            <div class="hobbies sidebar-section">
+                <h4>Hobbies</h4>
+                <ul>
+                    <li>Travel Photography</li>
+                    <li>Coding Challenges</li>
+                    <li>Community Volunteering</li>
+                </ul>
+            </div>
+
+            <div class="additional-info sidebar-section">
+                <h4>Additional Info</h4>
+                <ul>
+                    <li>Authorized to work in US</li>
+                    <li>Available for relocation</li>
+                    <li>Fluent in English, Spanish</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
