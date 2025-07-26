@@ -1,235 +1,303 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Resume Template - John Smith</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #fff;
+    * {
       margin: 0;
       padding: 0;
-    }
-    .resume-container {
-      width: 210mm;
-      min-height: 297mm;
-      margin: 0 auto;
-      background: #fff;
-      padding: 25mm 20mm;
       box-sizing: border-box;
     }
-    .header {
-      text-align: left;
-      margin-bottom: 24px;
-      margin-top: 15px;
+
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+      background-color: #f0f0f0;
+      font-family: 'Segoe UI', Arial, sans-serif;
     }
-    .header h1 {
-      color: #1d3557;
-      font-size: 2.3em;
-      margin: 0 0 2px 0;
-      font-weight: 700;
+
+    .resume-container {
+      display: flex;
+      width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      min-height: 1120px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    .header .title {
-      color: #225185;
-      font-size: 1.15em;
-      font-weight: 500;
+
+    .sidebar {
+      background-color: #003b6f;
+      color: white;
+      width: 220px;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .sidebar h2 {
+      font-size: 24px;
+      margin-bottom: 5px;
+      margin-top: 10px;
+    }
+
+    .sidebar h4 {
+      font-size: 16px;
+      margin-bottom: 20px;
+      font-weight: normal;
+    }
+
+    .sidebar p {
+      font-size: 15px;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+
+    .achievements h4 {
+      margin-top: 25px;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 16px;
       margin-bottom: 12px;
     }
-    .header .contacts {
-      margin-bottom: 18px;
-      font-size: 1em;
-      color: #263345;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px 32px;
-      align-items: center;
+
+    .achievement {
+      margin-bottom: 12px;
     }
-    .header .contacts span, .header .contacts a {
-      color: #263345;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 1em;
-    }
-    .header .contacts a {
-      color: #225185;
-      text-decoration: underline;
-    }
-    .summary {
-      margin-bottom: 30px;
-      font-size: 1.05em;
-      color: #263345;
-      line-height: 1.5;
-    }
-    .section {
-      margin-bottom: 20px;
-    }
-    .section-title {
-      color: #1d3557;
-      font-size: 1.13em;
-      font-weight: 700;
-      margin-bottom: 8px;
-      letter-spacing: 0.5px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .timeline {
-      border-left: 3px solid #1d3557;
-      margin-left: 10px;
+
+    .achievement-title {
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 3px;
+      position: relative;
       padding-left: 18px;
     }
-    .timeline-entry {
-      position: relative;
-      margin-bottom: 16px;
-    }
-    .timeline-entry:before {
-      content: '';
+
+    .achievement-title::before {
+      content: "•";
       position: absolute;
-      left: -27px;
-      top: 6px;
-      width: 13px;
-      height: 13px;
-      background: #1d3557;
-      border-radius: 50%;
-      border: 2px solid #fff;
+      left: 0;
+      top: 0;
+      color: white;
+      font-size: 18px;
+      line-height: 1;
     }
-    .entry-header {
+
+    .achievement-desc {
+      font-size: 14px;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .certifications {
+      margin-top: 30px;
+    }
+
+    .certifications h4 {
       font-weight: bold;
-      margin-bottom: 2px;
-      color: #224570;
-      font-size: 1.08em;
+      margin-bottom: 12px;
+      font-size: 16px;
+      text-transform: uppercase;
     }
-    .entry-meta {
-      font-size: 0.97em;
-      color: #6489a8;
-      margin-bottom: 1px;
+
+    .certifications ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
     }
-    .entry-desc {
-      margin-bottom: 0;
-      font-size: 0.97em;
-      line-height: 1.5;
+
+    .certifications ul li {
+      position: relative;
+      padding-left: 18px;
+      margin-bottom: 6px;
+      font-size: 14px;
     }
-    .skill-ratings {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      font-size: 0.99em;
+
+    .certifications ul li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: white;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .content {
+      padding: 30px;
+      flex: 1;
+      font-size: 16px;
+    }
+
+    .content h3 {
+      color: #003b6f;
+      margin-bottom: 8px;
+      margin-left: 10px;
+      font-size: 18px;
+    }
+
+    .section {
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+
+    .job-title {
+      font-weight: bold;
+      margin-left: 10px;
+      margin-bottom: 5px;
+      font-size: 16px;
+    }
+
+    .company {
+      font-style: italic;
+      margin-left: 10px;
+      margin-bottom: 5px;
+      font-size: 15px;
+    }
+
+    .date {
+      color: gray;
+      font-size: 14px;
+      margin-bottom: 5px;
+      margin-left: 10px;
+    }
+
+    ul {
+      margin-left: 35px;
+      margin-top: 5px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    p {
+      margin-left: 10px;
+      margin-bottom: 8px;
+    }
+
+    .section hr {
+      border: none;
+      border-top: 1px solid #ccc;
       margin: 10px 0;
-    }
-    .rating-bar {
-      background: #e3edfa;
-      border-radius: 3px;
-      height: 7px;
-      width: 80px;
-      overflow: hidden;
-      margin-left: 9px;
-      display: inline-block;
-    }
-    .rating-bar-inner {
-      background: #a3cdfd;
-      height: 100%;
-      display: block;
-    }
-    @media (max-width: 830px) {
-      .resume-container { padding: 0 0 20px 0; }
-      .header, .summary, .section { padding: 0 12px; }
     }
   </style>
 </head>
+
 <body>
   <div class="resume-container">
-    <div class="header">
-      <h1>John Smith</h1>
-      <div class="title">IT Project Manager</div>
-      <div class="contacts">
-        <span>774-987-4009</span>
-        <span>jsmith@uptowork.com</span>
-        <a href="#">linkedin.com/johutw</a>
-      </div>
-    </div>
-    <div class="summary">
-      IT Professional with <b>over 10 years of experience</b> specializing in <b>IT department management</b> for international logistics companies. I can implement effective <b>IT strategies</b> at local and global levels. My greatest strength is business awareness, which enables me to permanently streamline infrastructure and applications.
-    </div>
+    <div class="sidebar">
+      <h2>JOHN SMITH</h2>
+      <h4>IT Project Manager</h4>
+      <p>774-987-4009</p>
+      <p>jsmith@uptowork.com</p>
+      <p>linkedin.com/johnutw</p>
+      <p>@johnsmithutw</p>
 
-    <div class="section">
-      <div class="section-title">Experience</div>
-      <div class="timeline">
-        <div class="timeline-entry">
-          <div class="entry-header">Senior Project Manager</div>
-          <div class="entry-meta">Seton Hospital, ME | 2006-12 - present</div>
-          <div class="entry-desc">
-            <ul>
-              <li>Oversaw all major hospital IT projects for 10+ years, focus on cost reduction.</li>
-              <li>Responsible for creating, improving, and developing IT project strategies.</li>
-              <li>Implemented the highly successful Lean Training and Six Sigma projects for all employees.</li>
-              <li>Reduced the costs of IT infrastructure maintenance by 5%.</li>
-            </ul>
-          </div>
+      <div class="achievements">
+        <h4>Key Achievements</h4>
+
+        <div class="achievement">
+          <div class="achievement-title">Infrastructure Cost Cut</div>
+          <div class="achievement-desc">Reduced IT maintenance costs by 5% through vendor optimization.</div>
         </div>
-        <div class="timeline-entry">
-          <div class="entry-header">Junior Project Manager</div>
-          <div class="entry-meta">Seton Hospital, ME | 2004-09 - 2006-11</div>
-          <div class="entry-desc">
-            <ul>
-              <li>Streamlined IT logistics and administration operation cutting costs by 25%.</li>
-              <li>Diagnosed problems with hardware and operating systems and implemented new solutions.</li>
-              <li>Maintained the user database of over 30000 patients.</li>
-              <li>Managed project for lean training for all IT Support Officers.</li>
-            </ul>
-          </div>
+
+        <div class="achievement">
+          <div class="achievement-title">Hospital Database Overhaul</div>
+          <div class="achievement-desc">Redesigned patient database system for 30,000+ entries.</div>
+        </div>
+
+        <div class="achievement">
+          <div class="achievement-title">Training Leader</div>
+          <div class="achievement-desc">Led onboarding for 20+ new IT staff in project tools & agile flow.</div>
+        </div>
+
+        <div class="achievement">
+          <div class="achievement-title">Process Automation</div>
+          <div class="achievement-desc">Automated admin tasks saving 300+ man-hours annually.</div>
         </div>
       </div>
-    </div>
 
-    <div class="section">
-      <div class="section-title">Education</div>
-      <div class="timeline">
-        <div class="timeline-entry">
-          <div class="entry-header">BS/MS in Computer Science, University of Maryland</div>
-          <div class="entry-meta">1996-09 - 2001-05</div>
-          <div class="entry-desc">
-            <ul>
-              <li>Graduated Summa Cum Laude.</li>
-              <li>Member of Student Association of Computer Science.</li>
-              <li>Managed a student project to organize a conference for 50+ professionals.</li>
-            </ul>
-          </div>
-        </div>
+      <!-- Certifications moved here -->
+      <div class="certifications">
+        <h4>Certifications</h4>
+        <ul>
+          <li>PMP – Project Management Institute</li>
+          <li>PRINCE2® Foundation</li>
+        </ul>
       </div>
     </div>
 
-    <div class="section">
-      <div class="section-title">Skills</div>
-      <div class="timeline">
-        <div class="timeline-entry">
-          <div class="entry-desc"><b>Business Process Improvement</b> – history of successful innovations leading to cost savings.</div>
-        </div>
-        <div class="timeline-entry">
-          <div class="entry-desc"><b>Vendor Management</b> – managing vendors in projects with budget over $1,000,000.</div>
-        </div>
-        <div class="timeline-entry">
-          <div class="entry-desc"><b>Project Scheduling</b> – over 90% of projects led were finished in due time.</div>
-        </div>
-        <div class="timeline-entry">
-          <div class="entry-desc"><b>Sales Analysis</b> – background in IT Sales with deep understanding of negotiating contracts.</div>
-        </div>
+    <div class="content">
+      <div class="section">
+        <p>
+          IT Professional with <strong>over 10 years of experience</strong> specializing in
+          <strong>IT department management</strong> for international logistics companies.
+          I can implement effective <strong>IT strategies</strong> at local and global levels.
+          My greatest strength is business awareness, which enables me to permanently streamline
+          infrastructure and applications.
+        </p>
       </div>
-    </div>
 
-    <div class="section">
-      <div class="section-title">Software</div>
-      <div class="timeline">
-        <div class="timeline-entry">
-          <div class="entry-desc">Microsoft Project, Linux/Unix</div>
-        </div>
-        <div class="timeline-entry">
-          <div class="entry-desc">MS Windows Server</div>
-        </div>
+      <div class="section">
+        <h3>Experience</h3>
+        <p class="date">2006-12 – present</p>
+        <p class="job-title">Senior Project Manager</p>
+        <p class="company">Seton Hospital, ME</p>
+        <ul>
+          <li>Oversaw all major hospital IT projects for 10+ years, focused on cost reduction.</li>
+          <li>Developed and implemented IT project strategies.</li>
+          <li>Led Lean Training and Six Sigma projects.</li>
+          <li>Reduced IT infrastructure maintenance by 5%.</li>
+        </ul>
 
+        <p class="date">2004-09 – 2006-11</p>
+        <p class="job-title">Junior Project Manager</p>
+        <p class="company">Seton Hospital, ME</p>
+        <ul>
+          <li>Reduced logistics/admin costs by 25%.</li>
+          <li>Diagnosed hardware/software issues and created new solutions.</li>
+          <li>Maintained 30,000+ patient database.</li>
+          <li>Led training for all IT Support Officers.</li>
+        </ul>
       </div>
+
+      <div class="section">
+        <h3>Education</h3>
+        <p class="date">1996-09 – 2001-05</p>
+        <p class="job-title">BS/MS in Computer Science</p>
+        <p class="company">University of Maryland</p>
+        <ul>
+          <li>Graduated Summa Cum Laude</li>
+          <li>Member of Student Association of CS</li>
+          <li>Organized a conference for 50+ professionals</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h3>Skills</h3>
+        <ul>
+          <li><strong>Business Process Improvement</strong> – successful innovations for cost savings</li>
+          <li><strong>Vendor Management</strong> – managing vendors with budgets over $100,000</li>
+          <li><strong>Project Scheduling</strong> – 90% of projects finished on time</li>
+          <li><strong>Sales Analysis</strong> – IT sales and contract negotiations</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h3>Hobbies</h3>
+        <ul>
+          <li>Hobby 1</li>
+        </ul>
+        <ul>
+          <li>Hobby 2</li>
+      </div>
+
     </div>
   </div>
 </body>
+
 </html>
