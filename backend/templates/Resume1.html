@@ -1,94 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <title>Template 1 - James Miller</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume - Sarah Smith</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #e5e5e5;
-      margin: 0;
-      padding: 40px 0;
-    }
-
-    .a4-page {
-      background: #fff;
-      width: 210mm;
-      min-height: 297mm;
-      margin: 0 auto;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
-      padding: 30mm 22mm;
+    * {
       box-sizing: border-box;
-      border-radius: 6px;
-      border: 1px solid #d1d1d1;
-      position: relative;
-      overflow: hidden;
+      margin: 0;
+      padding: 0;
     }
 
-    @media print {
-
-      body,
-      html {
-        background: none;
-        box-shadow: none;
-        padding: 0;
-      }
-
-      /* The .a4-page selector here is intended to override the screen styles for print media.
-         However, in your HTML, the main content is not wrapped in a <div class="a4-page">,
-         so these print-specific styles are not applied to any element.
-         To use these print styles, wrap your main content in a <div class="a4-page">. */
+    html, body {
+      width: 100%;
+      overflow-x: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fff;
+      color: #333;
+      font-size: 15px;
+      line-height: 1.5;
     }
 
-    h1 {
-      color: #2e6c80;
-      font-size: 2.2em;
-      margin-bottom: 0.2em;
-      letter-spacing: 1px;
+    body {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 40px;
     }
 
-    h2 {
-      border-bottom: 1px solid #e0e0e0;
+    .header {
+       background: #3aa6a3;
+  color: white;
+  padding: 35px 20px;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .header h2 {
+      font-size: 16px;
+      font-weight: normal;
+      margin-bottom: 6px;
+    }
+
+    .contact {
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .section {
+      margin-bottom: 18px;
+    }
+
+    .section h3 {
+      color: #2f9c95;
+      font-size: 17px;
+      margin: 0 0 6px;
+      border-bottom: 1px solid #2f9c95;
       padding-bottom: 4px;
-      margin-top: 1.5em;
-      color: #444;
-      font-size: 1.2em;
-      letter-spacing: 0.5px;
+    }
+
+    .job-title {
+      font-weight: bold;
+      margin: 6px 0 2px;
+      font-size: 15px;
+    }
+
+    .company {
+      font-style: italic;
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
+
+    .date-range {
+      float: right;
+      color: #666;
+      font-size: 13px;
+      margin-top: -32px;
+    }
+
+    ul {
+      margin: 4px 0 8px 20px;
+      padding: 0;
+      font-size: 14px;
+    }
+
+    .highlight ul {
+      margin: 2px 0 6px 20px;
+    }
+
+    .skills {
+      display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+    }
+
+    .skill {
+      width: 250px;
+    }
+
+    .bar-container {
+      background-color: #e0e0e0;
+      border-radius: 20px;
+      overflow: hidden;
+      height: 11px;
+    }
+
+    .bar {
+      height: 11px;
+      background-color: #2f9c95;
     }
 
     p {
-      margin: 6px 0;
-      color: #222;
-      font-size: 1em;
-      line-height: 1.5;
+      margin: 4px 0 12px;
+      font-size: 14px;
     }
   </style>
 </head>
-
 <body>
-  <div class="a4-page">
-    <h1>James Miller</h1>
-    <p>44 Shirley Ave, West Chicago, IL 60185</p>
-    <p>jmiller@gmail.com | +1 563-456-6942</p>
 
-    <h2>Professional Summary</h2>
-    <p>Highly resourceful, flexible, innovative, and enthusiastic project manager...</p>
-
-    <h2>Employment History</h2>
-    <p><strong>IT Project Manager, Telecomunica Ltd</strong> — May 2017 - Current</p>
-    <p>Lead a team of technical staff. Planning and execution of projects.</p>
-
-    <p><strong>IT Technician, International Mobilities</strong> — Oct 2015 - Apr 2016</p>
-    <p>Operate and maintain information systems.</p>
-
-    <h2>Education</h2>
-    <p>BSc Computer Science, University of Birmingham</p>
-    <p>A-Levels: ICT, Maths, Biology, Washwood Heath College</p>
-
-    <h2>Honors</h2>
-    <p>Board Member Mensa, Birmingham</p>
+  <div class="header">
+    <h1>SARAH SMITH</h1>
+    <h2>Management Professional</h2>
+    <div class="contact">
+      4725 Sunnydale Lane, Plano, Texas, United States, 75071<br />
+      123-456-7890 · candylovers@email.com
+    </div>
   </div>
-</body>
 
+  <div class="section">
+    <p><strong>Management Professional</strong> with 2+ years of experience. Adept at guiding teams through complex projects while balancing the priorities of each department. Well-versed in major scheduling and management software programs. Master of Science in Management.</p>
+  </div>
+
+  <div class="section">
+    <h3>Professional Experience</h3>
+
+    <div>
+      <div class="job-title">Managed Coordinator</div>
+      <div class="company">Delta Graphic Design</div>
+      <div class="date-range">March 2021 – Present</div>
+      <ul>
+        <li>Assisted teams of graphic artists, copywriters, and other creative professionals to lead each phase of production.</li>
+        <li>Monitored project performance data; reports sent to ensure consistent work quality.</li>
+        <li>Led monthly project evaluations.</li>
+        <li>Set realistic project scheduling and budgeting goals.</li>
+      </ul>
+    </div>
+
+    <div class="highlight">
+      <strong>Highlights:</strong>
+      <ul>
+        <li>Negotiated new vendor contracts, reducing average project cost by more than $5,000</li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="job-title">Management Associate</div>
+      <div class="company">Advance Technology</div>
+      <div class="date-range">November 2020 – March 2021</div>
+      <ul>
+        <li>Researched new scheduling techniques and project management tools.</li>
+        <li>Generated insights reports to improve future management decisions.</li>
+        <li>Drafted personnel training documentation for new employees.</li>
+        <li>Developed people-first systems to encourage team input on each project’s resources and challenges.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Education</h3>
+    <p><strong>Houston School of Business | Houston, TX</strong><br>
+    Master of Science in Management – September 2021</p>
+
+    <p><strong>Midwestern Institute of Business | MI</strong><br>
+    Bachelor of Science in Business – September 2019</p>
+
+    <p><strong>HR Institute of America</strong><br>
+    Certified Project Manager – May 2021</p>
+  </div>
+
+  <div class="section">
+    <h3>Key Skills</h3>
+    <div class="skills">
+      <div class="skill">
+        <strong>Conflict Management</strong>
+        <div class="bar-container"><div class="bar" style="width: 90%;"></div></div>
+      </div>
+      <div class="skill">
+        <strong>Team Management & Mediation</strong>
+        <div class="bar-container"><div class="bar" style="width: 80%;"></div></div>
+      </div>
+      <div class="skill">
+        <strong>Project Scheduling</strong>
+        <div class="bar-container"><div class="bar" style="width: 85%;"></div></div>
+      </div>
+      <div class="skill">
+        <strong>Vendor Contract Negotiation</strong>
+        <div class="bar-container"><div class="bar" style="width: 70%;"></div></div>
+      </div>
+    </div>
+  </div>
+
+</body>
 </html>
