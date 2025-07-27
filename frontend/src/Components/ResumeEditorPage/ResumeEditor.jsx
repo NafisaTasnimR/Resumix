@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import QuestionBox from './QuestionBox';
 import Preview from './Preview';
 
@@ -10,7 +11,16 @@ const questions = [
 ];
 
 const ResumeEditor = () => {
-  const [title, setTitle] = useState('Untitled');
+  const location = useLocation();
+  const renderedHtml = location.state?.rawTemplate || "";
+  const templateCss = location.state?.templateCss || "";
+  console.log("Router state:", location.state);
+
+
+  console.log("Rendered HTML:", renderedHtml);
+  const titleFromTemplate = location.state?.templateName || "Untitled";
+
+  const [title, setTitle] = useState(titleFromTemplate);
   const [titleDropdownOpen, setTitleDropdownOpen] = useState(false);
 
   // Lifted state for answers and current question
@@ -53,13 +63,20 @@ const ResumeEditor = () => {
           current={current}
           setCurrent={setCurrent}
           answers={answers}
-          onAnswerChange={handleAnswerChange}
+          //onAnswerChange={handleAnswerChange}
+          onAnswerChange={(value) => {
+            const updated = [...answers];
+            updated[current] = value;
+            setAnswers(updated);
+          }}
           title={title}
         />
       </div>
       <Preview
         title={title}
         answers={answers}
+        renderedHtml={renderedHtml}
+        templateCss={templateCss}
       />
     </div>
   );
