@@ -1,94 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <title>Template 1 - James Miller</title>
+  <title>{{personalInfo.fullName}} – Resume</title>
   <style>
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #e5e5e5;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f4f4;
       margin: 0;
       padding: 40px 0;
     }
 
     .a4-page {
-      background: #fff;
+      background: white;
       width: 210mm;
       min-height: 297mm;
-      margin: 0 auto;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
-      padding: 30mm 22mm;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      padding: 30mm;
       box-sizing: border-box;
-      border-radius: 6px;
-      border: 1px solid #d1d1d1;
-      position: relative;
-      overflow: hidden;
+      border-radius: 8px;
     }
 
-    @media print {
-
-      body,
-      html {
-        background: none;
-        box-shadow: none;
-        padding: 0;
-      }
-
-      /* The .a4-page selector here is intended to override the screen styles for print media.
-         However, in your HTML, the main content is not wrapped in a <div class="a4-page">,
-         so these print-specific styles are not applied to any element.
-         To use these print styles, wrap your main content in a <div class="a4-page">. */
+    h1, h2 {
+      margin-bottom: 8px;
+      color: #2c3e50;
     }
 
-    h1 {
-      color: #2e6c80;
-      font-size: 2.2em;
-      margin-bottom: 0.2em;
-      letter-spacing: 1px;
+    section {
+      margin-bottom: 24px;
     }
 
-    h2 {
-      border-bottom: 1px solid #e0e0e0;
-      padding-bottom: 4px;
-      margin-top: 1.5em;
-      color: #444;
-      font-size: 1.2em;
-      letter-spacing: 0.5px;
-    }
-
-    p {
+    .field {
       margin: 6px 0;
-      color: #222;
-      font-size: 1em;
       line-height: 1.5;
+    }
+
+    .label {
+      font-weight: bold;
     }
   </style>
 </head>
-
 <body>
   <div class="a4-page">
-    <h1>James Miller</h1>
-    <p>44 Shirley Ave, West Chicago, IL 60185</p>
-    <p>jmiller@gmail.com | +1 563-456-6942</p>
 
-    <h2>Professional Summary</h2>
-    <p>Highly resourceful, flexible, innovative, and enthusiastic project manager...</p>
+    <h1 data-edit-id="personalInfo.fullName">Nafisa</h1>
+    <p class="field" data-edit-id="personalInfo.professionalEmail">{{personalInfo.professionalEmail}}</p>
+    <p class="field" data-edit-id="personalInfo.phone">{{personalInfo.phone}}</p>
+    <p class="field" data-edit-id="personalInfo.address">{{personalInfo.address}}, {{personalInfo.city}}, {{personalInfo.country}} – {{personalInfo.zipCode}}</p>
 
-    <h2>Employment History</h2>
-    <p><strong>IT Project Manager, Telecomunica Ltd</strong> — May 2017 - Current</p>
-    <p>Lead a team of technical staff. Planning and execution of projects.</p>
+    <section>
+      <h2>Professional Summary</h2>
+      <p class="field" data-edit-id="additionalInfos[0].content">{{additionalInfos[0].content}}</p>
+    </section>
 
-    <p><strong>IT Technician, International Mobilities</strong> — Oct 2015 - Apr 2016</p>
-    <p>Operate and maintain information systems.</p>
+    <section>
+      <h2>Education</h2>
+      {{#each education}}
+      <div class="field">
+        <span data-edit-id="education[{{@index}}].degree">{{degree}}</span>,
+        <span data-edit-id="education[{{@index}}].fieldOfStudy">{{fieldOfStudy}}</span> –
+        <span data-edit-id="education[{{@index}}].institution">{{institution}}</span>
+        (<span data-edit-id="education[{{@index}}].startDate">{{startDate}}</span> to <span data-edit-id="education[{{@index}}].endDate">{{endDate}}</span>)
+      </div>
+      {{/each}}
+    </section>
 
-    <h2>Education</h2>
-    <p>BSc Computer Science, University of Birmingham</p>
-    <p>A-Levels: ICT, Maths, Biology, Washwood Heath College</p>
+    <section>
+      <h2>Experience</h2>
+      {{#each experience}}
+      <div class="field">
+        <span class="label" data-edit-id="experience[{{@index}}].jobTitle">{{jobTitle}}</span> –
+        <span data-edit-id="experience[{{@index}}].employerName">{{employerName}}</span><br />
+        <span data-edit-id="experience[{{@index}}].startDate">{{startDate}}</span> to <span data-edit-id="experience[{{@index}}].endDate">{{endDate}}</span>
+      </div>
+      {{/each}}
+    </section>
 
-    <h2>Honors</h2>
-    <p>Board Member Mensa, Birmingham</p>
+    <section>
+      <h2>Skills</h2>
+      <ul>
+        {{#each skills}}
+        <li data-edit-id="skills[{{@index}}].skillName">{{skillName}} – {{proficiencyLevel}}</li>
+        {{/each}}
+      </ul>
+    </section>
+
+    <section>
+      <h2>Projects</h2>
+      {{#each projects}}
+      <div class="field">
+        <span class="label" data-edit-id="projects[{{@index}}].title">{{title}}</span><br />
+        <span data-edit-id="projects[{{@index}}].description">{{description}}</span><br />
+        <a href="{{url}}" target="_blank" data-edit-id="projects[{{@index}}].url">{{url}}</a>
+      </div>
+      {{/each}}
+    </section>
+
   </div>
 </body>
-
 </html>
