@@ -1,11 +1,33 @@
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import './TemplatePreview.css';
-import ResumeEditor from '../ResumeEditorPage/ResumeEditor';
+import axios from 'axios';
+
 
 const TemplatePreview = ({ id, template }) => {
+  const navigate = useNavigate();
+
+  const handleClick = async () => {
+    try {
+      // Fetch raw HTML from backend
+      const res = await axios.get(`http://localhost:5000/preview/api/template/parts/${id}`);
+      const rawHTML = res.data.rawTemplate;
+      const templateCss = res.data.templateCss || "";
+
+      // Navigate with template HTML in router state
+      navigate('/resumebuilder', {
+        state: {
+          rawTemplate: rawHTML,
+          templateCss: templateCss,
+          templateName: template.name
+        }
+      });
+    } catch (error) {
+      console.error("Failed to load template HTML:", error);
+    }
+  };
+
   return (
-    <div className="template-preview">
-      <Link to={`/resumebuilder`}>
+    <div className="template-preview" onClick={handleClick}>
         <div className="iframe-container">
           <iframe
             src={`http://localhost:5000/preview/api/template/${id}`}
@@ -14,7 +36,6 @@ const TemplatePreview = ({ id, template }) => {
             scrolling ="no"
           ></iframe>
         </div>
-      </Link>
       <p>{template.name}</p>
     </div>
   );
