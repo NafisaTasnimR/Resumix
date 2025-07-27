@@ -26,15 +26,16 @@
   gap: 30px;
   align-items: flex-start;
 }
-
 .left-section {
   flex: 1;
   max-width: 300px;
+  display: flex;
+  flex-direction: column;
 }
 
-.photo-placeholder {
+.photo-placeholder3 {
   width: 100%;
-  height: 350px;
+  height: 280px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,25 +43,88 @@
   position: relative;
   padding: 10px;
   box-sizing: border-box;
-}
-
-.page-image {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  text-align: center;
-  height: auto;
-  width: 100%;
+  margin-bottom: 15px;
 }
 
 .page-img {
   max-width: 100%;
-  max-height: 300px;
+  max-height: 240px;
   width: auto;
   height: auto;
   object-fit: cover;
+  margin-bottom: 10px;
+}
+
+
+.sidebar-navigation3 {
+  width: 60%;
+  padding: 0 10px;
+}
+
+.nav-sections3 {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
   margin-bottom: 15px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.nav-list-item3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: rgba(164, 172, 134, 0.25);
+  border-bottom: 1px solid #000;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.nav-list-item3:last-child {
+  border-bottom: none;
+}
+
+.nav-list-item3:hover {
+  background-color: rgba(164, 172, 134, 0.15);
+}
+
+.nav-list-item3.active {
+  background-color: rgba(101, 109, 74, 0.2);
+  font-weight: 500;
+}
+
+.nav-item-text3 {
+  flex: 1;
+  font-size: 13px;
+}
+
+/* Skip Form Button */
+.skip-form-button3 {
+  width: 100%;
+  padding: 8px 12px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.skip-form-button3:hover {
+  background-color: #c82333;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
 }
 
 .image-label {

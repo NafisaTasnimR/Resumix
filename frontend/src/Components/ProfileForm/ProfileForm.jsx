@@ -13,7 +13,6 @@ import axios from 'axios';
 import TopBar from '../ResumeEditorPage/TopBar';
 import { useNavigate } from 'react-router-dom';
 
-
 const ProfileForm = () => {
   window.scrollTo(0, 0);
   const [currentPage, setCurrentPage] = useState('personal');
@@ -65,7 +64,6 @@ const ProfileForm = () => {
   ]);
   const [currentEducationIndex, setCurrentEducationIndex] = useState(0);
 
-
   const [skills, setSkills] = useState([
     {
       id: 1,
@@ -108,7 +106,6 @@ const ProfileForm = () => {
   ]);
   const [currentReferenceIndex, setCurrentReferenceIndex] = useState(0);
 
-
   const [hobbies, setHobbies] = useState([
     {
       id: 1,
@@ -122,7 +119,6 @@ const ProfileForm = () => {
   ]);
   const [currentHobbyIndex, setCurrentHobbyIndex] = useState(0);
 
-
   const [additionalInfos, setAdditionalInfos] = useState([
     {
       id: 1,
@@ -132,6 +128,29 @@ const ProfileForm = () => {
   ]);
   const [currentAdditionalInfoIndex, setCurrentAdditionalInfoIndex] = useState(0);
 
+  // Define navigation sections
+  const navigationSections = [
+    { id: 'personal', name: 'Personal Information' },
+    { id: 'experience', name: 'Experience' },
+    { id: 'education', name: 'Education' },
+    { id: 'skills', name: 'Skills' },
+    { id: 'achievements', name: 'Achievements' },
+    { id: 'references', name: 'References' },
+    { id: 'hobbies', name: 'Hobbies' },
+    { id: 'additional', name: 'Additional Information' }
+  ];
+
+  // Direct navigation function
+  const navigateToSection = (sectionId) => {
+    window.scrollTo(0, 0);
+    setCurrentPage(sectionId);
+  };
+
+  // Skip entire form function
+  const handleSkipForm = () => {
+    window.scrollTo(0, 0);
+    navigate('/postlogin/');
+  };
 
   const handleNextPage = () => {
     window.scrollTo(0, 0);
@@ -541,7 +560,6 @@ const ProfileForm = () => {
         }
       };
 
-
       const response = await axios.patch(
         'http://localhost:5000/info/update',
         payload,
@@ -661,7 +679,6 @@ const ProfileForm = () => {
     fetchUserData();
   }, []);
 
-
   return (
     <div className="resume-container">
 
@@ -672,7 +689,8 @@ const ProfileForm = () => {
 
       <div className="content-wrapper">
         <div className="left-section">
-          <div className="photo-placeholder">
+          
+          <div className="photo-placeholder3">
             {currentPage === 'personal' && (
               <div className="page-image">
                 <img
@@ -746,6 +764,26 @@ const ProfileForm = () => {
               </div>
             )}
           </div>
+
+          {/* Navigation Bar below image */}
+          <div className="sidebar-navigation3">
+            <div className="nav-sections3">
+              {navigationSections.map((section) => (
+                <div
+                  key={section.id}
+                  className={`nav-list-item3 ${currentPage === section.id ? 'active' : ''}`}
+                  onClick={() => navigateToSection(section.id)}
+                >
+                  <span className="nav-item-text3">{section.name}</span>
+                </div>
+              ))}
+            </div>
+            
+            {/* Skip button at the end */}
+            <button className="skip-form-button3" onClick={handleSkipForm}>
+              Skip Form
+            </button>
+          </div>
         </div>
 
         <div className="right-section">
@@ -795,11 +833,9 @@ const ProfileForm = () => {
           </button>
         )}
         {currentPage === 'additional' && (
-          //<Link to="/dashboard">
           <button className="nav-button submit-nav-button" onClick={handleSave}>
             Submit
           </button>
-          //</Link>
         )}
       </div>
     </div>
