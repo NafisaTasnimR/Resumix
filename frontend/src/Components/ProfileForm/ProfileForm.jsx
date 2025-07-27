@@ -19,6 +19,9 @@ const ProfileForm = () => {
   const [showAddressDetails, setShowAddressDetails] = useState(false);
   const navigate = useNavigate();
 
+  // Progress tracking state
+  const [completedSteps3, setCompletedSteps3] = useState(new Set());
+
   const [personalInfo, setPersonalInfo] = useState({
     fullName: '',
     professionalEmail: '',
@@ -140,8 +143,15 @@ const ProfileForm = () => {
     { id: 'additional', name: 'Additional Information' }
   ];
 
+  // Get current step number
+  const getCurrentStepNumber3 = () => {
+    return navigationSections.findIndex(section => section.id === currentPage) + 1;
+  };
+
   // Direct navigation function
   const navigateToSection = (sectionId) => {
+    // Mark current section as completed when navigating away
+    setCompletedSteps3(prev => new Set([...prev, currentPage]));
     window.scrollTo(0, 0);
     setCurrentPage(sectionId);
   };
@@ -153,6 +163,8 @@ const ProfileForm = () => {
   };
 
   const handleNextPage = () => {
+    // Mark current section as completed
+    setCompletedSteps3(prev => new Set([...prev, currentPage]));
     window.scrollTo(0, 0);
     if (currentPage === 'personal') {
       setCurrentPage('experience');
@@ -685,6 +697,28 @@ const ProfileForm = () => {
       <div className="resume-header">
         <TopBar />
         <div className="header-line"></div>
+
+        {/* Progress Bar */}
+        <div className="progress-container3">
+          <div className="progress-steps3">
+            {navigationSections.map((section, index) => {
+              const stepNumber = index + 1;
+              const isCompleted = completedSteps3.has(section.id);
+              const isCurrent = currentPage === section.id;
+              
+              return (
+                <div key={section.id} className="progress-step3">
+                  <div className={`step-circle3 ${isCompleted ? 'completed3' : ''} ${isCurrent ? 'current3' : ''}`}>
+                    {isCompleted ? '✓' : stepNumber}
+                  </div>
+                  <span className={`step-label3 ${isCompleted ? 'completed3' : ''} ${isCurrent ? 'current3' : ''}`}>
+                    {section.name}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       <div className="content-wrapper">
