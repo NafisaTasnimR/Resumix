@@ -247,7 +247,7 @@ const SubscriptionPage = () => {
                 textAlign: 'center',
                 marginBottom: '40px',
                 lineHeight: 1
-              }}>$0.70</div>
+              }}>$1.70</div>
 
               <div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', fontSize: '16px', lineHeight: 1.5, color: '#495057' }}>
@@ -260,7 +260,7 @@ const SubscriptionPage = () => {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', fontSize: '16px', lineHeight: 1.5, color: '#495057' }}>
                   <span style={{ color: '#28a745', fontWeight: 'bold', fontSize: '18px', marginTop: '2px' }}>✓</span>
-                  No Watermark
+                  Unlimited Downloads
                 </div>
               </div>
             </div>
@@ -378,7 +378,7 @@ const SubscriptionPage = () => {
               <div style={{
                 fontSize: '3rem',
                 marginBottom: '20px'
-              }}>✏️</div>
+              }}>✅</div>
               <h3 style={{
                 fontSize: '1.3rem',
                 fontWeight: 700,
