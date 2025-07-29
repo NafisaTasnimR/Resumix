@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{personalInfo.fullName}} – Resume</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 40px 0;
+    }
+
+    .a4-page {
+      background: white;
+      width: 210mm;
+      min-height: 297mm;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      padding: 30mm;
+      box-sizing: border-box;
+      border-radius: 8px;
+    }
+
+    h1, h2 {
+      margin-bottom: 8px;
+      color: #2c3e50;
+    }
+
+    section {
+      margin-bottom: 24px;
+    }
+
+    .field {
+      margin: 6px 0;
+      line-height: 1.5;
+    }
+
+    .label {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="a4-page">
+
+    <h1 data-edit-id="personalInfo.fullName">Nafisa</h1>
+    <p class="field" data-edit-id="personalInfo.professionalEmail">{{personalInfo.professionalEmail}}</p>
+    <p class="field" data-edit-id="personalInfo.phone">{{personalInfo.phone}}</p>
+    <p class="field" data-edit-id="personalInfo.address">{{personalInfo.address}}, {{personalInfo.city}}, {{personalInfo.country}} – {{personalInfo.zipCode}}</p>
+
+    <section>
+      <h2>Professional Summary</h2>
+      <p class="field" data-edit-id="additionalInfos[0].content">{{additionalInfos[0].content}}</p>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      {{#each education}}
+      <div class="field">
+        <span data-edit-id="education[{{@index}}].degree">{{degree}}</span>,
+        <span data-edit-id="education[{{@index}}].fieldOfStudy">{{fieldOfStudy}}</span> –
+        <span data-edit-id="education[{{@index}}].institution">{{institution}}</span>
+        (<span data-edit-id="education[{{@index}}].startDate">{{startDate}}</span> to <span data-edit-id="education[{{@index}}].endDate">{{endDate}}</span>)
+      </div>
+      {{/each}}
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+      {{#each experience}}
+      <div class="field">
+        <span class="label" data-edit-id="experience[{{@index}}].jobTitle">{{jobTitle}}</span> –
+        <span data-edit-id="experience[{{@index}}].employerName">{{employerName}}</span><br />
+        <span data-edit-id="experience[{{@index}}].startDate">{{startDate}}</span> to <span data-edit-id="experience[{{@index}}].endDate">{{endDate}}</span>
+      </div>
+      {{/each}}
+    </section>
+
+    <section>
+      <h2>Skills</h2>
+      <ul>
+        {{#each skills}}
+        <li data-edit-id="skills[{{@index}}].skillName">{{skillName}} – {{proficiencyLevel}}</li>
+        {{/each}}
+      </ul>
+    </section>
+
+    <section>
+      <h2>Projects</h2>
+      {{#each projects}}
+      <div class="field">
+        <span class="label" data-edit-id="projects[{{@index}}].title">{{title}}</span><br />
+        <span data-edit-id="projects[{{@index}}].description">{{description}}</span><br />
+        <a href="{{url}}" target="_blank" data-edit-id="projects[{{@index}}].url">{{url}}</a>
+      </div>
+      {{/each}}
+    </section>
+
+  </div>
+</body>
+</html>

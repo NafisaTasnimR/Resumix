@@ -411,7 +411,7 @@
   height: 600px;
   background: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-  padding: 2rem;
+  /*padding: 2rem;*/
   box-sizing: border-box;
   border-radius: 8px;
   overflow-y: auto;
@@ -423,3 +423,4 @@
   /* wrap the text on overflow */
   word-wrap: break-word;
 }
+

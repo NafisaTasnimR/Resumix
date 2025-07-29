@@ -1,27 +1,58 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-const Preview = ({ title, answers = [] }) => (
-  <div className="preview">
-    <div className="preview-box">
-      <h1 className="resume-title">{title}</h1>
-      <section>
-        <h2>Work Experience</h2>
-        <p>{answers[0]?.trim() ? answers[0] : <span className="placeholder">No work experience added yet.</span>}</p>
-      </section>
-      <section>
-        <h2>Education</h2>
-        <p>{answers[1]?.trim() ? answers[1] : <span className="placeholder">No education details added yet.</span>}</p>
-      </section>
-      <section>
-        <h2>Skills</h2>
-        <p>{answers[2]?.trim() ? answers[2] : <span className="placeholder">No skills added yet.</span>}</p>
-      </section>
-      <section>
-        <h2>Projects</h2>
-        <p>{answers[3]?.trim() ? answers[3] : <span className="placeholder">No projects added yet.</span>}</p>
-      </section>
+const Preview = ({ renderedHtml = "", templateCss = "" }) => {
+  const iframeRef = useRef(null);
+  const [scaleFactor, setScaleFactor] = useState(1);
+
+  useEffect(() => {
+    if (iframeRef.current) {
+      const doc = iframeRef.current.contentDocument;
+      if (doc) {
+        doc.open();
+        doc.write(`
+          <html>
+            <head>
+              <style>${templateCss}</style>
+              <style>
+                html, body { margin: 0; padding: 0; overflow: hidden; }
+                #template-root { transform-origin: top left; }
+              </style>
+            </head>
+            <body>
+              <div id="template-root">${renderedHtml}</div>
+            </body>
+          </html>
+        `);
+        doc.close();
+
+        iframeRef.current.onload = () => {
+          const root = doc.getElementById("template-root");
+          const height = root.scrollHeight || 1000;
+          const maxPreviewHeight = 600;
+          const scale = Math.min(1, maxPreviewHeight / height);
+          root.style.transform = `scale(${scale})`;
+          setScaleFactor(scale); // Optional if you want to display scale info
+        };
+      }
+    }
+  }, [renderedHtml, templateCss]);
+
+  return (
+    <div className="preview">
+      <div className="preview-box" style={{ width: "100%", height: "600px", overflow: "hidden" }}>
+        <iframe
+          title="Resume Preview"
+          ref={iframeRef}
+          style={{
+            width: "100%",
+            height: "100%",
+            border: "none",
+            background: "#fff",
+          }}
+        />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default Preview;
