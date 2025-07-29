@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Smart Resume</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0 auto;
+            padding: 0 40px;
+            max-width: 900px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 13px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            color: #003b6f;
+            margin-top: 20px;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: #555;
+        }
+
+        .section {
+            margin-bottom: 15px;
+        }
+
+        .section h2 {
+            font-size: 20px;
+            border-bottom: 2px solid #003b6f;
+            padding-bottom: 5px;
+            color: #003b6f;
+            margin-bottom: 5px;
+        }
+
+        .section ul {
+            list-style: disc;
+            padding-left: 20px;
+        }
+
+        .entry {
+            margin-bottom: 3px;
+        }
+
+        .entry h3 {
+            margin-bottom: 2px;
+            font-size: 16px;
+        }
+
+        .entry p {
+            margin: 2px 0;
+            font-size: 14px;
+        }
+
+        .tags {
+            font-style: italic;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="resume">
+        <div class="header">
+            <h1>JOHN DOE</h1>
+            <p>john.doe@example.com | +1-234-567-890 | New York, USA</p>
+        </div>
+
+        <div class="section">
+            <p>
+                Results-driven software engineer with 5+ years of experience in designing, developing,
+                and maintaining scalable web applications. Adept in both frontend and backend development
+                with a strong foundation in system architecture and agile methodologies.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Education</h2>
+            <div class="entry">
+                <h3>Bachelor of Science in Computer Science - Stanford University</h3>
+                <p>Stanford, CA | 2014 to 2018</p>
+            </div>
+            <div class="entry">
+                <h3>High School Diploma - Lincoln High School</h3>
+                <p>San Francisco, CA | 2010 to 2014</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Experience</h2>
+            <div class="entry">
+                <h3>Senior Software Engineer at TechCorp</h3>
+                <p>New York, NY | 2019 to Present</p>
+                <p>Lead development of cloud-based applications, mentored junior developers, and contributed to system
+                    design decisions.</p>
+            </div>
+            <div class="entry">
+                <h3>Software Engineer Intern at WebWorks</h3>
+                <p>Palo Alto, CA | Summer 2017</p>
+                <p>Assisted in developing frontend features for an enterprise analytics platform using Angular and
+                    D3.js.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Skills</h2>
+            <ul>
+                <li><strong>React</strong> (Advanced, 4 years)<br>SPA development using Redux, hooks, and
+                    component-based architecture.</li>
+                <li><strong>Python</strong> (Intermediate, 3 years)<br>Used for scripting, automation, and building
+                    RESTful APIs with Flask.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Achievements</h2>
+            <div class="entry">
+                <h3>Top Innovator Award - TechCorp</h3>
+                <p class="tags">Innovation, June 2022</p>
+                <p>Recognized for leading the development of a microservices-based reporting tool that improved data
+                    pipeline efficiency by 40%.</p>
+            </div>
+            <div class="entry">
+                <h3>Hackathon Champion - CodeFest</h3>
+                <p class="tags">Team Leadership, April 2021</p>
+                <p>Led a team of 4 to develop an AI-based task scheduler and won 1st place among 80+ participants.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Projects</h2>
+            <div class="entry">
+                <h3>TaskManager Pro</h3>
+                <p>Developed a productivity tool to manage tasks and track progress in teams with integrated Kanban
+                    board and analytics dashboard.</p>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
