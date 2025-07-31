@@ -35,7 +35,7 @@ const Achievements = ({
         </div>
 
         <div className="field-group">
-          <label>Achievement Title:</label>
+          <label className="required">Achievement Title:</label>
           <input 
             type="text" 
             className="input-field" 
@@ -46,7 +46,7 @@ const Achievements = ({
         </div>
 
         <div className="field-group">
-          <label>Organization/Institution:</label>
+          <label className="required">Organization/Institution:</label>
           <input 
             type="text" 
             className="input-field" 
