@@ -36,7 +36,7 @@ const References = ({
 
         <div className="field-row">
           <div className="field-group half-width">
-            <label>First Name:</label>
+            <label className="required">First Name:</label>
             <input 
               type="text" 
               className="input-field" 
@@ -46,7 +46,7 @@ const References = ({
             />
           </div>
           <div className="field-group half-width">
-            <label>Last Name:</label>
+            <label className="required">Last Name:</label>
             <input 
               type="text" 
               className="input-field" 
@@ -69,7 +69,7 @@ const References = ({
         </div>
 
         <div className="field-group">
-          <label>Company/Organization:</label>
+          <label className="required">Company/Organization:</label>
           <input 
             type="text" 
             className="input-field" 
