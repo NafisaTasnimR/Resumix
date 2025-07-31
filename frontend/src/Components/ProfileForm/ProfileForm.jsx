@@ -14,13 +14,17 @@ import TopBar from '../ResumeEditorPage/TopBar';
 import { useNavigate } from 'react-router-dom';
 
 const ProfileForm = () => {
-  window.scrollTo(0, 0);
+  // Move scroll to useEffect to only run on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [currentPage, setCurrentPage] = useState('personal');
   const [showAddressDetails, setShowAddressDetails] = useState(false);
   const navigate = useNavigate();
 
-  // Progress tracking state
-  const [completedSteps3, setCompletedSteps3] = useState(new Set());
+  // Track if this is update mode
+  const [isUpdateMode, setIsUpdateMode] = useState(false);
 
   const [personalInfo, setPersonalInfo] = useState({
     fullName: '',
@@ -131,41 +135,107 @@ const ProfileForm = () => {
   ]);
   const [currentAdditionalInfoIndex, setCurrentAdditionalInfoIndex] = useState(0);
 
-  // Define navigation sections
+  // Define navigation sections with icons
   const navigationSections = [
-    { id: 'personal', name: 'Personal Information' },
-    { id: 'experience', name: 'Experience' },
-    { id: 'education', name: 'Education' },
-    { id: 'skills', name: 'Skills' },
-    { id: 'achievements', name: 'Achievements' },
-    { id: 'references', name: 'References' },
-    { id: 'hobbies', name: 'Hobbies' },
-    { id: 'additional', name: 'Additional Information' }
+    { id: 'personal', name: 'Personal Information', icon: '👤' },
+    { id: 'experience', name: 'Experience', icon: '💼' },
+    { id: 'education', name: 'Education', icon: '🎓' },
+    { id: 'skills', name: 'Skills', icon: '🛠️' },
+    { id: 'achievements', name: 'Achievements', icon: '🏆' },
+    { id: 'references', name: 'References', icon: '👥' },
+    { id: 'hobbies', name: 'Hobbies', icon: '🎨' },
+    { id: 'additional', name: 'Additional Information', icon: '➕' }
   ];
 
-  // Get current step number
-  const getCurrentStepNumber3 = () => {
-    return navigationSections.findIndex(section => section.id === currentPage) + 1;
+  // Validation functions for each section
+  const isPersonalInfoComplete = () => {
+    if (isUpdateMode) return true; // No validation in update mode
+    return personalInfo.fullName.trim() && 
+           personalInfo.professionalEmail.trim() && 
+           personalInfo.phone.trim();
+  };
+
+  const isExperienceComplete = () => {
+    if (isUpdateMode) return true;
+    // Check if at least one experience has required fields filled
+    return experiences.some(exp => 
+      exp.employerName.trim() && 
+      exp.jobTitle.trim() && 
+      exp.startDate.trim()
+    );
+  };
+
+  const isEducationComplete = () => {
+    if (isUpdateMode) return true;
+    return educations.some(edu => 
+      edu.institution.trim() && 
+      edu.degree.trim()
+    );
+  };
+
+  const isSkillsComplete = () => {
+    if (isUpdateMode) return true;
+    return skills.some(skill => skill.skillName.trim());
+  };
+
+  const isAchievementsComplete = () => {
+    if (isUpdateMode) return true;
+    return achievements.some(ach => 
+      ach.title.trim() && 
+      ach.organization.trim()
+    );
+  };
+
+  const isReferencesComplete = () => {
+    if (isUpdateMode) return true;
+    return references.some(ref => 
+      ref.firstName.trim() && 
+      ref.lastName.trim() && 
+      ref.company.trim()
+    );
+  };
+
+  const isHobbiesComplete = () => {
+    if (isUpdateMode) return true;
+    return hobbies.some(hobby => hobby.hobbyName.trim());
+  };
+
+  const isAdditionalInfoComplete = () => {
+    if (isUpdateMode) return true;
+    return additionalInfos.some(info => 
+      info.sectionTitle.trim() && 
+      info.content.trim()
+    );
+  };
+
+  // Check completion status for each section
+  const getSectionCompletionStatus = (sectionId) => {
+    switch (sectionId) {
+      case 'personal': return isPersonalInfoComplete();
+      case 'experience': return isExperienceComplete();
+      case 'education': return isEducationComplete();
+      case 'skills': return isSkillsComplete();
+      case 'achievements': return isAchievementsComplete();
+      case 'references': return isReferencesComplete();
+      case 'hobbies': return isHobbiesComplete();
+      case 'additional': return isAdditionalInfoComplete();
+      default: return false;
+    }
   };
 
   // Direct navigation function
   const navigateToSection = (sectionId) => {
-    // Mark current section as completed when navigating away
-    setCompletedSteps3(prev => new Set([...prev, currentPage]));
-    window.scrollTo(0, 0);
     setCurrentPage(sectionId);
+    // Only scroll when actually changing pages
+    setTimeout(() => window.scrollTo(0, 0), 100);
   };
 
   // Skip entire form function
   const handleSkipForm = () => {
-    window.scrollTo(0, 0);
     navigate('/postlogin/');
   };
 
   const handleNextPage = () => {
-    // Mark current section as completed
-    setCompletedSteps3(prev => new Set([...prev, currentPage]));
-    window.scrollTo(0, 0);
     if (currentPage === 'personal') {
       setCurrentPage('experience');
     } else if (currentPage === 'experience') {
@@ -181,10 +251,11 @@ const ProfileForm = () => {
     } else if (currentPage === 'hobbies') {
       setCurrentPage('additional');
     }
+    // Scroll after state update
+    setTimeout(() => window.scrollTo(0, 0), 100);
   };
 
   const handlePrevPage = () => {
-    window.scrollTo(0, 0);
     if (currentPage === 'experience') {
       setCurrentPage('personal');
     } else if (currentPage === 'education') {
@@ -200,6 +271,8 @@ const ProfileForm = () => {
     } else if (currentPage === 'additional') {
       setCurrentPage('hobbies');
     }
+    // Scroll after state update
+    setTimeout(() => window.scrollTo(0, 0), 100);
   };
 
   const handleSubmit = () => {
@@ -613,6 +686,11 @@ const ProfileForm = () => {
           return
         };
 
+        // Check if user has existing data (update mode)
+        if (resume.personalInfo && resume.personalInfo.fullName) {
+          setIsUpdateMode(true);
+        }
+
         const formatDate = (date) => {
           if (!date) return '';
           const d = new Date(date);
@@ -698,18 +776,20 @@ const ProfileForm = () => {
         <TopBar />
         <div className="header-line"></div>
 
-        {/* Progress Bar */}
+        {/* Progress Bar with Icons and Tooltips */}
         <div className="progress-container3">
           <div className="progress-steps3">
-            {navigationSections.map((section, index) => {
-              const stepNumber = index + 1;
-              const isCompleted = completedSteps3.has(section.id);
+            {navigationSections.map((section) => {
+              const isCompleted = getSectionCompletionStatus(section.id);
               const isCurrent = currentPage === section.id;
               
               return (
                 <div key={section.id} className="progress-step3">
-                  <div className={`step-circle3 ${isCompleted ? 'completed3' : ''} ${isCurrent ? 'current3' : ''}`}>
-                    {isCompleted ? '✓' : stepNumber}
+                  <div 
+                    className={`step-circle3 ${isCompleted ? 'completed3' : ''} ${isCurrent ? 'current3' : ''}`}
+                    title={section.name}
+                  >
+                    {section.icon}
                   </div>
                   <span className={`step-label3 ${isCompleted ? 'completed3' : ''} ${isCurrent ? 'current3' : ''}`}>
                     {section.name}

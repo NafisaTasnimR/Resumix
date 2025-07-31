@@ -60,12 +60,19 @@
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
   margin-bottom: 6px;
   transition: all 0.3s ease;
   background-color: #e0e0e0;
   color: #999;
   border: 2px solid #e0e0e0;
+  cursor: pointer;
+  position: relative;
+}
+
+.step-circle3:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .step-circle3.completed3 {
@@ -80,22 +87,9 @@
   border-color: #007bff;
 }
 
+/* Remove the step label completely */
 .step-label3 {
-  font-size: 11px;
-  font-weight: 500;
-  color: #666;
-  max-width: 90px;
-  line-height: 1.2;
-}
-
-.step-label3.completed3 {
-  color: #28a745;
-  font-weight: 600;
-}
-
-.step-label3.current3 {
-  color: #007bff;
-  font-weight: 600;
+  display: none;
 }
 
 .content-wrapper {
@@ -261,6 +255,13 @@
   font-size: 16px;
   color: #333;
   font-weight: 500;
+}
+
+/* Mandatory field indicator */
+.field-group label.required::after {
+  content: " *";
+  color: #dc3545;
+  font-weight: bold;
 }
 
 .input-field {
@@ -511,14 +512,14 @@ select.input-field {
 }
 
 .experience-navigation {
-  margin-bottom: 0px;
+  margin-bottom: 20px;
 }
 
 .experience-tabs {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .tab-button {
