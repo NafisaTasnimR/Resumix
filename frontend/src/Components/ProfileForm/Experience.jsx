@@ -12,9 +12,7 @@ const Experience = ({
 
   return (
     <>
-     
       <div className="personal-info-header">
-        
         <h2>Experience </h2>
         <div className="info-line3"></div>
       </div>
@@ -37,7 +35,7 @@ const Experience = ({
         </div>
 
         <div className="field-group">
-          <label>Employer Name:</label>
+          <label className="required">Employer Name:</label>
           <input 
             type="text" 
             className="input-field" 
@@ -48,7 +46,7 @@ const Experience = ({
         </div>
 
         <div className="field-group">
-          <label>Job Title:</label>
+          <label className="required">Job Title:</label>
           <input 
             type="text" 
             className="input-field" 
@@ -83,7 +81,7 @@ const Experience = ({
 
         <div className="field-row">
           <div className="field-group half-width">
-            <label>Start Date</label>
+            <label className="required">Start Date</label>
             <input 
               type="date" 
               className="input-field" 

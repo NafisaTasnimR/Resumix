@@ -12,9 +12,7 @@ const Education = ({
 
   return (
     <>
-    
       <div className="personal-info-header">
-         
         <h2>Education </h2>
         <div className="info-line3"></div>
       </div>
@@ -37,7 +35,7 @@ const Education = ({
         </div>
 
         <div className="field-group">
-          <label>School Name:</label>
+          <label className="required">School Name:</label>
           <input 
             type="text" 
             className="input-field" 
@@ -48,7 +46,7 @@ const Education = ({
         </div>
 
         <div className="field-group">
-          <label>Degree:</label>
+          <label className="required">Degree:</label>
           <input 
             type="text" 
             className="input-field" 
