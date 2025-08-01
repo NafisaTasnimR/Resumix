@@ -84,7 +84,7 @@ const ProfileForm = () => {
       organization: '',
       dateReceived: '',
       category: '',
-      customCategory: '',
+      //customCategory: '',
       description: '',
       website: ''
     }
@@ -101,7 +101,7 @@ const ProfileForm = () => {
       referenceEmail: '',
       phone: '',
       relationship: '',
-      customRelationship: '',
+      //customRelationship: '',
       description: '',
       permissionToContact: false
     }
@@ -274,7 +274,7 @@ const ProfileForm = () => {
       organization: '',
       dateReceived: '',
       category: '',
-      customCategory: '',
+      //customCategory: '',
       description: '',
       website: ''
     };
@@ -631,11 +631,17 @@ const ProfileForm = () => {
         if (Array.isArray(resume.achievements)) {
           setAchievements(
             resume.achievements.map((a) => ({
-              ...a,
+              id: a.id || Date.now(), // fallback ID if missing
+              title: a.title || '',
+              organization: a.organization || '',
               dateReceived: formatDate(a.dateReceived),
+              category: a.category || '',  // ✅ ensure it always exists
+              description: a.description || '',
+              website: a.website || ''
             }))
           );
         }
+
 
         if (Array.isArray(resume.references)) {
           setReferences(resume.references);

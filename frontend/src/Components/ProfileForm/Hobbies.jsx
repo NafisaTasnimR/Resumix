@@ -41,7 +41,7 @@ const Hobbies = ({
           <input 
             type="text" 
             className="input-field" 
-            value={currentHobby.hobbyName}
+            value={currentHobby?.hobbyName || ''}
             onChange={(e) => updateHobby('hobbyName', e.target.value)}
             placeholder="Photography" 
           />
@@ -52,7 +52,7 @@ const Hobbies = ({
             <label>Experience Level:</label>
             <select 
               className="input-field" 
-              value={currentHobby.experienceLevel}
+              value={currentHobby?.experienceLevel || ''}
               onChange={(e) => updateHobby('experienceLevel', e.target.value)}
             >
               <option value="">Select Level</option>
@@ -67,7 +67,7 @@ const Hobbies = ({
             <input 
               type="number" 
               className="input-field" 
-              value={currentHobby.yearsInvolved}
+              value={currentHobby?.yearsInvolved ?? 0}
               onChange={(e) => updateHobby('yearsInvolved', e.target.value)}
               placeholder="5" 
               min="0"
@@ -80,7 +80,7 @@ const Hobbies = ({
           <label>Category:</label>
           <select 
             className="input-field" 
-            value={currentHobby.category}
+            value={currentHobby?.category || ''}
             onChange={(e) => updateHobby('category', e.target.value)}
           >
             <option value="">Select Category</option>
@@ -103,7 +103,7 @@ const Hobbies = ({
           <textarea 
             className="input-field textarea-field" 
             rows="4" 
-            value={currentHobby.hobbyDescription}
+            value={currentHobby?.hobbyDescription || ''}
             onChange={(e) => updateHobby('hobbyDescription', e.target.value)}
             placeholder="Passionate about landscape and portrait photography. Enjoy capturing natural beauty and human emotions through my lens. Have participated in several local exhibitions and love experimenting with different techniques."
           ></textarea>
@@ -114,7 +114,7 @@ const Hobbies = ({
           <input 
             type="text" 
             className="input-field" 
-            value={currentHobby.achievements}
+            value={currentHobby?.achievements || ''}
             onChange={(e) => updateHobby('achievements', e.target.value)}
             placeholder="Winner of Local Photography Contest 2023" 
           />
