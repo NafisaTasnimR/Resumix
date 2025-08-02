@@ -21,6 +21,7 @@ const ProfileForm = () => {
 
   const [currentPage, setCurrentPage] = useState('personal');
   const [showAddressDetails, setShowAddressDetails] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
   // Track if this is update mode
@@ -135,17 +136,8 @@ const ProfileForm = () => {
   ]);
   const [currentAdditionalInfoIndex, setCurrentAdditionalInfoIndex] = useState(0);
 
-  // Define navigation sections with icons
-  const navigationSections = [
-    { id: 'personal', name: 'Personal Information', icon: '👤' },
-    { id: 'experience', name: 'Experience', icon: '💼' },
-    { id: 'education', name: 'Education', icon: '🎓' },
-    { id: 'skills', name: 'Skills', icon: '🛠️' },
-    { id: 'achievements', name: 'Achievements', icon: '🏆' },
-    { id: 'references', name: 'References', icon: '👥' },
-    { id: 'hobbies', name: 'Hobbies', icon: '🎨' },
-    { id: 'additional', name: 'Additional Information', icon: '➕' }
-  ];
+  // Define navigation sections with Flaticon icons
+  
 
   // Validation functions for each section
   const isPersonalInfoComplete = () => {
@@ -771,6 +763,62 @@ const ProfileForm = () => {
 
   return (
     <div className="resume-container">
+      {/* Hamburger Menu Button */}
+      <button 
+        className="hamburger-menu"
+        onClick={() => setIsSidebarOpen(true)}
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      {/* Sliding Sidebar */}
+      {isSidebarOpen && (
+        <>
+          <div 
+            className="sidebar-overlay" 
+            onClick={() => setIsSidebarOpen(false)}
+          ></div>
+          <div className="sliding-sidebar">
+            <div className="sidebar-header">
+              <h3>Navigation</h3>
+              <button 
+                className="close-sidebar"
+                onClick={() => setIsSidebarOpen(false)}
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className="sidebar-content">
+              <div className="nav-sections-slide">
+                {navigationSections.map((section) => (
+                  <div
+                    key={section.id}
+                    className={`nav-list-item-slide ${currentPage === section.id ? 'active' : ''}`}
+                    onClick={() => {
+                      navigateToSection(section.id);
+                      setIsSidebarOpen(false);
+                    }}
+                  >
+                    <img 
+                      src={section.icon} 
+                      alt={section.alt}
+                      className="nav-icon-img"
+                    />
+                    <span className="nav-item-text-slide">{section.name}</span>
+                  </div>
+                ))}
+              </div>
+              
+              <button className="skip-form-button-slide" onClick={handleSkipForm}>
+                Skip Form
+              </button>
+            </div>
+          </div>
+        </>
+      )}
 
       <div className="resume-header">
         <TopBar />
@@ -789,7 +837,11 @@ const ProfileForm = () => {
                     className={`step-circle3 ${isCompleted ? 'completed3' : ''} ${isCurrent ? 'current3' : ''}`}
                     title={section.name}
                   >
-                    {section.icon}
+                    <img 
+                      src={section.icon} 
+                      alt={section.alt}
+                      className="progress-icon"
+                    />
                   </div>
                   <span className={`step-label3 ${isCompleted ? 'completed3' : ''} ${isCurrent ? 'current3' : ''}`}>
                     {section.name}
@@ -803,7 +855,6 @@ const ProfileForm = () => {
 
       <div className="content-wrapper">
         <div className="left-section">
-          
           <div className="photo-placeholder3">
             {currentPage === 'personal' && (
               <div className="page-image">
@@ -877,26 +928,6 @@ const ProfileForm = () => {
                 />
               </div>
             )}
-          </div>
-
-          {/* Navigation Bar below image */}
-          <div className="sidebar-navigation3">
-            <div className="nav-sections3">
-              {navigationSections.map((section) => (
-                <div
-                  key={section.id}
-                  className={`nav-list-item3 ${currentPage === section.id ? 'active' : ''}`}
-                  onClick={() => navigateToSection(section.id)}
-                >
-                  <span className="nav-item-text3">{section.name}</span>
-                </div>
-              ))}
-            </div>
-            
-            {/* Skip button at the end */}
-            <button className="skip-form-button3" onClick={handleSkipForm}>
-              Skip Form
-            </button>
           </div>
         </div>
 

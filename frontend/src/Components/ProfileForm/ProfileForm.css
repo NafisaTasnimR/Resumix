@@ -82,14 +82,227 @@
 }
 
 .step-circle3.current3 {
-  background-color: #007bff;
+  background-color: #0553a6;
   color: white;
-  border-color: #007bff;
+  border-color: #0553a6;
+}
+
+/* Progress bar icon styling */
+.progress-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(50%);
+  transition: filter 0.3s ease;
+}
+
+.step-circle3.completed3 .progress-icon {
+  filter: brightness(0) saturate(100%) invert(100%);
+}
+
+.step-circle3.current3 .progress-icon {
+  filter: brightness(0) saturate(100%) invert(100%);
 }
 
 /* Remove the step label completely */
 .step-label3 {
   display: none;
+}
+
+/* Hamburger Menu Button */
+.hamburger-menu {
+  position: fixed;
+  top: 80px;
+  left: 20px;
+  background: rgba(164, 172, 134, 0.9);
+  border: none;
+  border-radius: 8px;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.3s ease;
+}
+
+.hamburger-menu:hover {
+  background: rgba(164, 172, 134, 1);
+  transform: scale(1.05);
+}
+
+.hamburger-menu span {
+  width: 20px;
+  height: 2px;
+  background: #333;
+  border-radius: 1px;
+  transition: all 0.3s ease;
+}
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1500;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Sliding Sidebar */
+.sliding-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 320px;
+  height: 100%;
+  background: #f8f9fa;
+  z-index: 2000;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  background: white;
+}
+
+.sidebar-header h3 {
+  font-size: 18px;
+  color: #333;
+  margin: 0;
+}
+
+.close-sidebar {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.close-sidebar:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.sidebar-content {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.nav-sections-slide {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.nav-list-item-slide {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 16px;
+  background-color: white;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #333;
+}
+
+.nav-list-item-slide:last-child {
+  border-bottom: none;
+}
+
+.nav-list-item-slide:hover {
+  background-color: rgba(164, 172, 134, 0.1);
+}
+
+.nav-list-item-slide.active {
+  background-color: rgba(164, 172, 134, 0.2);
+  font-weight: 600;
+  color: #2c5530;
+}
+
+.nav-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+/* Sidebar navigation icon styling */
+.nav-icon-img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(20%);
+  transition: filter 0.2s ease;
+}
+
+.nav-list-item-slide.active .nav-icon-img {
+  filter: brightness(0) saturate(100%) invert(30%);
+}
+
+.nav-item-text-slide {
+  flex: 1;
+  font-size: 14px;
+}
+
+.skip-form-button-slide {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: auto;
+}
+
+.skip-form-button-slide:hover {
+  background-color: #c82333;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
 }
 
 .content-wrapper {
@@ -129,77 +342,6 @@
   height: auto;
   object-fit: cover;
   margin-bottom: 10px;
-}
-
-.sidebar-navigation3 {
-  width: 65%;
-  padding: 0 5px;
-  margin: 0 auto;
-}
-
-.nav-sections3 {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin-bottom: 15px;
-  border: 1px solid #000;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.nav-list-item3 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  background-color: rgba(164, 172, 134, 0.25);
-  border-bottom: 1px solid #000;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: left;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.nav-list-item3:last-child {
-  border-bottom: none;
-}
-
-.nav-list-item3:hover {
-  background-color: rgba(164, 172, 134, 0.15);
-}
-
-.nav-list-item3.active {
-  background-color: rgba(101, 109, 74, 0.2);
-  font-weight: 700;
-}
-
-.nav-item-text3 {
-  flex: 1;
-  font-size: 13px;
-}
-
-.skip-form-button3 {
-  width: 100%;
-  padding: 8px 12px;
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.skip-form-button3:hover {
-  background-color: #c82333;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
 }
 
 .image-label {
@@ -641,4 +783,25 @@ select.input-field {
 
 .custom-dropdown.open .dropdown-arrow {
   transform: translateY(-50%) rotate(180deg);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sliding-sidebar {
+    width: 280px;
+  }
+  
+  .content-wrapper {
+    padding: 10px;
+  }
+  
+  .left-section {
+    flex: 0 0 300px;
+    max-width: 300px;
+  }
+  
+  .right-section {
+    flex: 1;
+    min-width: 300px;
+  }
 }
