@@ -137,7 +137,56 @@ const ProfileForm = () => {
   const [currentAdditionalInfoIndex, setCurrentAdditionalInfoIndex] = useState(0);
 
   // Define navigation sections with Flaticon icons
-  
+  const navigationSections = [
+    { 
+      id: 'personal', 
+      name: 'Personal Information', 
+      icon: '/personal-info_icon.png',  // Path to your Flaticon
+      alt: 'Personal Information Icon'
+    },
+    { 
+      id: 'experience', 
+      name: 'Experience', 
+      icon: '/experience_icon.png',     // Path to your Flaticon
+      alt: 'Experience Icon'
+    },
+    { 
+      id: 'education', 
+      name: 'Education', 
+      icon: '/education_icon.png',      // Path to your Flaticon
+      alt: 'Education Icon'
+    },
+    { 
+      id: 'skills', 
+      name: 'Skills', 
+      icon: '/skills_icon.png',         // Path to your Flaticon
+      alt: 'Skills Icon'
+    },
+    { 
+      id: 'achievements', 
+      name: 'Achievements', 
+      icon: '/achievements_icon.png',   // Path to your Flaticon
+      alt: 'Achievements Icon'
+    },
+    { 
+      id: 'references', 
+      name: 'References', 
+      icon: '/references_icon.png',     // Path to your Flaticon
+      alt: 'References Icon'
+    },
+    { 
+      id: 'hobbies', 
+      name: 'Hobbies', 
+      icon: '/hobbies_icon.png',        // Path to your Flaticon
+      alt: 'Hobbies Icon'
+    },
+    { 
+      id: 'additional', 
+      name: 'Additional Information', 
+      icon: '/additional_icon.png',     // Path to your Flaticon
+      alt: 'Additional Info Icon'
+    }
+  ];
 
   // Validation functions for each section
   const isPersonalInfoComplete = () => {
