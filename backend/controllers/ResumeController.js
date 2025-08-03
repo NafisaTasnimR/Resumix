@@ -76,7 +76,49 @@ const updateResume = async (req, res) => {
     }
 };
 
+const getResumeById = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const { resumeId } = req.params;
 
+        const userEmail = req.user.email; 
+
+        const resume = await ResumeModel.findById(resumeId);
+
+        if (!resume) {
+            return res.status(404).json({ message: 'Resume not found' });
+        }
+
+        if (resume.userEmail !== userEmail) {
+            return res.status(403).json({ message: 'Unauthorized access to this resume' });
+        }
+
+        res.status(200).json(resume);
+    } catch (error) {
+        console.error("Get Resume Error:", error);
+        res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+};
+
+const getAllResumes = async (req, res) => {
+    try {
+        const userEmail = req.user.email;
+
+        const resumes = await ResumeModel.find({ userEmail });
+
+        res.status(200).json(resumes);
+    } catch (error) {
+        console.error("Get All Resumes Error:", error);
+        res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+};
+
+module.exports = {
+    createResume,
+    updateResume,
+    getResumeById,
+    getAllResumes
+};          
 
 
  
