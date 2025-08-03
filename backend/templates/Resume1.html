@@ -45,23 +45,23 @@
   <div class="a4-page">
 
     <h1 data-edit-id="personalInfo.fullName">Nafisa</h1>
-    <p class="field" data-edit-id="personalInfo.professionalEmail">{{personalInfo.professionalEmail}}</p>
-    <p class="field" data-edit-id="personalInfo.phone">{{personalInfo.phone}}</p>
-    <p class="field" data-edit-id="personalInfo.address">{{personalInfo.address}}, {{personalInfo.city}}, {{personalInfo.country}} – {{personalInfo.zipCode}}</p>
+    <p class="field" data-edit-id="personalInfo.professionalEmail">nafisa@email.com</p>
+    <p class="field" data-edit-id="personalInfo.phone">012457899377</p>
+    <p class="field" data-edit-id="personalInfo.address">uttara, dhaka, bangladesh – 1230</p>
 
     <section>
       <h2>Professional Summary</h2>
-      <p class="field" data-edit-id="additionalInfos[0].content">{{additionalInfos[0].content}}</p>
+      <p class="field" data-edit-id="additionalInfos[0].content">hardworking student</p>
     </section>
 
     <section>
       <h2>Education</h2>
       {{#each education}}
       <div class="field">
-        <span data-edit-id="education[{{@index}}].degree">{{degree}}</span>,
-        <span data-edit-id="education[{{@index}}].fieldOfStudy">{{fieldOfStudy}}</span> –
-        <span data-edit-id="education[{{@index}}].institution">{{institution}}</span>
-        (<span data-edit-id="education[{{@index}}].startDate">{{startDate}}</span> to <span data-edit-id="education[{{@index}}].endDate">{{endDate}}</span>)
+        <span data-edit-id="education[{{@index}}].degree">bsc</span>,
+        <span data-edit-id="education[{{@index}}].fieldOfStudy">cse</span> –
+        <span data-edit-id="education[{{@index}}].institution">iut</span>
+        (<span data-edit-id="education[{{@index}}].startDate">2023</span> to <span data-edit-id="education[{{@index}}].endDate">2027</span>)
       </div>
       {{/each}}
     </section>
@@ -70,9 +70,9 @@
       <h2>Experience</h2>
       {{#each experience}}
       <div class="field">
-        <span class="label" data-edit-id="experience[{{@index}}].jobTitle">{{jobTitle}}</span> –
-        <span data-edit-id="experience[{{@index}}].employerName">{{employerName}}</span><br />
-        <span data-edit-id="experience[{{@index}}].startDate">{{startDate}}</span> to <span data-edit-id="experience[{{@index}}].endDate">{{endDate}}</span>
+        <span class="label" data-edit-id="experience[{{@index}}].jobTitle">intern</span> –
+        <span data-edit-id="experience[{{@index}}].employerName">bkash</span><br />
+        <span data-edit-id="experience[{{@index}}].startDate">2024</span> to <span data-edit-id="experience[{{@index}}].endDate">2025</span>
       </div>
       {{/each}}
     </section>
@@ -90,8 +90,8 @@
       <h2>Projects</h2>
       {{#each projects}}
       <div class="field">
-        <span class="label" data-edit-id="projects[{{@index}}].title">{{title}}</span><br />
-        <span data-edit-id="projects[{{@index}}].description">{{description}}</span><br />
+        <span class="label" data-edit-id="projects[{{@index}}].title">hire up</span><br />
+        <span data-edit-id="projects[{{@index}}].description">job post and job apply app</span><br />
         <a href="{{url}}" target="_blank" data-edit-id="projects[{{@index}}].url">{{url}}</a>
       </div>
       {{/each}}

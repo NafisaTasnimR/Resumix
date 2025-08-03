@@ -3,14 +3,67 @@ import { useLocation } from 'react-router-dom';
 import QuestionBox from './QuestionBox';
 import Preview from './Preview';
 
-const questions = [
-  "Your Work Experience?",
-  "Your Education?",
-  "Your Skills?",
-  "Your Projects?",
+const personalQuestions = [
+  "Full Name?",
+  "Professional Email?",
+  "Date of Birth?",
+  "Phone?",
+  "Address?",
+  "City?",
+  "District?",
+  "Country?",
+  "Zip Code?",
 ];
 
+const educationQuestions = [
+  "Your Degree?",
+  "Your Field of Study?",
+  "Your Institution?",
+  "Start Date of Education?",
+  "End Date of Education?",
+  "Current Status of Education?",
+];
+
+const experienceQuestions = [
+  "Job Title?",
+  "Employer Name?",
+  "Job Location?",
+  "Start Date of Job?",
+  "End Date of Job?",
+  "Is this your current job?",
+  "Your Responsibilities?",
+];
+
+const skillQuestions = [
+  "Skill Name?",
+  "Skill Proficiency?",
+];
+
+const projectQuestions = [
+  "Project Title?",
+  "Project Description?",
+  "Project URL?",
+];
+
+const referenceQuestions = [
+  "Referee Name?",
+  "Referee Designation?",
+  "Referee Organization?",
+  "Referee Email?",
+  "Referee Phone?"
+];
+
+const hobbyQuestions = [
+  "Your Hobbies?"
+];
+
+const additionalInfoQuestions = [
+  "Additional Information?"
+];
+
+
 const ResumeEditor = () => {
+  const [questions, setQuestions] = useState(personalQuestions);
   const location = useLocation();
   const renderedHtml = location.state?.rawTemplate || "";
   const templateCss = location.state?.templateCss || "";
@@ -41,6 +94,38 @@ const ResumeEditor = () => {
     updated[current] = value;
     setAnswers(updated);
   };
+
+  const handleSectionClick = (section) => {
+  switch (section) {
+    case "personal":
+      setQuestions(personalQuestions);
+      break;
+    case "education":
+      setQuestions(educationQuestions);
+      break;
+    case "experience":
+      setQuestions(experienceQuestions);
+      break;
+    case "skills":
+      setQuestions(skillQuestions);
+      break;
+    case "projects":
+      setQuestions(projectQuestions);
+      break;
+    case "references":
+      setQuestions(referenceQuestions);
+      break;
+    case "hobbies":
+      setQuestions(hobbyQuestions);
+      break;
+    case "additional":
+      setQuestions(additionalInfoQuestions);
+      break;
+    default:
+      break;
+  }
+  setCurrent(0); 
+};
 
   return (
     <div className='resume-editor'>
@@ -77,6 +162,7 @@ const ResumeEditor = () => {
         answers={answers}
         renderedHtml={renderedHtml}
         templateCss={templateCss}
+        onSectionClick={handleSectionClick}
       />
     </div>
   );
