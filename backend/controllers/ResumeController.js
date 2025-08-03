@@ -34,4 +34,49 @@ const createResume = async (req, res) => {
     }
 };
 
+const updateResume = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const { resumeId } = req.params; 
+        
+        const resume = await ResumeModel.findById(resumeId);
+        if (!resume) {
+            return res.status(404).json({ message: 'Resume not found' });
+        }
+
+        if (resume.userEmail !== req.user.email) {
+            return res.status(403).json({ message: 'Unauthorized to update this resume' });
+        }
+
+        const updateFields = {};
+        if (req.body.title !== undefined) {
+            updateFields.title = req.body.title;
+        }
+        if (req.body.templateId !== undefined) {
+            updateFields.templateId = req.body.templateId;
+        }
+        if (req.body.ResumeData !== undefined) {
+            updateFields.ResumeData = req.body.ResumeData;
+        }
+
+        const updatedResume = await ResumeModel.findByIdAndUpdate(
+            resumeId,
+            { $set: updateFields },
+            { new: true, runValidators: true }
+        );
+
+        res.status(200).json({
+            message: 'Resume updated successfully',
+            resume: updatedResume
+        });
+
+    } catch (error) {
+        console.error("Update Resume Error:", error);
+        res.status(500).json({ message: 'Internal server error', error: error.message });       
+    }
+};
+
+
+
+
  
