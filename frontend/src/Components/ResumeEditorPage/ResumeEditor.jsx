@@ -39,11 +39,15 @@ const skillQuestions = [
   "Skill Proficiency?",
 ];
 
-const projectQuestions = [
-  "Project Title?",
-  "Project Description?",
-  "Project URL?",
+const achievementQuestions = [
+  "Achievement Title?",
+  "Organization (optional)?",
+  "Date Received?",
+  "Category (e.g., Award, Certification)?",
+  "Description?",
+  "Website (optional)?",
 ];
+
 
 const referenceQuestions = [
   "Referee Name?",
@@ -109,8 +113,8 @@ const ResumeEditor = () => {
     case "skills":
       setQuestions(skillQuestions);
       break;
-    case "projects":
-      setQuestions(projectQuestions);
+    case "achievements":
+      setQuestions(achievementQuestions);
       break;
     case "references":
       setQuestions(referenceQuestions);

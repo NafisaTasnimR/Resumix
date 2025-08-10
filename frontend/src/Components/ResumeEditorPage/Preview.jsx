@@ -42,7 +42,7 @@ const Preview = ({ renderedHtml = "", templateCss = "", onSectionClick }) => {
                 else if (dataEditId.startsWith("education")) onSectionClick("education");
                 else if (dataEditId.startsWith("experience")) onSectionClick("experience");
                 else if (dataEditId.startsWith("skills")) onSectionClick("skills");
-                else if (dataEditId.startsWith("projects")) onSectionClick("projects");
+                else if (dataEditId.startsWith("achievements")) onSectionClick("achievements");
                 else if (dataEditId.startsWith("references")) onSectionClick("references");
                 else if (dataEditId.startsWith("hobbies")) onSectionClick("hobbies");
                 else if (dataEditId.includes("additionalInfos")) onSectionClick("additional");
