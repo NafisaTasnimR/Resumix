@@ -1,18 +1,26 @@
 import React from 'react';
 
-const Skills = ({ 
-  skills, 
-  currentSkillIndex, 
-  setCurrentSkillIndex, 
-  updateSkill, 
-  addNewSkill, 
-  removeSkill 
+const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
+
+const normalizeLevel = (v = '') => {
+  const t = String(v).trim().toLowerCase();
+  if (t === 'intermidiate') return 'Intermediate'; // typo -> correct
+  const found = SKILL_LEVELS.find(l => l.toLowerCase() === t);
+  return found || 'Beginner';
+};
+
+const Skills = ({
+  skills,
+  currentSkillIndex,
+  setCurrentSkillIndex,
+  updateSkill,
+  addNewSkill,
+  removeSkill
 }) => {
   const currentSkill = skills[currentSkillIndex];
 
   return (
     <>
-     
       <div className="personal-info-header">
         <h2>Skills </h2>
         <div className="info-line3"></div>
@@ -37,38 +45,44 @@ const Skills = ({
 
         <div className="field-group">
           <label>Skill Name:</label>
-          <input 
-            type="text" 
-            className="input-field" 
+          <input
+            type="text"
+            className="input-field"
             value={currentSkill?.skillName || ''}
             onChange={(e) => updateSkill('skillName', e.target.value)}
-            placeholder="JavaScript" 
+            placeholder="JavaScript"
           />
         </div>
 
         <div className="field-row">
           <div className="field-group half-width">
             <label>Proficiency Level:</label>
-            <select 
-              className="input-field" 
-              value={currentSkill?.proficiencyLevel || ''}
-              onChange={(e) => updateSkill('proficiencyLevel', e.target.value)}
+            <select
+              className="input-field"
+              value={normalizeLevel(currentSkill?.proficiencyLevel)}
+              onChange={(e) => {
+                const level = e.target.value;
+                updateSkill('proficiencyLevel', level);
+                if (typeof window !== 'undefined' && typeof window.updateSkillBars === 'function') {
+                  window.updateSkillBars();
+                }
+              }}
             >
               <option value="">Select Level</option>
-              <option value="Beginner">Beginner</option>
-              <option value="Intermediate">Intermediate</option>
-              <option value="Advanced">Advanced</option>
-              <option value="Expert">Expert</option>
+              {SKILL_LEVELS.map(l => (
+                <option key={l} value={l}>{l}</option>
+              ))}
             </select>
           </div>
+
           <div className="field-group half-width">
             <label>Years of Experience:</label>
-            <input 
-              type="number" 
-              className="input-field" 
+            <input
+              type="number"
+              className="input-field"
               value={currentSkill?.yearsOfExperience ?? 0}
-              onChange={(e) => updateSkill('yearsOfExperience', e.target.value)}
-              placeholder="10" 
+              onChange={(e) => updateSkill('yearsOfExperience', Number(e.target.value))}
+              placeholder="10"
               min="0"
               max="50"
             />
@@ -77,9 +91,9 @@ const Skills = ({
 
         <div className="field-group">
           <label>Skill Description</label>
-          <textarea 
-            className="input-field textarea-field" 
-            rows="4" 
+          <textarea
+            className="input-field textarea-field"
+            rows="4"
             value={currentSkill?.skillDescription || ''}
             onChange={(e) => updateSkill('skillDescription', e.target.value)}
             placeholder="Full-stack JavaScript development including React, Node.js, and modern frameworks"
@@ -91,8 +105,8 @@ const Skills = ({
             + Add Another Skill
           </button>
           {skills.length > 1 && (
-            <button 
-              className="remove-button" 
+            <button
+              className="remove-button"
               onClick={() => removeSkill(currentSkillIndex)}
             >
               Remove This Skill
