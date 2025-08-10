@@ -76,15 +76,15 @@
 }
 
 .step-circle3.completed3 {
-  background-color: #28a745;
+  background-color: #656d4a;
   color: white;
-  border-color: #28a745;
+  border-color: #656d4a;
 }
 
 .step-circle3.current3 {
-  background-color: #0573e8;
+  background-color: #5d99d9;
   color: white;
-  border-color: #0573e8;
+  border-color: #5d99d9;
 }
 
 /* Progress bar icon styling */
