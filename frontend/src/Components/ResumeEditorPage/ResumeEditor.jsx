@@ -37,6 +37,8 @@ const experienceQuestions = [
 const skillQuestions = [
   "Skill Name?",
   "Skill Proficiency?",
+  "Years of Experience?",
+  "Skills Description?",
 ];
 
 const achievementQuestions = [
