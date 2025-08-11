@@ -12,9 +12,7 @@ const Hobbies = ({
 
   return (
     <>
-    
       <div className="personal-info-header">
-         
         <h2>Hobbies </h2>
         <div className="info-line3"></div>
       </div>
@@ -37,7 +35,7 @@ const Hobbies = ({
         </div>
 
         <div className="field-group">
-          <label>Hobby Name:</label>
+          <label className="required">Hobby Name:</label>
           <input 
             type="text" 
             className="input-field" 

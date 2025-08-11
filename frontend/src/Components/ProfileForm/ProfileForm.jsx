@@ -13,12 +13,19 @@ import axios from 'axios';
 import TopBar from '../ResumeEditorPage/TopBar';
 import { useNavigate } from 'react-router-dom';
 
-
 const ProfileForm = () => {
-  window.scrollTo(0, 0);
+  // Move scroll to useEffect to only run on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [currentPage, setCurrentPage] = useState('personal');
   const [showAddressDetails, setShowAddressDetails] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
+
+  // Track if this is update mode
+  const [isUpdateMode, setIsUpdateMode] = useState(false);
 
   const [personalInfo, setPersonalInfo] = useState({
     fullName: '',
@@ -65,7 +72,6 @@ const ProfileForm = () => {
   ]);
   const [currentEducationIndex, setCurrentEducationIndex] = useState(0);
 
-
   const [skills, setSkills] = useState([
     {
       id: 1,
@@ -108,7 +114,6 @@ const ProfileForm = () => {
   ]);
   const [currentReferenceIndex, setCurrentReferenceIndex] = useState(0);
 
-
   const [hobbies, setHobbies] = useState([
     {
       id: 1,
@@ -122,7 +127,6 @@ const ProfileForm = () => {
   ]);
   const [currentHobbyIndex, setCurrentHobbyIndex] = useState(0);
 
-
   const [additionalInfos, setAdditionalInfos] = useState([
     {
       id: 1,
@@ -132,9 +136,147 @@ const ProfileForm = () => {
   ]);
   const [currentAdditionalInfoIndex, setCurrentAdditionalInfoIndex] = useState(0);
 
+  // Define navigation sections with Flaticon icons
+  const navigationSections = [
+    { 
+      id: 'personal', 
+      name: 'Personal Information', 
+      icon: '/personal-info_icon.png',  // Path to your Flaticon
+      alt: 'Personal Information Icon'
+    },
+    { 
+      id: 'experience', 
+      name: 'Experience', 
+      icon: '/experience_icon.png',     // Path to your Flaticon
+      alt: 'Experience Icon'
+    },
+    { 
+      id: 'education', 
+      name: 'Education', 
+      icon: '/education_icon.png',      // Path to your Flaticon
+      alt: 'Education Icon'
+    },
+    { 
+      id: 'skills', 
+      name: 'Skills', 
+      icon: '/skills_icon.png',         // Path to your Flaticon
+      alt: 'Skills Icon'
+    },
+    { 
+      id: 'achievements', 
+      name: 'Achievements', 
+      icon: '/achievements_icon.png',   // Path to your Flaticon
+      alt: 'Achievements Icon'
+    },
+    { 
+      id: 'references', 
+      name: 'References', 
+      icon: '/references_icon.png',     // Path to your Flaticon
+      alt: 'References Icon'
+    },
+    { 
+      id: 'hobbies', 
+      name: 'Hobbies', 
+      icon: '/hobbies_icon.png',        // Path to your Flaticon
+      alt: 'Hobbies Icon'
+    },
+    { 
+      id: 'additional', 
+      name: 'Additional Information', 
+      icon: '/additional_icon.png',     // Path to your Flaticon
+      alt: 'Additional Info Icon'
+    }
+  ];
+
+  // Validation functions for each section
+  const isPersonalInfoComplete = () => {
+    if (isUpdateMode) return true; // No validation in update mode
+    return personalInfo.fullName.trim() && 
+           personalInfo.professionalEmail.trim() && 
+           personalInfo.phone.trim();
+  };
+
+  const isExperienceComplete = () => {
+    if (isUpdateMode) return true;
+    // Check if at least one experience has required fields filled
+    return experiences.some(exp => 
+      exp.employerName.trim() && 
+      exp.jobTitle.trim() && 
+      exp.startDate.trim()
+    );
+  };
+
+  const isEducationComplete = () => {
+    if (isUpdateMode) return true;
+    return educations.some(edu => 
+      edu.institution.trim() && 
+      edu.degree.trim()
+    );
+  };
+
+  const isSkillsComplete = () => {
+    if (isUpdateMode) return true;
+    return skills.some(skill => skill.skillName.trim());
+  };
+
+  const isAchievementsComplete = () => {
+    if (isUpdateMode) return true;
+    return achievements.some(ach => 
+      ach.title.trim() && 
+      ach.organization.trim()
+    );
+  };
+
+  const isReferencesComplete = () => {
+    if (isUpdateMode) return true;
+    return references.some(ref => 
+      ref.firstName.trim() && 
+      ref.lastName.trim() && 
+      ref.company.trim()
+    );
+  };
+
+  const isHobbiesComplete = () => {
+    if (isUpdateMode) return true;
+    return hobbies.some(hobby => hobby.hobbyName.trim());
+  };
+
+  const isAdditionalInfoComplete = () => {
+    if (isUpdateMode) return true;
+    return additionalInfos.some(info => 
+      info.sectionTitle.trim() && 
+      info.content.trim()
+    );
+  };
+
+  // Check completion status for each section
+  const getSectionCompletionStatus = (sectionId) => {
+    switch (sectionId) {
+      case 'personal': return isPersonalInfoComplete();
+      case 'experience': return isExperienceComplete();
+      case 'education': return isEducationComplete();
+      case 'skills': return isSkillsComplete();
+      case 'achievements': return isAchievementsComplete();
+      case 'references': return isReferencesComplete();
+      case 'hobbies': return isHobbiesComplete();
+      case 'additional': return isAdditionalInfoComplete();
+      default: return false;
+    }
+  };
+
+  // Direct navigation function
+  const navigateToSection = (sectionId) => {
+    setCurrentPage(sectionId);
+    // Only scroll when actually changing pages
+    setTimeout(() => window.scrollTo(0, 0), 100);
+  };
+
+  // Skip entire form function
+  const handleSkipForm = () => {
+    navigate('/postlogin/');
+  };
 
   const handleNextPage = () => {
-    window.scrollTo(0, 0);
     if (currentPage === 'personal') {
       setCurrentPage('experience');
     } else if (currentPage === 'experience') {
@@ -150,10 +292,11 @@ const ProfileForm = () => {
     } else if (currentPage === 'hobbies') {
       setCurrentPage('additional');
     }
+    // Scroll after state update
+    setTimeout(() => window.scrollTo(0, 0), 100);
   };
 
   const handlePrevPage = () => {
-    window.scrollTo(0, 0);
     if (currentPage === 'experience') {
       setCurrentPage('personal');
     } else if (currentPage === 'education') {
@@ -169,6 +312,8 @@ const ProfileForm = () => {
     } else if (currentPage === 'additional') {
       setCurrentPage('hobbies');
     }
+    // Scroll after state update
+    setTimeout(() => window.scrollTo(0, 0), 100);
   };
 
   const handleSubmit = () => {
@@ -541,7 +686,6 @@ const ProfileForm = () => {
         }
       };
 
-
       const response = await axios.patch(
         'http://localhost:5000/info/update',
         payload,
@@ -582,6 +726,11 @@ const ProfileForm = () => {
           console.error("No resume data found for the user.");
           return
         };
+
+        // Check if user has existing data (update mode)
+        if (resume.personalInfo && resume.personalInfo.fullName) {
+          setIsUpdateMode(true);
+        }
 
         const formatDate = (date) => {
           if (!date) return '';
@@ -661,18 +810,101 @@ const ProfileForm = () => {
     fetchUserData();
   }, []);
 
-
   return (
     <div className="resume-container">
+      {/* Hamburger Menu Button */}
+      <button 
+        className="hamburger-menu"
+        onClick={() => setIsSidebarOpen(true)}
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      {/* Sliding Sidebar */}
+      {isSidebarOpen && (
+        <>
+          <div 
+            className="sidebar-overlay" 
+            onClick={() => setIsSidebarOpen(false)}
+          ></div>
+          <div className="sliding-sidebar">
+            <div className="sidebar-header">
+              <h3>Navigation</h3>
+              <button 
+                className="close-sidebar"
+                onClick={() => setIsSidebarOpen(false)}
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className="sidebar-content">
+              <div className="nav-sections-slide">
+                {navigationSections.map((section) => (
+                  <div
+                    key={section.id}
+                    className={`nav-list-item-slide ${currentPage === section.id ? 'active' : ''}`}
+                    onClick={() => {
+                      navigateToSection(section.id);
+                      setIsSidebarOpen(false);
+                    }}
+                  >
+                    <img 
+                      src={section.icon} 
+                      alt={section.alt}
+                      className="nav-icon-img"
+                    />
+                    <span className="nav-item-text-slide">{section.name}</span>
+                  </div>
+                ))}
+              </div>
+              
+              <button className="skip-form-button-slide" onClick={handleSkipForm}>
+                Skip Form
+              </button>
+            </div>
+          </div>
+        </>
+      )}
 
       <div className="resume-header">
         <TopBar />
         <div className="header-line"></div>
+
+        {/* Progress Bar with Icons and Tooltips */}
+        <div className="progress-container3">
+          <div className="progress-steps3">
+            {navigationSections.map((section) => {
+              const isCompleted = getSectionCompletionStatus(section.id);
+              const isCurrent = currentPage === section.id;
+              
+              return (
+                <div key={section.id} className="progress-step3">
+                  <div 
+                    className={`step-circle3 ${isCompleted ? 'completed3' : ''} ${isCurrent ? 'current3' : ''}`}
+                    title={section.name}
+                  >
+                    <img 
+                      src={section.icon} 
+                      alt={section.alt}
+                      className="progress-icon"
+                    />
+                  </div>
+                  <span className={`step-label3 ${isCompleted ? 'completed3' : ''} ${isCurrent ? 'current3' : ''}`}>
+                    {section.name}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       <div className="content-wrapper">
         <div className="left-section">
-          <div className="photo-placeholder">
+          <div className="photo-placeholder3">
             {currentPage === 'personal' && (
               <div className="page-image">
                 <img
@@ -795,11 +1027,9 @@ const ProfileForm = () => {
           </button>
         )}
         {currentPage === 'additional' && (
-          //<Link to="/dashboard">
           <button className="nav-button submit-nav-button" onClick={handleSave}>
             Submit
           </button>
-          //</Link>
         )}
       </div>
     </div>

@@ -1,18 +1,17 @@
 import React from 'react';
 
-const Skills = ({ 
-  skills, 
-  currentSkillIndex, 
-  setCurrentSkillIndex, 
-  updateSkill, 
-  addNewSkill, 
-  removeSkill 
+const Skills = ({
+  skills,
+  currentSkillIndex,
+  setCurrentSkillIndex,
+  updateSkill,
+  addNewSkill,
+  removeSkill
 }) => {
   const currentSkill = skills[currentSkillIndex];
 
   return (
     <>
-     
       <div className="personal-info-header">
         <h2>Skills </h2>
         <div className="info-line3"></div>
@@ -36,21 +35,21 @@ const Skills = ({
         </div>
 
         <div className="field-group">
-          <label>Skill Name:</label>
-          <input 
-            type="text" 
-            className="input-field" 
+          <label className="required">Skill Name:</label>
+          <input
+            type="text"
+            className="input-field"
             value={currentSkill.skillName}
             onChange={(e) => updateSkill('skillName', e.target.value)}
-            placeholder="JavaScript" 
+            placeholder="JavaScript"
           />
         </div>
 
         <div className="field-row">
           <div className="field-group half-width">
             <label>Proficiency Level:</label>
-            <select 
-              className="input-field" 
+            <select
+              className="input-field"
               value={currentSkill.proficiencyLevel}
               onChange={(e) => updateSkill('proficiencyLevel', e.target.value)}
             >
@@ -63,12 +62,12 @@ const Skills = ({
           </div>
           <div className="field-group half-width">
             <label>Years of Experience:</label>
-            <input 
-              type="number" 
-              className="input-field" 
+            <input
+              type="number"
+              className="input-field"
               value={currentSkill.yearsOfExperience}
               onChange={(e) => updateSkill('yearsOfExperience', e.target.value)}
-              placeholder="10" 
+              placeholder="10"
               min="0"
               max="50"
             />
@@ -77,9 +76,9 @@ const Skills = ({
 
         <div className="field-group">
           <label>Skill Description</label>
-          <textarea 
-            className="input-field textarea-field" 
-            rows="4" 
+          <textarea
+            className="input-field textarea-field"
+            rows="4"
             value={currentSkill.skillDescription}
             onChange={(e) => updateSkill('skillDescription', e.target.value)}
             placeholder="Full-stack JavaScript development including React, Node.js, and modern frameworks"
@@ -91,8 +90,8 @@ const Skills = ({
             + Add Another Skill
           </button>
           {skills.length > 1 && (
-            <button 
-              className="remove-button" 
+            <button
+              className="remove-button"
               onClick={() => removeSkill(currentSkillIndex)}
             >
               Remove This Skill
