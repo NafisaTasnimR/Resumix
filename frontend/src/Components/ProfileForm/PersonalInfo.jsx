@@ -29,7 +29,7 @@ const PersonalInfo = ({
 
       <div className="form-fields">
         <div className="field-group">
-          <label>Name:</label>
+          <label className="required">Name:</label>
           <input
             type="text"
             name="fullName"
@@ -41,7 +41,7 @@ const PersonalInfo = ({
         </div>
 
         <div className="field-group">
-          <label>Email:</label>
+          <label className="required">Email:</label>
           <input
             type="email"
             name="professionalEmail"
@@ -64,7 +64,7 @@ const PersonalInfo = ({
         </div>
 
         <div className="field-group">
-          <label>Phone:</label>
+          <label className="required">Phone:</label>
           <input
             type="tel"
             name="phone"

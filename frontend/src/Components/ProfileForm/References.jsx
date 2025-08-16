@@ -47,21 +47,25 @@ const References = ({
 
         <div className="field-row">
           <div className="field-group half-width">
-            <label>First Name:</label>
-            <input
-              type="text"
-              className="input-field"
-              value={currentReference?.firstName || ''}
+
+            <label className="required">First Name:</label>
+            <input 
+              type="text" 
+              className="input-field" 
+              value={currentReference.firstName}
+>>>>>>> master
               onChange={(e) => updateReference('firstName', e.target.value)}
               placeholder="Bill"
             />
           </div>
           <div className="field-group half-width">
-            <label>Last Name:</label>
-            <input
-              type="text"
-              className="input-field"
-              value={currentReference?.lastName || ''}
+
+            <label className="required">Last Name:</label>
+            <input 
+              type="text" 
+              className="input-field" 
+              value={currentReference.lastName}
+
               onChange={(e) => updateReference('lastName', e.target.value)}
               placeholder="Gates"
             />
@@ -80,11 +84,13 @@ const References = ({
         </div>
 
         <div className="field-group">
-          <label>Company/Organization:</label>
-          <input
-            type="text"
-            className="input-field"
-            value={currentReference?.company || ''}
+
+          <label className="required">Company/Organization:</label>
+          <input 
+            type="text" 
+            className="input-field" 
+            value={currentReference.company}
+
             onChange={(e) => updateReference('company', e.target.value)}
             placeholder="Microsoft Corporation"
           />

@@ -1,20 +1,18 @@
 import React from 'react';
 
-const AdditionalInfo = ({ 
-  additionalInfos, 
-  currentAdditionalInfoIndex, 
-  setCurrentAdditionalInfoIndex, 
-  updateAdditionalInfo, 
-  addNewAdditionalInfo, 
-  removeAdditionalInfo 
+const AdditionalInfo = ({
+  additionalInfos,
+  currentAdditionalInfoIndex,
+  setCurrentAdditionalInfoIndex,
+  updateAdditionalInfo,
+  addNewAdditionalInfo,
+  removeAdditionalInfo
 }) => {
   const currentInfo = additionalInfos[currentAdditionalInfoIndex];
 
   return (
     <>
-    
       <div className="personal-info-header">
-         
         <h2>Additional Information </h2>
         <div className="info-line3"></div>
       </div>
@@ -37,22 +35,24 @@ const AdditionalInfo = ({
         </div>
 
         <div className="field-group">
-          <label>Section Title:</label>
-          <input 
-            type="text" 
-            className="input-field" 
-            value={currentInfo?.sectionTitle || ''}
+          <label className="required">Section Title:</label>
+          <input
+            type="text"
+            className="input-field"
+            value={currentInfo.sectionTitle}
+
             onChange={(e) => updateAdditionalInfo('sectionTitle', e.target.value)}
-            placeholder="Languages" 
+            placeholder="Languages"
           />
         </div>
 
         <div className="field-group">
-          <label>Information:</label>
-          <textarea 
-            className="input-field textarea-field" 
-            rows="8" 
-            value={currentInfo?.content || ''}
+
+          <label className="required">Information:</label>
+          <textarea
+            className="input-field textarea-field"
+            rows="8"
+            value={currentInfo.content}
             onChange={(e) => updateAdditionalInfo('content', e.target.value)}
             placeholder="Write the description here"
           ></textarea>
@@ -63,8 +63,8 @@ const AdditionalInfo = ({
             + Add Another Section
           </button>
           {additionalInfos.length > 1 && (
-            <button 
-              className="remove-button" 
+            <button
+              className="remove-button"
               onClick={() => removeAdditionalInfo(currentAdditionalInfoIndex)}
             >
               Remove This Section

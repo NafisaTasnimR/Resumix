@@ -43,22 +43,25 @@ const Achievements = ({
         </div>
 
         <div className="field-group">
-          <label>Achievement Title:</label>
-          <input
-            type="text"
-            className="input-field"
-            value={currentAchievement?.title || ''}
+          <label className="required">Achievement Title:</label>
+          <input 
+            type="text" 
+            className="input-field" 
+            value={currentAchievement.title}
+
             onChange={(e) => updateAchievement('title', e.target.value)}
             placeholder="Forbes 30 Under 30"
           />
         </div>
 
         <div className="field-group">
-          <label>Organization/Institution:</label>
-          <input
-            type="text"
-            className="input-field"
-            value={currentAchievement?.organization || ''}
+
+          <label className="required">Organization/Institution:</label>
+          <input 
+            type="text" 
+            className="input-field" 
+            value={currentAchievement.organization}
+
             onChange={(e) => updateAchievement('organization', e.target.value)}
             placeholder="Forbes Magazine"
           />

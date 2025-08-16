@@ -197,15 +197,15 @@ const SubscriptionPage = () => {
               <div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', fontSize: '16px', lineHeight: 1.5, color: '#495057' }}>
                   <span style={{ color: '#28a745', fontWeight: 'bold', fontSize: '18px', marginTop: '2px' }}>✓</span>
-                  Basic resume builder access
+                  Basic resume builder access 
                 </div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', fontSize: '16px', lineHeight: 1.5, color: '#495057' }}>
                   <span style={{ color: '#28a745', fontWeight: 'bold', fontSize: '18px', marginTop: '2px' }}>✓</span>
-                  Limited templates
+                  Can Download Resumes 3 times
                 </div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', fontSize: '16px', lineHeight: 1.5, color: '#495057' }}>
                   <span style={{ color: '#28a745', fontWeight: 'bold', fontSize: '18px', marginTop: '2px' }}>✓</span>
-                  Upgrade anytime
+                  Can use ATS Checker once only
                 </div>
               </div>
             </div>
@@ -256,11 +256,11 @@ const SubscriptionPage = () => {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', fontSize: '16px', lineHeight: 1.5, color: '#495057' }}>
                   <span style={{ color: '#28a745', fontWeight: 'bold', fontSize: '18px', marginTop: '2px' }}>✓</span>
-                  Unlimited Downloads
+                  Unlimited use of ATS Checker
                 </div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', fontSize: '16px', lineHeight: 1.5, color: '#495057' }}>
                   <span style={{ color: '#28a745', fontWeight: 'bold', fontSize: '18px', marginTop: '2px' }}>✓</span>
-                  <strong>Sharable URL</strong>
+                  Unlimited Downloads
                 </div>
               </div>
             </div>
@@ -332,7 +332,7 @@ const SubscriptionPage = () => {
                 color: '#6c757d',
                 lineHeight: 1.6,
                 fontSize: '15px'
-              }}>Edit and download your resume in multiple formats including PDF, Word, RTF, and TXT</p>
+              }}>Edit and download your resume in PDF.</p>
             </div>
             
             <div style={{
@@ -356,7 +356,7 @@ const SubscriptionPage = () => {
                 color: '#212529',
                 marginBottom: '16px',
                 lineHeight: 1.3
-              }}>18+ Templates & 600+ Designs</h3>
+              }}>All Templates &  Designs</h3>
               <p style={{
                 color: '#6c757d',
                 lineHeight: 1.6,
@@ -378,7 +378,7 @@ const SubscriptionPage = () => {
               <div style={{
                 fontSize: '3rem',
                 marginBottom: '20px'
-              }}>✏️</div>
+              }}>✅</div>
               <h3 style={{
                 fontSize: '1.3rem',
                 fontWeight: 700,
@@ -390,7 +390,7 @@ const SubscriptionPage = () => {
                 color: '#6c757d',
                 lineHeight: 1.6,
                 fontSize: '15px'
-              }}>ATS Checker that checks more than 30+ common issues and improvements</p>
+              }}>Unlimited access to ATS Checker that checks more than 30+ common issues and improvements</p>
             </div>
             
             <div style={{

@@ -9,6 +9,7 @@ const normalizeLevel = (v = '') => {
   return found || 'Beginner';
 };
 
+
 const Skills = ({
   skills,
   currentSkillIndex,
@@ -44,11 +45,13 @@ const Skills = ({
         </div>
 
         <div className="field-group">
-          <label>Skill Name:</label>
+
+          <label className="required">Skill Name:</label>
           <input
             type="text"
             className="input-field"
-            value={currentSkill?.skillName || ''}
+            value={currentSkill.skillName}
+
             onChange={(e) => updateSkill('skillName', e.target.value)}
             placeholder="JavaScript"
           />
@@ -59,14 +62,10 @@ const Skills = ({
             <label>Proficiency Level:</label>
             <select
               className="input-field"
-              value={normalizeLevel(currentSkill?.proficiencyLevel)}
-              onChange={(e) => {
-                const level = e.target.value;
-                updateSkill('proficiencyLevel', level);
-                if (typeof window !== 'undefined' && typeof window.updateSkillBars === 'function') {
-                  window.updateSkillBars();
-                }
-              }}
+
+              value={currentSkill.proficiencyLevel}
+              onChange={(e) => updateSkill('proficiencyLevel', e.target.value)}
+
             >
               <option value="">Select Level</option>
               {SKILL_LEVELS.map(l => (
@@ -79,9 +78,10 @@ const Skills = ({
             <label>Years of Experience:</label>
             <input
               type="number"
-              className="input-field"
+
               value={currentSkill?.yearsOfExperience ?? 0}
               onChange={(e) => updateSkill('yearsOfExperience', Number(e.target.value))}
+
               placeholder="10"
               min="0"
               max="50"
@@ -94,7 +94,9 @@ const Skills = ({
           <textarea
             className="input-field textarea-field"
             rows="4"
+
             value={currentSkill?.skillDescription || ''}
+
             onChange={(e) => updateSkill('skillDescription', e.target.value)}
             placeholder="Full-stack JavaScript development including React, Node.js, and modern frameworks"
           ></textarea>

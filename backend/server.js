@@ -5,6 +5,7 @@ const cors = require('cors');
 const authRouter = require('./routes/AuthRouter'); 
 const infoUpdateRouter = require('./routes/InfoUpdateRouter');
 const previewRouter = require('./routes/TemplateRouter');
+const ResumeRouter = require('./routes/ResumeRouter');
 require('dotenv').config();
 require('./models/Database');
 
@@ -18,6 +19,7 @@ app.use('/auth',authRouter);
 app.use('/info', infoUpdateRouter);
 app.use('/viewInformation', infoUpdateRouter);
 app.use('/preview',previewRouter);
+app.use('/resume', ResumeRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
