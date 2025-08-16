@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Resume Template- 1</title>
   <style>
     * {
@@ -11,7 +12,8 @@
       padding: 0;
     }
 
-    html, body {
+    html,
+    body {
       width: 100%;
       overflow-x: hidden;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -28,12 +30,12 @@
     }
 
     .header {
-       background: #3aa6a3;
-  color: white;
-  padding: 35px 20px;
-  text-align: center;
-  width: 100%;
-  margin-bottom: 30px;
+      background: #3aa6a3;
+      color: white;
+      padding: 35px 20px;
+      text-align: center;
+      width: 100%;
+      margin-bottom: 30px;
     }
 
     .header h1 {
@@ -95,13 +97,19 @@
 
     .skills {
       display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 8px;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
     }
 
     .skill {
       width: 250px;
+    }
+
+    .skill .skill-level {
+      display: block;
+      font-size: 12px;
+      color: #666;
     }
 
     .bar-container {
@@ -114,6 +122,7 @@
     .bar {
       height: 11px;
       background-color: #2f9c95;
+      width: 0;
     }
 
     p {
@@ -122,30 +131,44 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="header">
-    <h1>SARAH SMITH</h1>
-    <h2>Management Professional</h2>
+    <h1 data-edit-id="personalInfo.fullName">SARAH SMITH</h1>
+    <h2 data-edit-id="additionalInfos[0].sectionTitle">Management Professional</h2>
     <div class="contact">
-      4725 Sunnydale Lane, Plano, Texas, United States, 75071<br />
-      123-456-7890 · candylovers@email.com
+      <span data-edit-id="personalInfo.address">4725 Sunnydale Lane</span>,
+      <span data-edit-id="personalInfo.city">Plano</span>,
+      <span data-edit-id="personalInfo.district">Texas</span>,
+      <span data-edit-id="personalInfo.country">United States</span>,
+      <span data-edit-id="personalInfo.zipCode">75071</span><br />
+      <span data-edit-id="personalInfo.phone">123-456-7890</span> ·
+      <span data-edit-id="personalInfo.professionalEmail">candylovers@email.com</span>
     </div>
   </div>
 
   <div class="section">
-    <p><strong>Management Professional</strong> with 2+ years of experience. Adept at guiding teams through complex projects while balancing the priorities of each department. Well-versed in major scheduling and management software programs. Master of Science in Management.</p>
+    <p data-edit-id="additionalInfos[0].content">
+      <strong>Management Professional</strong> with 2+ years of experience. Adept at guiding teams through complex
+      projects while balancing the priorities of each department. Well-versed in major scheduling and management
+      software programs. Master of Science in Management.
+    </p>
   </div>
 
   <div class="section">
     <h3>Professional Experience</h3>
 
     <div>
-      <div class="job-title">Managed Coordinator</div>
-      <div class="company">Delta Graphic Design</div>
-      <div class="date-range">March 2021 – Present</div>
+      <div class="job-title" data-edit-id="experience[0].jobTitle">Managed Coordinator</div>
+      <div class="company" data-edit-id="experience[0].employerName">Delta Graphic Design</div>
+      <div class="date-range">
+        <span data-edit-id="experience[0].startDate">March 2021</span> –
+        <span data-edit-id="experience[0].isCurrentJob">Present</span>
+      </div>
       <ul>
-        <li>Assisted teams of graphic artists, copywriters, and other creative professionals to lead each phase of production.</li>
+        <li>Assisted teams of graphic artists, copywriters, and other creative professionals to lead each phase of
+          production.</li>
         <li>Monitored project performance data; reports sent to ensure consistent work quality.</li>
         <li>Led monthly project evaluations.</li>
         <li>Set realistic project scheduling and budgeting goals.</li>
@@ -155,14 +178,18 @@
     <div class="highlight">
       <strong>Highlights:</strong>
       <ul>
-        <li>Negotiated new vendor contracts, reducing average project cost by more than $5,000</li>
+        <li data-edit-id="achievements[0].description">Negotiated new vendor contracts, reducing average project cost by
+          more than $5,000</li>
       </ul>
     </div>
 
     <div>
-      <div class="job-title">Management Associate</div>
-      <div class="company">Advance Technology</div>
-      <div class="date-range">November 2020 – March 2021</div>
+      <div class="job-title" data-edit-id="experience[1].jobTitle">Management Associate</div>
+      <div class="company" data-edit-id="experience[1].employerName">Advance Technology</div>
+      <div class="date-range">
+        <span data-edit-id="experience[1].startDate">November 2020</span> –
+        <span data-edit-id="experience[1].endDate">March 2021</span>
+      </div>
       <ul>
         <li>Researched new scheduling techniques and project management tools.</li>
         <li>Generated insights reports to improve future management decisions.</li>
@@ -174,33 +201,80 @@
 
   <div class="section">
     <h3>Education</h3>
-    <p><strong>Houston School of Business | Houston, TX</strong><br>
-    Master of Science in Management – September 2021</p>
 
-    <p><strong>Midwestern Institute of Business | MI</strong><br>
-    Bachelor of Science in Business – September 2019</p>
+    <p>
+      <strong>
+        <span data-edit-id="education[0].institution">Houston School of Business</span> |
+        <span data-edit-id="education[0].city">Houston</span>,
+        <span data-edit-id="education[0].state">TX</span>
+      </strong><br>
+      <span data-edit-id="education[0].degree">Master of Science in Management</span> –
+      <span data-edit-id="education[0].graduationDate">September 2021</span>
+    </p>
 
-    <p><strong>HR Institute of America</strong><br>
-    Certified Project Manager – May 2021</p>
+    <p>
+      <strong>
+        <span data-edit-id="education[1].institution">Midwestern Institute of Business</span> |
+        <span data-edit-id="education[1].state">MI</span>
+      </strong><br>
+      <span data-edit-id="education[1].degree">Bachelor of Science in Business</span> –
+      <span data-edit-id="education[1].graduationDate">September 2019</span>
+    </p>
+
+    <p>
+      <strong><span data-edit-id="education[2].institution">HR Institute of America</span></strong><br>
+      <span data-edit-id="education[2].degree">Certified Project Manager</span> –
+      <span data-edit-id="education[2].graduationDate">May 2021</span>
+    </p>
   </div>
 
   <div class="section">
     <h3>Key Skills</h3>
     <div class="skills">
       <div class="skill">
-        <strong>Conflict Management</strong>
-        <div class="bar-container"><div class="bar" style="width: 90%;"></div></div>
+        <strong data-edit-id="skills[0].skillName">Conflict Management</strong>
+        <span class="skill-level" data-edit-id="skills[0].proficiencyLevel">Advanced</span>
+        <div class="bar-container">
+          <div class="bar" style="width:0;"></div>
+        </div>
       </div>
       <div class="skill">
-        <strong>Team Management & Mediation</strong>
-        <div class="bar-container"><div class="bar" style="width: 80%;"></div></div>
+        <strong data-edit-id="skills[1].skillName">Team Management & Mediation</strong>
+        <span class="skill-level" data-edit-id="skills[1].proficiencyLevel">Intermediate</span>
+        <div class="bar-container">
+          <div class="bar" style="width:0;"></div>
+        </div>
       </div>
-      <div class="skill">
-        <strong>Project Scheduling</strong>
-        <div class="bar-container"><div class="bar" style="width: 85%;"></div></div>
+        </div>
       </div>
     </div>
   </div>
 
+  <script>
+    (function () {
+      const LEVEL_TO_WIDTH = {
+        beginner: 25,
+        intermediate: 50,
+        intermidiate: 50, // typo tolerance
+        advanced: 75,
+        expert: 100
+      };
+
+      function updateSkillBars() {
+        document.querySelectorAll('.skill').forEach(skill => {
+          const levelEl = skill.querySelector('.skill-level');
+          const bar = skill.querySelector('.bar');
+          const level = (levelEl?.textContent || '').trim().toLowerCase();
+          const width = LEVEL_TO_WIDTH[level] ?? 0;
+          if (bar) bar.style.width = width + '%';
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', updateSkillBars);
+      window.updateSkillBars = updateSkillBars; // call this after inline edits
+    })();
+  </script>
+
 </body>
+
 </html>

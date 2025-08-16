@@ -1,14 +1,22 @@
 import React from 'react';
 
-const Achievements = ({ 
-  achievements, 
-  currentAchievementIndex, 
-  setCurrentAchievementIndex, 
-  updateAchievement, 
-  addNewAchievement, 
-  removeAchievement 
+const Achievements = ({
+  achievements,
+  currentAchievementIndex,
+  setCurrentAchievementIndex,
+  updateAchievement,
+  addNewAchievement,
+  removeAchievement
 }) => {
-  const currentAchievement = achievements[currentAchievementIndex];
+  const currentAchievement = achievements?.[currentAchievementIndex] ?? {
+    title: '',
+    organization: '',
+    dateReceived: '',
+    category: '',
+    description: '',
+    website: ''
+  };
+
 
   return (
     <>
@@ -40,37 +48,40 @@ const Achievements = ({
             type="text" 
             className="input-field" 
             value={currentAchievement.title}
+
             onChange={(e) => updateAchievement('title', e.target.value)}
-            placeholder="Forbes 30 Under 30" 
+            placeholder="Forbes 30 Under 30"
           />
         </div>
 
         <div className="field-group">
+
           <label className="required">Organization/Institution:</label>
           <input 
             type="text" 
             className="input-field" 
             value={currentAchievement.organization}
+
             onChange={(e) => updateAchievement('organization', e.target.value)}
-            placeholder="Forbes Magazine" 
+            placeholder="Forbes Magazine"
           />
         </div>
 
         <div className="field-row">
           <div className="field-group half-width">
             <label>Date Received:</label>
-            <input 
-              type="date" 
-              className="input-field" 
-              value={currentAchievement.dateReceived}
+            <input
+              type="date"
+              className="input-field"
+              value={currentAchievement?.dateReceived ?? ''}
               onChange={(e) => updateAchievement('dateReceived', e.target.value)}
             />
           </div>
           <div className="field-group half-width">
             <label>Category:</label>
-            <select 
-              className="input-field" 
-              value={currentAchievement.category}
+            <select
+              className="input-field"
+              value={currentAchievement?.category || ''}
               onChange={(e) => updateAchievement('category', e.target.value)}
             >
               <option value="">Select Category</option>
@@ -90,22 +101,22 @@ const Achievements = ({
         {currentAchievement.category === 'Other' && (
           <div className="field-group">
             <label>Please specify category:</label>
-            <input 
-              type="text" 
-              className="input-field" 
-              value={currentAchievement.customCategory || ''}
-              onChange={(e) => updateAchievement('customCategory', e.target.value)}
-              placeholder="Enter your custom category" 
+            <input
+              type="text"
+              className="input-field"
+              value={currentAchievement?.category || ''}
+              onChange={(e) => updateAchievement('category', e.target.value)}
+              placeholder="Enter your custom category"
             />
           </div>
         )}
 
         <div className="field-group">
           <label>Description</label>
-          <textarea 
-            className="input-field textarea-field" 
-            rows="4" 
-            value={currentAchievement.description}
+          <textarea
+            className="input-field textarea-field"
+            rows="4"
+            value={currentAchievement?.description || ''}
             onChange={(e) => updateAchievement('description', e.target.value)}
             placeholder="Recognized for revolutionary impact on education through Khan Academy, transforming how millions learn mathematics and science globally."
           ></textarea>
@@ -113,12 +124,12 @@ const Achievements = ({
 
         <div className="field-group">
           <label>Website/Link (Optional):</label>
-          <input 
-            type="url" 
-            className="input-field" 
-            value={currentAchievement.website}
+          <input
+            type="url"
+            className="input-field"
+            value={currentAchievement?.website || ''}
             onChange={(e) => updateAchievement('website', e.target.value)}
-            placeholder="https://forbes.com/30-under-30/education" 
+            placeholder="https://forbes.com/30-under-30/education"
           />
         </div>
 
@@ -127,8 +138,8 @@ const Achievements = ({
             + Add Another Achievement
           </button>
           {achievements.length > 1 && (
-            <button 
-              className="remove-button" 
+            <button
+              className="remove-button"
               onClick={() => removeAchievement(currentAchievementIndex)}
             >
               Remove This Achievement

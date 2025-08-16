@@ -198,15 +198,15 @@
     <div class="resume-container">
         <div class="content">
             <div class="header">
-                <h1>JANE DOE</h1>
-                <h4>IT Project Manager</h4>
-                <p>555-123-4567</p>
-                <p>jane.doe@email.com</p>
-                <p>linkedin.com/in/janedoe</p>
+                <h1 data-edit-id="personalInfo.fullName">JANE DOE</h1>
+                <h4 data-edit-id="additionalInfos[0].sectionTitle">IT Project Manager</h4>
+                <p data-edit-id="personalInfo.phone">555-123-4567</p>
+                <p data-edit-id="personalInfo.professionalEmail">jane.doe@email.com</p>
+                <p data-edit-id="additionalInfos[1].content">linkedin.com/in/janedoe</p>
             </div>
 
             <div class="section">
-                <p>
+                <p data-edit-id="additionalInfos[0].content">
                     Seasoned IT professional with <strong>10+ years of experience</strong> leading complex IT projects
                     across industries.
                     Passionate about creating scalable infrastructure and automating operations for greater efficiency.
@@ -215,18 +215,22 @@
 
             <div class="section">
                 <h3>Experience</h3>
-                <p class="job-title">IT Program Manager</p>
-                <p class="date">2015 – Present</p>
-                <p class="company">GreenTech Solutions</p>
+                <p class="job-title" data-edit-id="experience[0].jobTitle">IT Program Manager</p>
+                <p class="date">
+                    <span data-edit-id="experience[0].startDate">2015</span> – <span data-edit-id="experience[0].isCurrentJob">Present</span>
+                </p>
+                <p class="company"><span data-edit-id="experience[0].employerName">GreenTech Solutions</span></p>
                 <ul>
                     <li>Led a team of 15 to deliver enterprise software within deadlines.</li>
                     <li>Saved $200K annually through automated backup and reporting tools.</li>
                     <li>Improved uptime to 99.9% through proactive system monitoring.</li>
                 </ul>
 
-                <p class="job-title">Systems Analyst</p>
-                <p class="date">2010 – 2015</p>
-                <p class="company">NorthBridge Health</p>
+                <p class="job-title" data-edit-id="experience[1].jobTitle">Systems Analyst</p>
+                <p class="date">
+                    <span data-edit-id="experience[1].startDate">2010</span> – <span data-edit-id="experience[1].endDate">2015</span>
+                </p>
+                <p class="company"><span data-edit-id="experience[1].employerName">NorthBridge Health</span></p>
                 <ul>
                     <li>Designed patient scheduling system used by 20+ hospitals.</li>
                     <li>Led agile team for mobile-first transformation initiative.</li>
@@ -235,9 +239,14 @@
 
             <div class="section">
                 <h3>Education</h3>
-                <p class="job-title">BSc in Information Systems</p>
-                <p class="date">2006 – 2010</p>
-                <p class="company">University of Washington</p>
+                <p class="job-title">
+                    <span data-edit-id="education[0].degree">BSc</span> in
+                    <span data-edit-id="education[0].fieldOfStudy">Information Systems</span>
+                </p>
+                <p class="date">
+                    <span data-edit-id="education[0].startDate">2006</span> – <span data-edit-id="education[0].endDate">2010</span>
+                </p>
+                <p class="company"><span data-edit-id="education[0].institution">University of Washington</span></p>
                 <ul>
                     <li>Graduated Magna Cum Laude</li>
                     <li>President of Women in Tech Club</li>
@@ -247,10 +256,10 @@
             <div class="section">
                 <h3>Skills</h3>
                 <ul>
-                    <li><strong>Agile Leadership</strong> – Managed cross-functional scrum teams</li>
-                    <li><strong>Cloud Infrastructure</strong> – AWS, Azure, GCP experience</li>
-                    <li><strong>Process Automation</strong> – Built internal tools to cut 300+ hrs/yr</li>
-                    <li><strong>Stakeholder Communication</strong> – Aligned dev work to business goals</li>
+                    <li><strong data-edit-id="skills[0].skillName">Agile Leadership</strong> – Managed cross-functional scrum teams</li>
+                    <li><strong data-edit-id="skills[1].skillName">Cloud Infrastructure</strong> – AWS, Azure, GCP experience</li>
+                    <li><strong data-edit-id="skills[2].skillName">Process Automation</strong> – Built internal tools to cut 300+ hrs/yr</li>
+                    <li><strong data-edit-id="skills[3].skillName">Stakeholder Communication</strong> – Aligned dev work to business goals</li>
                 </ul>
             </div>
         </div>
@@ -259,54 +268,56 @@
             <div class="achievements">
                 <h4>Key Achievements</h4>
                 <div class="achievement">
-                    <div class="achievement-title">Cloud Migration</div>
-                    <div class="achievement-desc">Migrated 20+ systems to cloud with 0 downtime.</div>
+                    <div class="achievement-title" data-edit-id="achievements[0].title">Cloud Migration</div>
+                    <div class="achievement-desc" data-edit-id="achievements[0].description">Migrated 20+ systems to cloud with 0 downtime.</div>
                 </div>
                 <div class="achievement">
-                    <div class="achievement-title">Cost Optimization</div>
-                    <div class="achievement-desc">Cut infrastructure spend by 15% via refactoring.</div>
+                    <div class="achievement-title" data-edit-id="achievements[1].title">Cost Optimization</div>
+                    <div class="achievement-desc" data-edit-id="achievements[1].description">Cut infrastructure spend by 15% via refactoring.</div>
                 </div>
                 <div class="achievement">
-                    <div class="achievement-title">Award Winner</div>
-                    <div class="achievement-desc">Received “Best Innovator 2023” at GreenTech.</div>
+                    <div class="achievement-title" data-edit-id="achievements[2].title">Award Winner</div>
+                    <div class="achievement-desc" data-edit-id="achievements[2].description">Received “Best Innovator 2023” at GreenTech.</div>
                 </div>
             </div>
 
             <div class="certifications sidebar-section">
                 <h4>Certifications</h4>
                 <ul>
-                    <li>PMP – PMI</li>
-                    <li>Scrum Master – Scrum Alliance</li>
+                    <li data-edit-id="achievements[3].title">PMP – PMI</li>
+                    <li data-edit-id="achievements[4].title">Scrum Master – Scrum Alliance</li>
                 </ul>
             </div>
 
             <div class="references sidebar-section">
                 <h4>References</h4>
-                <p><strong>Emily Rogers</strong><br>
-                    CIO, GreenTech<br>
-                    emily.rogers@greentech.com
+                <p>
+                    <strong><span data-edit-id="references[0].firstName">Emily</span> <span data-edit-id="references[0].lastName">Rogers</span></strong><br>
+                    <span data-edit-id="references[0].jobTitle">CIO</span>, <span data-edit-id="references[0].company">GreenTech</span><br>
+                    <span data-edit-id="references[0].referenceEmail">emily.rogers@greentech.com</span>
                 </p>
-                <p><strong>Alan Smith</strong><br>
-                    Director, NorthBridge<br>
-                    alan.smith@northbridge.com
+                <p>
+                    <strong><span data-edit-id="references[1].firstName">Alan</span> <span data-edit-id="references[1].lastName">Smith</span></strong><br>
+                    <span data-edit-id="references[1].jobTitle">Director</span>, <span data-edit-id="references[1].company">NorthBridge</span><br>
+                    <span data-edit-id="references[1].referenceEmail">alan.smith@northbridge.com</span>
                 </p>
             </div>
 
             <div class="hobbies sidebar-section">
                 <h4>Hobbies</h4>
                 <ul>
-                    <li>Travel Photography</li>
-                    <li>Coding Challenges</li>
-                    <li>Community Volunteering</li>
+                    <li data-edit-id="hobbies[0].hobbyName">Travel Photography</li>
+                    <li data-edit-id="hobbies[1].hobbyName">Coding Challenges</li>
+                    <li data-edit-id="hobbies[2].hobbyName">Community Volunteering</li>
                 </ul>
             </div>
 
             <div class="additional-info sidebar-section">
                 <h4>Additional Info</h4>
                 <ul>
-                    <li>Authorized to work in US</li>
-                    <li>Available for relocation</li>
-                    <li>Fluent in English, Spanish</li>
+                    <li data-edit-id="additionalInfos[2].content">Authorized to work in US</li>
+                    <li data-edit-id="additionalInfos[3].content">Available for relocation</li>
+                    <li data-edit-id="additionalInfos[4].content">Fluent in English, Spanish</li>
                 </ul>
             </div>
         </div>

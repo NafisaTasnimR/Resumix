@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>Resume Template - 6</title>
@@ -24,8 +25,8 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       position: relative;
       overflow: hidden;
-       margin-top: 0;
-  padding-top: 0;
+      margin-top: 0;
+      padding-top: 0;
     }
 
     .top-bar {
@@ -80,7 +81,6 @@
       margin: 20px 0 10px;
     }
 
-
     .icon-text {
       display: flex;
       align-items: center;
@@ -114,86 +114,100 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <div class="top-bar">
-      <h1>Richard Sanchez</h1>
-      <p>Graphics Designer</p>
+      <h1 data-edit-id="personalInfo.fullName">Richard Sanchez</h1>
+      <p data-edit-id="additionalInfos[0].sectionTitle">Graphics Designer</p>
     </div>
 
     <div class="left-section">
       <div class="section-title">About Me</div>
-      <p>Passionate graphics designer with over 5 years of experience crafting impactful visual identities for brands. Skilled in branding, UI/UX design, and digital marketing assets, with a strong eye for aesthetics and detail.</p>
+      <p data-edit-id="additionalInfos[0].content">
+        Passionate graphics designer with over 5 years of experience crafting impactful visual identities for brands.
+        Skilled in branding, UI/UX design, and digital marketing assets, with a strong eye for aesthetics and detail.
+      </p>
 
       <div class="section-title">Contact</div>
-      <div class="icon-text"> +123-456-7890</div>
-      <div class="icon-text"> hello@reallygreatsite.com</div>
-      <div class="icon-text"> 123 Anywhere Street, Any City</div>
+      <div class="icon-text"><span data-edit-id="personalInfo.phone"> +123-456-7890</span></div>
+      <div class="icon-text"><span data-edit-id="personalInfo.professionalEmail"> hello@reallygreatsite.com</span></div>
+      <div class="icon-text"><span data-edit-id="personalInfo.address"> 123 Anywhere Street, Any City</span></div>
 
       <div class="section-title">Skills</div>
       <ul>
-        <li>Web Design</li>
-        <li>Branding</li>
-        <li>Graphic Design</li>
-        <li>SEO</li>
-        <li>Marketing</li>
+        <li><span data-edit-id="skills[0].skillName">Web Design</span></li>
+        <li><span data-edit-id="skills[1].skillName">Branding</span></li>
+        <li><span data-edit-id="skills[2].skillName">Graphic Design</span></li>
+        <li><span data-edit-id="skills[3].skillName">SEO</span></li>
+        <li><span data-edit-id="skills[4].skillName">Marketing</span></li>
       </ul>
 
       <div class="section-title">Certifications</div>
       <ul>
-        <li>Adobe Certified Expert (ACE)</li>
-        <li>Google UX Design Certificate</li>
-        <li>Certified Web Designer</li>
+        <li><span data-edit-id="achievements[0].title">Adobe Certified Expert (ACE)</span></li>
+        <li><span data-edit-id="achievements[1].title">Google UX Design Certificate</span></li>
+        <li><span data-edit-id="achievements[2].title">Certified Web Designer</span></li>
       </ul>
 
       <div class="section-title">Additional Info</div>
       <ul>
-        <li>Authorized to work in US</li>
-        <li>Willing to relocate</li>
-        <li>Fluent in English & French</li>
+        <li><span data-edit-id="additionalInfos[1].content">Authorized to work in US</span></li>
+        <li><span data-edit-id="additionalInfos[2].content">Willing to relocate</span></li>
+        <li><span data-edit-id="additionalInfos[3].content">Fluent in English & French</span></li>
       </ul>
 
       <div class="section-title">Language</div>
       <ul>
-        <li>English</li>
-        <li>French</li>
+        <li><span data-edit-id="additionalInfos[4].content">English</span></li>
+        <li><span data-edit-id="additionalInfos[5].content">French</span></li>
       </ul>
 
       <div class="section-title">Hobbies</div>
       <ul>
-        <li>Travel Photography</li>
-        <li>Creative Writing</li>
-        <li>Community Volunteering</li>
+        <li><span data-edit-id="hobbies[0].hobbyName">Travel Photography</span></li>
+        <li><span data-edit-id="hobbies[1].hobbyName">Creative Writing</span></li>
+        <li><span data-edit-id="hobbies[2].hobbyName">Community Volunteering</span></li>
       </ul>
     </div>
 
     <div class="right-section">
       <div class="section-title">Education</div>
       <div class="timeline">
-        <p class="year">(2011–2015)</p>
-        <p class="university">Wardiere University</p>
-        <p>Bachelor of Design</p>
+        <p class="year">(<span data-edit-id="education[0].startDate">2011</span>–<span
+            data-edit-id="education[0].endDate">2015</span>)</p>
+        <p class="university"><span data-edit-id="education[0].institution">Wardiere University</span></p>
+        <p><span data-edit-id="education[0].degree">Bachelor of Design</span></p>
         <p>3.65</p>
       </div>
       <div class="timeline">
-        <p class="year">(2014–2019)</p>
-        <p class="university">Wardiere University</p>
-        <p>Bachelor of Design</p>
+        <p class="year">(<span data-edit-id="education[1].startDate">2014</span>–<span
+            data-edit-id="education[1].endDate">2019</span>)</p>
+        <p class="university"><span data-edit-id="education[1].institution">Wardiere University</span></p>
+        <p><span data-edit-id="education[1].degree">Bachelor of Design</span></p>
         <p>3.74</p>
       </div>
 
       <div class="section-title">Experience</div>
       <div class="timeline">
-        <p class="year">(2020–2025)</p>
-        <p class="university"><strong>Senior Graphic Designer</strong><br>Studio 1</p>
+        <p class="year">(<span data-edit-id="experience[0].startDate">2020</span>–<span
+            data-edit-id="experience[0].endDate">2025</span>)</p>
+        <p class="university">
+          <strong data-edit-id="experience[0].jobTitle">Senior Graphic Designer</strong><br>
+          <span data-edit-id="experience[0].employerName">Studio 1</span>
+        </p>
         <ul>
           <li>Create more than 100 graphic designs for big companies</li>
           <li>Complete a lot of complicated work</li>
         </ul>
       </div>
       <div class="timeline">
-        <p class="year">(2017–2019)</p>
-        <p class="university"><strong>Senior Graphic Designer</strong><br>Studio 2</p>
+        <p class="year">(<span data-edit-id="experience[1].startDate">2017</span>–<span
+            data-edit-id="experience[1].endDate">2019</span>)</p>
+        <p class="university">
+          <strong data-edit-id="experience[1].jobTitle">Senior Graphic Designer</strong><br>
+          <span data-edit-id="experience[1].employerName">Studio 2</span>
+        </p>
         <ul>
           <li>Create more than 100 graphic designs for big companies</li>
           <li>Complete a lot of complicated work</li>
@@ -203,27 +217,44 @@
       <div class="section-title">Projects</div>
       <div class="timeline">
         <ul>
-          <li><strong>Portfolio Website</strong>: Designed and developed personal branding website. <em>(richardsanchez.dev)</em></li>
-          <li><strong>Branding Package for TechCorp</strong>: Logo, brand guide, web templates.</li>
-        </ul>
+          <li>
+            <span data-edit-id="additionalInfos[6].content">
+              Portfolio Website — Designed and developed personal branding website. (richardsanchez.dev)
+            </span>
+          </li>
+          <li>
+            <span data-edit-id="additionalInfos[7].content">
+              Branding Package for TechCorp — Logo, brand guide, web templates.
+            </span>
+          </li>
+
       </div>
 
       <div class="section-title">References</div>
       <div class="timeline">
         <ul>
           <li>
-            <strong>Emily Rogers</strong><br>
-            Creative Director, Studio 1<br>
-            emily.rogers@example.com
+            <strong>
+              <span data-edit-id="references[0].firstName">Emily</span>
+              <span data-edit-id="references[0].lastName">Rogers</span>
+            </strong><br>
+            <span data-edit-id="references[0].jobTitle">Creative Director</span>,
+            <span data-edit-id="references[0].company">Studio 1</span><br>
+            <span data-edit-id="references[0].referenceEmail">emily.rogers@example.com</span>
           </li>
           <li style="margin-top: 10px;">
-            <strong>Alan Smith</strong><br>
-            HR Manager, Studio 2<br>
-            alan.smith@example.com
+            <strong>
+              <span data-edit-id="references[1].firstName">Alan</span>
+              <span data-edit-id="references[1].lastName">Smith</span>
+            </strong><br>
+            <span data-edit-id="references[1].jobTitle">HR Manager</span>,
+            <span data-edit-id="references[1].company">Studio 2</span><br>
+            <span data-edit-id="references[1].referenceEmail">alan.smith@example.com</span>
           </li>
         </ul>
       </div>
     </div>
   </div>
 </body>
+
 </html>

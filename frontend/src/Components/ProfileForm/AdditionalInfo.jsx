@@ -40,12 +40,14 @@ const AdditionalInfo = ({
             type="text"
             className="input-field"
             value={currentInfo.sectionTitle}
+
             onChange={(e) => updateAdditionalInfo('sectionTitle', e.target.value)}
             placeholder="Languages"
           />
         </div>
 
         <div className="field-group">
+
           <label className="required">Information:</label>
           <textarea
             className="input-field textarea-field"
