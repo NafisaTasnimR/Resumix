@@ -53,7 +53,7 @@ const References = ({
               type="text" 
               className="input-field" 
               value={currentReference.firstName}
->>>>>>> master
+
               onChange={(e) => updateReference('firstName', e.target.value)}
               placeholder="Bill"
             />
