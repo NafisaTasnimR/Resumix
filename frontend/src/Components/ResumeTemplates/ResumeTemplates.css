@@ -167,10 +167,10 @@
   transform: translateY(-5px);
 }
 
-/* Minimalistic PRO Badge - Bottom Right Corner of Template Content */
+/* Minimalistic PRO Badge - Top Right Corner of Template Content */
 .minimal-pro-badge {
   position: absolute;
-  bottom: 8px;
+  top: 8px;
   right: 8px;
   width: 28px;
   height: 28px;
@@ -200,7 +200,7 @@
   .minimal-pro-badge {
     width: 24px;
     height: 24px;
-    bottom: 6px;
+    top: 6px;
     right: 6px;
   }
   
@@ -214,7 +214,7 @@
   .minimal-pro-badge {
     width: 22px;
     height: 22px;
-    bottom: 5px;
+    top: 5px;
     right: 5px;
   }
   
