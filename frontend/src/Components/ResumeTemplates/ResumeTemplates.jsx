@@ -11,7 +11,7 @@ const ResumeTemplates = () => {
   const [visibleCount, setVisibleCount] = useState(3);
   const [templatesData, setTemplatesData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isNavigating, setIsNavigating] = useState(false); // Prevent double clicks
+  const [isNavigating, setIsNavigating] = useState(false); 
   const navigate = useNavigate();
 
   // Fetch templates from backend on mount
@@ -20,19 +20,17 @@ const ResumeTemplates = () => {
       try {
         const res = await axios.get('http://localhost:5000/preview/api/templates');
         
-        // Get stored click counts from localStorage
+      
         const storedClicks = JSON.parse(localStorage.getItem('templateClicks') || '{}');
         
-        // Initialize templates with clickCount and premium status
+        
         const templatesWithClicks = (res.data || []).map((template, index) => ({
           ...template,
           clickCount: storedClicks[template._id || template.id] || template.clickCount || 0,
-          // Make every 3rd template premium for demo (you can change this logic)
-          // You can also add specific template IDs: template.isPremium || ['id1', 'id2', 'id3'].includes(template._id)
-         // Make specifically template 3 (index 2) and template 6 (index 5) premium
+         
 isPremium: template.isPremium || 
-  index === 2 || // Template 3 (0-indexed)
-  index === 5 || // Template 6 (0-indexed)
+  index === 2 || 
+  index === 5 || 
   // Alternative: target by name if templates have consistent naming
   (template.filename && (template.filename.includes('Resume3') || template.filename.includes('Resume6'))) ||
   (template.name && (template.name.includes('Resume3') || template.name.includes('Resume6')))
@@ -50,7 +48,7 @@ isPremium: template.isPremium ||
     fetchTemplates();
   }, []);
 
-  // Handle browser back button and page visibility changes
+ 
   useEffect(() => {
     const refreshClickCounts = () => {
       const storedClicks = JSON.parse(localStorage.getItem('templateClicks') || '{}');
@@ -62,19 +60,18 @@ isPremium: template.isPremium ||
       );
     };
 
-    // Handle browser back/forward navigation
+    
     const handlePopState = () => {
       setTimeout(refreshClickCounts, 100);
     };
 
-    // Handle page visibility change (tab switching, etc.)
+    
     const handleVisibilityChange = () => {
       if (!document.hidden) {
         refreshClickCounts();
       }
     };
 
-    // Handle window focus (when user returns to the browser)
     const handleFocus = () => {
       refreshClickCounts();
     };
@@ -90,7 +87,7 @@ isPremium: template.isPremium ||
     };
   }, []);
 
-  // Helper function to determine if a template is "new"
+  
   const isNewTemplate = (template) => {
     if (!template.createdAt && !template.dateAdded) return false;
     
@@ -98,14 +95,14 @@ isPremium: template.isPremium ||
     const now = new Date();
     const daysAgo = Math.floor((now - templateDate) / (1000 * 60 * 60 * 24));
     
-    // Consider template "new" if created within reasonable timeframe
+   
     const totalTemplates = templatesData.length;
-    const newThreshold = Math.max(7, Math.ceil(totalTemplates * 0.15)); // At least 7 days or 15% of templates
+    const newThreshold = Math.max(7, Math.ceil(totalTemplates * 0.15)); 
     
     return daysAgo <= newThreshold;
   };
 
-  // Helper function to sort templates by click count (popularity)
+  
   const sortByPopularity = (templates) => {
     return [...templates].sort((a, b) => {
       const aClicks = a.clickCount || 0;
@@ -114,7 +111,7 @@ isPremium: template.isPremium ||
     });
   };
 
-  // Helper function to sort templates by date (newest first)
+ 
   const sortByDate = (templates) => {
     return [...templates].sort((a, b) => {
       const aDate = new Date(a.createdAt || a.dateAdded || 0);
@@ -123,10 +120,10 @@ isPremium: template.isPremium ||
     });
   };
 
-  // Apply filtering and sorting logic
+  
   const getFilteredAndSortedTemplates = () => {
     let filtered = templatesData.filter(template => {
-      // Search filter
+      
       const matchesSearch =
         searchTerm === '' ||
         (template.filename && template.filename.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -135,15 +132,15 @@ isPremium: template.isPremium ||
       return matchesSearch;
     });
 
-    // Apply filter-specific logic
+    
     switch (currentFilter) {
       case 'popular':
-        // Only show templates that have been clicked (popular)
+        
         filtered = filtered.filter(template => (template.clickCount || 0) > 0);
         return sortByPopularity(filtered);
         
       case 'new':
-        // Only show templates that are new
+        
         filtered = filtered.filter(template => isNewTemplate(template));
         return sortByDate(filtered);
         
@@ -151,7 +148,7 @@ isPremium: template.isPremium ||
         
       case 'all':
       default:
-        // Show all templates, sorted by a mix of popularity and recency
+       
         return sortByPopularity(filtered);
     }
   };
@@ -171,9 +168,9 @@ isPremium: template.isPremium ||
     setVisibleCount(prev => prev + 3);
   };
 
-  // Function to handle template click and update click count
+  
   const handleTemplateClick = (e, template) => {
-    // Prevent double execution
+    
     if (isNavigating) return;
     
     e.preventDefault();
@@ -184,7 +181,7 @@ isPremium: template.isPremium ||
     const templateId = template._id || template.id;
     const newClickCount = (template.clickCount || 0) + 1;
     
-    // Update local state to increment click count
+    
     setTemplatesData(prevTemplates => 
       prevTemplates.map(t => 
         (t._id || t.id) === templateId 
@@ -193,18 +190,13 @@ isPremium: template.isPremium ||
       )
     );
 
-    // Save click counts to localStorage for persistence
+    
     const storedClicks = JSON.parse(localStorage.getItem('templateClicks') || '{}');
     storedClicks[templateId] = newClickCount;
     localStorage.setItem('templateClicks', JSON.stringify(storedClicks));
 
-    // Navigate to resume builder (your actual route)
-    navigate('/resumebuilder', { 
-      state: { template },
-      replace: false
-    });
+  
     
-    // Reset navigation flag after a short delay
     setTimeout(() => setIsNavigating(false), 1000);
   };
 
