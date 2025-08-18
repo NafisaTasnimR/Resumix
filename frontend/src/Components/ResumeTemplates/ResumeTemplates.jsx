@@ -29,7 +29,13 @@ const ResumeTemplates = () => {
           clickCount: storedClicks[template._id || template.id] || template.clickCount || 0,
           // Make every 3rd template premium for demo (you can change this logic)
           // You can also add specific template IDs: template.isPremium || ['id1', 'id2', 'id3'].includes(template._id)
-          isPremium: template.isPremium || (index % 3 === 0)
+         // Make specifically template 3 (index 2) and template 6 (index 5) premium
+isPremium: template.isPremium || 
+  index === 2 || // Template 3 (0-indexed)
+  index === 5 || // Template 6 (0-indexed)
+  // Alternative: target by name if templates have consistent naming
+  (template.filename && (template.filename.includes('Resume3') || template.filename.includes('Resume6'))) ||
+  (template.name && (template.name.includes('Resume3') || template.name.includes('Resume6')))
         }));
         
         setTemplatesData(templatesWithClicks);
