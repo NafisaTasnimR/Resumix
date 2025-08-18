@@ -11,6 +11,7 @@ const ResumeTemplates = () => {
   const [visibleCount, setVisibleCount] = useState(3);
   const [templatesData, setTemplatesData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isNavigating, setIsNavigating] = useState(false); // Prevent double clicks
   const navigate = useNavigate();
 
   // Fetch templates from backend on mount
@@ -22,10 +23,13 @@ const ResumeTemplates = () => {
         // Get stored click counts from localStorage
         const storedClicks = JSON.parse(localStorage.getItem('templateClicks') || '{}');
         
-        // Initialize templates with clickCount from localStorage or 0
-        const templatesWithClicks = (res.data || []).map(template => ({
+        // Initialize templates with clickCount and premium status
+        const templatesWithClicks = (res.data || []).map((template, index) => ({
           ...template,
-          clickCount: storedClicks[template._id || template.id] || template.clickCount || 0
+          clickCount: storedClicks[template._id || template.id] || template.clickCount || 0,
+          // Make every 3rd template premium for demo (you can change this logic)
+          // You can also add specific template IDs: template.isPremium || ['id1', 'id2', 'id3'].includes(template._id)
+          isPremium: template.isPremium || (index % 3 === 0)
         }));
         
         setTemplatesData(templatesWithClicks);
@@ -88,7 +92,7 @@ const ResumeTemplates = () => {
     const now = new Date();
     const daysAgo = Math.floor((now - templateDate) / (1000 * 60 * 60 * 24));
     
-    // Consider template "new" if created within reasonable timeframe
+    
     const totalTemplates = templatesData.length;
     const newThreshold = Math.max(7, Math.ceil(totalTemplates * 0.15)); // At least 7 days or 15% of templates
     
@@ -137,9 +141,11 @@ const ResumeTemplates = () => {
         filtered = filtered.filter(template => isNewTemplate(template));
         return sortByDate(filtered);
         
+
+        
       case 'all':
       default:
-        // Show all templates, sorted by a mix of popularity and recency
+        
         return sortByPopularity(filtered);
     }
   };
@@ -160,7 +166,15 @@ const ResumeTemplates = () => {
   };
 
   // Function to handle template click and update click count
-  const handleTemplateClick = (template) => {
+  const handleTemplateClick = (e, template) => {
+    // Prevent double execution
+    if (isNavigating) return;
+    
+    e.preventDefault();
+    e.stopPropagation();
+    
+    setIsNavigating(true);
+    
     const templateId = template._id || template.id;
     const newClickCount = (template.clickCount || 0) + 1;
     
@@ -178,8 +192,10 @@ const ResumeTemplates = () => {
     storedClicks[templateId] = newClickCount;
     localStorage.setItem('templateClicks', JSON.stringify(storedClicks));
 
-    // Navigate to resume builder (your actual route)
-   
+    
+    
+    // Reset navigation flag after a short delay
+    setTimeout(() => setIsNavigating(false), 1000);
   };
 
   return (
@@ -237,8 +253,15 @@ const ResumeTemplates = () => {
             <div 
               key={template._id || template.id} 
               className="template-card"
-              onClick={() => handleTemplateClick(template)}
+              onClick={(e) => handleTemplateClick(e, template)}
             >
+              {/* Premium Badge - minimalistic bottom-right */}
+              {template.isPremium && (
+                <div className="minimal-pro-badge">
+                  <span className="crown-icon">👑</span>
+                </div>
+              )}
+              
               <TemplatePreview id={template._id || template.id} template={template} />
             </div>
           ))
