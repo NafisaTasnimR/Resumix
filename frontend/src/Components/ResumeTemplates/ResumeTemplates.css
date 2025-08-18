@@ -144,7 +144,9 @@
   transform: translateY(-2px);
 }
 
+/* Your existing CSS styles remain the same, add these new styles */
 
+/* Update template-card to ensure proper positioning */
 .template-card {
   background: white;
   border-radius: 0;
@@ -157,20 +159,21 @@
   transition: transform 0.3s ease;
   padding: 10px;
   position: relative; /* Essential for badge positioning */
-  overflow: hidden; /* Prevent badge from extending outside card */
+  overflow: visible; /* Allow badge to be visible */
+  min-height: 400px; /* Ensure consistent height */
 }
 
 .template-card:hover {
   transform: translateY(-5px);
 }
 
-/* Minimalistic PRO Badge - Bottom Right Corner (Fixed) */
+/* Minimalistic PRO Badge - Bottom Right Corner of Template Content */
 .minimal-pro-badge {
   position: absolute;
-  bottom: 15px;
+  bottom: 8px;
   right: 8px;
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
   background: rgba(0, 0, 0, 0.8);
   border-radius: 50%;
   display: flex;
@@ -181,8 +184,10 @@
 }
 
 .crown-icon {
-  font-size: 10px;
-  line-height: 1;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  pointer-events: none;
 }
 
 /* Subtle hover effect - very minimal */
@@ -193,26 +198,28 @@
 /* Responsive design for smaller screens */
 @media (max-width: 768px) {
   .minimal-pro-badge {
-    width: 18px;
-    height: 18px;
-    bottom: 12px;
+    width: 24px;
+    height: 24px;
+    bottom: 6px;
     right: 6px;
   }
   
   .crown-icon {
-    font-size: 9px;
+    width: 14px;
+    height: 14px;
   }
 }
 
 @media (max-width: 480px) {
   .minimal-pro-badge {
-    width: 16px;
-    height: 16px;
-    bottom: 10px;
+    width: 22px;
+    height: 22px;
+    bottom: 5px;
     right: 5px;
   }
   
   .crown-icon {
-    font-size: 8px;
+    width: 12px;
+    height: 12px;
   }
 }

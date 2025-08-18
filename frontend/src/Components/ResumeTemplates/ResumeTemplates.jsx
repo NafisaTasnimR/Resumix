@@ -92,7 +92,7 @@ const ResumeTemplates = () => {
     const now = new Date();
     const daysAgo = Math.floor((now - templateDate) / (1000 * 60 * 60 * 24));
     
-    
+    // Consider template "new" if created within reasonable timeframe
     const totalTemplates = templatesData.length;
     const newThreshold = Math.max(7, Math.ceil(totalTemplates * 0.15)); // At least 7 days or 15% of templates
     
@@ -145,7 +145,7 @@ const ResumeTemplates = () => {
         
       case 'all':
       default:
-        
+        // Show all templates, sorted by a mix of popularity and recency
         return sortByPopularity(filtered);
     }
   };
@@ -192,7 +192,11 @@ const ResumeTemplates = () => {
     storedClicks[templateId] = newClickCount;
     localStorage.setItem('templateClicks', JSON.stringify(storedClicks));
 
-    
+    // Navigate to resume builder (your actual route)
+    navigate('/resumebuilder', { 
+      state: { template },
+      replace: false
+    });
     
     // Reset navigation flag after a short delay
     setTimeout(() => setIsNavigating(false), 1000);
@@ -258,7 +262,11 @@ const ResumeTemplates = () => {
               {/* Premium Badge - minimalistic bottom-right */}
               {template.isPremium && (
                 <div className="minimal-pro-badge">
-                  <span className="crown-icon">👑</span>
+                  <img 
+                    src="/crown.png" 
+                    alt="Premium" 
+                    className="crown-icon"
+                  />
                 </div>
               )}
               
