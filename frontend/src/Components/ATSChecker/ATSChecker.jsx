@@ -1,27 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ATSChecker.css';
 import { useNavigate } from 'react-router-dom';
 import TopBar from '../ResumeEditorPage/TopBar';
+import { calculateAtsScore, generateScoreData } from './ATSLogic';
 
-const ATSChecker = () => {
+const ATSChecker = ({ resumeData, resumeId }) => {
   const [jobDescription, setJobDescription] = useState('');
+  const [scoreData, setScoreData] = useState(null);
 
-  const scoreData = {
-    overall: 72,
-    totalIssues: 11,
-    categories: {
-      tailoring: { score: 100, status: 'good' },
-      content: { score: 70, status: 'warning' },
-      format: { score: 40, status: 'error' },
-      sections: { score: 89, status: 'good' },
-      style: { score: 86, status: 'good' }
-    },
-    issues: [
-      { name: 'ATS Parse Rate', status: 'good', icon: '✓' },
-      { name: 'Quantifying Impact', status: 'warning', icon: '⚠' },
-      { name: 'Repetition', status: 'good', icon: '✓' },
-      { name: 'Spelling & Grammar', status: 'warning', icon: '⚠' }
-    ]
+  useEffect(() => {
+    if (resumeData) {
+      const score = calculateAtsScore(resumeData);
+      const generatedScoreData = generateScoreData(score);
+      setScoreData(generatedScoreData);
+
+      updateBackendScore(score);
+    }
+  }, [resumeData]);
+
+  const updateBackendScore = async (score) => {
+    try {
+      await fetch(`/api/resumes/${resumeId}/ats-score`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ atsScore: score }),
+      });
+    } catch (err) {
+      console.error('Error updating ATS score:', err);
+    }
   };
 
   const getScoreColor = (score) => {
@@ -39,6 +45,18 @@ const ATSChecker = () => {
     }
   };
 
+  if (!scoreData)
+    return (
+      <div className="resume-checker loading-screen">
+        <TopBar />
+        <div className="loading-container">
+          <div className="spinner"></div>
+          <p>Calculating ATS score...</p>
+        </div>
+      </div>
+    );
+
+
   return (
     <div className="resume-checker">
       <TopBar />
@@ -55,94 +73,36 @@ const ATSChecker = () => {
           </div>
 
           <div className="categories-section">
-            <div className="category-item">
-              <div className="category-header">
-                <span className="category-name">TAILORING</span>
-                <div className="category-score-container">
-                  <span 
-                    className="category-score"
-                    style={{ backgroundColor: getScoreColor(scoreData.categories.tailoring.score) }}
-                  >
-                    {scoreData.categories.tailoring.score}%
-                  </span>
-                  <span className="chevron">▼</span>
+            {Object.entries(scoreData.categories).map(([key, value]) => (
+              <div className="category-item" key={key}>
+                <div className="category-header">
+                  <span className="category-name">{key.toUpperCase()}</span>
+                  <div className="category-score-container">
+                    <span
+                      className="category-score"
+                      style={{ backgroundColor: getScoreColor(value.score) }}
+                    >
+                      {value.score}%
+                    </span>
+                    <span className="chevron">▼</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
+          </div>
 
-            <div className="category-item">
-              <div className="category-header">
-                <span className="category-name">CONTENT</span>
-                <div className="category-score-container">
-                  <span 
-                    className="category-score"
-                    style={{ backgroundColor: getScoreColor(scoreData.categories.content.score) }}
-                  >
-                    {scoreData.categories.content.score}%
-                  </span>
-                  <span className="chevron">▼</span>
-                </div>
+          <div className="issues-list">
+            {scoreData.issues.map((issue, index) => (
+              <div key={index} className="issue-item">
+                <span
+                  className="issue-icon"
+                  style={{ color: getStatusColor(issue.status) }}
+                >
+                  {issue.icon}
+                </span>
+                <span className="issue-name">{issue.name}</span>
               </div>
-            </div>
-
-            <div className="issues-list">
-              {scoreData.issues.map((issue, index) => (
-                <div key={index} className="issue-item">
-                  <span 
-                    className="issue-icon" 
-                    style={{ color: getStatusColor(issue.status) }}
-                  >
-                    {issue.icon}
-                  </span>
-                  <span className="issue-name">{issue.name}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="category-item">
-              <div className="category-header">
-                <span className="category-name">FORMAT</span>
-                <div className="category-score-container">
-                  <span 
-                    className="category-score"
-                    style={{ backgroundColor: getScoreColor(scoreData.categories.format.score) }}
-                  >
-                    {scoreData.categories.format.score}%
-                  </span>
-                  <span className="chevron">▼</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="category-item">
-              <div className="category-header">
-                <span className="category-name">SECTIONS</span>
-                <div className="category-score-container">
-                  <span 
-                    className="category-score"
-                    style={{ backgroundColor: getScoreColor(scoreData.categories.sections.score) }}
-                  >
-                    {scoreData.categories.sections.score}%
-                  </span>
-                  <span className="chevron">▼</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="category-item">
-              <div className="category-header">
-                <span className="category-name">STYLE</span>
-                <div className="category-score-container">
-                  <span 
-                    className="category-score"
-                    style={{ backgroundColor: getScoreColor(scoreData.categories.style.score) }}
-                  >
-                    {scoreData.categories.style.score}%
-                  </span>
-                  <span className="chevron">▼</span>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
 
           <button className="unlock-report-btn">
@@ -171,52 +131,12 @@ const ATSChecker = () => {
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
             />
-            
-            <div className="action-buttons">
-              <button className="sample-job-btn">
-                📄 Use a Sample Job Post
-              </button>
-              <button className="tailored-insights-btn">
-                <span className="btn-icon">🎯</span>
-                Get Tailored Insights
-              </button>
-            </div>
           </div>
 
           <div className="hard-skills-section">
-           
             <h3>🔒 HARD SKILLS</h3>
-            
             <div className="skills-categories">
-              <div className="skill-category">
-                <div className="skill-header">
-                  <span>CONTENT</span>
-                  <div className="skill-right">
-                    <span className="skill-score" style={{ backgroundColor: getScoreColor(70) }}>70%</span>
-                    <span className="chevron">▼</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="skill-category">
-                <div className="skill-header">
-                  <span>FORMAT</span>
-                  <div className="skill-right">
-                    <span className="skill-score" style={{ backgroundColor: getScoreColor(40) }}>40%</span>
-                    <span className="chevron">▼</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="skill-category">
-                <div className="skill-header">
-                  <span>SECTIONS</span>
-                  <div className="skill-right">
-                    <span className="skill-score" style={{ backgroundColor: getScoreColor(89) }}>89%</span>
-                    <span className="chevron">▼</span>
-                  </div>
-                </div>
-              </div>
+
             </div>
           </div>
 
