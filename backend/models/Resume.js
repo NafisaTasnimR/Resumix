@@ -15,7 +15,10 @@ const ResumeSchema = new schema({
         type: String,
         default: 'Untitled'
     },
-
+    strength: {
+        type: Number,
+        default: 0
+    },
     ResumeData: {
         personalInfo: {
             fullName: { type: String, default: '' },
