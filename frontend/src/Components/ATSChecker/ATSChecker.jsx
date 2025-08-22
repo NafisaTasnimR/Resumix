@@ -3,6 +3,7 @@ import './ATSChecker.css';
 import { useNavigate } from 'react-router-dom';
 import TopBar from '../ResumeEditorPage/TopBar';
 import { calculateAtsScore, generateScoreData } from './ATSLogic';
+import axios from 'axios';
 
 const ATSChecker = ({ resumeData, resumeId }) => {
   const [jobDescription, setJobDescription] = useState('');
@@ -19,16 +20,17 @@ const ATSChecker = ({ resumeData, resumeId }) => {
   }, [resumeData]);
 
   const updateBackendScore = async (score) => {
-    try {
-      await fetch(`/api/resumes/${resumeId}/ats-score`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ atsScore: score }),
-      });
-    } catch (err) {
-      console.error('Error updating ATS score:', err);
-    }
-  };
+  try {
+    await axios.patch(`/api/resumes/${resumeId}/ats-score`, {
+      atsScore: score,
+    }, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch (err) {
+    console.error('Error updating ATS score:', err);
+  }
+};
+
 
   const getScoreColor = (score) => {
     if (score >= 80) return '#10B981';
