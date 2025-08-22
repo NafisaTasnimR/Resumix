@@ -20,7 +20,7 @@ const RoutingComponent = () => {
             <Route path="/resumebuilder" element={<ResumeEditor />} />
             <Route path="/noaccount" element={<NoAccountPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/resumeview" element={<ResumeViewPage />} />
+            <Route path="/resumeview/:id" element={<ResumeViewPage />} />
 
         </Routes>
     );

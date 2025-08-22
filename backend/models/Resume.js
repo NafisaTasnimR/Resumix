@@ -15,12 +15,10 @@ const ResumeSchema = new schema({
         type: String,
         default: 'Untitled'
     },
-    
-    createdAt: {
-        type: Date,
-        default: Date.now
+    strength: {
+        type: Number,
+        default: 0
     },
-
     ResumeData: {
         personalInfo: {
             fullName: { type: String, default: '' },
@@ -158,9 +156,10 @@ const ResumeSchema = new schema({
             default: []
         }
     }
+}, { timestamps: true });
 
+ResumeSchema.index({ userEmail: 1, createdAt: -1 });
 
-});
 
 const ResumeModel = mongoose.model('Resume', ResumeSchema);
 module.exports = ResumeModel;
