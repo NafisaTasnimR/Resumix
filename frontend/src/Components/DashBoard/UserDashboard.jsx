@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import './UserDashboard.css';
 import { Link, useNavigate } from 'react-router-dom';
 import ShareResumeModal from '../ResumeListPage/ShareResumeModal';
@@ -96,7 +96,7 @@ const Dashboard = () => {
 
   const fmt = (d) => (d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : '—');
 
-   const handleDownloadClick = async (resume) => {
+  const handleDownloadClick = async (resume) => {
     try {
       const token = localStorage.getItem('token') || '';
       const res = await axios.get(`http://localhost:5000/download/resume/${resume._id}/pdf`, {
@@ -116,7 +116,7 @@ const Dashboard = () => {
     }
   };
 
- 
+
 
   return (
     <div className="resume-fullpage">
@@ -165,11 +165,17 @@ const Dashboard = () => {
             <span>{fmt(r.createdAt)}</span>
 
             {/* Strength placeholder (put your actual score here if available) */}
-            <span className="strength-badge">{r.strength ?? '—'}</span>
+            <span className="strength-badge">
+              {Number.isFinite(r.atsScore) ? `${r.atsScore}` : '—'}
+            </span>
 
             <span className="actions">
               <button onClick={() => handleDownloadClick(r)}>Download</button>
               <button onClick={() => handleShareClick(r)}>Link</button>
+              <button onClick={() => navigate('/m/atschecker', { state: { resumeId: r._id } })}>
+                ATS Check
+              </button>
+
               {/* You can also offer a copy-link-to-preview:
                   <button onClick={() => navigator.clipboard.writeText(`${window.location.origin}/resumeview/${r._id}`)}>Copy Link</button>
                */}
