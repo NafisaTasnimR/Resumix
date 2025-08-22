@@ -21,7 +21,7 @@ const ATSChecker = ({ resumeData, resumeId }) => {
 
   const updateBackendScore = async (score) => {
   try {
-    await axios.patch(`/api/resumes/${resumeId}/ats-score`, {
+    await axios.patch(`http://localhost:5000/resume/updateResume/${resumeId}`, {
       atsScore: score,
     }, {
       headers: { 'Content-Type': 'application/json' }
