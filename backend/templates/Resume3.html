@@ -84,94 +84,128 @@
     }
 
     .section-title.references {
-  margin-top: 12px; 
-}
+      margin-top: 12px; 
+    }
 
-.section-title.hobbies {
-  margin-top: 12px;
-}
-
+    .section-title.hobbies {
+      margin-top: 12px;
+    }
   </style>
 </head>
 <body>
 
   <div class="header1">
-    <h1>ALEXANDER TAYLOR</h1>
-    <h2>SR PRODUCT MANAGER</h2>
+    <h1 data-edit-id="personalInfo.fullName">ALEXANDER TAYLOR</h1>
+    <h2 data-edit-id="additionalInfos[0].sectionTitle">SR PRODUCT MANAGER</h2>
     <div class="contact-info">
-    alex.taylor@gmail.com &nbsp; | &nbsp;  New York, USA &nbsp; | &nbsp;  (123) 456-7890 &nbsp; | &nbsp;  LinkedIn @alex-taylor
+      <span data-edit-id="personalInfo.professionalEmail">alex.taylor@gmail.com</span> &nbsp; | &nbsp;  
+      <span data-edit-id="personalInfo.city">New York</span>, <span data-edit-id="personalInfo.country">USA</span> &nbsp; | &nbsp;  
+      <span data-edit-id="personalInfo.phone">(123) 456-7890</span> &nbsp; | &nbsp;  
+      <span data-edit-id="additionalInfos[1].content">LinkedIn @alex-taylor</span>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">SUMMARY</div>
-    <p>Seasoned product manager with over 8 years of experience in leading cross-functional teams, defining product roadmaps, and delivering customer-centric SaaS solutions.</p>
+    <p data-edit-id="additionalInfos[0].content">Seasoned product manager with over 8 years of experience in leading cross-functional teams, defining product roadmaps, and delivering customer-centric SaaS solutions.</p>
   </div>
 
   <div class="section two-columns">
     <div class="column">
       <div class="section-title">EXPERIENCE</div>
 
-      <div class="item-title">Google</div>
-      <div class="sub-info">Senior Product Manager | 05/2020 to Present</div>
+      <div class="item-title" data-edit-id="experience[0].employerName">Google</div>
+      <div class="sub-info">
+        <span data-edit-id="experience[0].jobTitle">Senior Product Manager</span> | 
+        <span data-edit-id="experience[0].startDate">05/2020</span> to 
+        <span data-edit-id="experience[0].isCurrentJob">Present</span>
+      </div>
       <ul>
         <li>Led the development of a new Ads Analytics tool used by over 1M advertisers.</li>
         <li>Collaborated with engineering and UX to increase feature adoption by 35%.</li>
       </ul>
 
-      <div class="item-title">Adobe Inc.</div>
-      <div class="sub-info">Product Manager | 01/2016 to 04/2020</div>
+      <div class="item-title" data-edit-id="experience[1].employerName">Adobe Inc.</div>
+      <div class="sub-info">
+        <span data-edit-id="experience[1].jobTitle">Product Manager</span> | 
+        <span data-edit-id="experience[1].startDate">01/2016</span> to 
+        <span data-edit-id="experience[1].endDate">04/2020</span>
+      </div>
       <ul>
         <li>Launched three new SaaS tools, boosting monthly active users by 50k.</li>
         <li>Conducted UX testing and defined feature specs with agile teams.</li>
       </ul>
 
       <div class="section-title">EDUCATION</div>
-      <div class="item-title">Stanford University</div>
-      <div class="sub-info">MBA | 2013 to 2015</div>
+      <div class="item-title" data-edit-id="education[0].institution">Stanford University</div>
+      <div class="sub-info">
+        <span data-edit-id="education[0].degree">MBA</span> | 
+        <span data-edit-id="education[0].startDate">2013</span> to 
+        <span data-edit-id="education[0].endDate">2015</span>
+      </div>
       <ul>
-        <li>Stanford, CA</li>
+        <li><span data-edit-id="education[0].city">Stanford</span>, <span data-edit-id="education[0].state">CA</span></li>
       </ul>
 
-      <div class="item-title">University of Texas</div>
-      <div class="sub-info">BSc in Computer Science | 2008 to 2012</div>
+      <div class="item-title" data-edit-id="education[1].institution">University of Texas</div>
+      <div class="sub-info">
+        <span data-edit-id="education[1].degree">BSc</span> in 
+        <span data-edit-id="education[1].fieldOfStudy">Computer Science</span> | 
+        <span data-edit-id="education[1].startDate">2008</span> to 
+        <span data-edit-id="education[1].endDate">2012</span>
+      </div>
       <ul>
-        <li>Austin, TX</li>
+        <li><span data-edit-id="education[1].city">Austin</span>, <span data-edit-id="education[1].state">TX</span></li>
       </ul>
 
       <div class="section-title">PROJECTS</div>
-      <ul>
-        <li>InsightApp – B2B analytics dashboard for SMBs | <a href="#">https://insightapp.io</a></li>
-      </ul>
+<ul>
+  <li>
+    <span data-edit-id="additionalInfos[2].content">
+      InsightApp – B2B analytics dashboard for SMBs 
+    </span>
+  </li>
+</ul>
+
     </div>
 
     <div class="column">
       <div class="section-title">SKILLS</div>
       <ul>
-        <li>Product Management</li>
-        <li>UX Research</li>
-        <li>SaaS</li>
-        <li>A/B Testing</li>
+        <li><span data-edit-id="skills[0].skillName">Product Management</span></li>
+        <li><span data-edit-id="skills[1].skillName">UX Research</span></li>
+        <li><span data-edit-id="skills[2].skillName">SaaS</span></li>
+        <li><span data-edit-id="skills[3].skillName">A/B Testing</span></li>
       </ul>
 
       <div class="section-title">ACHIEVEMENTS</div>
-      <div class="item-title">PM of the Year</div>
-      <div class="sub-info">Tech Innovators Awards | 2022</div>
+      <div class="item-title" data-edit-id="achievements[0].title">PM of the Year</div>
+      <div class="sub-info">
+        <span data-edit-id="achievements[0].organization">Tech Innovators Awards</span> | 
+        <span data-edit-id="achievements[0].dateReceived">2022</span>
+      </div>
 
-      <div class="item-title">UX Innovation Grant</div>
-      <div class="sub-info">Adobe Labs | 2019</div>
+      <div class="item-title" data-edit-id="achievements[1].title">UX Innovation Grant</div>
+      <div class="sub-info">
+        <span data-edit-id="achievements[1].organization">Adobe Labs</span> | 
+        <span data-edit-id="achievements[1].dateReceived">2019</span>
+      </div>
 
       <div class="section-title references">REFERENCES</div>
-      <div class="item-title">Emily Johnson</div>
-      <div class="sub-info">Director of Product, Google</div>
-      <div>Email: emily.johnson@google.com</div>
-      <div>Phone: (321) 987-6543</div>
-      <div>Relationship: Supervisor</div>
+      <div class="item-title">
+        <span data-edit-id="references[0].firstName">Emily</span> <span data-edit-id="references[0].lastName">Johnson</span>
+      </div>
+      <div class="sub-info">
+        <span data-edit-id="references[0].jobTitle">Director of Product</span>, <span data-edit-id="references[0].company">Google</span>
+      </div>
+      <div>Email: <span data-edit-id="references[0].referenceEmail">emily.johnson@google.com</span></div>
+      <div>Phone: <span data-edit-id="references[0].phone">(321) 987-6543</span></div>
+      <div>Relationship: <span data-edit-id="references[0].relationship">Supervisor</span></div>
 
       <div class="section-title hobbies">HOBBIES</div>
       <ul>
-        <li>Photography – Capturing cityscapes and wildlife during travel</li>
-        <li>Chess – Competitive club player with regional championship participation</li>
+        <li><span data-edit-id="hobbies[0].hobbyName">Photography</span> – <span data-edit-id="hobbies[0].description">Capturing cityscapes and wildlife during travel</span></li>
+        <li><span data-edit-id="hobbies[1].hobbyName">Chess</span> – <span data-edit-id="hobbies[1].description">Competitive club player with regional championship participation</span></li>
       </ul>
     </div>
   </div>

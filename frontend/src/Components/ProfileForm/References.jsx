@@ -1,14 +1,25 @@
 import React from 'react';
 
-const References = ({ 
-  references, 
-  currentReferenceIndex, 
-  setCurrentReferenceIndex, 
-  updateReference, 
-  addNewReference, 
-  removeReference 
+const References = ({
+  references,
+  currentReferenceIndex,
+  setCurrentReferenceIndex,
+  updateReference,
+  addNewReference,
+  removeReference
 }) => {
-  const currentReference = references[currentReferenceIndex];
+  const currentReference = references?.[currentReferenceIndex] ?? {
+    firstName: '',
+    lastName: '',
+    jobTitle: '',
+    company: '',
+    referenceEmail: '',
+    phone: '',
+    relationship: '',
+    description: '',
+    permissionToContact: false
+  };
+
 
   return (
     <>
@@ -36,77 +47,83 @@ const References = ({
 
         <div className="field-row">
           <div className="field-group half-width">
+
             <label className="required">First Name:</label>
             <input 
               type="text" 
               className="input-field" 
               value={currentReference.firstName}
+
               onChange={(e) => updateReference('firstName', e.target.value)}
-              placeholder="Bill" 
+              placeholder="Bill"
             />
           </div>
           <div className="field-group half-width">
+
             <label className="required">Last Name:</label>
             <input 
               type="text" 
               className="input-field" 
               value={currentReference.lastName}
+
               onChange={(e) => updateReference('lastName', e.target.value)}
-              placeholder="Gates" 
+              placeholder="Gates"
             />
           </div>
         </div>
 
         <div className="field-group">
           <label>Job Title:</label>
-          <input 
-            type="text" 
-            className="input-field" 
-            value={currentReference.jobTitle}
+          <input
+            type="text"
+            className="input-field"
+            value={currentReference?.jobTitle || ''}
             onChange={(e) => updateReference('jobTitle', e.target.value)}
-            placeholder="Co-founder, Bill & Melinda Gates Foundation" 
+            placeholder="Co-founder, Bill & Melinda Gates Foundation"
           />
         </div>
 
         <div className="field-group">
+
           <label className="required">Company/Organization:</label>
           <input 
             type="text" 
             className="input-field" 
             value={currentReference.company}
+
             onChange={(e) => updateReference('company', e.target.value)}
-            placeholder="Microsoft Corporation" 
+            placeholder="Microsoft Corporation"
           />
         </div>
 
         <div className="field-row">
           <div className="field-group half-width">
             <label>Email:</label>
-            <input 
-              type="email" 
-              className="input-field" 
-              value={currentReference.referenceEmail}
+            <input
+              type="email"
+              className="input-field"
+              value={currentReference?.referenceEmail || ''}
               onChange={(e) => updateReference('referenceEmail', e.target.value)}
-              placeholder="bill.gates@microsoft.com" 
+              placeholder="bill.gates@microsoft.com"
             />
           </div>
           <div className="field-group half-width">
             <label>Phone:</label>
-            <input 
-              type="tel" 
-              className="input-field" 
-              value={currentReference.phone}
+            <input
+              type="tel"
+              className="input-field"
+              value={currentReference?.phone || ''}
               onChange={(e) => updateReference('phone', e.target.value)}
-              placeholder="(555) 123-4567" 
+              placeholder="(555) 123-4567"
             />
           </div>
         </div>
 
         <div className="field-group">
           <label>Relationship:</label>
-          <select 
-            className="input-field" 
-            value={currentReference.relationship}
+          <select
+            className="input-field"
+            value={currentReference?.relationship || ''}
             onChange={(e) => updateReference('relationship', e.target.value)}
           >
             <option value="">Select Relationship</option>
@@ -125,22 +142,22 @@ const References = ({
         {currentReference.relationship === 'Other' && (
           <div className="field-group">
             <label>Please specify relationship:</label>
-            <input 
-              type="text" 
-              className="input-field" 
-              value={currentReference.customRelationship || ''}
-              onChange={(e) => updateReference('customRelationship', e.target.value)}
-              placeholder="Enter your custom relationship" 
+            <input
+              type="text"
+              className="input-field"
+              value={currentReference?.relationship || ''}
+              onChange={(e) => updateReference('relationship', e.target.value)}
+              placeholder="Enter your custom relationship"
             />
           </div>
         )}
 
         <div className="field-group">
           <label>How do you know this person?</label>
-          <textarea 
-            className="input-field textarea-field" 
-            rows="3" 
-            value={currentReference.description}
+          <textarea
+            className="input-field textarea-field"
+            rows="3"
+            value={currentReference?.description || ''}
             onChange={(e) => updateReference('description', e.target.value)}
             placeholder="Bill mentored me during the early development of Khan Academy and provided strategic guidance on scaling educational technology platforms."
           ></textarea>
@@ -148,10 +165,10 @@ const References = ({
 
         <div className="field-group">
           <div className="current-job-checkbox">
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               id={`permissionToContact${currentReferenceIndex}`}
-              className="checkbox-input" 
+              className="checkbox-input"
               checked={currentReference.permissionToContact}
               onChange={(e) => updateReference('permissionToContact', e.target.checked)}
             />
@@ -164,8 +181,8 @@ const References = ({
             + Add Another Reference
           </button>
           {references.length > 1 && (
-            <button 
-              className="remove-button" 
+            <button
+              className="remove-button"
               onClick={() => removeReference(currentReferenceIndex)}
             >
               Remove This Reference
