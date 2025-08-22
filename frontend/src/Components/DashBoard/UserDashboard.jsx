@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './UserDashboard.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ShareResumeModal from '../ResumeListPage/ShareResumeModal';
 import DownloadResumeModal from '../ResumeListPage/DownloadResumeModal';
 import TopBar from '../ResumeEditorPage/TopBar';
@@ -22,7 +22,15 @@ const Dashboard = () => {
   const hobbiesRef = useRef(null);
   const additonalsRef = useRef(null);
 
+  const [resumes, setResumes] = useState([]);
+  const [loadingResumes, setLoadingResumes] = useState(true);
+  const [resumeError, setResumeError] = useState(null);
+
+  const navigate = useNavigate();
+
   useEffect(() => {
+    const token = localStorage.getItem('token');
+
     const fetchUser = async () => {
       try {
         const res = await axios.get('http://localhost:5000/viewInformation/userInformation', {
@@ -36,22 +44,46 @@ const Dashboard = () => {
       }
     };
 
+    const fetchResumes = async () => {
+      try {
+        setLoadingResumes(true);
+        setResumeError(null);
+
+        // Assumes your controller exposes GET /api/resumes -> array of resumes owned by req.user
+        const res = await axios.get('http://localhost:5000/resume/all', {
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+
+        // If your API returns {resumes: [...]}, use res.data.resumes
+        const list = Array.isArray(res.data?.resumes) ? res.data.resumes : res.data;
+        setResumes(Array.isArray(list) ? list : []);
+      } catch (err) {
+        console.error('Failed to fetch resumes:', err);
+        setResumeError('Could not load your resumes.');
+      } finally {
+        setLoadingResumes(false);
+      }
+    };
+
+
     fetchUser();
+    fetchResumes();
   }, []);
 
   if (!user) return <p>Loading...</p>;
 
 
-  const handleShareClick = () => {
+  const handleShareClick = (resume) => {
+    setResumeName(resume.title || 'Untitled Resume');
     setIsShareModalOpen(true);
   };
 
-  const handleDownloadClick = (resume) => {
+  /*const handleDownloadClick = (resume) => {
     setResumeName(resume.name);
     setDownloadLink(`https://myresume.com/${resume.name}_Resume.pdf`);
 
     setIsDownloadModalOpen(true);
-  };
+  };*/
 
   const handleCloseModal = () => {
     setIsShareModalOpen(false);
@@ -61,6 +93,10 @@ const Dashboard = () => {
   const scrollToSection = (ref) => {
     ref.current.scrollIntoView({ behavior: 'smooth' });
   };
+
+  const fmt = (d) => (d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : '—');
+
+ 
 
   return (
     <div className="resume-fullpage">
@@ -80,16 +116,46 @@ const Dashboard = () => {
           <span>STRENGTH</span>
           <span>ACTIONS</span>
         </div>
-        <div className="resume-table-row">
-          <Link to="/resumeview" className="resume-name-link">Nishat_Tasnim_Resume</Link>
-          <span>5/16/2025</span>
-          <span>5/14/2025</span>
-          <span className="strength-badge">45</span>
-          <span className="actions">
-            <button onClick={() => handleDownloadClick({ name: 'Nishat_Tasnim_Resume' })}>Download</button>
-            <button onClick={() => handleShareClick()}>Link</button>
-          </span>
-        </div>
+
+        {loadingResumes && (
+          <div className="resume-table-row"><span>Loading your resumes…</span></div>
+        )}
+
+        {resumeError && (
+          <div className="resume-table-row"><span>{resumeError}</span></div>
+        )}
+
+        {!loadingResumes && !resumeError && resumes.length === 0 && (
+          <div className="resume-table-row"><span>No resumes yet. Create one!</span></div>
+        )}
+
+        {!loadingResumes && !resumeError && resumes.map((r) => (
+          <div className="resume-table-row" key={r._id}>
+            {/* Clicking the title navigates to the specific resume view */}
+            <button
+              className="resume-name-link"
+              onClick={() => navigate(`/resumeview/${r._id}`)}
+              title="Open resume"
+            >
+              {r.title || 'Untitled'}
+            </button>
+
+            {/* If you have updatedAt via timestamps, show it; else fallback to createdAt */}
+            <span>{fmt(r.updatedAt || r.createdAt)}</span>
+            <span>{fmt(r.createdAt)}</span>
+
+            {/* Strength placeholder (put your actual score here if available) */}
+            <span className="strength-badge">{r.strength ?? '—'}</span>
+
+            <span className="actions">
+              <button onClick={() => handleDownloadClick(r)}>Download</button>
+              <button onClick={() => handleShareClick(r)}>Link</button>
+              {/* You can also offer a copy-link-to-preview:
+                  <button onClick={() => navigator.clipboard.writeText(`${window.location.origin}/resumeview/${r._id}`)}>Copy Link</button>
+               */}
+            </span>
+          </div>
+        ))}
       </div>
 
       <div className="dashboard-content">
