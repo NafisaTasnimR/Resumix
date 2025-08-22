@@ -5,5 +5,7 @@ const { verifyToken } = require('../middlewares/TokenVerification');
 
 router.post('/create', verifyToken, createResume);
 router.patch('/updateResume/:resumeId', verifyToken, updateResume);
-router.get('/:resumeId', verifyToken, getResumeById);
 router.get('/all', verifyToken, getAllResumes);
+router.get('/:resumeId', verifyToken, getResumeById);
+
+module.exports = router;
