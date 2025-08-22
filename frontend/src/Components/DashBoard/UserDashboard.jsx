@@ -96,6 +96,26 @@ const Dashboard = () => {
 
   const fmt = (d) => (d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : '—');
 
+   const handleDownloadClick = async (resume) => {
+    try {
+      const token = localStorage.getItem('token') || '';
+      const res = await axios.get(`http://localhost:5000/download/resume/${resume._id}/pdf`, {
+        responseType: 'blob',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const url = URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${(resume.title || 'resume')}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      alert('Could not download PDF');
+    }
+  };
+
  
 
   return (
