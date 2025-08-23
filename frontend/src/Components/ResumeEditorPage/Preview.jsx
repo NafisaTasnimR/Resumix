@@ -79,15 +79,20 @@ const Preview = ({ renderedHtml = "", templateCss = "", onSectionClick }) => {
       doc.addEventListener("click", (e) => {
         const target = e.target.closest?.("[data-edit-id]");
         if (!target) return;
-        const id = target.getAttribute("data-edit-id") || "";
-        if (!id) return;
-        if (id.startsWith("personalInfo.")) onSectionClick?.("personal");
-        else if (id.startsWith("education")) onSectionClick?.("education");
-        else if (id.startsWith("experience")) onSectionClick?.("experience");
-        else if (id.startsWith("skills")) onSectionClick?.("skills");
-        else if (id.startsWith("achievements")) onSectionClick?.("achievements");
-        else if (id.startsWith("references")) onSectionClick?.("references");
-        else if (id.includes("additionalInfos")) onSectionClick?.("additional");
+
+        const path = target.getAttribute("data-edit-id") || "";
+        if (!path) return;
+
+        // break "experience[0].jobTitle" → ["experience","0","jobTitle"]
+        const tokens = path.split(/[\.\[\]]/).filter(Boolean);
+        let section = tokens[0] || "";
+        const field = tokens[tokens.length - 1] || "";
+
+        // normalize section ids to your editor’s names
+        if (section === "personalInfo") section = "personal";
+        if (section === "additionalInfos") section = "additional";
+
+        onSectionClick?.({ section, field, path });
       });
 
       // Recalc on inner DOM mutations (content changes)

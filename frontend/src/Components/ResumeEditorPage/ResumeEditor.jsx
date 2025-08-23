@@ -3,6 +3,31 @@ import { useLocation } from 'react-router-dom';
 import QuestionBox from './QuestionBox';
 import Preview from './Preview';
 
+const FIELD_INDEX = {
+  personal: {
+    fullName: 0, professionalEmail: 1, dateOfBirth: 2, phone: 3,
+    address: 4, city: 5, district: 6, country: 7, zipCode: 8,
+  },
+  education: {
+    degree: 0, fieldOfStudy: 1, institution: 2, startDate: 3, endDate: 4,
+    isCurrentEducation: 5, currentStatus: 5 // whichever you store
+  },
+  experience: {
+    jobTitle: 0,
+    employerName: 1,
+    city: 2, state: 2, location: 2, // map location-ish fields to the same question
+    startDate: 3,
+    endDate: 4,
+    isCurrentJob: 5,
+    bullets: 6, responsibilities: 6
+  },
+  skills: { skillName: 0, proficiencyLevel: 1, yearsOfExperience: 2, description: 3 },
+  achievements: { title: 0, organization: 1, dateReceived: 2, category: 3, description: 4, website: 5 },
+  references: { firstName: 0, lastName: 0, jobTitle: 1, company: 2, referenceEmail: 3, referencePhone: 4 },
+  hobbies: { hobbyName: 0 },
+  additional: { content: 0, sectionTitle: 0 }
+};
+
 const personalQuestions = [
   "Full Name?",
   "Professional Email?",
@@ -101,36 +126,34 @@ const ResumeEditor = () => {
     setAnswers(updated);
   };
 
-  const handleSectionClick = (section) => {
+  const handleSectionClick = (payload) => {
+  // support both old string API and new object API
+  const section = typeof payload === "string" ? payload : payload?.section;
+  const field   = typeof payload === "string" ? undefined : payload?.field;
+
+  // choose the question set for the section
+  let qs = personalQuestions;
   switch (section) {
-    case "personal":
-      setQuestions(personalQuestions);
-      break;
-    case "education":
-      setQuestions(educationQuestions);
-      break;
-    case "experience":
-      setQuestions(experienceQuestions);
-      break;
-    case "skills":
-      setQuestions(skillQuestions);
-      break;
-    case "achievements":
-      setQuestions(achievementQuestions);
-      break;
-    case "references":
-      setQuestions(referenceQuestions);
-      break;
-    case "hobbies":
-      setQuestions(hobbyQuestions);
-      break;
-    case "additional":
-      setQuestions(additionalInfoQuestions);
-      break;
-    default:
-      break;
+    case "personal":      qs = personalQuestions; break;
+    case "education":     qs = educationQuestions; break;
+    case "experience":    qs = experienceQuestions; break;
+    case "skills":        qs = skillQuestions; break;
+    case "achievements":  qs = achievementQuestions; break;
+    case "references":    qs = referenceQuestions; break;
+    case "hobbies":       qs = hobbyQuestions; break;
+    case "additional":    qs = additionalInfoQuestions; break;
+    default:              qs = personalQuestions;
   }
-  setCurrent(0); 
+  setQuestions(qs);
+
+  // pick the right question index based on field name
+  const idxMap = FIELD_INDEX[section] || {};
+  const nextIndex =
+    field && Object.prototype.hasOwnProperty.call(idxMap, field)
+      ? idxMap[field]
+      : 0;
+
+  setCurrent(nextIndex);
 };
 
   return (
