@@ -47,12 +47,9 @@ const ResumePreview = () => {
     <div className="resume-image-container">
       {/* add actual resume render in A4 layout */}
       {resume && (
-        <div className="a4-sheet">
           <ErrorBoundary>
             <ResumeRenderer resume={resume} />
           </ErrorBoundary>
-          
-        </div>
       )}
 
       {error && <p className="error-message">{error}</p>}
