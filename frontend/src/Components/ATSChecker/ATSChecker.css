@@ -48,7 +48,6 @@
   margin: 4px 0 12px !important;
 }
 
-/* extra compactness without changing JS props */
 .score-card .score-ring {
   transform: scale(0.78);
   transform-origin: center;
