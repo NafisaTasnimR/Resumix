@@ -4,13 +4,79 @@ import axios from "axios";
 import "./ResumeTemplates.css";
 import "./TemplatePreview.css";
 
+const BackTopBar = () => {
+  const navigate = useNavigate();
+  const [imgOk, setImgOk] = React.useState(true);
+
+  const goBack = () => {
+    if (window.history.length > 1) navigate(-1);
+    else navigate("/");
+  };
+
+  const barStyle = {
+    position: "sticky",
+    top: 0,
+    zIndex: 50,
+    background: "#ffffff",
+    display: "flex",
+    alignItems: "center",
+    height: 56,
+    padding: "0 16px",
+    borderBottom: "1px solid #e5e7eb",
+  };
+
+  const iconImgStyle = {
+    width: 24,
+    height: 24,
+    objectFit: "cover",
+    borderRadius: 4,
+    cursor: "pointer",
+    userSelect: "none",
+  };
+
+  const fallbackStyle = {
+    fontSize: 20,
+    lineHeight: 1,
+    cursor: "pointer",
+    userSelect: "none",
+  };
+
+  return (
+    <header style={barStyle}>
+      {imgOk ? (
+        <img
+          src="/arrow.png"           
+          alt="Go back"
+          style={iconImgStyle}
+          onClick={goBack}       
+          onError={() => setImgOk(false)}
+          title="Go back"
+        />
+      ) : (
+        <span
+          onClick={goBack}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && goBack()}
+          style={fallbackStyle}
+          aria-label="Go back"
+          title="Go back"
+        >
+          ←
+        </span>
+      )}
+    </header>
+  );
+};
+
+
 const TemplatePreviewGuest = ({ id, template }) => {
   const navigate = useNavigate();
 
   const handleClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    navigate("/login");
+    navigate("/noaccount");
   };
 
   return (
@@ -38,13 +104,9 @@ const PublicTemplates = () => {
   useEffect(() => {
     const fetchTemplates = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:5000/preview/api/templates"
-        );
+        const res = await axios.get("http://localhost:5000/preview/api/templates");
 
-        const storedClicks = JSON.parse(
-          localStorage.getItem("templateClicks") || "{}"
-        );
+        const storedClicks = JSON.parse(localStorage.getItem("templateClicks") || "{}");
 
         const withClicks = (res.data || []).map((template, index) => ({
           ...template,
@@ -52,7 +114,6 @@ const PublicTemplates = () => {
             storedClicks[template._id || template.id] ||
             template.clickCount ||
             0,
-          // keep your premium badge heuristics
           isPremium:
             template.isPremium ||
             index === 2 ||
@@ -77,7 +138,6 @@ const PublicTemplates = () => {
     fetchTemplates();
   }, []);
 
-  // Helpers copied from your page
   const isNewTemplate = (template) => {
     if (!template.createdAt && !template.dateAdded) return false;
     const templateDate = new Date(template.createdAt || template.dateAdded);
@@ -88,9 +148,7 @@ const PublicTemplates = () => {
   };
 
   const sortByPopularity = (templates) =>
-    [...templates].sort(
-      (a, b) => (b.clickCount || 0) - (a.clickCount || 0)
-    );
+    [...templates].sort((a, b) => (b.clickCount || 0) - (a.clickCount || 0));
 
   const sortByDate = (templates) =>
     [...templates].sort(
@@ -136,20 +194,11 @@ const PublicTemplates = () => {
 
   return (
     <div className="page-wrapper">
-      {/* No TopBar here on purpose */}
+      {/* NEW: back-only top bar */}
+      <BackTopBar />
+
       <div className="green-header">
         <h1 className="page-title">Templates</h1>
-      </div>
-
-      <div className="search-bar-container">
-        <input
-          type="text"
-          className="search-bar"
-          placeholder="Search here..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <span className="search-icon">⌕</span>
       </div>
 
       <div className="tabs">
@@ -186,17 +235,12 @@ const PublicTemplates = () => {
           </div>
         ) : (
           visibleTemplates.map((template) => (
-            <div
-              key={template._id || template.id}
-              className="template-card"
-              // no onClick here; the inner preview handles it and sends to /noaccount
-            >
+            <div key={template._id || template.id} className="template-card">
               {template.isPremium && (
                 <div className="minimal-pro-badge">
                   <img src="/crown.png" alt="Premium" className="crown-icon" />
                 </div>
               )}
-
               <TemplatePreviewGuest
                 id={template._id || template.id}
                 template={template}

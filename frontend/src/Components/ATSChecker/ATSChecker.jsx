@@ -111,22 +111,23 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
       .finally(() => setLoading(false));
   }, [resolvedId, resume, propResumeData]);
 
-  // Compute score + breakdown and persist score
   useEffect(() => {
     const data = propResumeData ?? resume?.ResumeData ?? resume ?? null;
     if (!data || !resolvedId) return;
-
     const score = calculateAtsScore(data);
-    // NOTE: for 3-panel layout, update generateScoreData in ATSLogic.js as I described
     setScoreData(generateScoreData(score, data, ''));
 
     const token = localStorage.getItem('token') || '';
+
+    if (Number(resume?.strength) === Number(score)) return;
+
     axios.patch(
       `http://localhost:5000/resume/updateResume/${resolvedId}`,
-      { atsScore: score },
+      { strength: score },
       { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` } }
-    ).catch(err => console.error('Error updating ATS score:', err));
+    ).catch(err => console.error('Error updating strength:', err));
   }, [propResumeData, resume, resolvedId]);
+
 
   if (leaving) {
     return (

@@ -178,11 +178,10 @@ const Dashboard = () => {
             <span>{fmt(r.updatedAt || r.createdAt)}</span>
             <span>{fmt(r.createdAt)}</span>
 
-            {/* Strength placeholder (put your actual score here if available) */}
             <span className="strength-badge">
-              {localScores[r._id] ?? (Number.isFinite(r.atsScore) ? r.atsScore : '—')}
+              {Number.isFinite(Number(r?.strength)) ? Number(r.strength) : '—'}
             </span>
-
+            
             <span className="actions">
               <button onClick={() => handleDownloadClick(r)}>Download</button>
               <button onClick={() => handleShareClick(r)}>Link</button>
