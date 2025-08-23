@@ -80,6 +80,20 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
   const [loadError, setLoadError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const [leaving, setLeaving] = useState(false);
+
+  const backToDashboard = () => {
+    setLeaving(true);
+    setTimeout(() => {
+      navigate('/dashboard', {
+        state: {
+          updatedScore: { id: resolvedId, score: scoreData?.overall ?? 0 }
+        }
+      });
+    }, 60);
+  };
+
+
   // Fetch resume if needed
   useEffect(() => {
     if (resume || !resolvedId || propResumeData) return;
@@ -114,6 +128,19 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
     ).catch(err => console.error('Error updating ATS score:', err));
   }, [propResumeData, resume, resolvedId]);
 
+  if (leaving) {
+    return (
+      <div className="resume-checker loading-screen">
+        <TopBar />
+        <div className="loading-container">
+          <div className="spinner"></div>
+          <p>Returning to dashboard…</p>
+        </div>
+      </div>
+    );
+  }
+
+
   if (!propResumeData && !resolvedId) {
     return (
       <div className="resume-checker">
@@ -144,7 +171,7 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
           <div className="content-area" style={{ padding: 24 }}>
             <h2>ATS Checker</h2>
             <p>{loadError}</p>
-            <button className="delete-data-btn" onClick={() => navigate(-1)}>Back to Dashboard</button>
+            <button className="delete-data-btn" onClick={backToDashboard}>Back to Dashboard</button>
           </div>
         </div>
       </div>
@@ -185,22 +212,9 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
             >
               Edit &amp; Fix Resume
             </button>
-            {/*<button className="delete-data-btn" onClick={() => navigate(-1)}>
-              Back to Dashboard
-            </button> */}
-            <button
-              className="delete-data-btn"
-              onClick={() =>
-                navigate('/dashboard', {
-                  state: {
-                    updatedScore: { id: resolvedId, score: scoreData?.overall ?? 0 }
-                  }
-                })
-              }
-            >
+            <button className="delete-data-btn" onClick={backToDashboard}>
               Back to Dashboard
             </button>
-
           </div>
         </div>
 
