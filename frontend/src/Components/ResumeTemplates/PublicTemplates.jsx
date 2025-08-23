@@ -14,9 +14,11 @@ const BackTopBar = () => {
   };
 
   const barStyle = {
-    position: "sticky",
+    position: "fixed",
     top: 0,
-    zIndex: 50,
+    left: 0,
+    right: 0,
+    zIndex: 1000,
     background: "#ffffff",
     display: "flex",
     alignItems: "center",
