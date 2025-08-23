@@ -43,23 +43,27 @@ const PostLoginHeader = () => {
                   <img src={userIcon} alt="Account Icon" className="account-icon" />
                 </span>
                 <button className="account-button">
-                  MY ACCOUNT 
+                  MY ACCOUNT
                   <span className="dropdown-arrow">▾</span>
                 </button>
               </div>
               {dropdownOpen && (
                 <div className="dropdown-content">
                   <Link to="/dashboard">
-                    <span role="img" aria-label="dashboard">👤</span> Dashboard
+                    <img src="/layout.png" alt="Dashboard" className="dropdown-icon" />
+                    Dashboard
                   </Link>
                   <Link to="/settings">
-                    <span role="img" aria-label="settings">⚙️</span> Settings
+                    <img src="/setting.png" alt="Settings" className="dropdown-icon" />
+                    Settings
                   </Link>
                   <Link to="/">
-                    <span role="img" aria-label="signout">↩️</span> Sign Out
+                    <img src="/exit.png" alt="Sign Out" className="dropdown-icon" />
+                    Sign Out
                   </Link>
                 </div>
               )}
+
             </div>
           </div>
         </nav>

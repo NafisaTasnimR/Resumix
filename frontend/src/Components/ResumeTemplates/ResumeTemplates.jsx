@@ -207,16 +207,6 @@ isPremium: template.isPremium ||
         <h1 className="page-title">Templates</h1>
       </div>
 
-      <div className="search-bar-container">
-        <input
-          type="text"
-          className="search-bar"
-          placeholder="Search here..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-
       <div className="tabs">
         <div
           className={`tab ${currentFilter === 'popular' ? 'active' : ''}`}

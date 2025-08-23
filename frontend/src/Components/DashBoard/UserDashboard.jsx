@@ -1,10 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import './UserDashboard.css';
 import { Link, useNavigate } from 'react-router-dom';
 import ShareResumeModal from '../ResumeListPage/ShareResumeModal';
 import DownloadResumeModal from '../ResumeListPage/DownloadResumeModal';
 import TopBar from '../ResumeEditorPage/TopBar';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 const Dashboard = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -25,8 +26,16 @@ const Dashboard = () => {
   const [resumes, setResumes] = useState([]);
   const [loadingResumes, setLoadingResumes] = useState(true);
   const [resumeError, setResumeError] = useState(null);
-
+  const [localScores, setLocalScores] = useState({});
   const navigate = useNavigate();
+
+  const location = useLocation();
+  useEffect(() => {
+    if (location.state?.updatedScore) {
+      const { id, score } = location.state.updatedScore;
+      setLocalScores(prev => ({ ...prev, [id]: score }));
+    }
+  }, [location.state]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -96,7 +105,7 @@ const Dashboard = () => {
 
   const fmt = (d) => (d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : '—');
 
-   const handleDownloadClick = async (resume) => {
+  const handleDownloadClick = async (resume) => {
     try {
       const token = localStorage.getItem('token') || '';
       const res = await axios.get(`http://localhost:5000/download/resume/${resume._id}/pdf`, {
@@ -116,7 +125,7 @@ const Dashboard = () => {
     }
   };
 
- 
+
 
   return (
     <div className="resume-fullpage">
@@ -138,7 +147,12 @@ const Dashboard = () => {
         </div>
 
         {loadingResumes && (
-          <div className="resume-table-row"><span>Loading your resumes…</span></div>
+          <div className="resume-table-row">
+            <div className="loading-container">
+              <div className="spinner"></div>
+              <p>Loading your resumes…</p>
+            </div>
+          </div>
         )}
 
         {resumeError && (
@@ -164,12 +178,17 @@ const Dashboard = () => {
             <span>{fmt(r.updatedAt || r.createdAt)}</span>
             <span>{fmt(r.createdAt)}</span>
 
-            {/* Strength placeholder (put your actual score here if available) */}
-            <span className="strength-badge">{r.strength ?? '—'}</span>
-
+            <span className="strength-badge">
+              {Number.isFinite(Number(r?.strength)) ? Number(r.strength) : '—'}
+            </span>
+            
             <span className="actions">
               <button onClick={() => handleDownloadClick(r)}>Download</button>
               <button onClick={() => handleShareClick(r)}>Link</button>
+              <button onClick={() => navigate('/m/atschecker', { state: { resumeId: r._id } })}>
+                ATS Check
+              </button>
+
               {/* You can also offer a copy-link-to-preview:
                   <button onClick={() => navigator.clipboard.writeText(`${window.location.origin}/resumeview/${r._id}`)}>Copy Link</button>
                */}

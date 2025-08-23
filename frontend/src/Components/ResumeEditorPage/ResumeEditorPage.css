@@ -424,3 +424,71 @@
   word-wrap: break-word;
 }
 
+/* --- TopBar hamburger + menu --- */
+.hamburger-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #4d5636;
+}
+.hamburger-btn:hover { background: rgba(0,0,0,0.05); }
+.hamburger-img { width: 25px; height: 25px; object-fit: contain; }
+
+/* Dropdown panel */
+.nav-menu {
+  position: fixed;
+  top: 60px;              
+  left: 16px;
+  width: 240px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  padding: 8px 0;
+  display: none;
+  z-index: 1100;         
+}
+.nav-menu.open { display: block; }
+
+.nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 15px;
+  color: #111827;
+}
+.nav-item:hover { background: #f3f4f6; }
+
+.nav-item-icon {
+  width: 20px; height: 20px; object-fit: contain;
+}
+
+.nav-item,
+.nav-item * {
+  text-decoration: none !important;
+}
+
+.nav-item:hover,
+.nav-item:hover span,
+.nav-item:focus,
+.nav-item:focus span {
+  text-decoration: none !important;
+}
+
+.top-bar-buttons button,
+.top-bar-buttons button span {
+  text-decoration: none !important;
+}

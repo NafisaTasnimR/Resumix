@@ -59,6 +59,7 @@ const updateResume = async (req, res) => {
         if (req.body.ResumeData !== undefined) {
             updateFields.ResumeData = req.body.ResumeData;
         }
+        if (req.body.strength !== undefined)    updateFields.strength = req.body.strength;
 
         const updatedResume = await ResumeModel.findByIdAndUpdate(
             resumeId,

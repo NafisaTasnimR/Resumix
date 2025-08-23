@@ -9,6 +9,7 @@ import Dashboard from './DashBoard/UserDashboard';
 import ResumeViewPage from './ResumeViewPage/ReviewViewPage';
 import ResumeTemplates from './ResumeTemplates/ResumeTemplates';
 import SubscriptionPage from './SubscriptionPage/SubscriptionPage';
+import PublicTemplates from './ResumeTemplates/PublicTemplates';
 
 const RoutingComponent = () => {
     return (
@@ -21,6 +22,7 @@ const RoutingComponent = () => {
             <Route path="/noaccount" element={<NoAccountPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/resumeview/:id" element={<ResumeViewPage />} />
+            <Route path="/publictemplates" element={<PublicTemplates />} />
 
         </Routes>
     );
