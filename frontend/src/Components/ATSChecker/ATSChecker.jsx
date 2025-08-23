@@ -14,9 +14,9 @@ const ScoreRing = ({ value = 0, size = 180, thickness = 22, color = '#10B981', t
   return (
     <div className="score-ring" style={{ width: size, height: size }}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        <circle cx={size/2} cy={size/2} r={r} stroke={track} strokeWidth={thickness} fill="none" />
+        <circle cx={size / 2} cy={size / 2} r={r} stroke={track} strokeWidth={thickness} fill="none" />
         <circle
-          cx={size/2} cy={size/2} r={r}
+          cx={size / 2} cy={size / 2} r={r}
           stroke={color} strokeWidth={thickness} fill="none"
           strokeDasharray={c} strokeDashoffset={offset} strokeLinecap="round"
           className="score-ring__progress"
@@ -185,9 +185,22 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
             >
               Edit &amp; Fix Resume
             </button>
-            <button className="delete-data-btn" onClick={() => navigate(-1)}>
+            {/*<button className="delete-data-btn" onClick={() => navigate(-1)}>
+              Back to Dashboard
+            </button> */}
+            <button
+              className="delete-data-btn"
+              onClick={() =>
+                navigate('/dashboard', {
+                  state: {
+                    updatedScore: { id: resolvedId, score: scoreData?.overall ?? 0 }
+                  }
+                })
+              }
+            >
               Back to Dashboard
             </button>
+
           </div>
         </div>
 
@@ -201,7 +214,7 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
               chips={(bd.impact?.softskillsMissing || []).slice(0, 6)}
             />
             <CategoryCard title="Concise" data={bd.brevity} />
-            <CategoryCard title="Style"   data={bd.style} />
+            <CategoryCard title="Style" data={bd.style} />
           </div>
         </div>
       </div>

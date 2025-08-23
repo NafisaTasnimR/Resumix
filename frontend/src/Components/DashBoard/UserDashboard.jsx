@@ -5,6 +5,7 @@ import ShareResumeModal from '../ResumeListPage/ShareResumeModal';
 import DownloadResumeModal from '../ResumeListPage/DownloadResumeModal';
 import TopBar from '../ResumeEditorPage/TopBar';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 const Dashboard = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -25,8 +26,16 @@ const Dashboard = () => {
   const [resumes, setResumes] = useState([]);
   const [loadingResumes, setLoadingResumes] = useState(true);
   const [resumeError, setResumeError] = useState(null);
-
+  const [localScores, setLocalScores] = useState({});
   const navigate = useNavigate();
+
+  const location = useLocation();
+  useEffect(() => {
+    if (location.state?.updatedScore) {
+      const { id, score } = location.state.updatedScore;
+      setLocalScores(prev => ({ ...prev, [id]: score }));
+    }
+  }, [location.state]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -166,7 +175,8 @@ const Dashboard = () => {
 
             {/* Strength placeholder (put your actual score here if available) */}
             <span className="strength-badge">
-              {Number.isFinite(r.atsScore) ? `${r.atsScore}` : '—'}
+              {localScores[r._id] ?? (Number.isFinite(r.atsScore) ? r.atsScore : '—')}
+              {/*Number.isFinite(r.atsScore) ? `${r.atsScore}` : '—'*/}
             </span>
 
             <span className="actions">
