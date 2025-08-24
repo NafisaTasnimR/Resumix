@@ -15,49 +15,67 @@ const FIELD_INDEX = {
   additional: { content: 0, sectionTitle: 0 }
 };
 
-const personalQuestions   = ["Full Name?","Professional Email?","Date of Birth?","Phone?","Address?","City?","District?","Country?","Zip Code?"];
-const educationQuestions  = ["Your Degree?","Your Field of Study?","Your Institution?","Start Date of Education?","End Date of Education?","Current Status of Education?"];
-const experienceQuestions = ["Job Title?","Employer Name?","Job Location?","Start Date of Job?","End Date of Job?","Is this your current job?","Your Responsibilities?"];
-const skillQuestions      = ["Skill Name?","Skill Proficiency?","Years of Experience?","Skills Description?"];
-const achievementQuestions= ["Achievement Title?","Organization (optional)?","Date Received?","Category (e.g., Award, Certification)?","Description?","Website (optional)?"];
-const referenceQuestions  = ["Referee Name?","Referee Designation?","Referee Organization?","Referee Email?","Referee Phone?"];
-const hobbyQuestions      = ["Your Hobbies?"];
+const personalQuestions = ["Full Name?", "Professional Email?", "Date of Birth?", "Phone?", "Address?", "City?", "District?", "Country?", "Zip Code?"];
+const educationQuestions = ["Your Degree?", "Your Field of Study?", "Your Institution?", "Start Date of Education?", "End Date of Education?", "Current Status of Education?"];
+const experienceQuestions = ["Job Title?", "Employer Name?", "Job Location?", "Start Date of Job?", "End Date of Job?", "Is this your current job?", "Your Responsibilities?"];
+const skillQuestions = ["Skill Name?", "Skill Proficiency?", "Years of Experience?", "Skills Description?"];
+const achievementQuestions = ["Achievement Title?", "Organization (optional)?", "Date Received?", "Category (e.g., Award, Certification)?", "Description?", "Website (optional)?"];
+const referenceQuestions = ["Referee Name?", "Referee Designation?", "Referee Organization?", "Referee Email?", "Referee Phone?"];
+const hobbyQuestions = ["Your Hobbies?"];
 const additionalInfoQuestions = ["Additional Information?"];
 
 const SECTION_LIST = [
-  { key: "personal",     label: "Personal",     qs: personalQuestions },
-  { key: "education",    label: "Education",    qs: educationQuestions },
-  { key: "experience",   label: "Experience",   qs: experienceQuestions },
-  { key: "skills",       label: "Skills",       qs: skillQuestions },
-  { key: "achievements", label: "Achievements", qs: achievementQuestions },
-  { key: "references",   label: "References",   qs: referenceQuestions },
-  { key: "hobbies",      label: "Hobbies",      qs: hobbyQuestions },
-  { key: "additional",   label: "Additional",   qs: additionalInfoQuestions },
+  { key: "personal", label: "Personal", repeatable: false, qs: personalQuestions },
+  { key: "education", label: "Education", repeatable: true, qs: educationQuestions },
+  { key: "experience", label: "Experience", repeatable: true, qs: experienceQuestions },
+  { key: "skills", label: "Skills", repeatable: true, qs: skillQuestions },
+  { key: "achievements", label: "Achievements", repeatable: true, qs: achievementQuestions },
+  { key: "references", label: "References", repeatable: true, qs: referenceQuestions },
+  { key: "hobbies", label: "Hobbies", repeatable: true, qs: hobbyQuestions },
+  { key: "additional", label: "Additional", repeatable: true, qs: additionalInfoQuestions },
 ];
+
+const initEntry = (qs) => Array(qs.length).fill("");
+
+const makeInitialEntries = () => ({
+  personal: [initEntry(personalQuestions)],
+  education: [initEntry(educationQuestions)],
+  experience: [initEntry(experienceQuestions)],
+  skills: [initEntry(skillQuestions)],
+  achievements: [initEntry(achievementQuestions)],
+  references: [initEntry(referenceQuestions)],
+  hobbies: [initEntry(hobbyQuestions)],
+  additional: [initEntry(additionalInfoQuestions)],
+});
+
+const makeInitialEntryIdx = () => ({
+  personal: 0, education: 0, experience: 0, skills: 0,
+  achievements: 0, references: 0, hobbies: 0, additional: 0,
+});
 
 const ResumeEditor = () => {
   const location = useLocation();
   const renderedHtml = location.state?.rawTemplate || "";
-  const templateCss  = location.state?.templateCss || "";
+  const templateCss = location.state?.templateCss || "";
   const titleFromTemplate = location.state?.templateName || "Untitled";
 
   const [title, setTitle] = useState(titleFromTemplate);
   const [titleDropdownOpen, setTitleDropdownOpen] = useState(false);
 
+  // which section & question are active
   const [currentSectionIdx, setCurrentSectionIdx] = useState(0);
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
-  const currentSection = SECTION_LIST[currentSectionIdx];
 
-  const [answersBySection, setAnswersBySection] = useState(() => ({
-    personal:     Array(personalQuestions.length).fill(""),
-    education:    Array(educationQuestions.length).fill(""),
-    experience:   Array(experienceQuestions.length).fill(""),
-    skills:       Array(skillQuestions.length).fill(""),
-    achievements: Array(achievementQuestions.length).fill(""),
-    references:   Array(referenceQuestions.length).fill(""),
-    hobbies:      Array(hobbyQuestions.length).fill(""),
-    additional:   Array(additionalInfoQuestions.length).fill(""),
-  }));
+  // per-section, multi-entry answers
+  const [entriesBySection, setEntriesBySection] = useState(makeInitialEntries);
+  const [entryIndexBySection, setEntryIndexBySection] = useState(makeInitialEntryIdx);
+
+  const currentSection = SECTION_LIST[currentSectionIdx];
+  const currKey = currentSection.key;
+  const currEntries = entriesBySection[currKey];
+  const currEntryIdx = entryIndexBySection[currKey];
+  const currAnswers = currEntries[currEntryIdx];
+  const [progressOpen, setProgressOpen] = useState(true);
 
   const toggleTitleEdit = () => setTitleDropdownOpen(!titleDropdownOpen);
   const saveTitle = (e) => {
@@ -67,52 +85,108 @@ const ResumeEditor = () => {
     setTitleDropdownOpen(false);
   };
 
-  // Move to a specific section/field (from clicking the preview)
+  // jump from preview to a section/field
   const handleSectionClick = (payload) => {
     const sectionKey = typeof payload === "string" ? payload : payload?.section;
-    const field      = typeof payload === "string" ? undefined : payload?.field;
+    const field = typeof payload === "string" ? undefined : payload?.field;
 
     const idx = SECTION_LIST.findIndex(s => s.key === sectionKey);
     const safeIdx = idx >= 0 ? idx : 0;
-
     setCurrentSectionIdx(safeIdx);
 
     const idxMap = FIELD_INDEX[sectionKey] || {};
     const nextQ = (field && Object.prototype.hasOwnProperty.call(idxMap, field)) ? idxMap[field] : 0;
     setCurrentQuestionIdx(nextQ);
+    // keep current entry index for that section
   };
 
-  // Update an answer in the current section
+  // update one answer in current entry of current section
   const handleAnswerChange = (value) => {
-    const secKey = currentSection.key;
-    setAnswersBySection(prev => {
+    setEntriesBySection(prev => {
       const copy = { ...prev };
-      const arr  = [...copy[secKey]];
-      arr[currentQuestionIdx] = value;
-      copy[secKey] = arr;
+      const list = copy[currKey].map(arr => [...arr]); // clone
+      list[currEntryIdx][currentQuestionIdx] = value;
+      copy[currKey] = list;
       return copy;
     });
   };
 
-  // Cross-section navigation (called by QuestionBox at edges)
-  const goToNextSection = () => {
+  // cross-section navigation
+  const onSectionNext = () => {
     if (currentSectionIdx < SECTION_LIST.length - 1) {
       setCurrentSectionIdx(i => i + 1);
-      setCurrentQuestionIdx(0); // progress line will move now
+      setCurrentQuestionIdx(0);
     }
   };
-
-  const goToPrevSection = () => {
+  const onSectionPrev = () => {
     if (currentSectionIdx > 0) {
-      setCurrentSectionIdx(i => i - 1);
       const prevIdx = currentSectionIdx - 1;
-      const lastQ = SECTION_LIST[Math.max(prevIdx, 0)].qs.length - 1;
+      setCurrentSectionIdx(prevIdx);
+      const lastQ = SECTION_LIST[prevIdx].qs.length - 1;
       setCurrentQuestionIdx(Math.max(lastQ, 0));
     }
   };
 
-  // collapsible state for the single progress line
-  const [progressOpen, setProgressOpen] = useState(true);
+  // add another instance of the current section
+  const onAddEntry = () => {
+    if (!currentSection.repeatable) return;
+    setEntriesBySection(prev => {
+      const copy = { ...prev };
+      const newEntry = initEntry(currentSection.qs);
+      copy[currKey] = [...copy[currKey], newEntry];
+      return copy;
+    });
+    setEntryIndexBySection(prev => ({ ...prev, [currKey]: currEntries.length })); // go to new one
+    setCurrentQuestionIdx(0);
+  };
+
+  // remove current instance (or clear if only one)
+  const onRemoveEntry = () => {
+    if (!currentSection.repeatable) return;
+    const total = currEntries.length;
+    if (total > 1) {
+      setEntriesBySection(prev => {
+        const copy = { ...prev };
+        const newList = [...copy[currKey]];
+        newList.splice(currEntryIdx, 1);
+        copy[currKey] = newList;
+        return copy;
+      });
+      setEntryIndexBySection(prev => ({ ...prev, [currKey]: Math.max(0, currEntryIdx - 1) }));
+      setCurrentQuestionIdx(0);
+    } else {
+      setEntriesBySection(prev => {
+        const copy = { ...prev };
+        copy[currKey] = [initEntry(currentSection.qs)];
+        return copy;
+      });
+      setCurrentQuestionIdx(0);
+    }
+  };
+
+  // NEW: entry pager handlers + booleans
+  const onPrevEntry = () => {
+    if (!currentSection.repeatable) return;
+    if (currEntryIdx > 0) {
+      setEntryIndexBySection(prev => ({ ...prev, [currKey]: currEntryIdx - 1 }));
+      setCurrentQuestionIdx(0);
+    }
+  };
+  const onNextEntry = () => {
+    if (!currentSection.repeatable) return;
+    if (currEntryIdx < currEntries.length - 1) {
+      setEntryIndexBySection(prev => ({ ...prev, [currKey]: currEntryIdx + 1 }));
+      setCurrentQuestionIdx(0);
+    }
+  };
+  const canPrevEntry = currentSection.repeatable && currEntries.length > 1 && currEntryIdx > 0;
+  const canNextEntry = currentSection.repeatable && currEntries.length > 1 && currEntryIdx < currEntries.length - 1;
+
+  // button enable/disable
+  const hasNextSection = currentSectionIdx < SECTION_LIST.length - 1;
+  const hasPrevSection = currentSectionIdx > 0;
+  const canAdd = !!currentSection.repeatable;
+  const canRemove = !!currentSection.repeatable && currEntries.length >= 1;
 
   return (
     <div className='resume-editor'>
@@ -130,32 +204,59 @@ const ResumeEditor = () => {
           )}
         </div>
 
-        {/* The ONLY progress line (sections-based) */}
+        {/* single, section-based progress line */}
         <div className="progress">
-          <div className="progress-line-header" onClick={() => setProgressOpen(v => !v)}>
+          <div
+            className="progress-line-header"
+            onClick={() => setProgressOpen((o) => !o)}
+          >
             <span className="progress-title">Progress Line</span>
-            <button className="arrow-btn-progress">{progressOpen ? "▲" : "▼"}</button>
+            <button className="arrow-btn-progress">
+              {progressOpen ? "▲" : "▼"}
+            </button>
           </div>
-          <ProgressLine items={SECTION_LIST} current={currentSectionIdx} open={progressOpen} />
+
+          <ProgressLine
+            items={SECTION_LIST}
+            current={currentSectionIdx}
+            open={progressOpen}
+          />
         </div>
 
-        {/* Questions within the active section */}
+        {/* Questions for CURRENT ENTRY of CURRENT SECTION */}
         <QuestionBox
           questions={currentSection.qs}
           current={currentQuestionIdx}
           setCurrent={setCurrentQuestionIdx}
-          answers={answersBySection[currentSection.key]}
+          answers={currAnswers}
           onAnswerChange={handleAnswerChange}
-          onSectionNext={goToNextSection}
-          onSectionPrev={goToPrevSection}
-          hasNextSection={currentSectionIdx < SECTION_LIST.length - 1}
-          hasPrevSection={currentSectionIdx > 0}
+
+          // repeatable controls
+          onAddEntry={onAddEntry}
+          onRemoveEntry={onRemoveEntry}
+          canAdd={canAdd}
+          canRemove={canRemove}
+
+          // NEW: entry pager props
+          sectionLabel={currentSection.label}
+          entryIndex={currEntryIdx}
+          entryCount={currEntries.length}
+          onPrevEntry={onPrevEntry}
+          onNextEntry={onNextEntry}
+          canPrevEntry={canPrevEntry}
+          canNextEntry={canNextEntry}
+
+          // cross-section behavior
+          hasNextSection={hasNextSection}
+          hasPrevSection={hasPrevSection}
+          onSectionNext={onSectionNext}
+          onSectionPrev={onSectionPrev}
         />
       </div>
 
       <Preview
         title={title}
-        answers={answersBySection}
+        answers={entriesBySection}   // NOTE: now per-section *arrays of entries*
         renderedHtml={renderedHtml}
         templateCss={templateCss}
         onSectionClick={handleSectionClick}

@@ -424,3 +424,54 @@
   word-wrap: break-word;
 }
 
+.entry-switcher{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:6px 0 12px;
+}
+.entry-title{ font-weight:600; }
+.entry-count{ margin-left:4px; opacity:.75; }
+.entry-controls{
+  margin-left:auto;
+  display:flex;
+  gap:10px;
+}
+
+/* Buttons to match the lower controls */
+.entry-nav-btn{
+  width:44px;               /* bigger */
+  height:44px;              /* bigger */
+  border-radius:12px;       /* same rounded vibe */
+  background:#5f6b46;       /* your olive button color */
+  color:#fff;
+  border:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;           /* bigger arrow */
+  line-height:1;
+  cursor:pointer;
+  box-shadow:0 2px 0 rgba(0,0,0,.2);
+  transition:transform .05s ease, box-shadow .15s ease, opacity .2s;
+}
+.entry-nav-btn:hover:not(:disabled){ transform:translateY(-1px); }
+.entry-nav-btn:active:not(:disabled){ transform:translateY(0); }
+.entry-nav-btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+/* Optional: make + and − match the new size too */
+.nav-buttons button{
+  height:44px;
+  padding:0 18px;
+  border-radius:12px;
+}
+.nav-buttons button.square{
+  width:44px;
+  padding:0;
+  font-size:22px;
+}
+
+
