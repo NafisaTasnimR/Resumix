@@ -1,3 +1,5 @@
+
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -6,7 +8,8 @@ const authRouter = require('./routes/AuthRouter');
 const infoUpdateRouter = require('./routes/InfoUpdateRouter');
 const previewRouter = require('./routes/TemplateRouter');
 //const ResumeRouter = require('./routes/ResumeRouter');
-require('dotenv').config();
+const PaymentRouter = require('./routes/PaymentRouter');
+
 require('./models/Database');
 
 
@@ -20,6 +23,7 @@ app.use('/info', infoUpdateRouter);
 app.use('/viewInformation', infoUpdateRouter);
 app.use('/preview',previewRouter);
 //app.use('/resume', ResumeRouter);
+app.use('/api/payment', PaymentRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

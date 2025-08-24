@@ -21,21 +21,59 @@ const PaymentForm = () => {
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [clientSecret, setClientSecret] = useState('');
+  const [user, setUser] = useState({ name: 'Loading...', email: 'Loading...' });
+  const [loading, setLoading] = useState(true);
 
-  // Get the selected plan from navigation state
   const selectedPlan = location.state?.selectedPlan || '14-day';
 
   useEffect(() => {
-    // Create PaymentIntent as soon as the page loads
-   fetch('http://localhost:5000/api/payment/create-payment-intent', {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setClientSecret(data.clientSecret));
+    fetchUserData();
   }, []);
+
+  const fetchUserData = async () => {
+    // Just call createPaymentIntent - it will handle everything
+    createPaymentIntent();
+    setLoading(false);
+  };
+
+  const createPaymentIntent = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      
+      const response = await fetch('http://localhost:5000/api/payment/create-payment-intent', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({})
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        setClientSecret(data.clientSecret);
+        
+        // Update user info with the REAL email from database
+        if (data.userEmail && data.userName) {
+          setUser({
+            name: data.userName,
+            email: data.userEmail
+          });
+        }
+      } else {
+        throw new Error(data.error || 'Payment initialization failed');
+      }
+    } catch (error) {
+      console.error('Payment intent error:', error);
+      setError('Failed to initialize payment');
+      // Set fallback values if API fails
+      setUser({
+        name: 'Demo User',
+        email: 'demo@example.com'
+      });
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -51,7 +89,8 @@ const PaymentForm = () => {
       payment_method: {
         card: card,
         billing_details: {
-          name: 'Demo User',
+          name: user.name,
+          email: user.email,
         },
       }
     });
@@ -60,14 +99,27 @@ const PaymentForm = () => {
       setError(error.message);
       setProcessing(false);
     } else if (paymentIntent.status === 'succeeded') {
-      // For demo purposes, we'll navigate to success regardless
       navigate('/m/final', { state: { paymentSuccess: true } });
     }
   };
 
+  if (loading) {
+    return (
+      <div className="payment-form">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit} className="payment-form">
       <h2>Payment Information</h2>
+      
+      {/* Show user info */}
+      <div className="user-info">
+        <p><strong>Name:</strong> {user.name}</p>
+        <p><strong>Email:</strong> {user.email}</p>
+      </div>
       
       <div className="card-section">
         <div className="section-header">
@@ -128,7 +180,6 @@ const PaymentInfo = () => {
     <div className="payment-container">
       <TopBar />
       
-      {/* Progress Steps */}
       <div className="progress-steps">
         <div 
           className="step completed"
@@ -147,8 +198,8 @@ const PaymentInfo = () => {
           <span>Choose Access</span>
         </div>
         <div className="step active" style={{color: '#007bff'}}>
-        <div className="step-number" style={{backgroundColor: '#007bff', color: 'white'}}>3</div>
-            <span>Payment Details</span>
+          <div className="step-number" style={{backgroundColor: '#007bff', color: 'white'}}>3</div>
+          <span>Payment Details</span>
         </div>
         <div className="step">
           <div className="step-number">4</div>
