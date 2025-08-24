@@ -2,25 +2,12 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import QuestionBox from './QuestionBox';
 import Preview from './Preview';
+import ProgressLine from './ProgressLine';
 
 const FIELD_INDEX = {
-  personal: {
-    fullName: 0, professionalEmail: 1, dateOfBirth: 2, phone: 3,
-    address: 4, city: 5, district: 6, country: 7, zipCode: 8,
-  },
-  education: {
-    degree: 0, fieldOfStudy: 1, institution: 2, startDate: 3, endDate: 4,
-    isCurrentEducation: 5, currentStatus: 5 // whichever you store
-  },
-  experience: {
-    jobTitle: 0,
-    employerName: 1,
-    city: 2, state: 2, location: 2, // map location-ish fields to the same question
-    startDate: 3,
-    endDate: 4,
-    isCurrentJob: 5,
-    bullets: 6, responsibilities: 6
-  },
+  personal: { fullName: 0, professionalEmail: 1, dateOfBirth: 2, phone: 3, address: 4, city: 5, district: 6, country: 7, zipCode: 8 },
+  education: { degree: 0, fieldOfStudy: 1, institution: 2, startDate: 3, endDate: 4, isCurrentEducation: 5, currentStatus: 5 },
+  experience: { jobTitle: 0, employerName: 1, city: 2, state: 2, location: 2, startDate: 3, endDate: 4, isCurrentJob: 5, bullets: 6, responsibilities: 6 },
   skills: { skillName: 0, proficiencyLevel: 1, yearsOfExperience: 2, description: 3 },
   achievements: { title: 0, organization: 1, dateReceived: 2, category: 3, description: 4, website: 5 },
   references: { firstName: 0, lastName: 0, jobTitle: 1, company: 2, referenceEmail: 3, referencePhone: 4 },
@@ -28,88 +15,49 @@ const FIELD_INDEX = {
   additional: { content: 0, sectionTitle: 0 }
 };
 
-const personalQuestions = [
-  "Full Name?",
-  "Professional Email?",
-  "Date of Birth?",
-  "Phone?",
-  "Address?",
-  "City?",
-  "District?",
-  "Country?",
-  "Zip Code?",
+const personalQuestions   = ["Full Name?","Professional Email?","Date of Birth?","Phone?","Address?","City?","District?","Country?","Zip Code?"];
+const educationQuestions  = ["Your Degree?","Your Field of Study?","Your Institution?","Start Date of Education?","End Date of Education?","Current Status of Education?"];
+const experienceQuestions = ["Job Title?","Employer Name?","Job Location?","Start Date of Job?","End Date of Job?","Is this your current job?","Your Responsibilities?"];
+const skillQuestions      = ["Skill Name?","Skill Proficiency?","Years of Experience?","Skills Description?"];
+const achievementQuestions= ["Achievement Title?","Organization (optional)?","Date Received?","Category (e.g., Award, Certification)?","Description?","Website (optional)?"];
+const referenceQuestions  = ["Referee Name?","Referee Designation?","Referee Organization?","Referee Email?","Referee Phone?"];
+const hobbyQuestions      = ["Your Hobbies?"];
+const additionalInfoQuestions = ["Additional Information?"];
+
+const SECTION_LIST = [
+  { key: "personal",     label: "Personal",     qs: personalQuestions },
+  { key: "education",    label: "Education",    qs: educationQuestions },
+  { key: "experience",   label: "Experience",   qs: experienceQuestions },
+  { key: "skills",       label: "Skills",       qs: skillQuestions },
+  { key: "achievements", label: "Achievements", qs: achievementQuestions },
+  { key: "references",   label: "References",   qs: referenceQuestions },
+  { key: "hobbies",      label: "Hobbies",      qs: hobbyQuestions },
+  { key: "additional",   label: "Additional",   qs: additionalInfoQuestions },
 ];
-
-const educationQuestions = [
-  "Your Degree?",
-  "Your Field of Study?",
-  "Your Institution?",
-  "Start Date of Education?",
-  "End Date of Education?",
-  "Current Status of Education?",
-];
-
-const experienceQuestions = [
-  "Job Title?",
-  "Employer Name?",
-  "Job Location?",
-  "Start Date of Job?",
-  "End Date of Job?",
-  "Is this your current job?",
-  "Your Responsibilities?",
-];
-
-const skillQuestions = [
-  "Skill Name?",
-  "Skill Proficiency?",
-  "Years of Experience?",
-  "Skills Description?",
-];
-
-const achievementQuestions = [
-  "Achievement Title?",
-  "Organization (optional)?",
-  "Date Received?",
-  "Category (e.g., Award, Certification)?",
-  "Description?",
-  "Website (optional)?",
-];
-
-
-const referenceQuestions = [
-  "Referee Name?",
-  "Referee Designation?",
-  "Referee Organization?",
-  "Referee Email?",
-  "Referee Phone?"
-];
-
-const hobbyQuestions = [
-  "Your Hobbies?"
-];
-
-const additionalInfoQuestions = [
-  "Additional Information?"
-];
-
 
 const ResumeEditor = () => {
-  const [questions, setQuestions] = useState(personalQuestions);
   const location = useLocation();
   const renderedHtml = location.state?.rawTemplate || "";
-  const templateCss = location.state?.templateCss || "";
-  console.log("Router state:", location.state);
-
-
-  console.log("Rendered HTML:", renderedHtml);
+  const templateCss  = location.state?.templateCss || "";
   const titleFromTemplate = location.state?.templateName || "Untitled";
 
   const [title, setTitle] = useState(titleFromTemplate);
   const [titleDropdownOpen, setTitleDropdownOpen] = useState(false);
 
-  // Lifted state for answers and current question
-  const [current, setCurrent] = useState(0);
-  const [answers, setAnswers] = useState(Array(questions.length).fill(""));
+  const [currentSectionIdx, setCurrentSectionIdx] = useState(0);
+  const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
+  const currentSection = SECTION_LIST[currentSectionIdx];
+
+  const [answersBySection, setAnswersBySection] = useState(() => ({
+    personal:     Array(personalQuestions.length).fill(""),
+    education:    Array(educationQuestions.length).fill(""),
+    experience:   Array(experienceQuestions.length).fill(""),
+    skills:       Array(skillQuestions.length).fill(""),
+    achievements: Array(achievementQuestions.length).fill(""),
+    references:   Array(referenceQuestions.length).fill(""),
+    hobbies:      Array(hobbyQuestions.length).fill(""),
+    additional:   Array(additionalInfoQuestions.length).fill(""),
+  }));
 
   const toggleTitleEdit = () => setTitleDropdownOpen(!titleDropdownOpen);
   const saveTitle = (e) => {
@@ -119,42 +67,52 @@ const ResumeEditor = () => {
     setTitleDropdownOpen(false);
   };
 
-  // Handler to update answers
-  const handleAnswerChange = (value) => {
-    const updated = [...answers];
-    updated[current] = value;
-    setAnswers(updated);
+  // Move to a specific section/field (from clicking the preview)
+  const handleSectionClick = (payload) => {
+    const sectionKey = typeof payload === "string" ? payload : payload?.section;
+    const field      = typeof payload === "string" ? undefined : payload?.field;
+
+    const idx = SECTION_LIST.findIndex(s => s.key === sectionKey);
+    const safeIdx = idx >= 0 ? idx : 0;
+
+    setCurrentSectionIdx(safeIdx);
+
+    const idxMap = FIELD_INDEX[sectionKey] || {};
+    const nextQ = (field && Object.prototype.hasOwnProperty.call(idxMap, field)) ? idxMap[field] : 0;
+    setCurrentQuestionIdx(nextQ);
   };
 
-  const handleSectionClick = (payload) => {
-  // support both old string API and new object API
-  const section = typeof payload === "string" ? payload : payload?.section;
-  const field   = typeof payload === "string" ? undefined : payload?.field;
+  // Update an answer in the current section
+  const handleAnswerChange = (value) => {
+    const secKey = currentSection.key;
+    setAnswersBySection(prev => {
+      const copy = { ...prev };
+      const arr  = [...copy[secKey]];
+      arr[currentQuestionIdx] = value;
+      copy[secKey] = arr;
+      return copy;
+    });
+  };
 
-  // choose the question set for the section
-  let qs = personalQuestions;
-  switch (section) {
-    case "personal":      qs = personalQuestions; break;
-    case "education":     qs = educationQuestions; break;
-    case "experience":    qs = experienceQuestions; break;
-    case "skills":        qs = skillQuestions; break;
-    case "achievements":  qs = achievementQuestions; break;
-    case "references":    qs = referenceQuestions; break;
-    case "hobbies":       qs = hobbyQuestions; break;
-    case "additional":    qs = additionalInfoQuestions; break;
-    default:              qs = personalQuestions;
-  }
-  setQuestions(qs);
+  // Cross-section navigation (called by QuestionBox at edges)
+  const goToNextSection = () => {
+    if (currentSectionIdx < SECTION_LIST.length - 1) {
+      setCurrentSectionIdx(i => i + 1);
+      setCurrentQuestionIdx(0); // progress line will move now
+    }
+  };
 
-  // pick the right question index based on field name
-  const idxMap = FIELD_INDEX[section] || {};
-  const nextIndex =
-    field && Object.prototype.hasOwnProperty.call(idxMap, field)
-      ? idxMap[field]
-      : 0;
+  const goToPrevSection = () => {
+    if (currentSectionIdx > 0) {
+      setCurrentSectionIdx(i => i - 1);
+      const prevIdx = currentSectionIdx - 1;
+      const lastQ = SECTION_LIST[Math.max(prevIdx, 0)].qs.length - 1;
+      setCurrentQuestionIdx(Math.max(lastQ, 0));
+    }
+  };
 
-  setCurrent(nextIndex);
-};
+  // collapsible state for the single progress line
+  const [progressOpen, setProgressOpen] = useState(true);
 
   return (
     <div className='resume-editor'>
@@ -172,23 +130,32 @@ const ResumeEditor = () => {
           )}
         </div>
 
+        {/* The ONLY progress line (sections-based) */}
+        <div className="progress">
+          <div className="progress-line-header" onClick={() => setProgressOpen(v => !v)}>
+            <span className="progress-title">Progress Line</span>
+            <button className="arrow-btn-progress">{progressOpen ? "▲" : "▼"}</button>
+          </div>
+          <ProgressLine items={SECTION_LIST} current={currentSectionIdx} open={progressOpen} />
+        </div>
+
+        {/* Questions within the active section */}
         <QuestionBox
-          questions={questions}
-          current={current}
-          setCurrent={setCurrent}
-          answers={answers}
-          //onAnswerChange={handleAnswerChange}
-          onAnswerChange={(value) => {
-            const updated = [...answers];
-            updated[current] = value;
-            setAnswers(updated);
-          }}
-          title={title}
+          questions={currentSection.qs}
+          current={currentQuestionIdx}
+          setCurrent={setCurrentQuestionIdx}
+          answers={answersBySection[currentSection.key]}
+          onAnswerChange={handleAnswerChange}
+          onSectionNext={goToNextSection}
+          onSectionPrev={goToPrevSection}
+          hasNextSection={currentSectionIdx < SECTION_LIST.length - 1}
+          hasPrevSection={currentSectionIdx > 0}
         />
       </div>
+
       <Preview
         title={title}
-        answers={answers}
+        answers={answersBySection}
         renderedHtml={renderedHtml}
         templateCss={templateCss}
         onSectionClick={handleSectionClick}

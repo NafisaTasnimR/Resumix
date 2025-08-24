@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import NavButtons from "./NavButtons";
-import ProgressLine from "./ProgressLine";
 
 const QuestionBox = ({
   questions,
@@ -8,46 +7,45 @@ const QuestionBox = ({
   setCurrent,
   answers,
   onAnswerChange,
+  onSectionNext,   // NEW: ask parent to go to next section
+  onSectionPrev,   // NEW: ask parent to go to prev section
+  hasNextSection,  // NEW: booleans from parent
+  hasPrevSection,  // NEW: booleans from parent
 }) => {
-  const [progressOpen, setProgressOpen] = useState(true);
+  const handleChange = (e) => onAnswerChange(e.target.value);
 
-  const handleChange = (e) => {
-    onAnswerChange(e.target.value);
+  const goPrev = () => {
+    if (current > 0) setCurrent((c) => c - 1);
+    else if (hasPrevSection && onSectionPrev) onSectionPrev();
   };
 
-  const goPrev = () => setCurrent((c) => Math.max(0, c - 1));
-  const goNext = () => setCurrent((c) => Math.min(questions.length - 1, c + 1));
+  const goNext = () => {
+    if (current < questions.length - 1) setCurrent((c) => c + 1);
+    else if (hasNextSection && onSectionNext) onSectionNext();
+  };
+
   const skip = () => goNext();
   const edit = () => {};
 
-  const toggleProgressLine = () => setProgressOpen((open) => !open);
+  // disable only when you're at very first question of first section OR
+  // very last question of last section
+  const disablePrev = current === 0 && !hasPrevSection;
+  const disableNext = current === questions.length - 1 && !hasNextSection;
 
   return (
     <>
       <div className="question-box">
         <label htmlFor="question">{questions[current]}</label>
-        <textarea
-          id="question"
-          value={answers[current]}
-          onChange={handleChange}
-        />
+        <textarea id="question" value={answers[current]} onChange={handleChange} />
       </div>
-      <div className="progress">
-        <div className="progress-line-header" onClick={toggleProgressLine}>
-          <span className="progress-title">Progress Line</span>
-          <button className="arrow-btn-progress">
-            {progressOpen ? "▲" : "▼"}
-          </button>
-        </div>
-        <ProgressLine questions={questions} current={current} open={progressOpen} />
-      </div>
+
       <NavButtons
         onPrev={goPrev}
         onNext={goNext}
         onSkip={skip}
         onEdit={edit}
-        disablePrev={current === 0}
-        disableNext={current === questions.length - 1}
+        disablePrev={disablePrev}
+        disableNext={disableNext}
       />
     </>
   );
