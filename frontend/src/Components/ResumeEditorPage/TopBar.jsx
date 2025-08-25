@@ -13,7 +13,7 @@ const TopBar = () => {
   const handleDashboardClick = () => { navigate('/dashboard'); }; 
   const handleResumeClick = () => { navigate('/resumes'); }; 
   const handleSegmentsClick = () => { navigate('/templates'); };
-  const handleAccountClick  = () => { navigate('/payment'); };
+  const handleAccountClick  = () => { navigate('/subscription'); };
   const handleSettingsClick = () => { navigate('/settings'); };
 
    useEffect(() => {
