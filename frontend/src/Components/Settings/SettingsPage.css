@@ -51,13 +51,13 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 14px;
+  font-size: 15px;
   padding: 0;
 }
 
 .edit-text {
-  color: #1a73e8;
-  text-decoration: none;
+  color: rgb(227, 93, 93);
+  text-decoration: none !important;
   transition: all 0.2s ease;
 }
 

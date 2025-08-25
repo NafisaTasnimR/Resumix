@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const UserModel = require('../models/User');
 const ResumeModel = require('../models/Resume');
+const mongoose = require('mongoose');
 
 
 const createResume = async (req, res) => {
@@ -58,6 +59,7 @@ const updateResume = async (req, res) => {
         if (req.body.ResumeData !== undefined) {
             updateFields.ResumeData = req.body.ResumeData;
         }
+        if (req.body.strength !== undefined)    updateFields.strength = req.body.strength;
 
         const updatedResume = await ResumeModel.findByIdAndUpdate(
             resumeId,
@@ -77,40 +79,45 @@ const updateResume = async (req, res) => {
 };
 
 const getResumeById = async (req, res) => {
-    try {
-        const userId = req.user.userId;
-        const { resumeId } = req.params;
+  try {
+    const { resumeId } = req.params;
+    const userEmail = req.user?.email; // set by auth middleware
 
-        const userEmail = req.user.email; 
-
-        const resume = await ResumeModel.findById(resumeId);
-
-        if (!resume) {
-            return res.status(404).json({ message: 'Resume not found' });
-        }
-
-        if (resume.userEmail !== userEmail) {
-            return res.status(403).json({ message: 'Unauthorized access to this resume' });
-        }
-
-        res.status(200).json(resume);
-    } catch (error) {
-        console.error("Get Resume Error:", error);
-        res.status(500).json({ message: 'Internal server error', error: error.message });
+    if (!userEmail) {
+      return res.status(401).json({ message: 'Unauthorized' });
     }
+
+    if (!mongoose.Types.ObjectId.isValid(resumeId)) {
+      return res.status(404).json({ message: 'Resume not found' });
+    }
+
+    const resume = await ResumeModel
+      .findOne({ _id: resumeId, userEmail }, { __v: 0 })
+      .lean();
+
+    if (!resume) {
+      return res.status(404).json({ message: 'Resume not found' });
+    }
+
+    return res.status(200).json(resume);
+  } catch (error) {
+    console.error('Get Resume Error:', error);
+    return res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
 };
 
 const getAllResumes = async (req, res) => {
-    try {
-        const userEmail = req.user.email;
-
-        const resumes = await ResumeModel.find({ userEmail });
-
-        res.status(200).json(resumes);
-    } catch (error) {
-        console.error("Get All Resumes Error:", error);
-        res.status(500).json({ message: 'Internal server error', error: error.message });
-    }
+  try {
+    const userEmail = req.user.email;
+    const resumes = await ResumeModel
+      .find({ userEmail }, { __v: 0 })
+      .sort({ createdAt: -1 })
+      .lean();
+    res.status(200).json(resumes);
+  } catch (error) {
+    console.error('Get All Resumes Error:', error);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
 };
 
 module.exports = {

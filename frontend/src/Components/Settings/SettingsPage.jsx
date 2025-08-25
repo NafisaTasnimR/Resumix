@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './SettingsPage.css';
-import { Link } from 'react-router-dom';
 import TopBar from '../ResumeEditorPage/TopBar';
 const SettingsPage = () => {
   const [password, setPassword] = useState('*******');
@@ -66,7 +65,7 @@ const SettingsPage = () => {
           <span className="label">Password:</span>
           <span className="value">{password}</span>
           <button className="edit-btn2" onClick={() => setModalType('password')}>
-            <span className="edit-icon2">✏️</span> <span className="edit-text">edit</span>
+            <span className="edit-icon2"></span> <span className="edit-text">edit</span>
           </button>
         </div>
       </div>

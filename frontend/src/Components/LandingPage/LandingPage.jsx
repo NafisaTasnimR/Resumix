@@ -17,10 +17,10 @@ const LandingPage = () => {
       <header className="header">
         <div className="header-left logo">RESUMIX</div>
 
-        <div className="header-center">
-          <span className="nav-item" onClick={openPopup} style={{ cursor: 'pointer' }}>Resumes</span>
-          <Link to="/templates" className="nav-item">Templates</Link>
-          <span className="nav-item" onClick={openPopup} style={{ cursor: 'pointer' }}>Subscription</span>
+        <div className="header-center1">
+          <span className="nav-item1" onClick={openPopup} style={{ cursor: 'pointer' }}>Resumes</span>
+           <Link to="/publictemplates" className="nav-item1 active1">Templates</Link>
+          <span className="nav-item1" onClick={openPopup} style={{ cursor: 'pointer' }}>Subscription</span>
         </div>
 
 
