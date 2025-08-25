@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './ATSChecker.css';
 import { useNavigate, useLocation, useSearchParams, useParams } from 'react-router-dom';
 import TopBar from '../ResumeEditorPage/TopBar';
-import { calculateAtsScore, generateScoreData } from './ATSLogic';
+import { calculateAtsScore } from './ATSLogic'; // ⬅️ removed generateScoreData
 import axios from 'axios';
 
 /* ---------- Donut score ring ---------- */
@@ -115,7 +115,7 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
     const data = propResumeData ?? resume?.ResumeData ?? resume ?? null;
     if (!data || !resolvedId) return;
     const score = calculateAtsScore(data);
-    setScoreData(generateScoreData(score, data, ''));
+    setScoreData({ overall: score }); // ⬅️ replaced generateScoreData
 
     const token = localStorage.getItem('token') || '';
 
@@ -187,7 +187,7 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
     );
   }
 
-  const bd = scoreData.breakdown || {}; // expect: impact, brevity, style (soft skills folded into impact)
+  const bd = scoreData.breakdown || {}; // keep as-is; will be {} now
 
   return (
     <div className="resume-checker">
@@ -219,7 +219,7 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
           </div>
         </div>
 
-        {/* RIGHT: 3-panel breakdown (Impact includes soft skills) */}
+        {/* RIGHT: 3-panel breakdown (these will not render without data, no other changes made) */}
         <div className="ats-right">
           <div className="breakdown-grid three-cols">
             <CategoryCard
