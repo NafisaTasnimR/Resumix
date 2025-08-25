@@ -1,4 +1,8 @@
 const nodemailer = require('nodemailer');
+console.log('Email config check:', {
+  user: process.env.EMAIL_USER ? 'Found' : 'Missing',
+  pass: process.env.EMAIL_PASS ? 'Found' : 'Missing'
+});
 
 // Create transporter with YOUR Gmail (from .env)
 const transporter = nodemailer.createTransport({
@@ -17,24 +21,7 @@ const sendConfirmationEmail = async (userEmail, userName) => {
       from: `Resumix <${process.env.EMAIL_USER}>`,
       to: userEmail,
       subject: ' Your Resumix Premium Subscription is Activated!',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <div style="background: linear-gradient(135deg, #656d4a, #8b9467); padding: 30px; text-align: center; color: white;">
-            <h1>Welcome to Resumix Premium! </h1>
-          </div>
-          <div style="padding: 30px; background: #f8f9fa;">
-            <h2>Thank you for your subscription, ${userName}!</h2>
-            <p>Your premium access has been activated. You now have:</p>
-            <ul style="background: white; padding: 20px; border-radius: 8px;">
-              <li>  Unlimited resume edits and downloads</li>
-              <li> All professional templates</li>
-              <li> Unlimited ATS checker usage</li>
-              <li> Personalized resume URL</li>
-            </ul>
-            <p>Start creating amazing resumes now!</p>
-          </div>
-        </div>
-      `,
+     
       text: `Welcome to Resumix Premium! Your subscription is now active. You have access to unlimited resume edits, all templates, ATS checker, and more.`
     });
 

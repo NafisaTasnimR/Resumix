@@ -24,7 +24,7 @@ router.post('/create-payment-intent', verifyToken, async (req, res) => {
     const userEmail = user.email; // This is the required registration email
     const userName = user.username; // This is the required username
 
-    console.log('💳 Creating payment intent for verified user:', userEmail);
+    console.log(' Creating payment intent for verified user:', userEmail);
 
     // Create payment intent - DON'T SEND EMAIL YET
     const paymentIntent = await stripe.paymentIntents.create({
@@ -38,7 +38,7 @@ router.post('/create-payment-intent', verifyToken, async (req, res) => {
       }
     });
 
-    console.log('✅ Payment intent created:', paymentIntent.id);
+    console.log(' Payment intent created:', paymentIntent.id);
 
     // DON'T SEND EMAIL HERE - only send after payment succeeds
 
@@ -50,7 +50,7 @@ router.post('/create-payment-intent', verifyToken, async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Payment error:', error);
+    console.error(' Payment error:', error);
     res.status(500).send({
       error: error.message,
       code: error.code
@@ -80,9 +80,9 @@ router.post('/confirm-payment', verifyToken, async (req, res) => {
     // NOW send the confirmation email
     try {
       await sendConfirmationEmail(user.email, user.username);
-      console.log('✅ Payment confirmed, email sent successfully');
+      console.log(' Payment confirmed, email sent successfully');
     } catch (emailError) {
-      console.log('⚠️ Email failed:', emailError.message);
+      console.log('Email failed:', emailError.message);
     }
 
     // Update user to paid status
@@ -94,7 +94,7 @@ router.post('/confirm-payment', verifyToken, async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Payment confirmation error:', error);
+    console.error(' Payment confirmation error:', error);
     res.status(500).json({ error: error.message });
   }
 });
