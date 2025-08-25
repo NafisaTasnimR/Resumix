@@ -119,7 +119,6 @@ isPremium: template.isPremium ||
       return bDate - aDate;
     });
   };
-
   
   const getFilteredAndSortedTemplates = () => {
     let filtered = templatesData.filter(template => {
@@ -131,6 +130,7 @@ isPremium: template.isPremium ||
       
       return matchesSearch;
     });
+
 
     
     switch (currentFilter) {
@@ -152,7 +152,6 @@ isPremium: template.isPremium ||
         return sortByPopularity(filtered);
     }
   };
-
   const filteredTemplates = getFilteredAndSortedTemplates();
   
   const visibleTemplates = searchTerm
