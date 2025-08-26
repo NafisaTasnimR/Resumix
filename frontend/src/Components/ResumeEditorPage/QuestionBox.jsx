@@ -2,6 +2,12 @@ import React from "react";
 import NavButtons from "./NavButtons";
 
 const QuestionBox = ({
+  // NEW (all optional)
+  actionLabel,
+  onAction,
+  actionDisabled = false,
+  actionTitle,       // handler for "Create" (new resume)
+
   // questions within the *current entry* of the section
   questions,
   current,
@@ -88,6 +94,10 @@ const QuestionBox = ({
         disableNext={disableNext}
         disableAdd={!canAdd}
         disableRemove={!canRemove}
+        actionLabel={actionLabel}
+        onAction={onAction}
+        actionDisabled={actionDisabled}
+        actionTitle={actionTitle}
       />
     </>
   );

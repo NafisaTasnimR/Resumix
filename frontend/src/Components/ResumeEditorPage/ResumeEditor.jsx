@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import QuestionBox from './QuestionBox';
@@ -23,24 +23,24 @@ const FIELD_INDEX = {
 /* ---------------------------------------------
    Questions per section
 ---------------------------------------------- */
-const personalQuestions   = ["Full Name?","Professional Email?","Date of Birth?","Phone?","Address?","City?","District?","Country?","Zip Code?"];
-const educationQuestions  = ["Your Degree?","Your Field of Study?","Your Institution?","Start Date of Education?","End Date of Education?","Current Status of Education?"];
-const experienceQuestions = ["Job Title?","Employer Name?","Job Location?","Start Date of Job?","End Date of Job?","Is this your current job?","Your Responsibilities?"];
-const skillQuestions      = ["Skill Name?","Skill Proficiency?","Years of Experience?","Skills Description?"];
-const achievementQuestions= ["Achievement Title?","Organization (optional)?","Date Received?","Category (e.g., Award, Certification)?","Description?","Website (optional)?"];
-const referenceQuestions  = ["Referee Name?","Referee Designation?","Referee Organization?","Referee Email?","Referee Phone?"];
-const hobbyQuestions      = ["Your Hobbies?"];
+const personalQuestions = ["Full Name?", "Professional Email?", "Date of Birth?", "Phone?", "Address?", "City?", "District?", "Country?", "Zip Code?"];
+const educationQuestions = ["Your Degree?", "Your Field of Study?", "Your Institution?", "Start Date of Education?", "End Date of Education?", "Current Status of Education?"];
+const experienceQuestions = ["Job Title?", "Employer Name?", "Job Location?", "Start Date of Job?", "End Date of Job?", "Is this your current job?", "Your Responsibilities?"];
+const skillQuestions = ["Skill Name?", "Skill Proficiency?", "Years of Experience?", "Skills Description?"];
+const achievementQuestions = ["Achievement Title?", "Organization (optional)?", "Date Received?", "Category (e.g., Award, Certification)?", "Description?", "Website (optional)?"];
+const referenceQuestions = ["Referee Name?", "Referee Designation?", "Referee Organization?", "Referee Email?", "Referee Phone?"];
+const hobbyQuestions = ["Your Hobbies?"];
 const additionalInfoQuestions = ["Additional Information?"];
 
 const SECTION_LIST = [
-  { key: "personal",     label: "Personal",     repeatable: false, qs: personalQuestions },
-  { key: "education",    label: "Education",    repeatable: true,  qs: educationQuestions },
-  { key: "experience",   label: "Experience",   repeatable: true,  qs: experienceQuestions },
-  { key: "skills",       label: "Skills",       repeatable: true,  qs: skillQuestions },
-  { key: "achievements", label: "Achievements", repeatable: true,  qs: achievementQuestions },
-  { key: "references",   label: "References",   repeatable: true,  qs: referenceQuestions },
-  { key: "hobbies",      label: "Hobbies",      repeatable: true,  qs: hobbyQuestions },
-  { key: "additional",   label: "Additional",   repeatable: true,  qs: additionalInfoQuestions },
+  { key: "personal", label: "Personal", repeatable: false, qs: personalQuestions },
+  { key: "education", label: "Education", repeatable: true, qs: educationQuestions },
+  { key: "experience", label: "Experience", repeatable: true, qs: experienceQuestions },
+  { key: "skills", label: "Skills", repeatable: true, qs: skillQuestions },
+  { key: "achievements", label: "Achievements", repeatable: true, qs: achievementQuestions },
+  { key: "references", label: "References", repeatable: true, qs: referenceQuestions },
+  { key: "hobbies", label: "Hobbies", repeatable: true, qs: hobbyQuestions },
+  { key: "additional", label: "Additional", repeatable: true, qs: additionalInfoQuestions },
 ];
 
 /* ---------------------------------------------
@@ -104,14 +104,14 @@ const buildEntries = (sectionKey, qs, map, arr) => {
 
 const initEntry = (qs) => Array(qs.length).fill("");
 const makeInitialEntries = () => ({
-  personal:     [initEntry(personalQuestions)],
-  education:    [initEntry(educationQuestions)],
-  experience:   [initEntry(experienceQuestions)],
-  skills:       [initEntry(skillQuestions)],
+  personal: [initEntry(personalQuestions)],
+  education: [initEntry(educationQuestions)],
+  experience: [initEntry(experienceQuestions)],
+  skills: [initEntry(skillQuestions)],
   achievements: [initEntry(achievementQuestions)],
-  references:   [initEntry(referenceQuestions)],
-  hobbies:      [initEntry(hobbyQuestions)],
-  additional:   [initEntry(additionalInfoQuestions)],
+  references: [initEntry(referenceQuestions)],
+  hobbies: [initEntry(hobbyQuestions)],
+  additional: [initEntry(additionalInfoQuestions)],
 });
 const makeInitialEntryIdx = () => ({
   personal: 0, education: 0, experience: 0, skills: 0,
@@ -123,11 +123,13 @@ const makeInitialEntryIdx = () => ({
 ---------------------------------------------- */
 const ResumeEditor = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   // preview/template state (from Templates flow by default)
-  const [renderedHtml, setRenderedHtml] = useState(location.state?.rawTemplate || "");
-  const [templateCss, setTemplateCss]   = useState(location.state?.templateCss || "");
-  const [title, setTitle]               = useState(location.state?.templateName || "Untitled");
+  const [templateHtml, setTemplateHtml] = useState(location.state?.rawTemplate || "");
+  const [templateCss, setTemplateCss] = useState(location.state?.templateCss || "");
+  const [title, setTitle] = useState(location.state?.templateName || "Untitled");
+  const [templateId, setTemplateId] = useState(null);
 
   // progress dropdown
   const [progressOpen, setProgressOpen] = useState(true);
@@ -140,11 +142,14 @@ const ResumeEditor = () => {
   const [entriesBySection, setEntriesBySection] = useState(makeInitialEntries);
   const [entryIndexBySection, setEntryIndexBySection] = useState(makeInitialEntryIdx);
 
+  const [saving, setSaving] = useState(false);
+  const isEditMode = Boolean(location.state?.resumeId);
+
   const currentSection = SECTION_LIST[currentSectionIdx];
-  const currKey        = currentSection.key;
-  const currEntries    = entriesBySection[currKey];
-  const currEntryIdx   = entryIndexBySection[currKey];
-  const currAnswers    = currEntries[currEntryIdx];
+  const currKey = currentSection.key;
+  const currEntries = entriesBySection[currKey];
+  const currEntryIdx = entryIndexBySection[currKey];
+  const currAnswers = currEntries[currEntryIdx];
 
   /* ---------------------------------------------
      Seed from Templates → user's defaultResumeData
@@ -163,18 +168,18 @@ const ResumeEditor = () => {
         const d = res?.data?.defaultResumeData || {};
 
         const personalAns = fillAnswersFromObject(personalQuestions, FIELD_INDEX.personal, d.personalInfo || {});
-        const eduEntries  = buildEntries('education',  educationQuestions,  FIELD_INDEX.education,  d.education       || []);
-        const expEntries  = buildEntries('experience', experienceQuestions, FIELD_INDEX.experience, d.experience      || []);
-        const sklEntries  = buildEntries('skills',     skillQuestions,      FIELD_INDEX.skills,     d.skills          || []);
-        const achEntries  = buildEntries('achievements', achievementQuestions, FIELD_INDEX.achievements, d.achievements || []);
-        const refEntries  = buildEntries('references', referenceQuestions,  FIELD_INDEX.references, d.references      || []);
-        const hobEntries  = buildEntries('hobbies',    hobbyQuestions,      FIELD_INDEX.hobbies,    d.hobbies         || []);
-        const addEntries  = Array.isArray(d.additionalInfos) && d.additionalInfos.length
+        const eduEntries = buildEntries('education', educationQuestions, FIELD_INDEX.education, d.education || []);
+        const expEntries = buildEntries('experience', experienceQuestions, FIELD_INDEX.experience, d.experience || []);
+        const sklEntries = buildEntries('skills', skillQuestions, FIELD_INDEX.skills, d.skills || []);
+        const achEntries = buildEntries('achievements', achievementQuestions, FIELD_INDEX.achievements, d.achievements || []);
+        const refEntries = buildEntries('references', referenceQuestions, FIELD_INDEX.references, d.references || []);
+        const hobEntries = buildEntries('hobbies', hobbyQuestions, FIELD_INDEX.hobbies, d.hobbies || []);
+        const addEntries = Array.isArray(d.additionalInfos) && d.additionalInfos.length
           ? d.additionalInfos.map(info => {
-              const a = Array(additionalInfoQuestions.length).fill('');
-              a[0] = info.content || info.sectionTitle || '';
-              return a;
-            })
+            const a = Array(additionalInfoQuestions.length).fill('');
+            a[0] = info.content || info.sectionTitle || '';
+            return a;
+          })
           : [Array(additionalInfoQuestions.length).fill('')];
 
         setEntriesBySection({
@@ -216,6 +221,7 @@ const ResumeEditor = () => {
         });
 
         if (data?.title) setTitle(data.title);
+        if (data?.templateId) setTemplateId(data.templateId);
 
         const rd = data?.ResumeData || {};
         const personal = rd.personalInfo || {};
@@ -290,12 +296,12 @@ const ResumeEditor = () => {
         }));
         setEntryIndexBySection(makeInitialEntryIdx());
 
-        // 2) fetch template parts by templateId (for preview)
+        // 2) fetch template parts by templateId (for initial preview)
         if (data?.templateId) {
           const parts = await axios.get(`http://localhost:5000/preview/api/template/parts/${data.templateId}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
-          setRenderedHtml(parts.data?.rawTemplate || "");
+          setTemplateHtml(parts.data?.rawTemplate || "");
           setTemplateCss(parts.data?.templateCss || "");
         }
       } catch (err) {
@@ -321,7 +327,7 @@ const ResumeEditor = () => {
   ---------------------------------------------- */
   const handleSectionClick = (payload) => {
     const sectionKey = typeof payload === "string" ? payload : payload?.section;
-    const field      = typeof payload === "string" ? undefined : payload?.field;
+    const field = typeof payload === "string" ? undefined : payload?.field;
 
     const idx = SECTION_LIST.findIndex(s => s.key === sectionKey);
     const safeIdx = idx >= 0 ? idx : 0;
@@ -412,10 +418,180 @@ const ResumeEditor = () => {
   };
   const hasNextSection = currentSectionIdx < SECTION_LIST.length - 1;
   const hasPrevSection = currentSectionIdx > 0;
-  const canAdd    = !!currentSection.repeatable;
+  const canAdd = !!currentSection.repeatable;
   const canRemove = !!currentSection.repeatable && currEntries.length >= 1;
   const canPrevEntry = currentSection.repeatable && currEntries.length > 1 && currEntryIdx > 0;
   const canNextEntry = currentSection.repeatable && currEntries.length > 1 && currEntryIdx < currEntries.length - 1;
+
+  /* ---------------------------------------------
+     Convert answers → ResumeData (schema shape)
+  ---------------------------------------------- */
+  const toBool = (s) => typeof s === 'string' ? /^y(es)?$/i.test(s.trim()) : !!s;
+  const parseCityState = (s = '') => {
+    const [city, state] = String(s).split(',').map(t => t.trim());
+    return { city: city || '', state: state || '' };
+  };
+  const curr = (all, secKey, entryIdx, qIdx) => {
+    const list = all?.[secKey] || [];
+    const entry = list?.[entryIdx] || [];
+    return entry?.[qIdx] || '';
+  };
+
+  const resumeData = useMemo(() => {
+    const data = {
+      personalInfo: {
+        fullName: curr(entriesBySection, 'personal', 0, FIELD_INDEX.personal.fullName),
+        professionalEmail: curr(entriesBySection, 'personal', 0, FIELD_INDEX.personal.professionalEmail),
+        dateOfBirth: curr(entriesBySection, 'personal', 0, FIELD_INDEX.personal.dateOfBirth),
+        phone: curr(entriesBySection, 'personal', 0, FIELD_INDEX.personal.phone),
+        address: curr(entriesBySection, 'personal', 0, FIELD_INDEX.personal.address),
+        city: curr(entriesBySection, 'personal', 0, FIELD_INDEX.personal.city),
+        district: curr(entriesBySection, 'personal', 0, FIELD_INDEX.personal.district),
+        country: curr(entriesBySection, 'personal', 0, FIELD_INDEX.personal.country),
+        zipCode: curr(entriesBySection, 'personal', 0, FIELD_INDEX.personal.zipCode),
+      },
+      education: (entriesBySection.education || [])
+        .map(ans => {
+          const startDate = ans[FIELD_INDEX.education.startDate] || '';
+          const endDate = ans[FIELD_INDEX.education.endDate] || '';
+          const isCurrent = toBool(ans[FIELD_INDEX.education.isCurrentEducation]);
+          return {
+            degree: ans[FIELD_INDEX.education.degree] || '',
+            fieldOfStudy: ans[FIELD_INDEX.education.fieldOfStudy] || '',
+            institution: ans[FIELD_INDEX.education.institution] || '',
+            startDate,
+            endDate: endDate || undefined,
+            graduationDate: !endDate ? undefined : endDate,
+            isCurrentInstitute: isCurrent,
+            city: '', state: ''
+          };
+        })
+        .filter(obj => Object.values(obj).some(v => v && String(v).trim() !== '')),
+      experience: (entriesBySection.experience || [])
+        .map(ans => {
+          const loc = parseCityState(ans[FIELD_INDEX.experience.location] || '');
+          return {
+            jobTitle: ans[FIELD_INDEX.experience.jobTitle] || '',
+            employerName: ans[FIELD_INDEX.experience.employerName] || '',
+            city: loc.city,
+            state: loc.state,
+            startDate: ans[FIELD_INDEX.experience.startDate] || '',
+            endDate: ans[FIELD_INDEX.experience.endDate] || '',
+            isCurrentJob: toBool(ans[FIELD_INDEX.experience.isCurrentJob]),
+          };
+        })
+        .filter(obj => Object.values(obj).some(v => v && String(v).trim() !== '')),
+      skills: (entriesBySection.skills || [])
+        .map(ans => ({
+          skillName: ans[FIELD_INDEX.skills.skillName] || '',
+          proficiencyLevel: ans[FIELD_INDEX.skills.proficiencyLevel] || '',
+          yearsOfExperience: ans[FIELD_INDEX.skills.yearsOfExperience]
+            ? Number(ans[FIELD_INDEX.skills.yearsOfExperience]) : undefined,
+          skillDescription: ans[FIELD_INDEX.skills.description] || '',
+        }))
+        .filter(obj => Object.values(obj).some(v => v && String(v).trim() !== '')),
+      achievements: (entriesBySection.achievements || [])
+        .map(ans => ({
+          title: ans[FIELD_INDEX.achievements.title] || '',
+          organization: ans[FIELD_INDEX.achievements.organization] || '',
+          dateReceived: ans[FIELD_INDEX.achievements.dateReceived] || '',
+          category: ans[FIELD_INDEX.achievements.category] || '',
+          description: ans[FIELD_INDEX.achievements.description] || '',
+          website: ans[FIELD_INDEX.achievements.website] || '',
+        }))
+        .filter(obj => Object.values(obj).some(v => v && String(v).trim() !== '')),
+      references: (entriesBySection.references || [])
+        .map(ans => {
+          const full = (ans[FIELD_INDEX.references.firstName] || '').trim();
+          const parts = full.split(/\s+/);
+          const lastName = parts.length > 1 ? parts.pop() : '';
+          const firstName = parts.join(' ');
+          return {
+            firstName, lastName,
+            jobTitle: ans[FIELD_INDEX.references.jobTitle] || '',
+            company: ans[FIELD_INDEX.references.company] || '',
+            referenceEmail: ans[FIELD_INDEX.references.referenceEmail] || '',
+            phone: ans[FIELD_INDEX.references.referencePhone] || '',
+            permissionToContact: false,
+          };
+        })
+        .filter(obj => Object.values(obj).some(v => v && String(v).trim() !== '')),
+      hobbies: (entriesBySection.hobbies || [])
+        .map(ans => ({
+          hobbyName: ans[FIELD_INDEX.hobbies.hobbyName] || '',
+        }))
+        .filter(obj => Object.values(obj).some(v => v && String(v).trim() !== '')),
+      additionalInfos: (entriesBySection.additional || [])
+        .map(ans => ({
+          sectionTitle: '',
+          content: ans[FIELD_INDEX.additional.content] || '',
+        }))
+        .filter(obj => (obj.content || '').trim() !== ''),
+      projects: []
+    };
+    return data;
+  }, [entriesBySection]);
+
+  // saving state to prevent duplicate requests
+
+  // create vs. save button handlers
+  // create: from Templates flow (no resumeId in location.state)
+  const handleCreate = async () => {
+    if (saving) return;
+    try {
+      setSaving(true);
+      const token = localStorage.getItem('token') || '';
+
+      // Schema-only payload and correct template source
+      const payload = {
+        userEmail: (location.state?.userEmail ?? localStorage.getItem('userEmail') ?? localStorage.getItem('email') ?? ''),
+        templateId: (location.state?.templateId ?? templateId),
+        title: title || 'Untitled',
+        ResumeData: resumeData,
+      };
+
+      await axios.post(
+        'http://localhost:5000/resume/create',
+        payload,
+        { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` } }
+      );
+      navigate(`/dashboard`);
+    } catch (err) {
+      console.error('Create failed:', err);
+      alert('Failed to create resume.');
+    } finally {
+      setSaving(false);
+    }
+  };
+  const handleSave = async () => {
+    if (saving) return;
+    try {
+      setSaving(true);
+      const token = localStorage.getItem('token') || '';
+      const resumeId = location.state?.resumeId;
+
+      const payload = {
+        title: title || 'Untitled',
+        // Include templateId so switching templates is persisted
+        templateId: (location.state?.templateId ?? templateId),
+        ResumeData: resumeData,
+      };
+
+      await axios.patch(
+        `http://localhost:5000/resume/updateResume/${resumeId}`,
+        payload,
+        { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` } }
+      );
+
+      alert('Changes saved.');
+    } catch (err) {
+      console.error('Save failed:', err);
+      alert('Failed to save changes.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
 
   /* ---------------------------------------------
      Render
@@ -473,14 +649,20 @@ const ResumeEditor = () => {
           hasPrevSection={hasPrevSection}
           onSectionNext={onSectionNext}
           onSectionPrev={onSectionPrev}
+
+          actionLabel={isEditMode ? 'Save' : 'Create'}
+          onAction={isEditMode ? handleSave : handleCreate}
+          actionDisabled={saving}
+          actionTitle={isEditMode ? 'Save changes to this resume' : 'Create this resume'}
         />
       </div>
 
+      {/* Live preview (server when templateId exists; DOM fill via data-edit-id otherwise) */}
       <Preview
-        title={title}
-        answers={entriesBySection}     // per-section arrays of entries
-        renderedHtml={renderedHtml}
+        templateId={templateId}
+        rawTemplate={templateHtml}
         templateCss={templateCss}
+        resumeData={resumeData}
         onSectionClick={handleSectionClick}
       />
     </div>
