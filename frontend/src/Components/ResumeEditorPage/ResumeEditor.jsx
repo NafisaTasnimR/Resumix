@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
+
 import QuestionBox from './QuestionBox';
 import Preview from './Preview';
 import ProgressLine from './ProgressLine';
 
+/* ---------------------------------------------
+   Field indexes (maps backend fields → question order)
+---------------------------------------------- */
 const FIELD_INDEX = {
   personal: { fullName: 0, professionalEmail: 1, dateOfBirth: 2, phone: 3, address: 4, city: 5, district: 6, country: 7, zipCode: 8 },
   education: { degree: 0, fieldOfStudy: 1, institution: 2, startDate: 3, endDate: 4, isCurrentEducation: 5, currentStatus: 5 },
@@ -15,68 +20,294 @@ const FIELD_INDEX = {
   additional: { content: 0, sectionTitle: 0 }
 };
 
-const personalQuestions = ["Full Name?", "Professional Email?", "Date of Birth?", "Phone?", "Address?", "City?", "District?", "Country?", "Zip Code?"];
-const educationQuestions = ["Your Degree?", "Your Field of Study?", "Your Institution?", "Start Date of Education?", "End Date of Education?", "Current Status of Education?"];
-const experienceQuestions = ["Job Title?", "Employer Name?", "Job Location?", "Start Date of Job?", "End Date of Job?", "Is this your current job?", "Your Responsibilities?"];
-const skillQuestions = ["Skill Name?", "Skill Proficiency?", "Years of Experience?", "Skills Description?"];
-const achievementQuestions = ["Achievement Title?", "Organization (optional)?", "Date Received?", "Category (e.g., Award, Certification)?", "Description?", "Website (optional)?"];
-const referenceQuestions = ["Referee Name?", "Referee Designation?", "Referee Organization?", "Referee Email?", "Referee Phone?"];
-const hobbyQuestions = ["Your Hobbies?"];
+/* ---------------------------------------------
+   Questions per section
+---------------------------------------------- */
+const personalQuestions   = ["Full Name?","Professional Email?","Date of Birth?","Phone?","Address?","City?","District?","Country?","Zip Code?"];
+const educationQuestions  = ["Your Degree?","Your Field of Study?","Your Institution?","Start Date of Education?","End Date of Education?","Current Status of Education?"];
+const experienceQuestions = ["Job Title?","Employer Name?","Job Location?","Start Date of Job?","End Date of Job?","Is this your current job?","Your Responsibilities?"];
+const skillQuestions      = ["Skill Name?","Skill Proficiency?","Years of Experience?","Skills Description?"];
+const achievementQuestions= ["Achievement Title?","Organization (optional)?","Date Received?","Category (e.g., Award, Certification)?","Description?","Website (optional)?"];
+const referenceQuestions  = ["Referee Name?","Referee Designation?","Referee Organization?","Referee Email?","Referee Phone?"];
+const hobbyQuestions      = ["Your Hobbies?"];
 const additionalInfoQuestions = ["Additional Information?"];
 
 const SECTION_LIST = [
-  { key: "personal", label: "Personal", repeatable: false, qs: personalQuestions },
-  { key: "education", label: "Education", repeatable: true, qs: educationQuestions },
-  { key: "experience", label: "Experience", repeatable: true, qs: experienceQuestions },
-  { key: "skills", label: "Skills", repeatable: true, qs: skillQuestions },
-  { key: "achievements", label: "Achievements", repeatable: true, qs: achievementQuestions },
-  { key: "references", label: "References", repeatable: true, qs: referenceQuestions },
-  { key: "hobbies", label: "Hobbies", repeatable: true, qs: hobbyQuestions },
-  { key: "additional", label: "Additional", repeatable: true, qs: additionalInfoQuestions },
+  { key: "personal",     label: "Personal",     repeatable: false, qs: personalQuestions },
+  { key: "education",    label: "Education",    repeatable: true,  qs: educationQuestions },
+  { key: "experience",   label: "Experience",   repeatable: true,  qs: experienceQuestions },
+  { key: "skills",       label: "Skills",       repeatable: true,  qs: skillQuestions },
+  { key: "achievements", label: "Achievements", repeatable: true,  qs: achievementQuestions },
+  { key: "references",   label: "References",   repeatable: true,  qs: referenceQuestions },
+  { key: "hobbies",      label: "Hobbies",      repeatable: true,  qs: hobbyQuestions },
+  { key: "additional",   label: "Additional",   repeatable: true,  qs: additionalInfoQuestions },
 ];
 
+/* ---------------------------------------------
+   Helpers to map backend → QuestionBox answers
+---------------------------------------------- */
+const yesNo = (b) => (b ? 'Yes' : 'No');
+const fmtDate = (d) => {
+  if (!d) return '';
+  const x = new Date(d);
+  return Number.isNaN(x.getTime()) ? '' : x.toISOString().slice(0, 10); // yyyy-mm-dd
+};
+
+// produce one answers[] matching qs order using a field map
+const fillAnswersFromObject = (qs, map, obj) => {
+  const ans = Array(qs.length).fill('');
+  Object.entries(map).forEach(([field, idx]) => {
+    if (!obj) return;
+    let v = obj[field];
+
+    // special cases/aliases
+    if (field === 'isCurrentEducation' || field === 'currentStatus') {
+      const b = obj.isCurrentEducation ?? obj.isCurrentInstitution ?? obj.isCurrentInstitute ?? obj.isCurrent ?? false;
+      v = yesNo(!!b);
+    }
+    if (field === 'location') {
+      const city = obj.city || '';
+      const state = obj.state || '';
+      v = [city, state].filter(Boolean).join(', ');
+    }
+    if (field === 'bullets' || field === 'responsibilities') {
+      v = obj.description || obj.responsibilities || '';
+    }
+    if (field.toLowerCase().includes('date')) {
+      v = fmtDate(v);
+    }
+    if (typeof v === 'boolean') v = yesNo(v);
+
+    if (v != null) ans[idx] = String(v);
+  });
+  return ans;
+};
+
+// build entries (array of answers[]) from array of objects for a section
+const buildEntries = (sectionKey, qs, map, arr) => {
+  if (!Array.isArray(arr) || arr.length === 0) return [Array(qs.length).fill('')];
+
+  // references: merge first+last into "Referee Name?"
+  if (sectionKey === 'references') {
+    const nameIdx = map.firstName;
+    if (nameIdx !== undefined) {
+      return arr.map((o) => {
+        const base = fillAnswersFromObject(qs, map, o);
+        base[nameIdx] = [o.firstName, o.lastName].filter(Boolean).join(' ').trim();
+        return base;
+      });
+    }
+  }
+
+  return arr.map((o) => fillAnswersFromObject(qs, map, o));
+};
+
 const initEntry = (qs) => Array(qs.length).fill("");
-
 const makeInitialEntries = () => ({
-  personal: [initEntry(personalQuestions)],
-  education: [initEntry(educationQuestions)],
-  experience: [initEntry(experienceQuestions)],
-  skills: [initEntry(skillQuestions)],
+  personal:     [initEntry(personalQuestions)],
+  education:    [initEntry(educationQuestions)],
+  experience:   [initEntry(experienceQuestions)],
+  skills:       [initEntry(skillQuestions)],
   achievements: [initEntry(achievementQuestions)],
-  references: [initEntry(referenceQuestions)],
-  hobbies: [initEntry(hobbyQuestions)],
-  additional: [initEntry(additionalInfoQuestions)],
+  references:   [initEntry(referenceQuestions)],
+  hobbies:      [initEntry(hobbyQuestions)],
+  additional:   [initEntry(additionalInfoQuestions)],
 });
-
 const makeInitialEntryIdx = () => ({
   personal: 0, education: 0, experience: 0, skills: 0,
   achievements: 0, references: 0, hobbies: 0, additional: 0,
 });
 
+/* ---------------------------------------------
+   Component
+---------------------------------------------- */
 const ResumeEditor = () => {
   const location = useLocation();
-  const renderedHtml = location.state?.rawTemplate || "";
-  const templateCss = location.state?.templateCss || "";
-  const titleFromTemplate = location.state?.templateName || "Untitled";
 
-  const [title, setTitle] = useState(titleFromTemplate);
-  const [titleDropdownOpen, setTitleDropdownOpen] = useState(false);
+  // preview/template state (from Templates flow by default)
+  const [renderedHtml, setRenderedHtml] = useState(location.state?.rawTemplate || "");
+  const [templateCss, setTemplateCss]   = useState(location.state?.templateCss || "");
+  const [title, setTitle]               = useState(location.state?.templateName || "Untitled");
 
-  // which section & question are active
+  // progress dropdown
+  const [progressOpen, setProgressOpen] = useState(true);
+
+  // section + question positions
   const [currentSectionIdx, setCurrentSectionIdx] = useState(0);
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
 
-  // per-section, multi-entry answers
+  // answers: per-section arrays of entries; each entry is an answers[] in question order
   const [entriesBySection, setEntriesBySection] = useState(makeInitialEntries);
   const [entryIndexBySection, setEntryIndexBySection] = useState(makeInitialEntryIdx);
 
   const currentSection = SECTION_LIST[currentSectionIdx];
-  const currKey = currentSection.key;
-  const currEntries = entriesBySection[currKey];
-  const currEntryIdx = entryIndexBySection[currKey];
-  const currAnswers = currEntries[currEntryIdx];
-  const [progressOpen, setProgressOpen] = useState(true);
+  const currKey        = currentSection.key;
+  const currEntries    = entriesBySection[currKey];
+  const currEntryIdx   = entryIndexBySection[currKey];
+  const currAnswers    = currEntries[currEntryIdx];
 
+  /* ---------------------------------------------
+     Seed from Templates → user's defaultResumeData
+  ---------------------------------------------- */
+  useEffect(() => {
+    const cameFromTemplates =
+      !!location.state?.rawTemplate && !location.state?.resumeId;
+
+    if (!cameFromTemplates) return;
+
+    const loadDefault = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/viewInformation/userInformation', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token') || ''}` }
+        });
+        const d = res?.data?.defaultResumeData || {};
+
+        const personalAns = fillAnswersFromObject(personalQuestions, FIELD_INDEX.personal, d.personalInfo || {});
+        const eduEntries  = buildEntries('education',  educationQuestions,  FIELD_INDEX.education,  d.education       || []);
+        const expEntries  = buildEntries('experience', experienceQuestions, FIELD_INDEX.experience, d.experience      || []);
+        const sklEntries  = buildEntries('skills',     skillQuestions,      FIELD_INDEX.skills,     d.skills          || []);
+        const achEntries  = buildEntries('achievements', achievementQuestions, FIELD_INDEX.achievements, d.achievements || []);
+        const refEntries  = buildEntries('references', referenceQuestions,  FIELD_INDEX.references, d.references      || []);
+        const hobEntries  = buildEntries('hobbies',    hobbyQuestions,      FIELD_INDEX.hobbies,    d.hobbies         || []);
+        const addEntries  = Array.isArray(d.additionalInfos) && d.additionalInfos.length
+          ? d.additionalInfos.map(info => {
+              const a = Array(additionalInfoQuestions.length).fill('');
+              a[0] = info.content || info.sectionTitle || '';
+              return a;
+            })
+          : [Array(additionalInfoQuestions.length).fill('')];
+
+        setEntriesBySection({
+          personal: [personalAns],
+          education: eduEntries,
+          experience: expEntries,
+          skills: sklEntries,
+          achievements: achEntries,
+          references: refEntries,
+          hobbies: hobEntries,
+          additional: addEntries,
+        });
+
+        setEntryIndexBySection(makeInitialEntryIdx());
+        setCurrentSectionIdx(0);
+        setCurrentQuestionIdx(0);
+      } catch (e) {
+        console.error('Failed to load defaultResumeData', e);
+      }
+    };
+
+    loadDefault();
+  }, [location.state]);
+
+  /* ---------------------------------------------
+     Edit flow → load Resume by id + its template
+  ---------------------------------------------- */
+  useEffect(() => {
+    const resumeId = location.state?.resumeId;
+    if (!resumeId) return;
+
+    const token = localStorage.getItem("token") || "";
+
+    (async () => {
+      try {
+        // 1) fetch the resume
+        const { data } = await axios.get(`http://localhost:5000/resume/${resumeId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (data?.title) setTitle(data.title);
+
+        const rd = data?.ResumeData || {};
+        const personal = rd.personalInfo || {};
+
+        // map each section
+        const personalAns = [
+          personal.fullName || "",
+          personal.professionalEmail || "",
+          fmtDate(personal.dateOfBirth),
+          personal.phone || "",
+          personal.address || "",
+          personal.city || "",
+          personal.district || "",
+          personal.country || "",
+          personal.zipCode || "",
+        ];
+        const eduEntries = (rd.education || []).map(e => ([
+          e.degree || "",
+          e.fieldOfStudy || "",
+          e.institution || "",
+          fmtDate(e.startDate),
+          fmtDate(e.endDate || e.graduationDate),
+          e.isCurrentInstitute ? "Yes" : "No",
+        ]));
+        const expEntries = (rd.experience || []).map(x => ([
+          x.jobTitle || "",
+          x.employerName || "",
+          [x.city, x.state].filter(Boolean).join(", "),
+          fmtDate(x.startDate),
+          fmtDate(x.endDate),
+          x.isCurrentJob ? "Yes" : "No",
+          "", // responsibilities placeholder
+        ]));
+        const sklEntries = (rd.skills || []).map(s => ([
+          s.skillName || "",
+          s.proficiencyLevel || "",
+          (s.yearsOfExperience ?? "").toString(),
+          s.skillDescription || "",
+        ]));
+        const achEntries = (rd.achievements || []).map(a => ([
+          a.title || "",
+          a.organization || "",
+          fmtDate(a.dateReceived),
+          a.category || "",
+          a.description || "",
+          a.website || "",
+        ]));
+        const refEntries = (rd.references || []).map(r => ([
+          [r.firstName, r.lastName].filter(Boolean).join(" ").trim(),
+          r.jobTitle || "",
+          r.company || "",
+          r.referenceEmail || "",
+          r.phone || "",
+        ]));
+        const hobEntries = (rd.hobbies || []).map(h => ([
+          h.hobbyName || h.description || "",
+        ]));
+        const addEntries = (rd.additionalInfos || []).map(a => ([
+          a.content || a.sectionTitle || "",
+        ]));
+
+        setEntriesBySection(prev => ({
+          ...prev,
+          personal: [personalAns],
+          education: eduEntries.length ? eduEntries : prev.education,
+          experience: expEntries.length ? expEntries : prev.experience,
+          skills: sklEntries.length ? sklEntries : prev.skills,
+          achievements: achEntries.length ? achEntries : prev.achievements,
+          references: refEntries.length ? refEntries : prev.references,
+          hobbies: hobEntries.length ? hobEntries : prev.hobbies,
+          additional: addEntries.length ? addEntries : prev.additional,
+        }));
+        setEntryIndexBySection(makeInitialEntryIdx());
+
+        // 2) fetch template parts by templateId (for preview)
+        if (data?.templateId) {
+          const parts = await axios.get(`http://localhost:5000/preview/api/template/parts/${data.templateId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setRenderedHtml(parts.data?.rawTemplate || "");
+          setTemplateCss(parts.data?.templateCss || "");
+        }
+      } catch (err) {
+        console.error("Failed to load resume/template for edit", err);
+      }
+    })();
+  }, [location.state?.resumeId]);
+
+  /* ---------------------------------------------
+     Title editing
+  ---------------------------------------------- */
+  const [titleDropdownOpen, setTitleDropdownOpen] = useState(false);
   const toggleTitleEdit = () => setTitleDropdownOpen(!titleDropdownOpen);
   const saveTitle = (e) => {
     e.stopPropagation();
@@ -85,10 +316,12 @@ const ResumeEditor = () => {
     setTitleDropdownOpen(false);
   };
 
-  // jump from preview to a section/field
+  /* ---------------------------------------------
+     Preview → click to focus specific section/field
+  ---------------------------------------------- */
   const handleSectionClick = (payload) => {
     const sectionKey = typeof payload === "string" ? payload : payload?.section;
-    const field = typeof payload === "string" ? undefined : payload?.field;
+    const field      = typeof payload === "string" ? undefined : payload?.field;
 
     const idx = SECTION_LIST.findIndex(s => s.key === sectionKey);
     const safeIdx = idx >= 0 ? idx : 0;
@@ -97,14 +330,15 @@ const ResumeEditor = () => {
     const idxMap = FIELD_INDEX[sectionKey] || {};
     const nextQ = (field && Object.prototype.hasOwnProperty.call(idxMap, field)) ? idxMap[field] : 0;
     setCurrentQuestionIdx(nextQ);
-    // keep current entry index for that section
   };
 
-  // update one answer in current entry of current section
+  /* ---------------------------------------------
+     Question edit handlers
+  ---------------------------------------------- */
   const handleAnswerChange = (value) => {
     setEntriesBySection(prev => {
       const copy = { ...prev };
-      const list = copy[currKey].map(arr => [...arr]); // clone
+      const list = copy[currKey].map(arr => [...arr]); // shallow-clone entries
       list[currEntryIdx][currentQuestionIdx] = value;
       copy[currKey] = list;
       return copy;
@@ -127,29 +361,26 @@ const ResumeEditor = () => {
     }
   };
 
-  // add another instance of the current section
+  // add/remove one instance (entry) of current section
   const onAddEntry = () => {
     if (!currentSection.repeatable) return;
     setEntriesBySection(prev => {
       const copy = { ...prev };
-      const newEntry = initEntry(currentSection.qs);
-      copy[currKey] = [...copy[currKey], newEntry];
+      copy[currKey] = [...copy[currKey], initEntry(currentSection.qs)];
       return copy;
     });
-    setEntryIndexBySection(prev => ({ ...prev, [currKey]: currEntries.length })); // go to new one
+    setEntryIndexBySection(prev => ({ ...prev, [currKey]: currEntries.length }));
     setCurrentQuestionIdx(0);
   };
-
-  // remove current instance (or clear if only one)
   const onRemoveEntry = () => {
     if (!currentSection.repeatable) return;
     const total = currEntries.length;
     if (total > 1) {
       setEntriesBySection(prev => {
         const copy = { ...prev };
-        const newList = [...copy[currKey]];
-        newList.splice(currEntryIdx, 1);
-        copy[currKey] = newList;
+        const list = [...copy[currKey]];
+        list.splice(currEntryIdx, 1);
+        copy[currKey] = list;
         return copy;
       });
       setEntryIndexBySection(prev => ({ ...prev, [currKey]: Math.max(0, currEntryIdx - 1) }));
@@ -164,7 +395,7 @@ const ResumeEditor = () => {
     }
   };
 
-  // NEW: entry pager handlers + booleans
+  // entry pager within a repeatable section
   const onPrevEntry = () => {
     if (!currentSection.repeatable) return;
     if (currEntryIdx > 0) {
@@ -179,15 +410,16 @@ const ResumeEditor = () => {
       setCurrentQuestionIdx(0);
     }
   };
+  const hasNextSection = currentSectionIdx < SECTION_LIST.length - 1;
+  const hasPrevSection = currentSectionIdx > 0;
+  const canAdd    = !!currentSection.repeatable;
+  const canRemove = !!currentSection.repeatable && currEntries.length >= 1;
   const canPrevEntry = currentSection.repeatable && currEntries.length > 1 && currEntryIdx > 0;
   const canNextEntry = currentSection.repeatable && currEntries.length > 1 && currEntryIdx < currEntries.length - 1;
 
-  // button enable/disable
-  const hasNextSection = currentSectionIdx < SECTION_LIST.length - 1;
-  const hasPrevSection = currentSectionIdx > 0;
-  const canAdd = !!currentSection.repeatable;
-  const canRemove = !!currentSection.repeatable && currEntries.length >= 1;
-
+  /* ---------------------------------------------
+     Render
+  ---------------------------------------------- */
   return (
     <div className='resume-editor'>
       <div className="main">
@@ -204,23 +436,13 @@ const ResumeEditor = () => {
           )}
         </div>
 
-        {/* single, section-based progress line */}
+        {/* section-based progress line with dropdown */}
         <div className="progress">
-          <div
-            className="progress-line-header"
-            onClick={() => setProgressOpen((o) => !o)}
-          >
+          <div className="progress-line-header" onClick={() => setProgressOpen(o => !o)}>
             <span className="progress-title">Progress Line</span>
-            <button className="arrow-btn-progress">
-              {progressOpen ? "▲" : "▼"}
-            </button>
+            <button className="arrow-btn-progress">{progressOpen ? "▲" : "▼"}</button>
           </div>
-
-          <ProgressLine
-            items={SECTION_LIST}
-            current={currentSectionIdx}
-            open={progressOpen}
-          />
+          <ProgressLine items={SECTION_LIST} current={currentSectionIdx} open={progressOpen} />
         </div>
 
         {/* Questions for CURRENT ENTRY of CURRENT SECTION */}
@@ -237,7 +459,7 @@ const ResumeEditor = () => {
           canAdd={canAdd}
           canRemove={canRemove}
 
-          // NEW: entry pager props
+          // entry pager
           sectionLabel={currentSection.label}
           entryIndex={currEntryIdx}
           entryCount={currEntries.length}
@@ -256,7 +478,7 @@ const ResumeEditor = () => {
 
       <Preview
         title={title}
-        answers={entriesBySection}   // NOTE: now per-section *arrays of entries*
+        answers={entriesBySection}     // per-section arrays of entries
         renderedHtml={renderedHtml}
         templateCss={templateCss}
         onSectionClick={handleSectionClick}
