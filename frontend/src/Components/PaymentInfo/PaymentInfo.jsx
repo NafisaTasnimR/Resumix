@@ -21,7 +21,7 @@ const PaymentForm = () => {
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [clientSecret, setClientSecret] = useState('');
-  const [user, setUser] = useState({ name: 'Loading...', email: 'Loading...' });
+  const [user, setUser] = useState({ name: '', email: '' }); // Still fetch but don't show
   const [loading, setLoading] = useState(true);
 
   const selectedPlan = location.state?.selectedPlan || '14-day';
@@ -54,7 +54,7 @@ const PaymentForm = () => {
       if (response.ok) {
         setClientSecret(data.clientSecret);
         
-        // Update user info with the REAL email from database
+        // Update user info with the REAL email from database (for backend use)
         if (data.userEmail && data.userName) {
           setUser({
             name: data.userName,
@@ -135,11 +135,7 @@ const PaymentForm = () => {
     <form onSubmit={handleSubmit} className="payment-form">
       <h2>Payment Information</h2>
       
-      {/* Show user info */}
-      <div className="user-info">
-        <p><strong>Name:</strong> {user.name}</p>
-        <p><strong>Email:</strong> {user.email}</p>
-      </div>
+      {/* Removed user info display - data is still fetched for backend use */}
       
       <div className="card-section">
         <div className="section-header">
