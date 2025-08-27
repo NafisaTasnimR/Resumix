@@ -1,11 +1,10 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './UserDashboard.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ShareResumeModal from '../ResumeListPage/ShareResumeModal';
 import DownloadResumeModal from '../ResumeListPage/DownloadResumeModal';
 import TopBar from '../ResumeEditorPage/TopBar';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
 
 const Dashboard = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -58,14 +57,19 @@ const Dashboard = () => {
         setLoadingResumes(true);
         setResumeError(null);
 
-        // Assumes your controller exposes GET /api/resumes -> array of resumes owned by req.user
+        // Assumes your controller exposes GET /resume/all -> array of resumes owned by req.user
         const res = await axios.get('http://localhost:5000/resume/all', {
           headers: token ? { Authorization: `Bearer ${token}` } : {}
         });
 
-        // If your API returns {resumes: [...]}, use res.data.resumes
         const list = Array.isArray(res.data?.resumes) ? res.data.resumes : res.data;
-        setResumes(Array.isArray(list) ? list : []);
+
+        const withSerials = (Array.isArray(list) ? list : [])
+          .slice()
+          .sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0))
+          .map((item, idx) => ({ ...item, __serial: idx + 1 }));
+
+        setResumes(withSerials);
       } catch (err) {
         console.error('Failed to fetch resumes:', err);
         setResumeError('Could not load your resumes.');
@@ -74,25 +78,16 @@ const Dashboard = () => {
       }
     };
 
-
     fetchUser();
     fetchResumes();
   }, []);
 
   if (!user) return <p>Loading...</p>;
 
-
   const handleShareClick = (resume) => {
     setResumeName(resume.title || 'Untitled Resume');
     setIsShareModalOpen(true);
   };
-
-  /*const handleDownloadClick = (resume) => {
-    setResumeName(resume.name);
-    setDownloadLink(`https://myresume.com/${resume.name}_Resume.pdf`);
-
-    setIsDownloadModalOpen(true);
-  };*/
 
   const handleCloseModal = () => {
     setIsShareModalOpen(false);
@@ -124,8 +119,6 @@ const Dashboard = () => {
       alert('Could not download PDF');
     }
   };
-
-
 
   return (
     <div className="resume-fullpage">
@@ -165,16 +158,18 @@ const Dashboard = () => {
 
         {!loadingResumes && !resumeError && resumes.map((r) => (
           <div className="resume-table-row" key={r._id}>
-            {/* Clicking the title navigates to the specific resume view */}
-            <button
-              className="resume-name-link"
-              onClick={() => navigate(`/resumeview/${r._id}`)}
-              title="Open resume"
-            >
-              {r.title || 'Untitled'}
-            </button>
+            {/* Serial and Name kept separate but within the same column */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span className="resume-serial">{r.__serial}.</span>
+              <button
+                className="resume-name-link"
+                onClick={() => navigate(`/resumeview/${r._id}`)}
+                title="Open resume"
+              >
+                {r.title || 'Untitled'}
+              </button>
+            </div>
 
-            {/* If you have updatedAt via timestamps, show it; else fallback to createdAt */}
             <span>{fmt(r.updatedAt || r.createdAt)}</span>
             <span>{fmt(r.createdAt)}</span>
 
@@ -188,10 +183,6 @@ const Dashboard = () => {
               <button onClick={() => navigate('/m/atschecker', { state: { resumeId: r._id } })}>
                 ATS Check
               </button>
-
-              {/* You can also offer a copy-link-to-preview:
-                  <button onClick={() => navigator.clipboard.writeText(`${window.location.origin}/resumeview/${r._id}`)}>Copy Link</button>
-               */}
             </span>
           </div>
         ))}
