@@ -1,11 +1,13 @@
 import './PostLoginHeader.css';
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import userIcon from '../../assets/icons8-account-48.png';
 
 const PostLoginHeader = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -24,6 +26,52 @@ const PostLoginHeader = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [dropdownOpen]);
+
+  const hasAnyPersonalInfo = (pi = {}) => {
+    const keysToCheck = [
+      'fullName',
+      'professionalEmail',
+      'phone',
+      'address',
+      'city',
+      'district',
+      'country',
+      'zipCode',
+      'dateOfBirth'
+    ];
+    return keysToCheck.some(k => {
+      const v = pi?.[k];
+      return v !== undefined && v !== null && String(v).trim() !== '';
+    });
+  };
+
+  const handleBuildClick = async () => {
+    try {
+      const token = localStorage.getItem('token') || '';
+      if (!token) {
+        navigate('/profile');
+        return;
+      }
+
+      const { data } = await axios.get('http://localhost:5000/info/userInformation', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      const rd = data?.defaultResumeData || {};
+      const hasPI = hasAnyPersonalInfo(rd.personalInfo);
+      const hasEdu = Array.isArray(rd.education) && rd.education.length > 0;
+      const hasExp = Array.isArray(rd.experience) && rd.experience.length > 0;
+
+      if (hasPI || hasEdu || hasExp) {
+        navigate('/templates'); 
+      } else {
+        navigate('/profile');
+      }
+    } catch (err) {
+      console.error('Failed to check user information:', err);
+      navigate('/profile');
+    }
+  };
 
   return (
     <>
@@ -63,7 +111,6 @@ const PostLoginHeader = () => {
                   </Link>
                 </div>
               )}
-
             </div>
           </div>
         </nav>
@@ -77,7 +124,9 @@ const PostLoginHeader = () => {
         <div className="content-container">
           <h1>Create a Job-Ready Resume in Few Minutes</h1>
           <p className="subtext">Create your resume with our free builder and professional templates</p>
-          <Link to="/profile" className="primary-btn">Build Your Resume</Link>
+
+          {/* CHANGED: Link -> button with conditional navigation */}
+          <button onClick={handleBuildClick} className="primary-btn">Build Your Resume</button>
 
           {/* Live Preview Section */}
           <h1>Quick, Easy And Flexible Editing With Live Preview</h1>

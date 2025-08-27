@@ -41,7 +41,7 @@
 }
 
 .nav-center a:hover {
-  color: #656D4A;
+  color: #98968a;
   text-decoration: underline; 
 }
 
@@ -168,7 +168,7 @@
 }
 
 .primary-btn:hover {
-  background-color: #4d5636;
+  background-color: #a4ac86;
 }
 
 .hero-preview h1:last-of-type {
@@ -350,6 +350,6 @@
 .nav-center a:hover,
 .nav-center a:focus,
 .nav-center a:active {
-  text-decoration: none;     /* no underline on hover/click */
-  color: #656D4A;            /* keep your hover color change */
+  text-decoration: none;     
+  color: #98968a;            /* keep your hover color change */
 }
