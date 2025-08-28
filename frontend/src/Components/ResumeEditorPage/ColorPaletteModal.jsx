@@ -31,13 +31,13 @@ const hslToHex = ({ h, s, l }) => {
   const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
   const m = l - c / 2;
   let r = 0, g = 0, b = 0;
-  if      (0 <= h && h < 60)  { r = c; g = x; b = 0; }
-  else if (60 <= h && h < 120){ r = x; g = c; b = 0; }
-  else if (120<= h && h < 180){ r = 0; g = c; b = x; }
-  else if (180<= h && h < 240){ r = 0; g = x; b = c; }
-  else if (240<= h && h < 300){ r = x; g = 0; b = c; }
-  else                        { r = c; g = 0; b = x; }
-  const toHex = (v) => Math.round((v + m) * 255).toString(16).padStart(2,"0");
+  if (0 <= h && h < 60) { r = c; g = x; b = 0; }
+  else if (60 <= h && h < 120) { r = x; g = c; b = 0; }
+  else if (120 <= h && h < 180) { r = 0; g = c; b = x; }
+  else if (180 <= h && h < 240) { r = 0; g = x; b = c; }
+  else if (240 <= h && h < 300) { r = x; g = 0; b = c; }
+  else { r = c; g = 0; b = x; }
+  const toHex = (v) => Math.round((v + m) * 255).toString(16).padStart(2, "0");
   return "#" + toHex(r) + toHex(g) + toHex(b);
 };
 
@@ -50,16 +50,16 @@ const buildShades = (hex) => {
 };
 
 const QUICK_BASES = [
-  "#ef4444","#f97316","#f59e0b","#eab308","#84cc16",
-  "#22c55e","#10b981","#14b8a6","#06b6d4","#0ea5e9",
-  "#3b82f6","#6366f1","#8b5cf6","#a855f7","#d946ef",
-  "#ec4899","#f43f5e","#9ca3af","#6b7280","#111827"
+  "#ef4444", "#f97316", "#f59e0b", "#eab308", "#84cc16",
+  "#22c55e", "#10b981", "#14b8a6", "#06b6d4", "#0ea5e9",
+  "#3b82f6", "#6366f1", "#8b5cf6", "#a855f7", "#d946ef",
+  "#ec4899", "#f43f5e", "#9ca3af", "#6b7280", "#111827"
 ];
 
 /* ---------- Component ---------- */
 const ColorPaletteModal = ({ onClose, onColorSelect }) => {
   const [baseColor, setBaseColor] = useState("#8b5cf6");
-  const [hexInput, setHexInput]   = useState("#8b5cf6");
+  const [hexInput, setHexInput] = useState("#8b5cf6");
   const palette = useMemo(() => buildShades(baseColor), [baseColor]);
 
   const commitHex = () => {
@@ -70,7 +70,7 @@ const ColorPaletteModal = ({ onClose, onColorSelect }) => {
     setBaseColor(v);
   };
 
-  const chooseShade = (hex) => {
+  /*const chooseShade = (hex) => {
     setBaseColor(hex);
     setHexInput(hex);
     const next = buildShades(hex);
@@ -80,6 +80,30 @@ const ColorPaletteModal = ({ onClose, onColorSelect }) => {
   const applyCurrent = () => {
     const next = buildShades(baseColor);
     onColorSelect?.(next.shades[2], next); // middle shade by default
+  };*/
+
+  const emit = (hex, next) => {
+    try {
+      window.dispatchEvent(new CustomEvent('resume-apply-color', { detail: { hex, palette: next } }));
+    } catch { }
+    onColorSelect?.(hex, next);
+  };
+
+  // replace chooseShade with:
+  const chooseShade = (hex) => {
+    setBaseColor(hex);
+    setHexInput(hex);
+    const next = buildShades(hex);
+    emit(hex, next);               // <— was onColorSelect?.(hex, next)
+  };
+
+  // replace applyCurrent with:
+  const applyCurrent = () => {
+    let v = (hexInput || "").trim();
+    if (v && !v.startsWith("#")) v = "#" + v;
+    const valid = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(v) ? v : baseColor;
+    const next = buildShades(valid);
+    emit(valid, next); // emits { hex: valid, palette: next }
   };
 
   return (
@@ -96,12 +120,12 @@ const ColorPaletteModal = ({ onClose, onColorSelect }) => {
           <input
             className="hex-input"
             value={hexInput}
-            onChange={(e)=>setHexInput(e.target.value)}
-            onKeyDown={(e)=> e.key === "Enter" && commitHex()}
+            onChange={(e) => setHexInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && commitHex()}
             placeholder="#8b5cf6"
             aria-label="Hex color"
           />
-          <button className="apply-btn" onClick={applyCurrent}>Apply</button>
+          <button type="button" className="apply-btn" onClick={applyCurrent}>Apply</button>
         </div>
 
         {/* Wrapping quick chips */}
@@ -124,7 +148,7 @@ const ColorPaletteModal = ({ onClose, onColorSelect }) => {
               key={i}
               className="color-swatch"
               style={{ backgroundColor: c }}
-              title={`${c} (shade ${i+1})`}
+              title={`${c} (shade ${i + 1})`}
               onClick={() => chooseShade(c)}
             />
           ))}

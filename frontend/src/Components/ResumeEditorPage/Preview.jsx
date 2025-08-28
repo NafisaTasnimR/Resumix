@@ -1,13 +1,24 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import axios from "axios";
 import "./Preview.css";
+
+
+const sanitizeHtml = (html) => {
+  if (!html) return "";
+  return String(html)
+    // strip any <script>...</script>
+    .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")
+    // strip inline on* handlers (onclick, onload, etc.)
+    .replace(/\son[a-z]+="[^"]*"/gi, "")
+    .replace(/\son[a-z]+='[^']*'/gi, "");
+};
 
 /**
  * Props:
  * - templateId?: string
  * - rawTemplate?: string
  * - templateCss?: string
- * - resumeData: object
+ * - resumeData: object   // can carry { theme: { accent: "#hex" } }
  * - onSectionClick?: ({section, field, path}) => void
  */
 const Preview = ({
@@ -62,7 +73,7 @@ const Preview = ({
     return { headInner: "", bodyInner: html };
   };
 
-  // ---------- load server preview (Edit flow) ----------
+  // ---------- load server preview (Edit or Templates flow) ----------
   useEffect(() => {
     let cancelled = false;
 
@@ -133,6 +144,97 @@ const Preview = ({
     return `<style>${fallbackCss}</style>`;
   }, [processedHtml, processedHead, partsCss, templateCss, templateId]);
 
+  // ---------- accent (colorful parts) helpers ----------
+  const lastAccentRef = React.useRef(null);
+
+  // exact shade + optional ramp
+  const setAccentVars = (doc, hex, palette) => {
+    if (!doc || !hex) return;
+    doc.documentElement.style.setProperty("--accent", hex);
+
+    const shades = (palette?.shades && palette.shades.length === 5)
+      ? palette.shades
+      : [hex, hex, hex, hex, hex];
+
+    doc.documentElement.style.setProperty("--accent-100", shades[0]);
+    doc.documentElement.style.setProperty("--accent-300", shades[1]);
+    doc.documentElement.style.setProperty("--accent-500", shades[2]);
+    doc.documentElement.style.setProperty("--accent-700", shades[3]);
+    doc.documentElement.style.setProperty("--accent-900", shades[4]);
+  };
+
+  const applyAccentToDoc = React.useCallback((doc, hex, palette) => {
+    if (!doc || !hex) return;
+    setAccentVars(doc, hex, palette);
+
+    let styleEl = doc.getElementById("dynamic-accent");
+    if (!styleEl) {
+      styleEl = doc.createElement("style");
+      styleEl.id = "dynamic-accent";
+      (doc.head || doc.documentElement).prepend(styleEl);
+    }
+    styleEl.textContent = `
+      /* Text accents only when the element explicitly asks for accent */
+      :where(.accent,.primary,.section-title,.title,.headline,.resume-accent) {
+        color: var(--accent) !important;
+      }
+
+      /* Backgrounds for bars/panels/sidebars */
+      :where(.bg-accent,.header-bar,.accent-bg,.side-block-bg,
+            headerc,.headerc,.top-bar,.title-bar,.name-bar,.banner,
+            .left-panel,.left-sidebar,.sidebar-header) {
+        background-color: var(--accent-700, var(--accent)) !important;
+      }
+
+      /* Make text on those bars readable (white) */
+      :where(.headerc,.top-bar,.title-bar,.name-bar,.banner,
+            .left-panel,.left-sidebar,.sidebar-header) * {
+        color: #fff !important;
+      }
+
+      /* Dividers/borders */
+      :where(.border-accent,.divider,hr,.rule,.section-rule) {
+        border-color: var(--accent-700, var(--accent)) !important;
+      }
+
+      /* Default links elsewhere */
+      a { color: var(--accent) !important; }
+    `;
+  }, []);
+
+  const repaintHeuristics = (doc, hex) => {
+    if (!doc || !hex) return;
+    const pick = (sel) => Array.from(doc.querySelectorAll(sel));
+    const cands = [
+      ...pick("header,.header,.top-bar,.title-bar,.name-bar,.banner"),
+      ...pick(".left-panel,.left-sidebar,.sidebar,.sidebar-header"),
+    ];
+    cands.forEach((el) => {
+      const cs = doc.defaultView.getComputedStyle(el);
+      const rect = el.getBoundingClientRect();
+      const hasBg = cs.backgroundColor && cs.backgroundColor !== "rgba(0, 0, 0, 0)";
+      const isBig = rect.height > 30 || rect.width > 120;
+      if (isBig && hasBg) {
+        el.style.backgroundColor = hex;
+        if (/^hr|div$/i.test(el.tagName)) el.style.borderColor = hex;
+      }
+    });
+  };
+
+  // listen for palette events; remember + apply inside iframe
+  React.useEffect(() => {
+    const onPick = (e) => {
+      const hex = e?.detail?.hex;
+      const palette = e?.detail?.palette;
+      if (!hex || !iframeRef.current?.contentDocument) return;
+      lastAccentRef.current = { hex, palette };
+      applyAccentToDoc(iframeRef.current.contentDocument, hex, palette);
+      repaintHeuristics(iframeRef.current.contentDocument, hex);
+    };
+    window.addEventListener("resume-apply-color", onPick);
+    return () => window.removeEventListener("resume-apply-color", onPick);
+  }, [applyAccentToDoc]);
+
   // ---------- write/refresh iframe document ----------
   useEffect(() => {
     const iframe = iframeRef.current;
@@ -141,12 +243,15 @@ const Preview = ({
     const doc = iframe.contentDocument || iframe.contentWindow?.document;
     if (!doc) return;
 
+    const safeHead = sanitizeHtml(headHtmlToWrite);
+    const safeBody = sanitizeHtml(htmlBodyToWrite);
+
     doc.open();
     doc.write(`
       <!DOCTYPE html>
       <html>
         <head>
-          ${headHtmlToWrite}
+          ${safeHead}
           <style>
             * { box-sizing: border-box; }
             html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #fff; overflow: hidden; }
@@ -154,7 +259,7 @@ const Preview = ({
           </style>
         </head>
         <body>
-          <div id="template-root">${htmlBodyToWrite}</div>
+          <div id="template-root">${safeBody}</div>
         </body>
       </html>
     `);
@@ -223,23 +328,40 @@ const Preview = ({
     updateFnRef.current = () => {
       if (!resumeData) return;
       const nodes = doc.querySelectorAll("[data-edit-id]");
-      if (!nodes.length) return; // server may strip data-edit-id; nothing to inject/click
+      if (!nodes.length) return;
+
       nodes.forEach((el) => {
         const path = el.getAttribute("data-edit-id");
         if (!path) return;
         const val = getByPath(resumeData, path);
+
         if (el.tagName === "IMG") {
+          // only set if you have a value; don't remove existing src
           if (val) el.setAttribute("src", String(val));
-          else el.removeAttribute("src");
-        } else {
-          el.textContent = formatValue(val);
+          return;
+        }
+
+        // only overwrite text when you have something meaningful
+        const txt = formatValue(val);
+        if (txt != null && String(txt).trim() !== "") {
+          el.textContent = String(txt);
         }
       });
       recalcScale();
     };
 
+
     // initial populate
     updateFnRef.current?.();
+
+    // >>> apply saved accent (if any) after DOM is in place <<<
+    const savedHex = lastAccentRef.current?.hex || resumeData?.theme?.accent;
+    const savedPalette = lastAccentRef.current?.palette;
+    if (savedHex) {
+      applyAccentToDoc(doc, savedHex, savedPalette);
+      repaintHeuristics(doc, savedHex);
+    }
+
 
     // cleanup
     return () => {
@@ -251,12 +373,19 @@ const Preview = ({
         img.removeEventListener("error", done);
       });
     };
-  }, [htmlBodyToWrite, headHtmlToWrite, onSectionClick, resumeData]);
+  }, [htmlBodyToWrite, headHtmlToWrite, onSectionClick, resumeData, applyAccentToDoc]);
 
   // re-populate on resume data change without rewriting DOM
   useEffect(() => {
     updateFnRef.current?.();
   }, [resumeData]);
+
+  // re-apply accent whenever it changes externally (e.g., saved value)
+  useEffect(() => {
+    if (docRef.current && resumeData?.theme?.accent) {
+      applyAccentToDoc(docRef.current, resumeData.theme.accent);
+    }
+  }, [resumeData?.theme?.accent, applyAccentToDoc]);
 
   return (
     <div className="preview">

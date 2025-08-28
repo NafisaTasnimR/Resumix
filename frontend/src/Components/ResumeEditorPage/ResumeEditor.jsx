@@ -19,10 +19,7 @@ const FIELD_INDEX = {
   hobbies: { hobbyName: 0 },
   additional: { content: 0, sectionTitle: 0 }
 };
-
-/* ---------------------------------------------
-   Questions per section
----------------------------------------------- */
+/* Questions per section*/
 const personalQuestions = ["Full Name?", "Professional Email?", "Date of Birth?", "Phone?", "Address?", "City?", "District?", "Country?", "Zip Code?"];
 const educationQuestions = ["Your Degree?", "Your Field of Study?", "Your Institution?", "Start Date of Education?", "End Date of Education?", "Current Status of Education?"];
 const experienceQuestions = ["Job Title?", "Employer Name?", "Job Location?", "Start Date of Job?", "End Date of Job?", "Is this your current job?", "Your Responsibilities?"];
@@ -129,7 +126,9 @@ const ResumeEditor = () => {
   const [templateHtml, setTemplateHtml] = useState(location.state?.rawTemplate || "");
   const [templateCss, setTemplateCss] = useState(location.state?.templateCss || "");
   const [title, setTitle] = useState(location.state?.templateName || "Untitled");
-  const [templateId, setTemplateId] = useState(null);
+  //after adding location.state?.templateId || null to below line my resume from templates page
+  //  is also not taking the full area of preview box why?
+  const [templateId, setTemplateId] = useState(location.state?.templateId || null);
 
   // progress dropdown
   const [progressOpen, setProgressOpen] = useState(true);
@@ -143,6 +142,9 @@ const ResumeEditor = () => {
   const [entryIndexBySection, setEntryIndexBySection] = useState(makeInitialEntryIdx);
 
   const [saving, setSaving] = useState(false);
+  // accent only (no text-level overrides)
+  const [accentColor, setAccentColor] = useState('');
+
   const isEditMode = Boolean(location.state?.resumeId);
 
   const currentSection = SECTION_LIST[currentSectionIdx];
@@ -204,6 +206,54 @@ const ResumeEditor = () => {
     loadDefault();
   }, [location.state]);
 
+  const applyAccent = (hex) => {
+    if (!hex) return;
+
+    // try iframe first (Preview renders into this)
+    /*const iframe =
+      document.querySelector('iframe#resume-iframe, .resume-iframe, [data-preview-iframe]') ||
+      document.querySelector('#resume-preview iframe');*/
+    const iframe =  
+      document.querySelector('.preview-box iframe, iframe#resume-iframe, .resume-iframe, [data-preview-iframe], #resume-preview iframe');
+
+    const docs = [];
+    if (iframe && iframe.contentDocument) docs.push(iframe.contentDocument);
+    docs.push(document); // fallback (in case preview is not iframe)
+
+    docs.forEach((doc) => {
+      doc.documentElement.style.setProperty('--accent-color', hex);
+
+      let styleEl = doc.getElementById('dynamic-accent');
+      if (!styleEl) {
+        styleEl = doc.createElement('style');
+        styleEl.id = 'dynamic-accent';
+        (doc.head || doc.documentElement).prepend(styleEl);
+      }
+      styleEl.textContent = `
+      .accent, .primary, .resume-title, .section-title { color: var(--accent-color) !important; }
+      .bg-accent, .header-bar, .accent-bg, .side-block-bg { background-color: var(--accent-color) !important; }
+      .border-accent { border-color: var(--accent-color) !important; }
+      a { color: var(--accent-color); }
+    `;
+    });
+  };
+
+  // listen for picks from ColorPaletteModal
+  useEffect(() => {
+    const onPick = (e) => {
+      const hex = e?.detail?.hex;
+      if (!hex) return;
+      setAccentColor(hex);
+      applyAccent(hex);
+    };
+    window.addEventListener('resume-apply-color', onPick);
+    return () => window.removeEventListener('resume-apply-color', onPick);
+  }, []);
+
+  useEffect(() => {
+    if (accentColor) applyAccent(accentColor);
+  }, [templateHtml, templateCss, accentColor]);
+
   /* ---------------------------------------------
      Edit flow → load Resume by id + its template
   ---------------------------------------------- */
@@ -212,19 +262,23 @@ const ResumeEditor = () => {
     if (!resumeId) return;
 
     const token = localStorage.getItem("token") || "";
+    let cancelled = false;
 
     (async () => {
       try {
-        // 1) fetch the resume
         const { data } = await axios.get(`http://localhost:5000/resume/${resumeId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
+
+        if (cancelled) return;
 
         if (data?.title) setTitle(data.title);
         if (data?.templateId) setTemplateId(data.templateId);
 
         const rd = data?.ResumeData || {};
         const personal = rd.personalInfo || {};
+        if (rd?.theme?.accent) { setAccentColor(rd.theme.accent); applyAccent(rd.theme.accent); }
+
 
         // map each section
         const personalAns = [
@@ -301,6 +355,7 @@ const ResumeEditor = () => {
           const parts = await axios.get(`http://localhost:5000/preview/api/template/parts/${data.templateId}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
+          if (cancelled) return;
           setTemplateHtml(parts.data?.rawTemplate || "");
           setTemplateCss(parts.data?.templateCss || "");
         }
@@ -308,6 +363,8 @@ const ResumeEditor = () => {
         console.error("Failed to load resume/template for edit", err);
       }
     })();
+
+    return () => { cancelled = true; };
   }, [location.state?.resumeId]);
 
   /* ---------------------------------------------
@@ -547,7 +604,20 @@ const ResumeEditor = () => {
         userEmail: (location.state?.userEmail ?? localStorage.getItem('userEmail') ?? localStorage.getItem('email') ?? ''),
         templateId: (location.state?.templateId ?? templateId),
         title: title || 'Untitled',
-        ResumeData: resumeData,
+        ResumeData: {
+          ...resumeData,
+          // ensure no IDs are sent for new resume
+          personalInfo: { ...resumeData.personalInfo },
+          education: (resumeData.education || []).map(e => ({ ...e })),
+          experience: (resumeData.experience || []).map(e => ({ ...e })),
+          skills: (resumeData.skills || []).map(e => ({ ...e })),
+          achievements: (resumeData.achievements || []).map(e => ({ ...e })),
+          references: (resumeData.references || []).map(e => ({ ...e })),
+          hobbies: (resumeData.hobbies || []).map(e => ({ ...e })),
+          additionalInfos: (resumeData.additionalInfos || []).map(e => ({ ...e })),
+          projects: [],
+          theme: { accent: accentColor || resumeData?.theme?.accent || '' }
+        }
       };
 
       await axios.post(
@@ -574,7 +644,10 @@ const ResumeEditor = () => {
         title: title || 'Untitled',
         // Include templateId so switching templates is persisted
         templateId: (location.state?.templateId ?? templateId),
-        ResumeData: resumeData,
+        ResumeData: {
+          ...resumeData,
+          theme: { accent: accentColor || resumeData?.theme?.accent || '' }
+        }
       };
 
       await axios.patch(
@@ -662,7 +735,7 @@ const ResumeEditor = () => {
         templateId={templateId}
         rawTemplate={templateHtml}
         templateCss={templateCss}
-        resumeData={resumeData}
+        resumeData={{ ...resumeData, theme: { accent: accentColor || resumeData?.theme?.accent || '' } }}
         onSectionClick={handleSectionClick}
       />
     </div>
