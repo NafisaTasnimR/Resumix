@@ -154,6 +154,9 @@ const ResumeSchema = new schema({
                 }
             ],
             default: []
+        },
+        theme: {
+            accent: { type: String, default: '' }  
         }
     }
 }, { timestamps: true });

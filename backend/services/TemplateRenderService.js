@@ -333,7 +333,7 @@ function buildA4Html(prunedBody, scopedCss, scopeClass) {
     .page {
       width: calc(210mm - 16mm);             /* 210 - (left+right page margins) */
       min-height: calc(297mm - 16mm);         /* 297 - (top+bottom page margins) */
-      margin: 24px auto;
+      margin: 10px 10px 10px 10px;
       background: #fff;
       outline: 1px solid #d9d9d9;             /* subtle page edge */
       box-shadow: 0 4px 12px rgba(0,0,0,.07);
