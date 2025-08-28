@@ -118,13 +118,63 @@ const PostLoginHeader = () => {
       {/* Hero Section */}
       <section className="hero-preview">
         <div className="image-container">
-          <img src="/bg.jpg" alt="Hero Background" />
+          {/* Floating 3-card templates (no CSS file edits; styles are scoped here) */}
+          <style>{`
+  .hero-floating { 
+    position: relative; 
+    width: min(35vw, 530px);   /* was 38vw/560px */
+    height: min(35vw, 530px);  /* was 38vw/560px */
+    pointer-events: none; 
+    margin-top: -70px
+  }
+  .hero-floating .tpl { position: absolute; animation: heroDrift 12s ease-in-out infinite; }
+  .hero-floating .card { background: #fff; border-radius: 16px; padding: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.18); }
+  .hero-floating img { display: block; width: 100%; height: auto; border-radius: 10px; }
+
+  /* reduced individual card widths */
+  .hero-floating .tpl-1 { top: 10%; left: 0;    width: 59%; } /* was 62% */
+  .hero-floating .tpl-2 { top: 34%; left: 32%;  width: 63%; animation-duration: 13s; animation-delay: -0.6s; } /* was 66% */
+  .hero-floating .tpl-3 { top: 58%; left: 10%;  width: 55%; animation-duration: 15s; animation-delay: -1s; }  /* was 58% */
+
+  /* keep the slight rotations */
+  .hero-floating .tpl-1 .card { transform: rotate(-1.5deg); }
+  .hero-floating .tpl-2 .card { transform: rotate( 1.2deg); }
+  .hero-floating .tpl-3 .card { transform: rotate(-0.8deg); }
+
+  @keyframes heroDrift { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-18px) } }
+
+  @media (max-width: 900px){
+    .hero-floating { width: 80vw; height: 80vw; } /* slightly smaller on mobile too */
+  }
+`}</style>
+
+
+          <div className="hero-floating">
+            <div className="tpl tpl-1">
+              <div className="card">
+                {/* <<< replace src with your first template image >>> */}
+                <img src="/tem1.png" alt="Template 1" loading="lazy" />
+              </div>
+            </div>
+            <div className="tpl tpl-2">
+              <div className="card">
+                {/* <<< replace src with your second template image >>> */}
+                <img src="/tem2.png" alt="Template 2" loading="lazy" />
+              </div>
+            </div>
+            <div className="tpl tpl-3">
+              <div className="card">
+                {/* <<< replace src with your third template image >>> */}
+                <img src="/tem3.png" alt="Template 3" loading="lazy" />
+              </div>
+            </div>
+          </div>
         </div>
+
         <div className="content-container">
           <h1>Create a Job-Ready Resume in Few Minutes</h1>
           <p className="subtext">Create your resume with our free builder and professional templates</p>
 
-          {/* CHANGED: Link -> button with conditional navigation */}
           <button onClick={handleBuildClick} className="primary-btn">Build Your Resume</button>
 
           {/* Live Preview Section */}
