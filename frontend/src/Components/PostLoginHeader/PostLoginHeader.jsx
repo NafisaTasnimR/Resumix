@@ -88,7 +88,6 @@ const PostLoginHeader = () => {
             <div className="user-dropdown" ref={dropdownRef}>
               <div className="user-trigger" onClick={() => setDropdownOpen(!dropdownOpen)}>
                 <span className="user-avatar">
-                  <img src={userIcon} alt="Account Icon" className="account-icon" />
                 </span>
                 <button className="account-button">
                   MY ACCOUNT
@@ -102,8 +101,8 @@ const PostLoginHeader = () => {
                     Dashboard
                   </Link>
                   <Link to="/settings">
-                    <img src="/setting.png" alt="Settings" className="dropdown-icon" />
-                    Settings
+                    <img src="/pro.png" alt="Settings" className="dropdown-icon" />
+                    Account
                   </Link>
                   <Link to="/">
                     <img src="/exit.png" alt="Sign Out" className="dropdown-icon" />
