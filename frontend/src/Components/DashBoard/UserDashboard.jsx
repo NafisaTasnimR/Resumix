@@ -6,12 +6,19 @@ import DownloadResumeModal from '../ResumeListPage/DownloadResumeModal';
 import TopBar from '../ResumeEditorPage/TopBar';
 import axios from 'axios';
 
+const API_BASE = (import.meta.env && import.meta.env.VITE_API_BASE) || "http://localhost:5000";
+
+
 const Dashboard = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [resumeName, setResumeName] = useState('Nishat_Tasnim_Resume');
   const [downloadLink, setDownloadLink] = useState('https://myresume.com/resume12345.pdf');
   const [user, setUser] = useState(null);
+
+  const [shareLink, setShareLink] = useState("");
+  const [shareError, setShareError] = useState("");
+  const [shareLoadingId, setShareLoadingId] = useState(null);
 
   const personalRef = useRef(null);
   const educationRef = useRef(null);
@@ -27,6 +34,8 @@ const Dashboard = () => {
   const [resumeError, setResumeError] = useState(null);
 
   const navigate = useNavigate();
+
+  const buildFrontendPublicUrl = (token) => `${window.location.origin}/public/resume/${token}`;
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -73,10 +82,47 @@ const Dashboard = () => {
   if (!user) return <p>Loading...</p>;
 
 
-  const handleShareClick = (resume) => {
-    setResumeName(resume.title || 'Untitled Resume');
-    setIsShareModalOpen(true);
+  // ADD: share handler (does token inline, no helper files)
+  const handleShareClick = async (resume) => {
+    setResumeName(resume.title || "Untitled Resume");
+    setShareError("");
+    setShareLink("");
+    setShareLoadingId(resume._id);
+
+    const token = localStorage.getItem("token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+    try {
+      let url = "";
+
+      // Try POST (create/rotate)
+      try {
+        const r = await axios.post(`${API_BASE}/resume/${resume._id}/share`, {}, { headers });
+        const d = r?.data || {};
+        if (d.url) url = d.url;
+        else if (d.token) url = buildFrontendPublicUrl(d.token);
+      } catch {
+        // Fallback: GET existing
+        const r = await axios.get(`${API_BASE}/resume/${resume._id}/share`, { headers });
+        const d = r?.data || {};
+        if (d.url) url = d.url;
+        else if (d.token) url = buildFrontendPublicUrl(d.token);
+      }
+
+      // Last resort: internal viewer (may require auth)
+      if (!url) url = `${window.location.origin}/resumeview/${resume._id}?public=1`;
+
+      setShareLink(url);
+      setIsShareModalOpen(true);
+    } catch (e) {
+      console.error("Share link error", e);
+      setShareError("Could not generate a shareable link. Please try again.");
+      setIsShareModalOpen(true);
+    } finally {
+      setShareLoadingId(null);
+    }
   };
+
 
   /*const handleDownloadClick = (resume) => {
     setResumeName(resume.name);
@@ -96,7 +142,7 @@ const Dashboard = () => {
 
   const fmt = (d) => (d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : '—');
 
-   const handleDownloadClick = async (resume) => {
+  const handleDownloadClick = async (resume) => {
     try {
       const token = localStorage.getItem('token') || '';
       const res = await axios.get(`http://localhost:5000/download/resume/${resume._id}/pdf`, {
@@ -116,7 +162,7 @@ const Dashboard = () => {
     }
   };
 
- 
+
 
   return (
     <div className="resume-fullpage">
@@ -169,7 +215,9 @@ const Dashboard = () => {
 
             <span className="actions">
               <button onClick={() => handleDownloadClick(r)}>Download</button>
-              <button onClick={() => handleShareClick(r)}>Link</button>
+              <button onClick={() => handleShareClick(r)}>
+                {shareLoadingId === r._id ? "Loading…" : "Link"}
+              </button>
               {/* You can also offer a copy-link-to-preview:
                   <button onClick={() => navigator.clipboard.writeText(`${window.location.origin}/resumeview/${r._id}`)}>Copy Link</button>
                */}
@@ -336,6 +384,9 @@ const Dashboard = () => {
       <ShareResumeModal
         isOpen={isShareModalOpen}
         onClose={handleCloseModal}
+        resumeLink={shareLink}       // ADD
+        resumeName={resumeName}      // ADD (you already have this state)
+        error={shareError}           // ADD
       />
       <DownloadResumeModal
         isOpen={isDownloadModalOpen}
