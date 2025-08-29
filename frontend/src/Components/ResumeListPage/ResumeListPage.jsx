@@ -25,7 +25,21 @@ const ResumeListPage = () => {
   const [shareError, setShareError] = useState('');
   const [shareLoadingId, setShareLoadingId] = useState(null);
 
+  const [deletingId, setDeletingId] = useState(null);
+  const [deleteError, setDeleteError] = useState('');
+
+  const [downloadFileName, setDownloadFileName] = useState('resume.pdf');
+
+
+
   const navigate = useNavigate();
+
+  const fileSafe = (s) =>
+    (s || 'resume')
+      .replace(/[\/\\?%*:|"<>]/g, '-')  // illegal filename chars
+      .replace(/\s+/g, ' ')
+      .trim();
+
 
   useEffect(() => {
     const fetchResumes = async () => {
@@ -61,11 +75,32 @@ const ResumeListPage = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = () => {
-    // Keep as-is (you’ll wire actual delete later)
-    console.log(`Deleted resume: ${selectedResume?.title || selectedResume?.name}`);
-    setIsModalOpen(false);
+  const handleDelete = async () => {
+    if (!selectedResume?._id) return;
+
+    setDeleteError('');
+    setDeletingId(selectedResume._id);
+
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`${API_BASE}/resume/${selectedResume._id}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+
+      // Remove from list locally
+      setResumes(prev => prev.filter(x => x._id !== selectedResume._id));
+
+      // Close modal and clear selection
+      setIsModalOpen(false);
+      setSelectedResume(null);
+    } catch (e) {
+      console.error('Delete failed', e);
+      setDeleteError('Could not delete resume. Please try again.');
+    } finally {
+      setDeletingId(null);
+    }
   };
+
 
   const handleShareClick = async (resume) => {
     setResumeName(resume.title || 'Untitled');
@@ -117,10 +152,13 @@ const ResumeListPage = () => {
         responseType: 'blob',
         headers: { Authorization: `Bearer ${token}` },
       });
+
       const blobUrl = URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
-      setResumeName(resume.title || 'resume');
-      setDownloadLink(blobUrl);
-      setIsDownloadModalOpen(true);
+
+      setResumeName(resume.title || 'resume');                      // already there
+      setDownloadLink(blobUrl);                                     // already there
+      setDownloadFileName(`${fileSafe(resume.title || 'resume')}.pdf`);  // NEW
+      setIsDownloadModalOpen(true);                                 // already there
     } catch (e) {
       alert('Could not download PDF.');
     }
@@ -188,7 +226,9 @@ const ResumeListPage = () => {
               <button onClick={() => handleShareClick(r)}>
                 {shareLoadingId === r._id ? 'Loading…' : 'Link'}
               </button>
-              <button onClick={() => handleRemoveClick(r)}>Remove</button>
+              <button onClick={() => handleRemoveClick(r)} disabled={deletingId === r._id}>
+                {deletingId === r._id ? 'Removing…' : 'Remove'}
+              </button>
             </span>
           </div>
         ))}
@@ -211,7 +251,13 @@ const ResumeListPage = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onDelete={handleDelete}
-      />
+      >
+        {deleteError && (
+          <p className="error-text" style={{ marginTop: 8 }}>
+            {deleteError}
+          </p>
+        )}
+      </DeleteConfirmationModal>
     </div>
   );
 };
