@@ -198,13 +198,16 @@ const Dashboard = () => {
         {!loadingResumes && !resumeError && resumes.map((r) => (
           <div className="resume-table-row" key={r._id}>
             {/* Clicking the title navigates to the specific resume view */}
-            <button
+            <span
               className="resume-name-link"
+              role="link"
+              tabIndex={0}
               onClick={() => navigate(`/resumeview/${r._id}`)}
+              onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && navigate(`/resumeview/${r._id}`)}
               title="Open resume"
             >
               {r.title || 'Untitled'}
-            </button>
+            </span>
 
             {/* If you have updatedAt via timestamps, show it; else fallback to createdAt */}
             <span>{fmt(r.updatedAt || r.createdAt)}</span>
