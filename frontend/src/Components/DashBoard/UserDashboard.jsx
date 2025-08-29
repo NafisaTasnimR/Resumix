@@ -35,6 +35,12 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
 
+  const fileSafe = (s) =>
+    (s || 'resume')
+      .replace(/[\/\\?%*:|"<>]/g, '-')  // illegal filename chars
+      .replace(/\s+/g, ' ')
+      .trim();
+
   const buildFrontendPublicUrl = (token) => `${window.location.origin}/public/resume/${token}`;
 
   useEffect(() => {
@@ -130,12 +136,6 @@ const Dashboard = () => {
 
     setIsDownloadModalOpen(true);
   };*/
-
-  const handleCloseModal = () => {
-    setIsShareModalOpen(false);
-    setIsDownloadModalOpen(false);
-  };
-
   const scrollToSection = (ref) => {
     ref.current.scrollIntoView({ behavior: 'smooth' });
   };
@@ -145,20 +145,28 @@ const Dashboard = () => {
   const handleDownloadClick = async (resume) => {
     try {
       const token = localStorage.getItem('token') || '';
-      const res = await axios.get(`http://localhost:5000/download/resume/${resume._id}/pdf`, {
+      const res = await axios.get(`${API_BASE}/download/resume/${resume._id}/pdf`, {
         responseType: 'blob',
-        headers: { Authorization: `Bearer ${token}` },
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
-      const url = URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${(resume.title || 'resume')}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+
+      const blobUrl = URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
+      setResumeName(resume.title || 'resume');
+      setDownloadLink(blobUrl);
+      setIsDownloadModalOpen(true);   // <-- show modal now
     } catch (e) {
       alert('Could not download PDF');
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsShareModalOpen(false);
+    setIsDownloadModalOpen(false);
+
+    // clean up the object URL created for download
+    if (downloadLink) {
+      URL.revokeObjectURL(downloadLink);
+      setDownloadLink('');
     }
   };
 
@@ -396,6 +404,7 @@ const Dashboard = () => {
         onClose={handleCloseModal}
         resumeName={resumeName}
         downloadLink={downloadLink}
+        downloadFileName={`${fileSafe(resumeName)}.pdf`}   // filename from title
       />
     </div>
   );
