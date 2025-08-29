@@ -7,32 +7,48 @@ import "./FontPopup.css";
  */
 const FONT_CATALOG = [
   // System-safe
-  { name: "Roman",         family: "'Times New Roman', serif",      source: "system" },
-  { name: "Arial",         family: "'Arial', sans-serif",            source: "system" },
-  { name: "Georgia",       family: "'Georgia', serif",               source: "system" },
-  { name: "Courier New",   family: "'Courier New', monospace",       source: "system" },
-  { name: "Verdana",       family: "'Verdana', sans-serif",          source: "system" },
-  { name: "Trebuchet MS",  family: "'Trebuchet MS', sans-serif",     source: "system" },
-  { name: "Tahoma",        family: "'Tahoma', sans-serif",           source: "system" },
-  { name: "Palatino",      family: "'Palatino Linotype', serif",     source: "system" },
+  { name: "Roman", family: "'Times New Roman', serif", source: "system" },
+  { name: "Arial", family: "'Arial', sans-serif", source: "system" },
+  { name: "Georgia", family: "'Georgia', serif", source: "system" },
+  { name: "Courier New", family: "'Courier New', monospace", source: "system" },
+  { name: "Verdana", family: "'Verdana', sans-serif", source: "system" },
+  { name: "Trebuchet MS", family: "'Trebuchet MS', sans-serif", source: "system" },
+  { name: "Tahoma", family: "'Tahoma', sans-serif", source: "system" },
+  { name: "Palatino", family: "'Palatino Linotype', serif", source: "system" },
 
   // Google fonts (examples)
-  { name: "Inter",         family: "'Inter', sans-serif",            source: "google",
-    cssUrl: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" },
-  { name: "Poppins",       family: "'Poppins', sans-serif",          source: "google",
-    cssUrl: "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" },
-  { name: "Roboto",        family: "'Roboto', sans-serif",           source: "google",
-    cssUrl: "https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" },
-  { name: "Montserrat",    family: "'Montserrat', sans-serif",       source: "google",
-    cssUrl: "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" },
-  { name: "Lato",          family: "'Lato', sans-serif",             source: "google",
-    cssUrl: "https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" },
-  { name: "Merriweather",  family: "'Merriweather', serif",          source: "google",
-    cssUrl: "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" },
-  { name: "Nunito",        family: "'Nunito', sans-serif",           source: "google",
-    cssUrl: "https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" },
-  { name: "Playfair",      family: "'Playfair Display', serif",      source: "google",
-    cssUrl: "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" },
+  {
+    name: "Inter", family: "'Inter', sans-serif", source: "google",
+    cssUrl: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+  },
+  {
+    name: "Poppins", family: "'Poppins', sans-serif", source: "google",
+    cssUrl: "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+  },
+  {
+    name: "Roboto", family: "'Roboto', sans-serif", source: "google",
+    cssUrl: "https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+  },
+  {
+    name: "Montserrat", family: "'Montserrat', sans-serif", source: "google",
+    cssUrl: "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+  },
+  {
+    name: "Lato", family: "'Lato', sans-serif", source: "google",
+    cssUrl: "https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap"
+  },
+  {
+    name: "Merriweather", family: "'Merriweather', serif", source: "google",
+    cssUrl: "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap"
+  },
+  {
+    name: "Nunito", family: "'Nunito', sans-serif", source: "google",
+    cssUrl: "https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap"
+  },
+  {
+    name: "Playfair", family: "'Playfair Display', serif", source: "google",
+    cssUrl: "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap"
+  },
 ];
 
 /** Inject a Google Fonts <link> once (no duplicates). */
@@ -88,8 +104,15 @@ const FontPopup = ({ onClose, onFontSelect }) => {
   const chooseFont = (font) => {
     if (font.source === "google") ensureGoogleFontLoaded(font.cssUrl);
     setSelected(font);
-    try { localStorage.setItem(RECENT_KEY, font.name); } catch {}
-    onFontSelect?.(font.family); // parent can apply it to preview/page
+    try { localStorage.setItem(RECENT_KEY, font.name); } catch { }
+
+    // notify parent callback (if used anywhere)
+    onFontSelect?.(font.family);
+
+    // >>> NEW: broadcast for the Editor/Preview iframe
+    window.dispatchEvent(new CustomEvent('resume-apply-font', {
+      detail: { family: font.family, cssUrl: font.cssUrl || null }
+    }));
   };
 
   // Submit search via the round icon button or Enter
@@ -119,7 +142,7 @@ const FontPopup = ({ onClose, onFontSelect }) => {
           <button type="submit" className="search-btn" aria-label="Search">
             {/* magnifier icon (inline SVG) inside the round button */}
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>

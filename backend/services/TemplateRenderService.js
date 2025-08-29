@@ -98,7 +98,7 @@ async function readTemplatePartsById(id) {
   const htmlPath = path.join(TEMPLATES_DIR, `${id}.html`);
   const html = await fs.readFile(htmlPath, 'utf8');
   const styleMatch = html.match(/<style[^>]*>([\s\S]*?)<\/style>/i);
-  const bodyMatch  = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+  const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
   const templateCss = styleMatch ? styleMatch[1] : '';
   const rawTemplate = bodyMatch ? bodyMatch[1] : html;
   return { templateCss, rawTemplate };
@@ -223,7 +223,7 @@ function pruneEmpty(filledBodyHtml) {
   // 2) quick empty shells
   const suspects = [
     '.optional-block', '.section', '.item', '.row', '.field',
-    'li', 'p', 'h1','h2','h3','h4','h5','h6'
+    'li', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
   ];
   $(suspects.join(',')).each((_, el) => {
     const $el = $(el);
@@ -375,12 +375,12 @@ ${prefix} :where(.accent,.primary,.section-title,.title,.headline,.resume-accent
 
 ${prefix} :where(.bg-accent,.header-bar,.accent-bg,.side-block-bg,
                  headerc,.headerc,.top-bart,.title-bar,.name-bar,.banner,
-                 .left-panel,.sidebart,.sidebar-header){
+                 .left-panel,.sidebart,.sidebar-headert){
   background-color: var(--accent-700, var(--accent)) !important;
 }
 
 ${prefix} :where(.headerc,.top-bart,.title-bar,.name-bar,.banner,
-                 .left-panel,.sidebart,.sidebar-header) *{
+                 .left-panel,.sidebart,.sidebar-headert) *{
   color:#fff !important;
 }
 
@@ -389,6 +389,17 @@ ${prefix} :where(.border-accent,.divider,hr,.rule,.section-rule){
 }
 `;
 }
+
+function makeFontCss(scopeClass, fontFamily, fontCssUrl) {
+  if (!fontFamily) return '';
+  const prefix = `.${scopeClass}`;
+  const importLine = fontCssUrl ? `@import url('${fontCssUrl}');\n` : '';
+  return `
+${importLine}
+${prefix}, ${prefix} * { font-family: ${fontFamily} !important; }
+`;
+}
+
 
 
 
@@ -414,8 +425,13 @@ exports.prepareTemplateHtml = async (templateId, resumeData, scopeSuffix = '') =
 
   //4.5) Add saved accent color from ResumeData.theme.accent (if present)
   const accentHex = resumeData?.theme?.accent || '';
-  const combinedCss = `${scopedCss}\n${makeAccentCss(scopeClass, accentHex)}`;
+  const fontFamily = resumeData?.theme?.fontFamily || '';
+  const fontCssUrl = resumeData?.theme?.fontCssUrl || '';
+  //const combinedCss = `${scopedCss}\n${makeAccentCss(scopeClass, accentHex)}`;
 
+  const combinedCss = `${scopedCss}
+  ${makeAccentCss(scopeClass, accentHex)}
+  ${makeFontCss(scopeClass, fontFamily, fontCssUrl)}`;
   // 5) Wrap into A4 print shell
   //const finalHtml = buildA4Html(pruned, scopedCss, scopeClass);
   const finalHtml = buildA4Html(pruned, combinedCss, scopeClass);

@@ -39,13 +39,13 @@ const applyAccentToDocument = (rootEl, hex) => {
     /* bars/panels/sidebars */
     :where(.bg-accent,.header-bar,.accent-bg,.side-block-bg,
            headerc,.headerc,.top-bart,.title-bar,.name-bar,.banner,
-           .left-panel,.sidebart,.sidebar-header){
+           .left-panel,.sidebart,.sidebar-headert){
       background-color: var(--accent-700, var(--accent)) !important;
     }
 
     /* readable text on dark bars */
     :where(.headerc,.top-bart,.title-bar,.name-bar,.banner,
-           .left-panel,.sidebart,.sidebar-header) *{
+           .left-panel,.sidebart,.sidebar-headert) *{
       color:#fff !important;
     }
 

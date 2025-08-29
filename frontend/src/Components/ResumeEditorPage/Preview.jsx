@@ -2,13 +2,10 @@ import React, { useEffect, useMemo, useRef, useState, useCallback } from "react"
 import axios from "axios";
 import "./Preview.css";
 
-
 const sanitizeHtml = (html) => {
   if (!html) return "";
   return String(html)
-    // strip any <script>...</script>
     .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")
-    // strip inline on* handlers (onclick, onload, etc.)
     .replace(/\son[a-z]+="[^"]*"/gi, "")
     .replace(/\son[a-z]+='[^']*'/gi, "");
 };
@@ -18,7 +15,7 @@ const sanitizeHtml = (html) => {
  * - templateId?: string
  * - rawTemplate?: string
  * - templateCss?: string
- * - resumeData: object   // can carry { theme: { accent: "#hex" } }
+ * - resumeData: object   // can carry { theme: { accent, fontFamily, fontCssUrl } }
  * - onSectionClick?: ({section, field, path}) => void
  */
 const Preview = ({
@@ -109,7 +106,6 @@ const Preview = ({
           setPartsCss(parts.data?.templateCss || "");
         }
       } catch (e) {
-        // ignore; we can still use templateCss fallback
         console.error("Failed to load parts CSS:", e);
       }
     };
@@ -132,22 +128,18 @@ const Preview = ({
     return rawTemplate || "";
   }, [processedBody, processedHtml, rawTemplate]);
 
-  // Head content:
-  // - if processedHtml exists: include its <head> content + a safe fallback CSS (partsCss/templateCss)
-  // - else: include templateCss (Templates flow)
+  // Head content
   const headHtmlToWrite = useMemo(() => {
     const fallbackCss = templateId ? (partsCss || templateCss || "") : (templateCss || "");
     if (processedHtml) {
-      // Keep server head styles, then add fallbackCss (harmless if duplicate)
       return `${processedHead || ""}<style>${fallbackCss}</style>`;
     }
     return `<style>${fallbackCss}</style>`;
   }, [processedHtml, processedHead, partsCss, templateCss, templateId]);
 
-  // ---------- accent (colorful parts) helpers ----------
-  const lastAccentRef = React.useRef(null);
+  // ---------- ACCENT helpers ----------
+  const lastAccentRef = useRef(null);
 
-  // exact shade + optional ramp
   const setAccentVars = (doc, hex, palette) => {
     if (!doc || !hex) return;
     doc.documentElement.style.setProperty("--accent", hex);
@@ -163,7 +155,7 @@ const Preview = ({
     doc.documentElement.style.setProperty("--accent-900", shades[4]);
   };
 
-  const applyAccentToDoc = React.useCallback((doc, hex, palette) => {
+  const applyAccentToDoc = useCallback((doc, hex, palette) => {
     if (!doc || !hex) return;
     setAccentVars(doc, hex, palette);
 
@@ -174,25 +166,18 @@ const Preview = ({
       (doc.head || doc.documentElement).prepend(styleEl);
     }
     styleEl.textContent = `
-      /* Text accents only when the element explicitly asks for accent */
       :where(.accent,.primary,.section-title,.title,.headline,.resume-accent) {
         color: var(--accent) !important;
       }
-
-      /* Backgrounds for bars/panels/sidebars */
       :where(.bg-accent,.header-bar,.accent-bg,.side-block-bg,
-            headerc,.headerc,.top-bar,.title-bar,.name-bar,.banner,
-            .left-panel,.sidebart,.sidebar-header) {
+            headerc,.headerc,.top-bart,.title-bar,.name-bar,.banner,
+            .left-panel,.sidebart,.sidebar-headert) {
         background-color: var(--accent-700, var(--accent)) !important;
       }
-
-      /* Make text on those bars readable (white) */
-      :where(.headerc,.top-bar,.title-bar,.name-bar,.banner,
-            .left-panel,.sidebart,.sidebar-header) * {
+      :where(.headerc,.top-bart,.title-bar,.name-bar,.banner,
+            .left-panel,.sidebart,.sidebar-headert) * {
         color: #fff !important;
       }
-
-      /* Dividers/borders */
       :where(.border-accent,.divider,hr,.rule,.section-rule) {
         border-color: var(--accent-700, var(--accent)) !important;
       }
@@ -204,7 +189,7 @@ const Preview = ({
     const pick = (sel) => Array.from(doc.querySelectorAll(sel));
     const cands = [
       ...pick("headerc,.headerc,.top-bart,.title-bar,.name-bar,.banner"),
-      ...pick(".left-panel,.sidebart,.sidebar-header"),
+      ...pick(".left-panel,.sidebart,.sidebar-headert"),
     ];
     cands.forEach((el) => {
       const cs = doc.defaultView.getComputedStyle(el);
@@ -218,8 +203,47 @@ const Preview = ({
     });
   };
 
-  // listen for palette events; remember + apply inside iframe
-  React.useEffect(() => {
+  // ---------- FONT helpers ----------
+  const lastFontRef = useRef({ family: null, cssUrl: null });
+
+  const applyFontToDoc = (doc, family, cssUrl) => {
+    if (!doc) return;
+
+    // load Google CSS if provided
+    if (cssUrl) {
+      const id = "gf-" + btoa(cssUrl).replace(/=/g, "");
+      if (!doc.getElementById(id)) {
+        const link = doc.createElement("link");
+        link.id = id;
+        link.rel = "stylesheet";
+        link.href = cssUrl;
+        (doc.head || doc.documentElement).appendChild(link);
+      }
+    }
+
+    let styleEl = doc.getElementById("dynamic-font");
+    if (!styleEl) {
+      styleEl = doc.createElement("style");
+      styleEl.id = "dynamic-font";
+      (doc.head || doc.documentElement).prepend(styleEl);
+    }
+
+    styleEl.textContent = `
+      :root { --resume-font: ${family || "inherit"}; }
+      body, #template-root, #template-root *, .resume-container, .resume-container * {
+        font-family: var(--resume-font) !important;
+      }
+    `;
+  };
+
+  const resetFontInDoc = (doc) => {
+    if (!doc) return;
+    const styleEl = doc.getElementById("dynamic-font");
+    if (styleEl) styleEl.remove();
+  };
+
+  // listen for palette color events
+  useEffect(() => {
     const onPick = (e) => {
       const hex = e?.detail?.hex;
       const palette = e?.detail?.palette;
@@ -231,6 +255,27 @@ const Preview = ({
     window.addEventListener("resume-apply-color", onPick);
     return () => window.removeEventListener("resume-apply-color", onPick);
   }, [applyAccentToDoc]);
+
+  // listen for font pick/reset events
+  useEffect(() => {
+    const onFont = (e) => {
+      const { family, cssUrl } = e?.detail || {};
+      if (!iframeRef.current?.contentDocument) return;
+      lastFontRef.current = { family, cssUrl };
+      applyFontToDoc(iframeRef.current.contentDocument, family, cssUrl);
+    };
+    const onReset = () => {
+      if (!iframeRef.current?.contentDocument) return;
+      lastFontRef.current = { family: null, cssUrl: null };
+      resetFontInDoc(iframeRef.current.contentDocument);
+    };
+    window.addEventListener("resume-apply-font", onFont);
+    window.addEventListener("resume-reset-font", onReset);
+    return () => {
+      window.removeEventListener("resume-apply-font", onFont);
+      window.removeEventListener("resume-reset-font", onReset);
+    };
+  }, []);
 
   // ---------- write/refresh iframe document ----------
   useEffect(() => {
@@ -283,7 +328,6 @@ const Preview = ({
       doc.documentElement.style.height = `${scaledH}px`;
     };
 
-    // scale after resources load & on resize/DOM changes
     const imgs = Array.from(doc.images || []);
     let loaded = 0;
     const done = () => { loaded += 1; if (loaded >= imgs.length) recalcScale(); };
@@ -321,7 +365,7 @@ const Preview = ({
     };
     doc.addEventListener("click", handleClick);
 
-    // ----- population function for data-edit-id (client fill path) -----
+    // ----- data edit populate -----
     updateFnRef.current = () => {
       if (!resumeData) return;
       const nodes = doc.querySelectorAll("[data-edit-id]");
@@ -333,12 +377,10 @@ const Preview = ({
         const val = getByPath(resumeData, path);
 
         if (el.tagName === "IMG") {
-          // only set if you have a value; don't remove existing src
           if (val) el.setAttribute("src", String(val));
           return;
         }
 
-        // only overwrite text when you have something meaningful
         const txt = formatValue(val);
         if (txt != null && String(txt).trim() !== "") {
           el.textContent = String(txt);
@@ -347,18 +389,21 @@ const Preview = ({
       recalcScale();
     };
 
-
     // initial populate
     updateFnRef.current?.();
 
-    // >>> apply saved accent (if any) after DOM is in place <<<
+    // >>> apply saved accent & font (if any) after DOM is in place <<<
     const savedHex = lastAccentRef.current?.hex || resumeData?.theme?.accent;
     const savedPalette = lastAccentRef.current?.palette;
     if (savedHex) {
       applyAccentToDoc(doc, savedHex, savedPalette);
       repaintHeuristics(doc, savedHex);
     }
-
+    const savedFamily = (lastFontRef.current?.family) || resumeData?.theme?.fontFamily;
+    const savedCssUrl = (lastFontRef.current?.cssUrl) || resumeData?.theme?.fontCssUrl;
+    if (savedFamily) {
+      applyFontToDoc(doc, savedFamily, savedCssUrl);
+    }
 
     // cleanup
     return () => {
@@ -377,12 +422,18 @@ const Preview = ({
     updateFnRef.current?.();
   }, [resumeData]);
 
-  // re-apply accent whenever it changes externally (e.g., saved value)
+  // re-apply accent/font whenever they change externally (e.g., saved value)
   useEffect(() => {
     if (docRef.current && resumeData?.theme?.accent) {
       applyAccentToDoc(docRef.current, resumeData.theme.accent);
     }
   }, [resumeData?.theme?.accent, applyAccentToDoc]);
+
+  useEffect(() => {
+    if (docRef.current && (resumeData?.theme?.fontFamily || resumeData?.theme?.fontCssUrl)) {
+      applyFontToDoc(docRef.current, resumeData.theme.fontFamily, resumeData.theme.fontCssUrl);
+    }
+  }, [resumeData?.theme?.fontFamily, resumeData?.theme?.fontCssUrl]);
 
   return (
     <div className="preview">

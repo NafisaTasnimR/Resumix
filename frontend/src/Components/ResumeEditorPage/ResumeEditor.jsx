@@ -153,6 +153,78 @@ const ResumeEditor = () => {
   const currEntryIdx = entryIndexBySection[currKey];
   const currAnswers = currEntries[currEntryIdx];
 
+  // Selected font (and optional Google CSS url)
+  const [fontFamily, setFontFamily] = useState('');
+  const [fontCssUrl, setFontCssUrl] = useState('');
+
+  // Inject a font into the Preview iframe
+  const applyFont = (family, cssUrl) => {
+    const iframe = document.querySelector('.preview-box iframe, iframe#resume-iframe, .resume-iframe, [data-preview-iframe], #resume-preview iframe');
+    const doc = iframe?.contentDocument;
+    if (!doc) return;
+
+    // If it's a Google font, ensure link exists inside the iframe
+    if (cssUrl) {
+      const id = 'gf-' + btoa(cssUrl).replace(/=/g, '');
+      if (!doc.getElementById(id)) {
+        const link = doc.createElement('link');
+        link.id = id;
+        link.rel = 'stylesheet';
+        link.href = cssUrl;
+        (doc.head || doc.documentElement).appendChild(link);
+      }
+    }
+
+    let styleEl = doc.getElementById('dynamic-font');
+    if (!styleEl) {
+      styleEl = doc.createElement('style');
+      styleEl.id = 'dynamic-font';
+      (doc.head || doc.documentElement).prepend(styleEl);
+    }
+
+    // Apply everywhere in the template content
+    styleEl.textContent = `
+    :root { --resume-font: ${family || 'inherit'}; }
+    body, #template-root, #template-root *, .resume-container, .resume-container * {
+      font-family: var(--resume-font) !important;
+    }
+  `;
+  };
+
+  // Remove override → back to default template fonts
+  const resetFont = () => {
+    const iframe = document.querySelector('.preview-box iframe, iframe#resume-iframe, .resume-iframe, [data-preview-iframe], #resume-preview iframe');
+    const doc = iframe?.contentDocument;
+    if (!doc) return;
+    const styleEl = doc.getElementById('dynamic-font');
+    if (styleEl) styleEl.remove();
+  };
+
+  useEffect(() => {
+    const onFont = (e) => {
+      const { family, cssUrl } = e?.detail || {};
+      setFontFamily(family || '');
+      setFontCssUrl(cssUrl || '');
+      applyFont(family, cssUrl);
+    };
+    const onReset = () => {
+      setFontFamily('');
+      setFontCssUrl('');
+      resetFont();
+    };
+    window.addEventListener('resume-apply-font', onFont);
+    window.addEventListener('resume-reset-font', onReset);
+    return () => {
+      window.removeEventListener('resume-apply-font', onFont);
+      window.removeEventListener('resume-reset-font', onReset);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (fontFamily) applyFont(fontFamily, fontCssUrl);
+  }, [templateHtml, templateCss, fontFamily, fontCssUrl]);
+
+
   /* ---------------------------------------------
      Seed from Templates → user's defaultResumeData
   ---------------------------------------------- */
@@ -243,12 +315,12 @@ const ResumeEditor = () => {
      /* bars / panels / sidebars */
      :where(.bg-accent,.header-bar,.accent-bg,.side-block-bg,
             headerc,.headerc,.top-bart,.title-bar,.name-bar,.banner,
-            .left-panel,.sidebart,.sidebar-header){
+            .left-panel,.sidebart,.sidebar-headert){
        background-color: var(--accent-700, var(--accent)) !important;
      }
      /* keep text readable on dark bars */
      :where(.headerc,.top-bart,.title-bar,.name-bar,.banner,
-            .left-panel,.sidebart,.sidebar-header) *{
+            .left-panel,.sidebart,.sidebar-headert) *{
        color: #fff !important;
      }
      /* borders/dividers */
@@ -299,7 +371,11 @@ const ResumeEditor = () => {
         const rd = data?.ResumeData || {};
         const personal = rd.personalInfo || {};
         if (rd?.theme?.accent) { setAccentColor(rd.theme.accent); applyAccent(rd.theme.accent); }
-
+        if (rd?.theme?.fontFamily) {
+          setFontFamily(rd.theme.fontFamily);
+          applyFont(rd.theme.fontFamily, rd.theme.fontCssUrl || '');
+          setFontCssUrl(rd.theme.fontCssUrl || '');
+        }
 
         // map each section
         const personalAns = [
@@ -637,7 +713,11 @@ const ResumeEditor = () => {
           hobbies: (resumeData.hobbies || []).map(e => ({ ...e })),
           additionalInfos: (resumeData.additionalInfos || []).map(e => ({ ...e })),
           projects: [],
-          theme: { accent: accentColor || resumeData?.theme?.accent || '' }
+          theme: { 
+            accent: accentColor || resumeData?.theme?.accent || '',
+            fontFamily: fontFamily || resumeData?.theme?.fontFamily || '',
+            fontCssUrl: fontCssUrl || resumeData?.theme?.fontCssUrl || ''
+          }
         }
       };
 
@@ -667,7 +747,11 @@ const ResumeEditor = () => {
         templateId: (location.state?.templateId ?? templateId),
         ResumeData: {
           ...resumeData,
-          theme: { accent: accentColor || resumeData?.theme?.accent || '' }
+          theme: { 
+            accent: accentColor || resumeData?.theme?.accent || '',
+            fontFamily: fontFamily || resumeData?.theme?.fontFamily || '',
+            fontCssUrl: fontCssUrl || resumeData?.theme?.fontCssUrl || '' 
+          }
         }
       };
 
@@ -756,7 +840,14 @@ const ResumeEditor = () => {
         templateId={templateId}
         rawTemplate={templateHtml}
         templateCss={templateCss}
-        resumeData={{ ...resumeData, theme: { accent: accentColor || resumeData?.theme?.accent || '' } }}
+        resumeData={{
+           ...resumeData,
+           theme: {
+              accent: accentColor || resumeData?.theme?.accent || '',
+              fontFamily: fontFamily || resumeData?.theme?.fontFamily || '',
+              fontCssUrl: fontCssUrl || resumeData?.theme?.fontCssUrl || '' 
+            }
+        }}
         onSectionClick={handleSectionClick}
       />
     </div>
