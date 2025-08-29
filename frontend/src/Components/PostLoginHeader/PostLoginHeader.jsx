@@ -2,7 +2,6 @@ import './PostLoginHeader.css';
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import userIcon from '../../assets/icons8-account-48.png';
 
 const PostLoginHeader = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -128,18 +127,18 @@ const PostLoginHeader = () => {
     margin-top: -70px
   }
   .hero-floating .tpl { position: absolute; animation: heroDrift 12s ease-in-out infinite; }
-  .hero-floating .card { background: #fff; border-radius: 16px; padding: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.18); }
+  .hero-floating .card { background: #fff; border-radius: 8px; padding: 10px; box-shadow: 0 20px 60px rgba(0,0,0,.18); }
   .hero-floating img { display: block; width: 100%; height: auto; border-radius: 10px; }
 
   /* reduced individual card widths */
-  .hero-floating .tpl-1 { top: 10%; left: 0;    width: 59%; } /* was 62% */
-  .hero-floating .tpl-2 { top: 34%; left: 32%;  width: 63%; animation-duration: 13s; animation-delay: -0.6s; } /* was 66% */
-  .hero-floating .tpl-3 { top: 58%; left: 10%;  width: 55%; animation-duration: 15s; animation-delay: -1s; }  /* was 58% */
+  .hero-floating .tpl-1 { top: 8%; left: -10%;    width: 59%; } /* was 62% */
+  .hero-floating .tpl-2 { top: 25%; left: 32%;  width: 63%; animation-duration: 13s; animation-delay: -0.6s; } /* was 66% */
+  .hero-floating .tpl-3 { top: 45%; left: -2%;  width: 59%; animation-duration: 15s; animation-delay: -1s; }  /* was 58% */
 
   /* keep the slight rotations */
-  .hero-floating .tpl-1 .card { transform: rotate(-1.5deg); }
-  .hero-floating .tpl-2 .card { transform: rotate( 1.2deg); }
-  .hero-floating .tpl-3 .card { transform: rotate(-0.8deg); }
+  .hero-floating .tpl-1 .card { transform: rotate(-7.9deg); }
+  .hero-floating .tpl-2 .card { transform: rotate( 7.2deg); }
+  .hero-floating .tpl-3 .card { transform: rotate(-2.5deg); }
 
   @keyframes heroDrift { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-18px) } }
 
@@ -153,7 +152,7 @@ const PostLoginHeader = () => {
             <div className="tpl tpl-1">
               <div className="card">
                 {/* <<< replace src with your first template image >>> */}
-                <img src="/tem1.png" alt="Template 1" loading="lazy" />
+                <img src="/tem3.png" alt="Template 1" loading="lazy" />
               </div>
             </div>
             <div className="tpl tpl-2">
@@ -165,7 +164,7 @@ const PostLoginHeader = () => {
             <div className="tpl tpl-3">
               <div className="card">
                 {/* <<< replace src with your third template image >>> */}
-                <img src="/tem3.png" alt="Template 3" loading="lazy" />
+                <img src="/tem1.png" alt="Template 3" loading="lazy" />
               </div>
             </div>
           </div>
@@ -193,14 +192,14 @@ const PostLoginHeader = () => {
             <img src="/file.png" alt="Pick a Template" />
             <div className="step-label">STEP 1</div>
             <h3>Choose a Free Template</h3>
-            <p>Choose from templates crafted by career professionals to help you land the interview.</p>
+            <p>Choose from templates crafted by us to help you land the interview.</p>
           </div>
 
           <div className="step-card">
             <img src="/applicant.png" alt="Add Expert Content" />
             <div className="step-label">STEP 2</div>
             <h3>Fill in Your Details</h3>
-            <p>With just a few clicks, add tailored, job-specific contents.</p>
+            <p>With just a few clicks update your information.</p>
           </div>
 
           <div className="step-card">
