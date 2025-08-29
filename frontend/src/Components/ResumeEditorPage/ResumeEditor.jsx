@@ -213,7 +213,7 @@ const ResumeEditor = () => {
     /*const iframe =
       document.querySelector('iframe#resume-iframe, .resume-iframe, [data-preview-iframe]') ||
       document.querySelector('#resume-preview iframe');*/
-    const iframe =  
+    const iframe =
       document.querySelector('.preview-box iframe, iframe#resume-iframe, .resume-iframe, [data-preview-iframe], #resume-preview iframe');
 
     const docs = [];
@@ -221,7 +221,10 @@ const ResumeEditor = () => {
     docs.push(document); // fallback (in case preview is not iframe)
 
     docs.forEach((doc) => {
-      doc.documentElement.style.setProperty('--accent-color', hex);
+      //doc.documentElement.style.setProperty('--accent-color', hex);
+
+      doc.documentElement.style.setProperty('--accent', hex);
+      doc.documentElement.style.setProperty('--accent-700', hex);
 
       let styleEl = doc.getElementById('dynamic-accent');
       if (!styleEl) {
@@ -233,7 +236,25 @@ const ResumeEditor = () => {
       .accent, .primary, .resume-title, .section-title { color: var(--accent-color) !important; }
       .bg-accent, .header-bar, .accent-bg, .side-block-bg { background-color: var(--accent-color) !important; }
       .border-accent { border-color: var(--accent-color) !important; }
-      a { color: var(--accent-color); }
+      /* text accents only where marked */
+     :where(.accent,.primary,.section-title,.title,.headline,.resume-accent){
+       color: var(--accent) !important;
+     }
+     /* bars / panels / sidebars */
+     :where(.bg-accent,.header-bar,.accent-bg,.side-block-bg,
+            headerc,.headerc,.top-bart,.title-bar,.name-bar,.banner,
+            .left-panel,.sidebart,.sidebar-header){
+       background-color: var(--accent-700, var(--accent)) !important;
+     }
+     /* keep text readable on dark bars */
+     :where(.headerc,.top-bart,.title-bar,.name-bar,.banner,
+            .left-panel,.sidebart,.sidebar-header) *{
+       color: #fff !important;
+     }
+     /* borders/dividers */
+     :where(.border-accent,.divider,hr,.rule,.section-rule){
+       border-color: var(--accent-700, var(--accent)) !important;
+     }
     `;
     });
   };

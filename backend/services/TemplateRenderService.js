@@ -363,6 +363,33 @@ function buildA4Html(prunedBody, scopedCss, scopeClass) {
 </html>`;
 }
 
+function makeAccentCss(scopeClass, accentHex) {
+  if (!accentHex) return '';
+  const prefix = `.${scopeClass}`;
+  return `
+${prefix} { --accent: ${accentHex}; --accent-700: ${accentHex}; }
+
+${prefix} :where(.accent,.primary,.section-title,.title,.headline,.resume-accent){
+  color: var(--accent) !important;
+}
+
+${prefix} :where(.bg-accent,.header-bar,.accent-bg,.side-block-bg,
+                 headerc,.headerc,.top-bart,.title-bar,.name-bar,.banner,
+                 .left-panel,.sidebart,.sidebar-header){
+  background-color: var(--accent-700, var(--accent)) !important;
+}
+
+${prefix} :where(.headerc,.top-bart,.title-bar,.name-bar,.banner,
+                 .left-panel,.sidebart,.sidebar-header) *{
+  color:#fff !important;
+}
+
+${prefix} :where(.border-accent,.divider,hr,.rule,.section-rule){
+  border-color: var(--accent-700, var(--accent)) !important;
+}
+`;
+}
+
 
 
 /* ---------------- main: read -> expand -> fill -> prune -> wrap ---------------- */
@@ -385,7 +412,12 @@ exports.prepareTemplateHtml = async (templateId, resumeData, scopeSuffix = '') =
   // 4) Scope CSS to avoid clashes
   const scopedCss = await scopeCss(templateCss || '', scopeClass);
 
+  //4.5) Add saved accent color from ResumeData.theme.accent (if present)
+  const accentHex = resumeData?.theme?.accent || '';
+  const combinedCss = `${scopedCss}\n${makeAccentCss(scopeClass, accentHex)}`;
+
   // 5) Wrap into A4 print shell
-  const finalHtml = buildA4Html(pruned, scopedCss, scopeClass);
+  //const finalHtml = buildA4Html(pruned, scopedCss, scopeClass);
+  const finalHtml = buildA4Html(pruned, combinedCss, scopeClass);
   return { finalHtml, scopeClass };
 };

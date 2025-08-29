@@ -182,13 +182,13 @@ const Preview = ({
       /* Backgrounds for bars/panels/sidebars */
       :where(.bg-accent,.header-bar,.accent-bg,.side-block-bg,
             headerc,.headerc,.top-bar,.title-bar,.name-bar,.banner,
-            .left-panel,.left-sidebar,.sidebar-header) {
+            .left-panel,.sidebart,.sidebar-header) {
         background-color: var(--accent-700, var(--accent)) !important;
       }
 
       /* Make text on those bars readable (white) */
       :where(.headerc,.top-bar,.title-bar,.name-bar,.banner,
-            .left-panel,.left-sidebar,.sidebar-header) * {
+            .left-panel,.sidebart,.sidebar-header) * {
         color: #fff !important;
       }
 
@@ -196,9 +196,6 @@ const Preview = ({
       :where(.border-accent,.divider,hr,.rule,.section-rule) {
         border-color: var(--accent-700, var(--accent)) !important;
       }
-
-      /* Default links elsewhere */
-      a { color: var(--accent) !important; }
     `;
   }, []);
 
@@ -206,8 +203,8 @@ const Preview = ({
     if (!doc || !hex) return;
     const pick = (sel) => Array.from(doc.querySelectorAll(sel));
     const cands = [
-      ...pick("header,.header,.top-bar,.title-bar,.name-bar,.banner"),
-      ...pick(".left-panel,.left-sidebar,.sidebar,.sidebar-header"),
+      ...pick("headerc,.headerc,.top-bart,.title-bar,.name-bar,.banner"),
+      ...pick(".left-panel,.sidebart,.sidebar-header"),
     ];
     cands.forEach((el) => {
       const cs = doc.defaultView.getComputedStyle(el);

@@ -1,124 +1,158 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState, useMemo, useRef } from "react";
+import axios from "axios";
 
-// ---- keep your existing helper for fallback ----
-function fillTemplateWithEachAndJoin(raw, data) {
-  const normalizePath = (p) => (p || '').replace(/\[(\d+)\]/g, '.$1').trim();
-  const getProp = (obj, p) => normalizePath(p).split('.').reduce((o,k)=> (o ? o[k] : undefined), obj);
+/* ------------------------- tiny helpers ------------------------- */
 
-  function applyJoin(value, helperArgs) {
-    const [sepRaw, keyRaw] = helperArgs.split(',').map(s => s?.trim()).filter(Boolean);
-    const sep = sepRaw?.replace(/^"(.*)"$/, '$1') ?? ', ';
-    const propKey = keyRaw?.replace(/^"(.*)"$/, '$1');
-    if (!Array.isArray(value) || value.length === 0) return '';
-    if (propKey) return value.map(v => (v && v[propKey] != null ? String(v[propKey]) : '')).filter(Boolean).join(sep);
-    return value.map(v => (v == null ? '' : String(v))).filter(Boolean).join(sep);
+// Strip scripts/inline handlers so we don’t execute anything while injecting HTML
+const sanitizeHtml = (html) => {
+  if (!html) return "";
+  return String(html)
+    .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")
+    .replace(/\son[a-z]+="[^"]*"/gi, "")
+    .replace(/\son[a-z]+='[^']*'/gi, "");
+};
+
+// Apply accent to the rendered resume (processed or fallback)
+const applyAccentToDocument = (rootEl, hex) => {
+  if (!rootEl || !hex) return;
+  const doc = rootEl.ownerDocument;
+
+  // expose variables at both element and document level
+  rootEl.style.setProperty("--accent", hex);
+  rootEl.style.setProperty("--accent-700", hex);
+  doc.documentElement.style.setProperty("--accent", hex);
+  doc.documentElement.style.setProperty("--accent-700", hex);
+
+  let styleEl = doc.getElementById("dynamic-accent-view");
+  if (!styleEl) {
+    styleEl = doc.createElement("style");
+    styleEl.id = "dynamic-accent-view";
+    (doc.head || doc.documentElement).prepend(styleEl);
   }
 
-  function fillOnce(str, root, ctx, idx) {
-    return str.replace(/{{\s*([^}]+)\s*}}/g, (_, expr) => {
-      if (expr === '@index' && typeof idx === 'number') return String(idx);
-      if ((expr === '.' || expr === 'this') && ctx !== undefined) return ctx == null ? '' : String(ctx);
+  styleEl.textContent = `
+    /* text accents only where explicitly marked */
+    :where(.accent,.primary,.section-title,.title,.headline,.resume-accent){
+      color: var(--accent) !important;
+    }
 
-      const pipeIdx = expr.indexOf('|');
-      if (pipeIdx !== -1) {
-        const left = normalizePath(expr.slice(0, pipeIdx).trim());
-        const right = expr.slice(pipeIdx + 1).trim();
-        if (right.toLowerCase().startsWith('join')) {
-          const argMatch = right.match(/^join\s*:(.*)$/i);
-          const args = argMatch ? argMatch[1].trim() : '';
-          const candidate = (ctx !== undefined ? getProp(ctx, left) : undefined) ?? getProp(root, left);
-          return applyJoin(candidate, args || '');
-        }
-      }
+    /* bars/panels/sidebars */
+    :where(.bg-accent,.header-bar,.accent-bg,.side-block-bg,
+           headerc,.headerc,.top-bart,.title-bar,.name-bar,.banner,
+           .left-panel,.sidebart,.sidebar-header){
+      background-color: var(--accent-700, var(--accent)) !important;
+    }
 
-      const p = normalizePath(expr);
-      let val = (ctx !== undefined ? getProp(ctx, p) : undefined);
-      if (val === undefined) val = getProp(root, p);
+    /* readable text on dark bars */
+    :where(.headerc,.top-bart,.title-bar,.name-bar,.banner,
+           .left-panel,.sidebart,.sidebar-header) *{
+      color:#fff !important;
+    }
 
-      if (Array.isArray(val)) {
-        if (val.every(v => typeof v !== 'object')) return val.map(v => String(v)).join(' | ');
-        return '';
-      }
-      return val == null ? '' : String(val);
-    });
-  }
+    /* borders/dividers */
+    :where(.border-accent,.divider,hr,.rule,.section-rule){
+      border-color: var(--accent-700, var(--accent)) !important;
+    }
 
-  function expandEach(html, root, ctx) {
-    const EACH = /{{#each\s+([^}]+)}}([\s\S]*?){{\/each}}/g;
-    return html.replace(EACH, (_, rawPath, inner) => {
-      const path = normalizePath(rawPath);
-      const arr = (ctx !== undefined ? getProp(ctx, path) : undefined) ?? getProp(root, path);
-      if (!Array.isArray(arr) || arr.length === 0) return '';
-      return arr.map((item, i) => fillOnce(expandEach(inner, root, item), root, item, i)).join('');
-    });
-  }
+  `;
+};
 
-  const withEach = expandEach(raw, data);
-  return fillOnce(withEach, data);
-}
+/* --------------------------- component -------------------------- */
 
 const ResumeRenderer = ({ resume }) => {
-  const [processedHtml, setProcessedHtml] = useState(''); // from new backend endpoint
-  const [tplCss, setTplCss] = useState('');               // fallback only
-  const [tplBodyRaw, setTplBodyRaw] = useState('');       // fallback only
+  const containerRef = useRef(null);
 
+  const [processedHtml, setProcessedHtml] = useState("");
+  const [templateCss, setTemplateCss] = useState("");
+  const [rawTemplate, setRawTemplate] = useState("");
+
+  const templateId = resume?.templateId || "";
+  const resumeData = resume?.ResumeData || {};
+
+  // Load processed preview HTML and (fallback) parts for the template
   useEffect(() => {
-    const run = async () => {
-      setProcessedHtml('');
-      setTplCss('');
-      setTplBodyRaw('');
-      if (!resume?.templateId) return;
+    let cancelled = false;
 
-      // 1) Try the NEW processed-preview endpoint (preferred)
+    const run = async () => {
+      if (!templateId) {
+        setProcessedHtml("");
+        setTemplateCss("");
+        setRawTemplate("");
+        return;
+      }
+
+      // 1) processed HTML (server-rendered with data)
       try {
         const res = await axios.post(
-          `http://localhost:5000/preview/api/template/preview/${resume.templateId}`,
-          resume?.ResumeData || {},
-          { headers: { 'Content-Type': 'application/json', 'Accept': 'text/html' }, responseType: 'text' }
+          `http://localhost:5000/preview/api/template/preview/${templateId}`,
+          resumeData,
+          {
+            headers: { "Content-Type": "application/json", Accept: "text/html" },
+            responseType: "text",
+          }
         );
-        if (typeof res.data === 'string' && res.data.length > 0) {
+        if (!cancelled && typeof res.data === "string") {
           setProcessedHtml(res.data);
-          return; // success; no need for fallback
         }
-      } catch (e) {
-        console.warn('Processed preview not available, falling back to parts:', e?.message);
+      } catch {
+        // ignore; we’ll fall back to parts
       }
 
-      // 2) Fallback to your existing parts endpoint and client-side fill
+      // 2) parts (raw template + CSS) for fallback
       try {
         const parts = await axios.get(
-          `http://localhost:5000/preview/api/template/parts/${resume.templateId}`
+          `http://localhost:5000/preview/api/template/parts/${templateId}`
         );
-        setTplCss(parts.data.templateCss || '');
-        setTplBodyRaw(parts.data.rawTemplate || '');
-      } catch (e) {
-        console.error('Failed to load template parts:', e);
+        if (!cancelled) {
+          setTemplateCss(parts.data?.templateCss || "");
+          setRawTemplate(parts.data?.rawTemplate || "");
+        }
+      } catch {
+        // ignore
       }
     };
+
     run();
-  }, [resume?.templateId, resume?.ResumeData]);
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [templateId, JSON.stringify(resumeData)]);
 
-  // Client-side fill (only used for fallback)
-  const finalHtmlFallback = useMemo(() => {
-    if (!tplBodyRaw || !resume?.ResumeData) return '';
-    return fillTemplateWithEachAndJoin(tplBodyRaw, resume?.ResumeData);
-  }, [tplBodyRaw, resume?.ResumeData]);
+  const safeProcessed = useMemo(
+    () => sanitizeHtml(processedHtml),
+    [processedHtml]
+  );
+  const safeRaw = useMemo(() => sanitizeHtml(rawTemplate), [rawTemplate]);
 
-  // Render: prefer processedHtml (already A4-ready & CSS-scoped). Otherwise fallback.
-  if (processedHtml) {
+  // Re-apply saved accent when content changes or when accent is present
+  useEffect(() => {
+    const hex =
+      resume?.ResumeData?.theme?.accent ||
+      resume?.theme?.accent ||
+      "";
+
+    if (hex && containerRef.current) {
+      applyAccentToDocument(containerRef.current, hex);
+    }
+  }, [safeProcessed, safeRaw, templateCss, resume?.ResumeData?.theme?.accent]);
+
+  /* ----------------------------- render ----------------------------- */
+  // Prefer processed HTML (A4-ready). Otherwise show fallback (raw + CSS).
+  if (safeProcessed) {
     return (
-      <div className={`resume-preview processed`}>
-        <div dangerouslySetInnerHTML={{ __html: processedHtml }} />
+      <div ref={containerRef} className="resume-preview processed">
+        <div dangerouslySetInnerHTML={{ __html: safeProcessed }} />
       </div>
     );
   }
 
-  // Fallback rendering (your old behavior)
   return (
-    <div className={`resume-template ${resume?.templateId}`}>
-      <style dangerouslySetInnerHTML={{ __html: tplCss }} />
-      {finalHtmlFallback && <div dangerouslySetInnerHTML={{ __html: finalHtmlFallback }} />}
+    <div ref={containerRef} className={`resume-template ${templateId}`}>
+      {templateCss ? (
+        <style dangerouslySetInnerHTML={{ __html: templateCss }} />
+      ) : null}
+      {safeRaw ? <div dangerouslySetInnerHTML={{ __html: safeRaw }} /> : null}
     </div>
   );
 };
