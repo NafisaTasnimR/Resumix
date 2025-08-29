@@ -7,6 +7,8 @@ const infoUpdateRouter = require('./routes/InfoUpdateRouter');
 const previewRouter = require('./routes/TemplateRouter');
 const resumeRouter = require('./routes/ResumeRouter');
 const downloadRouter = require('./routes/DownloadRouter');
+const shareRouter = require('./routes/ShareLinkRoute'); 
+
 require('dotenv').config();
 require('./models/Database');
 
@@ -22,7 +24,8 @@ app.use('/viewInformation', infoUpdateRouter);
 app.use('/preview',previewRouter);
 app.use('/resume', resumeRouter);
 // server.js / app.js
-app.use('/download', downloadRouter);   // ← adds /api/resume/:id/pdf  // ← you already have this
+app.use('/download', downloadRouter);
+app.use('/', shareRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

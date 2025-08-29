@@ -19,6 +19,8 @@ const ResumeSchema = new schema({
         type: Number,
         default: 0
     },
+    shareToken: { type: String, index: true, sparse: true },
+    shareEnabled: { type: Boolean, default: true },
     ResumeData: {
         personalInfo: {
             fullName: { type: String, default: '' },
