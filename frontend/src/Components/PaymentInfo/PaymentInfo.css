@@ -344,6 +344,7 @@ body {
   color: #6c757d;
   font-style: italic;
 }
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .main-content {

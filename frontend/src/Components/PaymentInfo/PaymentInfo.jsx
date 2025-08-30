@@ -21,7 +21,7 @@ const PaymentForm = () => {
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [clientSecret, setClientSecret] = useState('');
-  const [user, setUser] = useState({ name: '', email: '' }); // Still fetch but don't show
+  const [user, setUser] = useState({ name: '', email: '' });
   const [loading, setLoading] = useState(true);
 
   const selectedPlan = location.state?.selectedPlan || '14-day';
@@ -31,9 +31,9 @@ const PaymentForm = () => {
   }, []);
 
   const fetchUserData = async () => {
-    // Just call createPaymentIntent - it will handle everything
+    // Add some realistic delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
     createPaymentIntent();
-    setLoading(false);
   };
 
   const createPaymentIntent = async () => {
@@ -72,6 +72,8 @@ const PaymentForm = () => {
         name: 'Demo User',
         email: 'demo@example.com'
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -125,8 +127,10 @@ const PaymentForm = () => {
 
   if (loading) {
     return (
-      <div className="payment-form">
-        <p>Loading...</p>
+      <div className="loading-container">
+        <div className="spinner"></div>
+        <h3>Setting up your payment...</h3>
+        <p>Please wait while we prepare your secure checkout</p>
       </div>
     );
   }
@@ -182,7 +186,14 @@ const PaymentForm = () => {
         className="subscribe-btn"
         disabled={!stripe || processing}
       >
-        {processing ? 'Processing...' : 'Get My Subscription'}
+        {processing ? (
+          <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            <div className="button-spinner"></div>
+            Processing...
+          </span>
+        ) : (
+          'Get My Subscription'
+        )}
       </button>
     </form>
   );
