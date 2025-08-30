@@ -23,6 +23,7 @@ const PaymentForm = () => {
   const [clientSecret, setClientSecret] = useState('');
   const [user, setUser] = useState({ name: '', email: '' });
   const [loading, setLoading] = useState(true);
+  const [paymentProcessing, setPaymentProcessing] = useState(false);
 
   const selectedPlan = location.state?.selectedPlan || '14-day';
 
@@ -80,8 +81,11 @@ const PaymentForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setProcessing(true);
+    setPaymentProcessing(true); // Show payment processing overlay
 
     if (!stripe || !elements) {
+      setProcessing(false);
+      setPaymentProcessing(false);
       return;
     }
 
@@ -100,6 +104,7 @@ const PaymentForm = () => {
     if (error) {
       setError(error.message);
       setProcessing(false);
+      setPaymentProcessing(false);
     } else if (paymentIntent.status === 'succeeded') {
       // Payment succeeded - now confirm it and send email
       try {
@@ -136,66 +141,76 @@ const PaymentForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="payment-form">
-      <h2>Payment Information</h2>
-      
-      {/* Removed user info display - data is still fetched for backend use */}
-      
-      <div className="card-section">
-        <div className="section-header">
-          <span>Card Information</span>
-          <div className="card-icons">
-            <img src="/Visa.jpg" alt="Visa" />
-            <img src="/MasterCard.jpg" alt="Mastercard" />
-            <img src="/JCB.jpg" alt="JCB" />
-            <img src="/AmericanExpress.jpg" alt="American Express" />
+    <div className="payment-form-container">
+      {paymentProcessing && (
+        <div className="payment-processing-overlay">
+          <div className="payment-processing-content">
+            <div className="spinner"></div>
+            <h3>Processing your payment...</h3>
+            <p>Please wait while we complete your transaction</p>
           </div>
         </div>
+      )}
+      
+      <form onSubmit={handleSubmit} className="payment-form">
+        <h2>Payment Information</h2>
+        
+        <div className="card-section">
+          <div className="section-header">
+            <span>Card Information</span>
+            <div className="card-icons">
+              <img src="/Visa.jpg" alt="Visa" />
+              <img src="/MasterCard.jpg" alt="Mastercard" />
+              <img src="/JCB.jpg" alt="JCB" />
+              <img src="/AmericanExpress.jpg" alt="American Express" />
+            </div>
+          </div>
 
-        <div className="form-group">
-          <label>Card Details</label>
-          <div className="stripe-card-element">
-            <CardElement
-              options={{
-                style: {
-                  base: {
-                    fontSize: '16px',
-                    color: '#424770',
-                    '::placeholder': {
-                      color: '#aab7c4',
+          <div className="form-group">
+            <label>Card Details</label>
+            <div className="stripe-card-element">
+              <CardElement
+                options={{
+                  style: {
+                    base: {
+                      fontSize: '16px',
+                      color: '#424770',
+                      '::placeholder': {
+                        color: '#aab7c4',
+                      },
                     },
                   },
-                },
-              }}
-            />
+                }}
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      {error && <div className="error-message">{error}</div>}
+        {error && <div className="error-message">{error}</div>}
 
-      <div className="terms-section">
-        <p>
-          By clicking "Get My Subscription" below you agree to be charged <strong>$1.70</strong> 
-          (which includes unlimited edits, downloads, and emails). You also agree to our Terms of 
-          Use and Privacy Policy.
-        </p>
-      </div>
+        <div className="terms-section">
+          <p>
+            By clicking "Get My Subscription" below you agree to be charged <strong>$1.70</strong> 
+            (which includes unlimited edits, downloads, and emails). You also agree to our Terms of 
+            Use and Privacy Policy.
+          </p>
+        </div>
 
-      <button 
-        className="subscribe-btn"
-        disabled={!stripe || processing}
-      >
-        {processing ? (
-          <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-            <div className="button-spinner"></div>
-            Processing...
-          </span>
-        ) : (
-          'Get My Subscription'
-        )}
-      </button>
-    </form>
+        <button 
+          className="subscribe-btn"
+          disabled={!stripe || processing}
+        >
+          {processing ? (
+            <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              <div className="button-spinner"></div>
+              Processing...
+            </span>
+          ) : (
+            'Get My Subscription'
+          )}
+        </button>
+      </form>
+    </div>
   );
 };
 
