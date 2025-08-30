@@ -13,7 +13,7 @@ const SubscriptionPage = () => {
 
   return (
     <div style={{
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+
       backgroundColor: '#f8f9fa',
       minHeight: '100vh',
       margin: 0,
