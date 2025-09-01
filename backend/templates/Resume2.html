@@ -21,40 +21,41 @@
 
     .resume-container {
       display: flex;
-      width: 800px;
+      width: 100%;
+      max-width: 210mm; /* limit to A4 page width */
       margin: 0 auto;
       background: #fff;
-      height: 1190px;
+      min-height: 297mm; /* at least A4 height */
+      height: auto;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
-    .sidebar {
+    .sidebart {
       background-color: #003b6f;
       color: white;
       width: 230px;
-      padding: 30px 20px;
+      padding: 20px 16px;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       flex: 0 0 230px;
       align-self: stretch;
-      height: 100%;
-      min-height: inherit;
+      height: auto;
     }
 
-    .sidebar h2 {
+    .sidebart h2 {
       font-size: 28px;
       margin-bottom: 10px;
       margin-top: 10px;
     }
 
-    .sidebar h4 {
+    .sidebart h4 {
       font-size: 19px;
       margin-bottom: 20px;
       font-weight: normal;
     }
 
-    .sidebar p {
+    .sidebart p {
       font-size: 15px;
       margin-bottom: 15px;
       line-height: 1.5;
@@ -231,12 +232,14 @@
 
 <body>
   <div class="resume-container">
-    <div class="sidebar">
+    <!-- Sidebar (left) -->
+    <div class="sidebart">
       <h2 data-edit-id="personalInfo.fullName">JOHN SMITH</h2>
-      <h4 data-edit-id="additionalInfos[0].sectionTitle">IT Project Manager</h4>
+      <h4 data-edit-id="additionalInfos[0].content">IT Project Manager</h4>
+
       <p data-edit-id="personalInfo.phone">774-987-4009</p>
       <p data-edit-id="personalInfo.professionalEmail">jsmith@uptowork.com</p>
-      <p data-edit-id="additionalInfos[1].content">linkedin.com/johnutw</p>
+      <p data-edit-id="personalInfo.address">linkedin.com/johnutw</p>
       <p data-edit-id="additionalInfos[2].content">@johnsmithutw</p>
 
       <div class="achievements">
@@ -253,8 +256,8 @@
         </div>
 
         <div class="achievement">
-          <div class="achievement-title" data-edit-id="achievements[2].title">Training Leader</div>
-          <div class="achievement-desc" data-edit-id="achievements[2].description">Led onboarding for 20+ new IT staff in project tools & agile flow.</div>
+          <div class="achievement-title" data-edit-id="achievements[2].title">IT Strategy Ownership</div>
+          <div class="achievement-desc" data-edit-id="achievements[2].description">Developed IT project strategies for key departments.</div>
         </div>
 
         <div class="achievement">
@@ -266,37 +269,38 @@
       <div class="certifications">
         <h4>Certifications</h4>
         <ul>
-          <li data-edit-id="achievements[4].title">PMP – Project Management Institute</li>
-          <li data-edit-id="achievements[5].title">PRINCE2® Foundation</li>
+          <li data-if-path="achievements[4]" data-edit-id="achievements[4].title">PMP – Project Management Institute</li>
+          <li data-if-path="achievements[5]" data-edit-id="achievements[5].title">PRINCE2® Foundation</li>
         </ul>
       </div>
 
       <div class="references">
         <h4>References</h4>
         <p>
-          <li><strong data-edit-id="references[0].firstName">Jane</strong> <strong data-edit-id="references[0].lastName">Doe</strong><br>
-            <span data-edit-id="references[0].jobTitle">Director</span>, <span data-edit-id="references[0].company">Tech Corp</span><br>
-            <span data-edit-id="references[0].referenceEmail">jane.doe@example.com</span>
+          <strong data-edit-id="references[0].firstName">Bill</strong>
+          <strong data-edit-id="references[0].lastName">Shirley</strong><br />
+          <span data-edit-id="references[0].jobTitle">CIO</span>,
+          <span data-edit-id="references[0].company">Seton Hospital</span><br />
+          <span data-edit-id="references[0].referenceEmail">bill.shirley@seton.com</span>
         </p>
       </div>
 
       <div class="additional-info">
         <h4>Additional Info</h4>
         <ul>
-          <li data-edit-id="additionalInfos[3].content">Authorized to work in US</li>
-          <li data-edit-id="additionalInfos[4].content">Willing to relocate</li>
-          <li data-edit-id="additionalInfos[5].content">Fluent in English & Spanish</li>
+          <li data-edit-id="additionalInfos[3].content">Portfolio: john.dev</li>
+          <li data-edit-id="additionalInfos[4].content">Fluent in English & Spanish</li>
         </ul>
       </div>
-
     </div>
 
+    <!-- Main content (right) -->
     <div class="content">
       <div class="section">
-        <p data-edit-id="additionalInfos[0].content">
+        <p>
           IT Professional with <strong>over 10 years of experience</strong> specializing in
           <strong>IT department management</strong> for international logistics companies.
-          I can implement effective <strong>IT strategies</strong> at local and global levels.
+          I can work with stakeholders to deliver cost-efficient solutions on time.
           My greatest strength is business awareness, which enables me to permanently streamline
           infrastructure and applications.
         </p>
@@ -305,7 +309,7 @@
       <div class="section">
         <h3>Experience</h3>
         <p class="job-title" data-edit-id="experience[0].jobTitle">Senior Project Manager</p>
-        <p class="date"><span data-edit-id="experience[0].startDate">2006-12</span> – <span data-edit-id="experience[0].isCurrentJob">present</span></p>
+        <p class="date"><span data-edit-id="experience[0].startD...pan data-if-path="experience[0].isCurrentJob">present</span></p>
         <p class="company" data-edit-id="experience[0].employerName">Seton Hospital, ME</p>
         <ul>
           <li>Oversaw all major hospital IT projects for 10+ years, focused on cost reduction.</li>
@@ -315,48 +319,43 @@
         </ul>
 
         <p class="job-title" data-edit-id="experience[1].jobTitle">Junior Project Manager</p>
-        <p class="date"><span data-edit-id="experience[1].startDate">2004-09</span> – <span data-edit-id="experience[1].endDate">2006-11</span></p>
+        <p class="date"><span data-edit-id="experience[1].startD... – <span data-edit-id="experience[1].endDate">2006-11</span></p>
         <p class="company" data-edit-id="experience[1].employerName">Seton Hospital, ME</p>
         <ul>
           <li>Reduced logistics/admin costs by 25%.</li>
-          <li>Diagnosed hardware/software issues and created new solutions.</li>
-          <li>Maintained 30,000+ patient database.</li>
-          <li>Led training for all IT Support Officers.</li>
+          <li>Implemented continuous integration processes.</li>
+          <li>Coordinated projects between different departments.</li>
+          <li>Delivered projects within scope and budget.</li>
         </ul>
       </div>
 
       <div class="section">
         <h3>Education</h3>
-        <p class="job-title" data-edit-id="education[0].degree">BS/MS in Computer Science</p>
-        <p class="date"><span data-edit-id="education[0].startDate">1996-09</span> – <span data-edit-id="education[0].endDate">2001-05</span></p>
-        <p class="company" data-edit-id="education[0].institution">University of Maryland</p>
+        <p class="job-title" data-edit-id="education[0].degree">BSc in CSE</p>
+        <p class="date"><span data-edit-id="education[0].startDate">2010</span> – <span data-edit-id="education[0].endDate">2014</span></p>
+        <p class="company" data-edit-id="education[0].institution">IUT</p>
         <ul>
-          <li data-edit-id="education[0].fieldOfStudy">Graduated Summa Cum Laude</li>
-          <li>Member of Student Association of CS</li>
-          <li>Organized a conference for 50+ professionals</li>
+          <li data-edit-id="education[0].fieldOfStudy">Computer Science</li>
         </ul>
       </div>
 
       <div class="section">
         <h3>Skills</h3>
         <ul>
-          <li><strong data-edit-id="skills[0].skillName">Business Process Improvement</strong> – successful innovations for cost savings</li>
-          <li><strong data-edit-id="skills[1].skillName">Vendor Management</strong> – managing vendors with budgets over $100,000</li>
-          <li><strong data-edit-id="skills[2].skillName">Project Scheduling</strong> – 90% of projects finished on time</li>
-          <li><strong data-edit-id="skills[3].skillName">Sales Analysis</strong> – IT sales and contract negotiations</li>
+          <li data-edit-id="skills[0].skillName"><strong>JavaScript</strong></li>
+          <li data-edit-id="skills[1].skillName"><strong>React</strong></li>
+          <li data-edit-id="skills[2].skillName"><strong>Node.js</strong></li>
+          <li data-edit-id="skills[3].skillName"><strong>MongoDB</strong></li>
         </ul>
       </div>
 
       <div class="section">
         <h3>Hobbies</h3>
         <ul>
-          <li data-edit-id="hobbies[0].hobbyName">Hobby 1</li>
-        </ul>
-        <ul>
-          <li data-edit-id="hobbies[1].hobbyName">Hobby 2</li>
+          <li data-edit-id="hobbies[0].hobbyName">Reading</li>
+          <li data-edit-id="hobbies[1].hobbyName">Cycling</li>
         </ul>
       </div>
-
     </div>
   </div>
 </body>

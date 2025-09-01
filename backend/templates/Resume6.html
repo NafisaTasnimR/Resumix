@@ -17,22 +17,22 @@
     }
 
     .container {
-      width: 800px;
-      height: 1190px;
+      width: 100%;
+      max-width: 210mm;
+      min-height: 297mm;
       margin: 0 auto;
       background: #fff;
       display: flex;
+      flex-direction: column;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       position: relative;
-      overflow: hidden;
+      overflow: visible;
       margin-top: 0;
       padding-top: 0;
     }
 
-    .top-bar {
-      position: absolute;
-      top: 20px;
-      left: 0;
+    .top-bart {
+      position: relative;
       width: 100%;
       height: 120px;
       background: #2b2b36;
@@ -42,34 +42,37 @@
       justify-content: center;
       padding-left: 30px;
       z-index: 2;
-      margin-bottom: 8px;
-      margin-top: 40px;
+      margin-bottom: 0;
     }
 
-    .top-bar h1 {
+    .top-bart h1 {
       font-size: 32px;
       font-weight: 700;
       margin-bottom: 5px;
     }
 
-    .top-bar p {
+    .top-bart p {
       font-size: 15px;
       font-weight: 300;
     }
 
+    .content-wrapper {
+      display: flex;
+      flex: 1;
+    }
+
     .left-section {
-      width: 280px;
+      width: 28%;
+      min-width: 120px;
       background: #dddbde;
-      padding-top: 180px;
-      padding-left: 30px;
-      padding-right: 20px;
+      padding: 20px;
       position: relative;
       z-index: 1;
     }
 
     .right-section {
       flex: 1;
-      padding: 180px 30px 30px;
+      padding: 20px 30px;
       background: #fff;
       position: relative;
       z-index: 1;
@@ -79,6 +82,13 @@
       font-size: 16px;
       font-weight: bold;
       margin: 20px 0 10px;
+      color: #2b2b36;
+    }
+
+    .left-section .section-title {
+      color: #2b2b36;
+      border-bottom: 1px solid #2b2b36;
+      padding-bottom: 5px;
     }
 
     .icon-text {
@@ -101,157 +111,187 @@
 
     .timeline .year {
       font-weight: bold;
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 5px;
     }
 
     .timeline .university {
       font-weight: bold;
-      font-size: 14px;
+      font-size: 16px;
+      color: #2b2b36;
+      margin-bottom: 5px;
     }
 
     .timeline ul {
       padding-left: 20px;
       list-style-type: disc;
+      margin-top: 10px;
+    }
+
+    .timeline ul li {
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .project-item {
+      margin-bottom: 15px;
+    }
+
+    .project-item strong {
+      color: #2b2b36;
+    }
+
+    .reference-item {
+      margin-bottom: 20px;
+      padding: 10px;
+      background: #f9f9f9;
+      border-left: 3px solid #2b2b36;
     }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <div class="top-bar">
+    <!-- Top Bar with Name and Title -->
+    <div class="top-bart">
       <h1 data-edit-id="personalInfo.fullName">Richard Sanchez</h1>
       <p data-edit-id="additionalInfos[0].sectionTitle">Graphics Designer</p>
     </div>
 
-    <div class="left-section">
-      <div class="section-title">About Me</div>
-      <p data-edit-id="additionalInfos[0].content">
-        Passionate graphics designer with over 5 years of experience crafting impactful visual identities for brands.
-        Skilled in branding, UI/UX design, and digital marketing assets, with a strong eye for aesthetics and detail.
-      </p>
-
-      <div class="section-title">Contact</div>
-      <div class="icon-text"><span data-edit-id="personalInfo.phone"> +123-456-7890</span></div>
-      <div class="icon-text"><span data-edit-id="personalInfo.professionalEmail"> hello@reallygreatsite.com</span></div>
-      <div class="icon-text"><span data-edit-id="personalInfo.address"> 123 Anywhere Street, Any City</span></div>
-
-      <div class="section-title">Skills</div>
-      <ul>
-        <li><span data-edit-id="skills[0].skillName">Web Design</span></li>
-        <li><span data-edit-id="skills[1].skillName">Branding</span></li>
-        <li><span data-edit-id="skills[2].skillName">Graphic Design</span></li>
-        <li><span data-edit-id="skills[3].skillName">SEO</span></li>
-        <li><span data-edit-id="skills[4].skillName">Marketing</span></li>
-      </ul>
-
-      <div class="section-title">Certifications</div>
-      <ul>
-        <li><span data-edit-id="achievements[0].title">Adobe Certified Expert (ACE)</span></li>
-        <li><span data-edit-id="achievements[1].title">Google UX Design Certificate</span></li>
-        <li><span data-edit-id="achievements[2].title">Certified Web Designer</span></li>
-      </ul>
-
-      <div class="section-title">Additional Info</div>
-      <ul>
-        <li><span data-edit-id="additionalInfos[1].content">Authorized to work in US</span></li>
-        <li><span data-edit-id="additionalInfos[2].content">Willing to relocate</span></li>
-        <li><span data-edit-id="additionalInfos[3].content">Fluent in English & French</span></li>
-      </ul>
-
-      <div class="section-title">Language</div>
-      <ul>
-        <li><span data-edit-id="additionalInfos[4].content">English</span></li>
-        <li><span data-edit-id="additionalInfos[5].content">French</span></li>
-      </ul>
-
-      <div class="section-title">Hobbies</div>
-      <ul>
-        <li><span data-edit-id="hobbies[0].hobbyName">Travel Photography</span></li>
-        <li><span data-edit-id="hobbies[1].hobbyName">Creative Writing</span></li>
-        <li><span data-edit-id="hobbies[2].hobbyName">Community Volunteering</span></li>
-      </ul>
-    </div>
-
-    <div class="right-section">
-      <div class="section-title">Education</div>
-      <div class="timeline">
-        <p class="year">(<span data-edit-id="education[0].startDate">2011</span>–<span
-            data-edit-id="education[0].endDate">2015</span>)</p>
-        <p class="university"><span data-edit-id="education[0].institution">Wardiere University</span></p>
-        <p><span data-edit-id="education[0].degree">Bachelor of Design</span></p>
-        <p>3.65</p>
-      </div>
-      <div class="timeline">
-        <p class="year">(<span data-edit-id="education[1].startDate">2014</span>–<span
-            data-edit-id="education[1].endDate">2019</span>)</p>
-        <p class="university"><span data-edit-id="education[1].institution">Wardiere University</span></p>
-        <p><span data-edit-id="education[1].degree">Bachelor of Design</span></p>
-        <p>3.74</p>
-      </div>
-
-      <div class="section-title">Experience</div>
-      <div class="timeline">
-        <p class="year">(<span data-edit-id="experience[0].startDate">2020</span>–<span
-            data-edit-id="experience[0].endDate">2025</span>)</p>
-        <p class="university">
-          <strong data-edit-id="experience[0].jobTitle">Senior Graphic Designer</strong><br>
-          <span data-edit-id="experience[0].employerName">Studio 1</span>
+    <div class="content-wrapper">
+      <!-- Left Sidebar -->
+      <div class="left-section">
+        <div class="section-title">About Me</div>
+        <p data-edit-id="additionalInfos[0].content">
+          Passionate graphics designer with over 5 years of experience crafting impactful visual identities for brands.
+          Skilled in branding, UI/UX design, and digital marketing assets, with a strong eye for aesthetics and detail.
         </p>
+
+        <div class="section-title">Contact</div>
+        <div class="icon-text"><span data-edit-id="personalInfo.phone">+123-456-7890</span></div>
+        <div class="icon-text"><span data-edit-id="personalInfo.professionalEmail">hello@reallygreatsite.com</span></div>
+        <div class="icon-text"><span data-edit-id="personalInfo.address">123 Anywhere Street, Any City</span></div>
+
+        <div class="section-title">Skills</div>
         <ul>
-          <li>Create more than 100 graphic designs for big companies</li>
-          <li>Complete a lot of complicated work</li>
+          <li><span data-edit-id="skills[0].skillName">Web Design</span></li>
+          <li><span data-edit-id="skills[1].skillName">Branding</span></li>
+          <li><span data-edit-id="skills[2].skillName">Graphic Design</span></li>
+          <li><span data-edit-id="skills[3].skillName">SEO</span></li>
+          <li><span data-edit-id="skills[4].skillName">Marketing</span></li>
         </ul>
-      </div>
-      <div class="timeline">
-        <p class="year">(<span data-edit-id="experience[1].startDate">2017</span>–<span
-            data-edit-id="experience[1].endDate">2019</span>)</p>
-        <p class="university">
-          <strong data-edit-id="experience[1].jobTitle">Senior Graphic Designer</strong><br>
-          <span data-edit-id="experience[1].employerName">Studio 2</span>
-        </p>
+
+        <div class="section-title">Certifications</div>
         <ul>
-          <li>Create more than 100 graphic designs for big companies</li>
-          <li>Complete a lot of complicated work</li>
+          <li><span data-edit-id="achievements[0].title">Adobe Certified Expert (ACE)</span> - <span data-edit-id="achievements[0].dateReceived">2022-06-15</span></li>
+          <li><span data-edit-id="achievements[1].title">Google UX Design Certificate</span> - <span data-edit-id="achievements[1].dateReceived">2021-09-10</span></li>
+          <li><span data-edit-id="achievements[2].title">Certified Web Designer</span> - <span data-edit-id="achievements[2].dateReceived">2020-03-20</span></li>
+        </ul>
+
+        <div class="section-title">Additional Info</div>
+        <ul>
+          <li><span data-edit-id="additionalInfos[1].content">Authorized to work in US</span></li>
+          <li><span data-edit-id="additionalInfos[2].content">Willing to relocate</span></li>
+          <li><span data-edit-id="additionalInfos[3].content">Fluent in English & French</span></li>
+        </ul>
+
+        <div class="section-title">Language</div>
+        <ul>
+          <li><span data-edit-id="additionalInfos[4].content">English</span></li>
+          <li><span data-edit-id="additionalInfos[5].content">French</span></li>
+        </ul>
+
+        <div class="section-title">Hobbies</div>
+        <ul>
+          <li><span data-edit-id="hobbies[0].hobbyName">Travel Photography</span></li>
+          <li><span data-edit-id="hobbies[1].hobbyName">Creative Writing</span></li>
+          <li><span data-edit-id="hobbies[2].hobbyName">Community Volunteering</span></li>
         </ul>
       </div>
 
-      <div class="section-title">Projects</div>
-      <div class="timeline">
-        <ul>
-          <li>
-            <span data-edit-id="additionalInfos[6].content">
-              Portfolio Website — Designed and developed personal branding website. (richardsanchez.dev)
-            </span>
-          </li>
-          <li>
-            <span data-edit-id="additionalInfos[7].content">
-              Branding Package for TechCorp — Logo, brand guide, web templates.
-            </span>
-          </li>
+      <!-- Right Content Section -->
+      <div class="right-section">
+        <div class="section-title">Education</div>
+        <div class="timeline">
+          <p class="year">(<span data-edit-id="education[0].startDate">2011-09-01</span>–<span
+              data-edit-id="education[0].endDate">2015-05-15</span>)</p>
+          <p class="university"><span data-edit-id="education[0].institution">Wardiere University</span> - <span data-edit-id="education[0].city">Chicago</span>, <span data-edit-id="education[0].state">IL</span></p>
+          <p><span data-edit-id="education[0].degree">Bachelor of Design</span> in <span data-edit-id="education[0].fieldOfStudy">Graphic Design</span></p>
+          <p>GPA: 3.65</p>
+        </div>
+        <div class="timeline">
+          <p class="year">(<span data-edit-id="education[1].startDate">2014-09-01</span>–<span
+              data-edit-id="education[1].endDate">2019-05-15</span>)</p>
+          <p class="university"><span data-edit-id="education[1].institution">Wardiere University</span> - <span data-edit-id="education[1].city">Chicago</span>, <span data-edit-id="education[1].state">IL</span></p>
+          <p><span data-edit-id="education[1].degree">Master of Design</span> in <span data-edit-id="education[1].fieldOfStudy">Digital Media</span></p>
+          <p>GPA: 3.74</p>
+        </div>
 
-      </div>
+        <div class="section-title">Experience</div>
+        <div class="timeline">
+          <p class="year">(<span data-edit-id="experience[0].startDate">2020-01-15</span>–<span
+              data-edit-id="experience[0].endDate">2025-01-15</span>)</p>
+          <p class="university">
+            <strong data-edit-id="experience[0].jobTitle">Senior Graphic Designer</strong><br>
+            <span data-edit-id="experience[0].employerName">Studio 1</span> - <span data-edit-id="experience[0].city">New York</span>, <span data-edit-id="experience[0].state">NY</span>
+          </p>
+          <ul>
+            <li>Create more than 100 graphic designs for big companies</li>
+            <li>Complete a lot of complicated work</li>
+          </ul>
+        </div>
+        <div class="timeline">
+          <p class="year">(<span data-edit-id="experience[1].startDate">2017-06-01</span>–<span
+              data-edit-id="experience[1].endDate">2019-12-15</span>)</p>
+          <p class="university">
+            <strong data-edit-id="experience[1].jobTitle">Graphic Designer</strong><br>
+            <span data-edit-id="experience[1].employerName">Studio 2</span> - <span data-edit-id="experience[1].city">Los Angeles</span>, <span data-edit-id="experience[1].state">CA</span>
+          </p>
+          <ul>
+            <li>Create more than 100 graphic designs for big companies</li>
+            <li>Complete a lot of complicated work</li>
+          </ul>
+        </div>
 
-      <div class="section-title">References</div>
-      <div class="timeline">
-        <ul>
-          <li>
+        <div class="section-title">Projects</div>
+        <div class="timeline">
+          <div class="project-item">
+            <strong data-edit-id="projects[0].title">Portfolio Website</strong><br>
+            <span data-edit-id="projects[0].description">Designed and developed personal branding website</span><br>
+            <span data-edit-id="projects[0].url">richardsanchez.dev</span>
+          </div>
+          <div class="project-item">
+            <strong data-edit-id="projects[1].title">TechCorp Branding Package</strong><br>
+            <span data-edit-id="projects[1].description">Logo, brand guide, web templates for TechCorp</span>
+          </div>
+        </div>
+
+        <div class="section-title">References</div>
+        <div class="timeline">
+          <div class="reference-item">
             <strong>
               <span data-edit-id="references[0].firstName">Emily</span>
               <span data-edit-id="references[0].lastName">Rogers</span>
             </strong><br>
             <span data-edit-id="references[0].jobTitle">Creative Director</span>,
             <span data-edit-id="references[0].company">Studio 1</span><br>
-            <span data-edit-id="references[0].referenceEmail">emily.rogers@example.com</span>
-          </li>
-          <li style="margin-top: 10px;">
+            <span data-edit-id="references[0].referenceEmail">emily.rogers@example.com</span><br>
+            <span data-edit-id="references[0].phone">555-123-4567</span><br>
+            <span data-edit-id="references[0].relationship">Former Supervisor</span>
+          </div>
+          <div class="reference-item">
             <strong>
               <span data-edit-id="references[1].firstName">Alan</span>
               <span data-edit-id="references[1].lastName">Smith</span>
             </strong><br>
             <span data-edit-id="references[1].jobTitle">HR Manager</span>,
             <span data-edit-id="references[1].company">Studio 2</span><br>
-            <span data-edit-id="references[1].referenceEmail">alan.smith@example.com</span>
-          </li>
-        </ul>
+            <span data-edit-id="references[1].referenceEmail">alan.smith@example.com</span><br>
+            <span data-edit-id="references[1].phone">555-987-6543</span><br>
+            <span data-edit-id="references[1].relationship">Former Manager</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
