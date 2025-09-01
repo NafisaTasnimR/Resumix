@@ -21,8 +21,9 @@ const PaymentForm = () => {
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [clientSecret, setClientSecret] = useState('');
-  const [user, setUser] = useState({ name: 'Loading...', email: 'Loading...' });
+  const [user, setUser] = useState({ name: '', email: '' });
   const [loading, setLoading] = useState(true);
+  const [paymentProcessing, setPaymentProcessing] = useState(false);
 
   const selectedPlan = location.state?.selectedPlan || '14-day';
 
@@ -31,9 +32,9 @@ const PaymentForm = () => {
   }, []);
 
   const fetchUserData = async () => {
-    // Just call createPaymentIntent - it will handle everything
+    // Add some realistic delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
     createPaymentIntent();
-    setLoading(false);
   };
 
   const createPaymentIntent = async () => {
@@ -54,7 +55,7 @@ const PaymentForm = () => {
       if (response.ok) {
         setClientSecret(data.clientSecret);
         
-        // Update user info with the REAL email from database
+        // Update user info with the REAL email from database (for backend use)
         if (data.userEmail && data.userName) {
           setUser({
             name: data.userName,
@@ -72,14 +73,19 @@ const PaymentForm = () => {
         name: 'Demo User',
         email: 'demo@example.com'
       });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setProcessing(true);
+    setPaymentProcessing(true); // Show payment processing overlay
 
     if (!stripe || !elements) {
+      setProcessing(false);
+      setPaymentProcessing(false);
       return;
     }
 
@@ -98,6 +104,7 @@ const PaymentForm = () => {
     if (error) {
       setError(error.message);
       setProcessing(false);
+      setPaymentProcessing(false);
     } else if (paymentIntent.status === 'succeeded') {
       // Payment succeeded - now confirm it and send email
       try {
@@ -125,70 +132,85 @@ const PaymentForm = () => {
 
   if (loading) {
     return (
-      <div className="payment-form">
-        <p>Loading...</p>
+      <div className="loading-container">
+        <div className="spinner"></div>
+        <h3>Setting up your payment...</h3>
+        <p>Please wait while we prepare your secure checkout</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="payment-form">
-      <h2>Payment Information</h2>
-      
-      {/* Show user info */}
-      <div className="user-info">
-        <p><strong>Name:</strong> {user.name}</p>
-        <p><strong>Email:</strong> {user.email}</p>
-      </div>
-      
-      <div className="card-section">
-        <div className="section-header">
-          <span>Card Information</span>
-          <div className="card-icons">
-            <img src="/Visa.jpg" alt="Visa" />
-            <img src="/MasterCard.jpg" alt="Mastercard" />
-            <img src="/JCB.jpg" alt="JCB" />
-            <img src="/AmericanExpress.jpg" alt="American Express" />
+    <div className="payment-form-container">
+      {paymentProcessing && (
+        <div className="payment-processing-overlay">
+          <div className="payment-processing-content">
+            <div className="spinner"></div>
+            <h3>Processing your payment...</h3>
+            <p>Please wait while we complete your transaction</p>
           </div>
         </div>
+      )}
+      
+      <form onSubmit={handleSubmit} className="payment-form">
+        <h2>Payment Information</h2>
+        
+        <div className="card-section">
+          <div className="section-header">
+            <span>Card Information</span>
+            <div className="card-icons">
+              <img src="/Visa.jpg" alt="Visa" />
+              <img src="/MasterCard.jpg" alt="Mastercard" />
+              <img src="/JCB.jpg" alt="JCB" />
+              <img src="/AmericanExpress.jpg" alt="American Express" />
+            </div>
+          </div>
 
-        <div className="form-group">
-          <label>Card Details</label>
-          <div className="stripe-card-element">
-            <CardElement
-              options={{
-                style: {
-                  base: {
-                    fontSize: '16px',
-                    color: '#424770',
-                    '::placeholder': {
-                      color: '#aab7c4',
+          <div className="form-group">
+            <label>Card Details</label>
+            <div className="stripe-card-element">
+              <CardElement
+                options={{
+                  style: {
+                    base: {
+                      fontSize: '16px',
+                      color: '#424770',
+                      '::placeholder': {
+                        color: '#aab7c4',
+                      },
                     },
                   },
-                },
-              }}
-            />
+                }}
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      {error && <div className="error-message">{error}</div>}
+        {error && <div className="error-message">{error}</div>}
 
-      <div className="terms-section">
-        <p>
-          By clicking "Get My Subscription" below you agree to be charged <strong>$1.70</strong> 
-          (which includes unlimited edits, downloads, and emails). You also agree to our Terms of 
-          Use and Privacy Policy.
-        </p>
-      </div>
+        <div className="terms-section">
+          <p>
+            By clicking "Get My Subscription" below you agree to be charged <strong>$1.70</strong> 
+            (which includes unlimited edits, downloads, and emails). You also agree to our Terms of 
+            Use and Privacy Policy.
+          </p>
+        </div>
 
-      <button 
-        className="subscribe-btn"
-        disabled={!stripe || processing}
-      >
-        {processing ? 'Processing...' : 'Get My Subscription'}
-      </button>
-    </form>
+        <button 
+          className="subscribe-btn"
+          disabled={!stripe || processing}
+        >
+          {processing ? (
+            <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              <div className="button-spinner"></div>
+              Processing...
+            </span>
+          ) : (
+            'Get My Subscription'
+          )}
+        </button>
+      </form>
+    </div>
   );
 };
 

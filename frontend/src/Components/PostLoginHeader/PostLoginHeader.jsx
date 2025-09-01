@@ -5,7 +5,54 @@ import userIcon from '../../assets/icons8-account-48.png';
 
 const PostLoginHeader = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [subscriptionStatus, setSubscriptionStatus] = useState('free'); // 'free' or 'paid'
+  const [loading, setLoading] = useState(true);
   const dropdownRef = useRef(null);
+
+  // Fetch subscription status on component mount
+  useEffect(() => {
+    fetchSubscriptionStatus();
+  }, []);
+
+  const fetchSubscriptionStatus = async () => {
+    try {
+      const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
+      console.log(' Token found:', token ? 'Yes' : 'No');
+      
+      if (!token) {
+        console.log(' No token found, setting to free');
+        setSubscriptionStatus('free');
+        setLoading(false);
+        return;
+      }
+
+      console.log(' Fetching subscription status...');
+      const response = await fetch('http://localhost:5000/api/payment/subscription-status', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log(' Response status:', response.status);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log(' Subscription data:', data);
+        setSubscriptionStatus(data.hasActiveSubscription ? 'paid' : 'free');
+        console.log(' Badge will show:', data.hasActiveSubscription ? 'PRO' : 'FREE');
+      } else {
+        console.log(' Response not ok, setting to free');
+        setSubscriptionStatus('free');
+      }
+    } catch (error) {
+      console.error(' Error fetching subscription status:', error);
+      setSubscriptionStatus('free');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -29,7 +76,16 @@ const PostLoginHeader = () => {
     <>
       <header className="postlogin-header">
         <nav className="navbar">
-          <div className="header-left logo">RESUMIX</div>
+          <div className="header-left logo">
+            <div className="logo-with-badge">
+              RESUMIX
+              {!loading && (
+                <span className={`subscription-badge ${subscriptionStatus === 'paid' ? 'pro' : 'free'}`}>
+                  {subscriptionStatus === 'paid' ? 'PRO' : 'FREE'}
+                </span>
+              )}
+            </div>
+          </div>
 
           <div className="nav-center">
             <Link to="/resumes">Resumes</Link>
