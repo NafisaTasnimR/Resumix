@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('./models/Database'); 
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -30,14 +31,7 @@ app.use('/api/payment', PaymentRouter);
 // server.js / app.js
 app.use('/download', downloadRouter);
 app.use('/', shareRouter);
-
-// Import cron job service
-
-
-require('dotenv').config(); 
-require('./models/Database');   
-
-const PORT = process.env.PORT || 3000;  
+ 
 
 app.use(bodyParser.json()); 
 app.use(cors());  
