@@ -1,25 +1,23 @@
+/* container & modal */
 .color-palette-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .color-popup {
   background: #f8f4f1;
-  border-radius: 10px;
-  padding: 24px;
-  width: 90%;
-  max-width: 500px;
-  margin: 40px auto;
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  border-radius: 14px;
+  padding: 18px;
+  width: min(92vw, 640px);      /* responsive width */
+  box-shadow: 0 12px 32px rgba(0,0,0,.25);
   position: relative;
+  box-sizing: border-box;       /* include padding in width */
+  overflow: hidden;             /* prevent spillover */
 }
 
 .color-popup-header {
@@ -30,7 +28,7 @@
 
 .color-popup-header h2 {
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 800;
   margin: 0;
 }
 
@@ -41,25 +39,77 @@
   cursor: pointer;
 }
 
-.color-swatch-container {
+/* top controls */
+.color-top-row {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0 12px;
+}
+
+.color-preview {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.hex-input {
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  padding: 0 12px;
+  font-size: 16px;
+}
+
+.apply-btn {
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.15);
+  background: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* quick chips: wrap (no overflow) */
+.quick-row {
   display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 16px;
+}
+
+.quick-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  flex: 0 0 22px; /* fixed chip width */
+}
+
+/* shade bars */
+.color-swatch-container.shades {
+  display: flex;
+  flex-wrap: wrap;               /* wrap on narrow screens */
   gap: 12px;
+  justify-content: space-between;
 }
 
 .color-swatch {
-  width: 60px;
-  height: 150px;
+  flex: 1 1 80px;                /* prefer ~80px, responsive */
+  min-width: 60px;
+  max-width: 120px;
+  height: 180px;
   border: none;
-  border-radius: 6px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.color-swatch:hover {
-  transform: scale(1.05);
-}
-.color-swatch.selected {
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-}
+.color-swatch:hover { transform: scale(1.03); }
+.color-swatch.selected { box-shadow: 0 0 10px rgba(0,0,0,.2); }
+
+.apply-btn:active { transform: translateY(1px); }

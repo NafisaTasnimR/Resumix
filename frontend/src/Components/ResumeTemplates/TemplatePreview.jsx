@@ -18,7 +18,8 @@ const TemplatePreview = ({ id, template }) => {
         state: {
           rawTemplate: rawHTML,
           templateCss: templateCss,
-          templateName: template.name
+          templateName: template.name,
+          templateId: id
         }
       });
     } catch (error) {

@@ -37,29 +37,32 @@ const ResumePreview = () => {
 
 
   return (
-  <div className="resume-page-container">
-    <TopBar/>
-    <header className="resume-view-header">
-      <h1 className="resume-title">{resume?.title || "Nishat_Tasnim_Resume"}</h1>
-      <Link to="/resumebuilder" className="edit-btn">Edit</Link>
-    </header>
+    <div className="resume-page-container">
+      <TopBar />
+      <header className="resume-view-header">
+        <h1 className="resume-title">{resume?.title || "Nishat_Tasnim_Resume"}</h1>
+        <Link
+          to="/resumebuilder"
+          state={{ resumeId: id }}
+          className="edit-btn"
+        >
+          Edit
+        </Link>
+      </header>
 
-    <div className="resume-image-container">
-      {/* add actual resume render in A4 layout */}
-      {resume && (
-        <div className="a4-sheet">
+      <div className="resume-image-container">
+        {/* add actual resume render in A4 layout */}
+        {resume && (
           <ErrorBoundary>
             <ResumeRenderer resume={resume} />
           </ErrorBoundary>
-          
-        </div>
-      )}
+        )}
 
-      {error && <p className="error-message">{error}</p>}
-      {!error && !resume && <p>Loading resume…</p>}
+        {error && <p className="error-message">{error}</p>}
+        {!error && !resume && <p>Loading resume…</p>}
+      </div>
     </div>
-  </div>
-);
+  );
 };
 
 export default ResumePreview;

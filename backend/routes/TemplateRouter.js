@@ -10,4 +10,6 @@ router.get("/api/template/parts/:id", previewController.getTemplatePartsById);
 // Route to list all templates
 router.get("/api/templates", previewController.listTemplates);
 
+router.post("/api/template/preview/:id", previewController.previewProcessedTemplate);
+
 module.exports = router;

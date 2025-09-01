@@ -1,8 +1,13 @@
 import React from 'react';
 import './DownloadResumeModal.css';
 
+const safe = (s) =>
+  (s || 'resume').replace(/[\/\\?%*:|"<>]/g, '-').replace(/\s+/g, ' ').trim();
+
 const DownloadResumeModal = ({ isOpen, onClose, resumeName, downloadLink, imgSrc }) => {
   if (!isOpen) return null;
+
+  const finalName = `${safe(resumeName)}.pdf`;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -11,14 +16,15 @@ const DownloadResumeModal = ({ isOpen, onClose, resumeName, downloadLink, imgSrc
         <div className="modal-header">
           <h3>Download Your Resume</h3>
         </div>
-        {/* Image added here */}
+
         <div className="modal-image">
           <img src="/pdf.png" alt="Resume Preview" />
         </div>
+
         <div className="modal-body">
-          <p>{resumeName}.pdf</p>
-          <a href={downloadLink} download>
-            <button className="download-btn">Download</button>
+          <p>{finalName}</p>
+          <a href={downloadLink} download={finalName}>
+            <button type="button" className="download-btn">Download</button>
           </a>
         </div>
       </div>

@@ -7,6 +7,9 @@ import TopBar from '../ResumeEditorPage/TopBar';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
+const API_BASE = (import.meta.env && import.meta.env.VITE_API_BASE) || "http://localhost:5000";
+
+
 const Dashboard = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
@@ -33,6 +36,10 @@ const Dashboard = () => {
     localStorage.setItem('usageData', JSON.stringify(usageData));
   }, [usageData]);
 
+  const [shareLink, setShareLink] = useState("");
+  const [shareError, setShareError] = useState("");
+  const [shareLoadingId, setShareLoadingId] = useState(null);
+
   const personalRef = useRef(null);
   const educationRef = useRef(null);
   const experienceRef = useRef(null);
@@ -47,6 +54,14 @@ const Dashboard = () => {
   const [resumeError, setResumeError] = useState(null);
   const [localScores, setLocalScores] = useState({});
   const navigate = useNavigate();
+
+  const fileSafe = (s) =>
+    (s || 'resume')
+      .replace(/[\/\\?%*:|"<>]/g, '-')  // illegal filename chars
+      .replace(/\s+/g, ' ')
+      .trim();
+
+  const buildFrontendPublicUrl = (token) => `${window.location.origin}/public/resume/${token}`;
 
   const location = useLocation();
   useEffect(() => {
@@ -151,15 +166,54 @@ const Dashboard = () => {
 
   if (!user) return <p>Loading...</p>;
 
-  const handleShareClick = (resume) => {
-    setResumeName(resume.title || 'Untitled Resume');
-    setIsShareModalOpen(true);
+  // ADD: share handler (does token inline, no helper files)
+  const handleShareClick = async (resume) => {
+    setResumeName(resume.title || "Untitled Resume");
+    setShareError("");
+    setShareLink("");
+    setShareLoadingId(resume._id);
+
+    const token = localStorage.getItem("token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+    try {
+      let url = "";
+
+      // Try POST (create/rotate)
+      try {
+        const r = await axios.post(`${API_BASE}/resume/${resume._id}/share`, {}, { headers });
+        const d = r?.data || {};
+        if (d.url) url = d.url;
+        else if (d.token) url = buildFrontendPublicUrl(d.token);
+      } catch {
+        // Fallback: GET existing
+        const r = await axios.get(`${API_BASE}/resume/${resume._id}/share`, { headers });
+        const d = r?.data || {};
+        if (d.url) url = d.url;
+        else if (d.token) url = buildFrontendPublicUrl(d.token);
+      }
+
+      // Last resort: internal viewer (may require auth)
+      if (!url) url = `${window.location.origin}/resumeview/${resume._id}?public=1`;
+
+      setShareLink(url);
+      setIsShareModalOpen(true);
+    } catch (e) {
+      console.error("Share link error", e);
+      setShareError("Could not generate a shareable link. Please try again.");
+      setIsShareModalOpen(true);
+    } finally {
+      setShareLoadingId(null);
+    }
   };
 
-  const handleCloseModal = () => {
-    setIsShareModalOpen(false);
-    setIsDownloadModalOpen(false);
-  };
+
+  /*const handleDownloadClick = (resume) => {
+    setResumeName(resume.name);
+    setDownloadLink(`https://myresume.com/${resume.name}_Resume.pdf`);
+
+    setIsDownloadModalOpen(true);
+  };*/
 
   const scrollToSection = (ref) => {
     ref.current.scrollIntoView({ behavior: 'smooth' });
@@ -174,13 +228,18 @@ const Dashboard = () => {
       navigate('/subscription');
       return;
     }
-
     try {
       const token = localStorage.getItem('token') || '';
-      const res = await axios.get(`http://localhost:5000/download/resume/${resume._id}/pdf`, {
+      const res = await axios.get(`${API_BASE}/download/resume/${resume._id}/pdf`, {
         responseType: 'blob',
-        headers: { Authorization: `Bearer ${token}` },
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
+
+      const blobUrl = URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
+      setResumeName(resume.title || 'resume');
+      setDownloadLink(blobUrl);
+      setIsDownloadModalOpen(true);   // <-- show modal now
+
       const url = URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
       const a = document.createElement('a');
       a.href = url;
@@ -199,6 +258,17 @@ const Dashboard = () => {
       }
     } catch (e) {
       alert('Could not download PDF');
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsShareModalOpen(false);
+    setIsDownloadModalOpen(false);
+
+    // clean up the object URL created for download
+    if (downloadLink) {
+      URL.revokeObjectURL(downloadLink);
+      setDownloadLink('');
     }
   };
 
@@ -564,12 +634,16 @@ const Dashboard = () => {
       <ShareResumeModal
         isOpen={isShareModalOpen}
         onClose={handleCloseModal}
+        resumeLink={shareLink}       // ADD
+        resumeName={resumeName}      // ADD (you already have this state)
+        error={shareError}           // ADD
       />
       <DownloadResumeModal
         isOpen={isDownloadModalOpen}
         onClose={handleCloseModal}
         resumeName={resumeName}
         downloadLink={downloadLink}
+        downloadFileName={`${fileSafe(resumeName)}.pdf`}   // filename from title
       />
     </div>
   );

@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { prepareTemplateHtml } = require('../services/TemplateRenderService');
 
 // Controller to get a single template by ID
 exports.getTemplatePartsById = (req, res) => {
@@ -49,4 +50,16 @@ exports.listTemplates = (req, res) => {
 
     res.json(templates);
   });
+};
+
+exports.previewProcessedTemplate = async (req, res) => {
+  try {
+    const { id } = req.params;          // template id (filename without .html)
+    const resumeData = req.body || {};  // pass the user’s ResumeData in request body
+    const { finalHtml } = await prepareTemplateHtml(id, resumeData, id);
+    res.status(200).type('text/html').send(finalHtml);
+  } catch (e) {
+    console.error(e);
+    res.status(500).send('Failed to build processed preview');
+  }
 };

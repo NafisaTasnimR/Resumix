@@ -1,20 +1,38 @@
-require('dotenv').config(); 
-const express = require('express'); 
-const app = express(); 
-const bodyParser = require('body-parser'); 
-const cors = require('cors'); 
-
-// Import routes
-const authRouter = require('./routes/AuthRouter');  
-const infoUpdateRouter = require('./routes/InfoUpdateRouter'); 
-const previewRouter = require('./routes/TemplateRouter'); 
-const ResumeRouter = require('./routes/ResumeRouter'); 
+require('dotenv').config();
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const authRouter = require('./routes/AuthRouter'); 
+const infoUpdateRouter = require('./routes/InfoUpdateRouter');
+const previewRouter = require('./routes/TemplateRouter');
+const resumeRouter = require('./routes/ResumeRouter');
+const downloadRouter = require('./routes/DownloadRouter');
+const shareRouter = require('./routes/ShareLinkRoute'); 
 const PaymentRouter = require('./routes/PaymentRouter'); 
-const resumeRouter = require('./routes/ResumeRouter'); 
-const downloadRouter = require('./routes/DownloadRouter'); 
+const { initializeSubscriptionCron } = require('./services/subscriptionCron');
+
+
+require('./models/Database');
+
+
+const PORT = process.env.PORT || 3000;
+
+app.use(bodyParser.json());
+app.use(cors());
+
+app.use('/auth',authRouter);
+app.use('/info', infoUpdateRouter);
+app.use('/viewInformation', infoUpdateRouter);
+app.use('/preview',previewRouter);
+app.use('/resume', resumeRouter);
+app.use('/api/payment', PaymentRouter);  
+// server.js / app.js
+app.use('/download', downloadRouter);
+app.use('/', shareRouter);
 
 // Import cron job service
-const { initializeSubscriptionCron } = require('./services/subscriptionCron');
+
 
 require('dotenv').config(); 
 require('./models/Database');   
@@ -23,16 +41,6 @@ const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json()); 
 app.use(cors());  
-
-// Routes
-app.use('/auth', authRouter); 
-app.use('/info', infoUpdateRouter); 
-app.use('/viewInformation', infoUpdateRouter); 
-app.use('/preview', previewRouter); 
-app.use('/resume', ResumeRouter); 
-app.use('/api/payment', PaymentRouter);  
-app.use('/resume', resumeRouter); 
-app.use('/download', downloadRouter);   
 
 // Health check endpoint
 app.get('/health', (req, res) => {

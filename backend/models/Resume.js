@@ -19,6 +19,8 @@ const ResumeSchema = new schema({
         type: Number,
         default: 0
     },
+    shareToken: { type: String, index: true, sparse: true },
+    shareEnabled: { type: Boolean, default: true },
     ResumeData: {
         personalInfo: {
             fullName: { type: String, default: '' },
@@ -154,6 +156,11 @@ const ResumeSchema = new schema({
                 }
             ],
             default: []
+        },
+        theme: {
+            accent: { type: String, default: '' },      // already used for color
+            fontFamily: { type: String, default: '' },  // NEW: e.g., "Inter", "Poppins"
+            fontCssUrl: { type: String, default: '' },  // NEW: Google Fonts CSS href if used
         }
     }
 }, { timestamps: true });
