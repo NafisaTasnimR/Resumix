@@ -17,16 +17,16 @@ const PostLoginHeader = () => {
   const fetchSubscriptionStatus = async () => {
     try {
       const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
-      console.log('🔍 Token found:', token ? 'Yes' : 'No');
+      console.log(' Token found:', token ? 'Yes' : 'No');
       
       if (!token) {
-        console.log('❌ No token found, setting to free');
+        console.log(' No token found, setting to free');
         setSubscriptionStatus('free');
         setLoading(false);
         return;
       }
 
-      console.log('📡 Fetching subscription status...');
+      console.log(' Fetching subscription status...');
       const response = await fetch('http://localhost:5000/api/payment/subscription-status', {
         method: 'GET',
         headers: {
@@ -35,19 +35,19 @@ const PostLoginHeader = () => {
         }
       });
 
-      console.log('📊 Response status:', response.status);
+      console.log(' Response status:', response.status);
       
       if (response.ok) {
         const data = await response.json();
-        console.log('✅ Subscription data:', data);
+        console.log(' Subscription data:', data);
         setSubscriptionStatus(data.hasActiveSubscription ? 'paid' : 'free');
-        console.log('🏷️ Badge will show:', data.hasActiveSubscription ? 'PRO' : 'FREE');
+        console.log(' Badge will show:', data.hasActiveSubscription ? 'PRO' : 'FREE');
       } else {
-        console.log('❌ Response not ok, setting to free');
+        console.log(' Response not ok, setting to free');
         setSubscriptionStatus('free');
       }
     } catch (error) {
-      console.error('💥 Error fetching subscription status:', error);
+      console.error(' Error fetching subscription status:', error);
       setSubscriptionStatus('free');
     } finally {
       setLoading(false);

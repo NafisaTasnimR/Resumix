@@ -13,6 +13,25 @@ const Dashboard = () => {
   const [resumeName, setResumeName] = useState('Nishat_Tasnim_Resume');
   const [downloadLink, setDownloadLink] = useState('https://myresume.com/resume12345.pdf');
   const [user, setUser] = useState(null);
+  
+  // Subscription and usage tracking
+  const [subscriptionStatus, setSubscriptionStatus] = useState('free');
+  const [usageData, setUsageData] = useState(() => {
+    // Initialize from localStorage immediately
+    const saved = localStorage.getItem('usageData');
+    return saved ? JSON.parse(saved) : {
+      downloadsUsed: 0,
+      atsChecksUsed: 0,
+      downloadLimit: 3,
+      atsLimit: 1
+    };
+  });
+  const [loadingSubscription, setLoadingSubscription] = useState(true);
+
+  // Save usage data to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('usageData', JSON.stringify(usageData));
+  }, [usageData]);
 
   const personalRef = useRef(null);
   const educationRef = useRef(null);
@@ -37,6 +56,59 @@ const Dashboard = () => {
     }
   }, [location.state]);
 
+  // Fetch subscription status and usage data
+  const fetchSubscriptionStatus = async () => {
+    try {
+      const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
+      
+      if (!token) {
+        setSubscriptionStatus('free');
+        setLoadingSubscription(false);
+        return;
+      }
+
+      const response = await fetch('http://localhost:5000/api/payment/subscription-status', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        const isPaid = data.hasActiveSubscription;
+        const previousStatus = subscriptionStatus;
+        setSubscriptionStatus(isPaid ? 'paid' : 'free');
+        
+        console.log('Dashboard: Subscription check - Previous:', previousStatus, 'Current:', isPaid ? 'paid' : 'free');
+        
+        // Only reset usage if user ACTUALLY just upgraded (was free, now paid)
+        // Not just because we're loading the page for the first time
+        if (isPaid && previousStatus === 'free' && previousStatus !== null) {
+          console.log('Dashboard: User upgraded to pro, resetting usage data');
+          const resetUsage = {
+            downloadsUsed: 0,
+            atsChecksUsed: 0,
+            downloadLimit: 3,
+            atsLimit: 1
+          };
+          setUsageData(resetUsage);
+          localStorage.setItem('usageData', JSON.stringify(resetUsage));
+        } else {
+          console.log('Dashboard: Keeping existing usage data');
+        }
+      } else {
+        setSubscriptionStatus('free');
+      }
+    } catch (error) {
+      console.error('Error fetching subscription status:', error);
+      setSubscriptionStatus('free');
+    } finally {
+      setLoadingSubscription(false);
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('token');
 
@@ -58,12 +130,10 @@ const Dashboard = () => {
         setLoadingResumes(true);
         setResumeError(null);
 
-        // Assumes your controller exposes GET /api/resumes -> array of resumes owned by req.user
         const res = await axios.get('http://localhost:5000/resume/all', {
           headers: token ? { Authorization: `Bearer ${token}` } : {}
         });
 
-        // If your API returns {resumes: [...]}, use res.data.resumes
         const list = Array.isArray(res.data?.resumes) ? res.data.resumes : res.data;
         setResumes(Array.isArray(list) ? list : []);
       } catch (err) {
@@ -74,25 +144,17 @@ const Dashboard = () => {
       }
     };
 
-
     fetchUser();
     fetchResumes();
+    fetchSubscriptionStatus();
   }, []);
 
   if (!user) return <p>Loading...</p>;
-
 
   const handleShareClick = (resume) => {
     setResumeName(resume.title || 'Untitled Resume');
     setIsShareModalOpen(true);
   };
-
-  /*const handleDownloadClick = (resume) => {
-    setResumeName(resume.name);
-    setDownloadLink(`https://myresume.com/${resume.name}_Resume.pdf`);
-
-    setIsDownloadModalOpen(true);
-  };*/
 
   const handleCloseModal = () => {
     setIsShareModalOpen(false);
@@ -106,6 +168,13 @@ const Dashboard = () => {
   const fmt = (d) => (d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : '—');
 
   const handleDownloadClick = async (resume) => {
+    // Check limits for free users
+    if (subscriptionStatus === 'free' && usageData.downloadsUsed >= usageData.downloadLimit) {
+      alert(`You've reached your download limit (${usageData.downloadLimit}). Upgrade to Pro for unlimited downloads!`);
+      navigate('/subscription');
+      return;
+    }
+
     try {
       const token = localStorage.getItem('token') || '';
       const res = await axios.get(`http://localhost:5000/download/resume/${resume._id}/pdf`, {
@@ -120,17 +189,88 @@ const Dashboard = () => {
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
+      
+      // Update usage count for free users
+      if (subscriptionStatus === 'free') {
+        setUsageData(prev => ({
+          ...prev,
+          downloadsUsed: prev.downloadsUsed + 1
+        }));
+      }
     } catch (e) {
       alert('Could not download PDF');
     }
   };
 
+  const handleATSCheck = (resume) => {
+    // Check limits for free users
+    if (subscriptionStatus === 'free' && usageData.atsChecksUsed >= usageData.atsLimit) {
+      alert(`You've reached your ATS check limit (${usageData.atsLimit}). Upgrade to Pro for unlimited ATS checks!`);
+      navigate('/subscription');
+      return;
+    }
 
+    // Update usage count for free users
+    if (subscriptionStatus === 'free') {
+      setUsageData(prev => ({
+        ...prev,
+        atsChecksUsed: prev.atsChecksUsed + 1
+      }));
+    }
+
+    navigate('/m/atschecker', { state: { resumeId: resume._id } });
+  };
 
   return (
     <div className="resume-fullpage">
       <TopBar />
-      <div className="resume-header">
+      
+      {/* Usage Status Bar for Free Users */}
+      {!loadingSubscription && subscriptionStatus === 'free' && (
+        <div style={{
+          background: 'linear-gradient(135deg, #fff3cd, #ffeaa7)',
+          border: '1px solid #ffeaa7',
+          padding: '16px 24px',
+          margin: '80px 20px 0 20px',
+          borderRadius: '12px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+        }}>
+          <div style={{ display: 'flex', gap: '40px', alignItems: 'center' }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '12px', color: '#856404', fontWeight: 600, marginBottom: '4px' }}>DOWNLOADS</div>
+              <div style={{ fontSize: '18px', fontWeight: 700, color: '#856404' }}>
+                {usageData.downloadsUsed}/{usageData.downloadLimit}
+              </div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '12px', color: '#856404', fontWeight: 600, marginBottom: '4px' }}>ATS CHECKS</div>
+              <div style={{ fontSize: '18px', fontWeight: 700, color: '#856404' }}>
+                {usageData.atsChecksUsed}/{usageData.atsLimit}
+              </div>
+            </div>
+          </div>
+          <button 
+            onClick={() => navigate('/subscription')}
+            style={{
+              background: '#6c7a3a',
+              color: 'white',
+              border: 'none',
+              padding: '8px 16px',
+              borderRadius: '20px',
+              fontSize: '14px',
+              fontWeight: 600,
+              cursor: 'pointer'
+            }}
+          >
+            Upgrade to Pro
+          </button>
+        </div>
+      )}
+
+      <div className="resume-header" style={{ marginTop: subscriptionStatus === 'free' ? '20px' : '80px' }}>
         <h2>My Resumes</h2>
         <div className="header-actions">
           <Link to="/resumebuilder" className="create-btn">Create New Resume</Link>
@@ -163,38 +303,59 @@ const Dashboard = () => {
           <div className="resume-table-row"><span>No resumes yet. Create one!</span></div>
         )}
 
-        {!loadingResumes && !resumeError && resumes.map((r) => (
-          <div className="resume-table-row" key={r._id}>
-            {/* Clicking the title navigates to the specific resume view */}
-            <button
-              className="resume-name-link"
-              onClick={() => navigate(`/resumeview/${r._id}`)}
-              title="Open resume"
-            >
-              {r.title || 'Untitled'}
-            </button>
+        {!loadingResumes && !resumeError && resumes.map((r) => {
+          const canDownload = subscriptionStatus === 'paid' || usageData.downloadsUsed < usageData.downloadLimit;
+          const canUseATS = subscriptionStatus === 'paid' || usageData.atsChecksUsed < usageData.atsLimit;
 
-            {/* If you have updatedAt via timestamps, show it; else fallback to createdAt */}
-            <span>{fmt(r.updatedAt || r.createdAt)}</span>
-            <span>{fmt(r.createdAt)}</span>
-
-            <span className="strength-badge">
-              {Number.isFinite(Number(r?.strength)) ? Number(r.strength) : '—'}
-            </span>
-            
-            <span className="actions">
-              <button onClick={() => handleDownloadClick(r)}>Download</button>
-              <button onClick={() => handleShareClick(r)}>Link</button>
-              <button onClick={() => navigate('/m/atschecker', { state: { resumeId: r._id } })}>
-                ATS Check
+          return (
+            <div className="resume-table-row" key={r._id}>
+              <button
+                className="resume-name-link"
+                onClick={() => navigate(`/resumeview/${r._id}`)}
+                title="Open resume"
+              >
+                {r.title || 'Untitled'}
               </button>
 
-              {/* You can also offer a copy-link-to-preview:
-                  <button onClick={() => navigator.clipboard.writeText(`${window.location.origin}/resumeview/${r._id}`)}>Copy Link</button>
-               */}
-            </span>
-          </div>
-        ))}
+              <span>{fmt(r.updatedAt || r.createdAt)}</span>
+              <span>{fmt(r.createdAt)}</span>
+
+              <span className="strength-badge">
+                {Number.isFinite(Number(r?.strength)) ? Number(r.strength) : '—'}
+              </span>
+              
+              <span className="actions">
+                <button 
+                  onClick={() => handleDownloadClick(r)}
+                  disabled={!canDownload}
+                  style={{
+                    opacity: canDownload ? 1 : 0.5,
+                    cursor: canDownload ? 'pointer' : 'not-allowed',
+                    backgroundColor: canDownload ? '' : '#e9ecef'
+                  }}
+                  title={!canDownload ? `Download limit reached (${usageData.downloadsUsed}/${usageData.downloadLimit})` : ''}
+                >
+                  {subscriptionStatus === 'paid' ? 'Download ' : `Download (${usageData.downloadLimit - usageData.downloadsUsed} left)`}
+                </button>
+                
+                <button onClick={() => handleShareClick(r)}>Link</button>
+                
+                <button 
+                  onClick={() => handleATSCheck(r)}
+                  disabled={!canUseATS}
+                  style={{
+                    opacity: canUseATS ? 1 : 0.5,
+                    cursor: canUseATS ? 'pointer' : 'not-allowed',
+                    backgroundColor: canUseATS ? '' : '#e9ecef'
+                  }}
+                  title={!canUseATS ? `ATS check limit reached (${usageData.atsChecksUsed}/${usageData.atsLimit})` : ''}
+                >
+                  {subscriptionStatus === 'paid' ? 'ATS Check ' : `ATS Check (${usageData.atsLimit - usageData.atsChecksUsed} left)`}
+                </button>
+              </span>
+            </div>
+          );
+        })}
       </div>
 
       <div className="dashboard-content">
