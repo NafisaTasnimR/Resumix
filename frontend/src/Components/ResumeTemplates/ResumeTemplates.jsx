@@ -119,7 +119,6 @@ isPremium: template.isPremium ||
       return bDate - aDate;
     });
   };
-
   
   const getFilteredAndSortedTemplates = () => {
     let filtered = templatesData.filter(template => {
@@ -131,6 +130,7 @@ isPremium: template.isPremium ||
       
       return matchesSearch;
     });
+
 
     
     switch (currentFilter) {
@@ -152,7 +152,6 @@ isPremium: template.isPremium ||
         return sortByPopularity(filtered);
     }
   };
-
   const filteredTemplates = getFilteredAndSortedTemplates();
   
   const visibleTemplates = searchTerm
@@ -205,16 +204,6 @@ isPremium: template.isPremium ||
       <TopBar />
       <div className="green-header">
         <h1 className="page-title">Templates</h1>
-      </div>
-
-      <div className="search-bar-container">
-        <input
-          type="text"
-          className="search-bar"
-          placeholder="Search here..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
       </div>
 
       <div className="tabs">

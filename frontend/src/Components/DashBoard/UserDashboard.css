@@ -149,3 +149,46 @@
 .info-line:nth-child(even) {
   background-color: #ffffff; 
 }
+
+.loading-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+}
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #eee;
+  border-top-color: #8b9969; 
+  border-radius: 50%;
+  animation: spin .9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.resume-name-link {
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  color: black;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-align: left;
+  transition: background-color 0.3s, color 0.3s;
+  text-decoration: none;   
+}
+
+.resume-name-link:hover {
+  background-color: #f0f0f0;
+  color: #1a1d40;
+  text-decoration: none;   
+}
+
+.resume-name-link:focus {
+  outline: none;
+  background-color: #e8e8e8;
+}
+
+.resume-serial { font-weight: 500; font-size: 15px; color: #6b7a4d; margin-right: 10px; }

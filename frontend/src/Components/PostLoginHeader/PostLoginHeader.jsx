@@ -1,11 +1,59 @@
 import './PostLoginHeader.css';
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import userIcon from '../../assets/icons8-account-48.png';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const PostLoginHeader = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [subscriptionStatus, setSubscriptionStatus] = useState('free'); // 'free' or 'paid'
+  const [loading, setLoading] = useState(true);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+
+  // Fetch subscription status on component mount
+  useEffect(() => {
+    fetchSubscriptionStatus();
+  }, []);
+
+  const fetchSubscriptionStatus = async () => {
+    try {
+      const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
+      console.log(' Token found:', token ? 'Yes' : 'No');
+      
+      if (!token) {
+        console.log(' No token found, setting to free');
+        setSubscriptionStatus('free');
+        setLoading(false);
+        return;
+      }
+
+      console.log(' Fetching subscription status...');
+      const response = await fetch('http://localhost:5000/api/payment/subscription-status', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log(' Response status:', response.status);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log(' Subscription data:', data);
+        setSubscriptionStatus(data.hasActiveSubscription ? 'paid' : 'free');
+        console.log(' Badge will show:', data.hasActiveSubscription ? 'PRO' : 'FREE');
+      } else {
+        console.log(' Response not ok, setting to free');
+        setSubscriptionStatus('free');
+      }
+    } catch (error) {
+      console.error(' Error fetching subscription status:', error);
+      setSubscriptionStatus('free');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -25,11 +73,66 @@ const PostLoginHeader = () => {
     };
   }, [dropdownOpen]);
 
+  const hasAnyPersonalInfo = (pi = {}) => {
+    const keysToCheck = [
+      'fullName',
+      'professionalEmail',
+      'phone',
+      'address',
+      'city',
+      'district',
+      'country',
+      'zipCode',
+      'dateOfBirth'
+    ];
+    return keysToCheck.some(k => {
+      const v = pi?.[k];
+      return v !== undefined && v !== null && String(v).trim() !== '';
+    });
+  };
+
+  const handleBuildClick = async () => {
+    try {
+      const token = localStorage.getItem('token') || '';
+      if (!token) {
+        navigate('/profile');
+        return;
+      }
+
+      const { data } = await axios.get('http://localhost:5000/info/userInformation', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      const rd = data?.defaultResumeData || {};
+      const hasPI = hasAnyPersonalInfo(rd.personalInfo);
+      const hasEdu = Array.isArray(rd.education) && rd.education.length > 0;
+      const hasExp = Array.isArray(rd.experience) && rd.experience.length > 0;
+
+      if (hasPI || hasEdu || hasExp) {
+        navigate('/templates'); 
+      } else {
+        navigate('/profile');
+      }
+    } catch (err) {
+      console.error('Failed to check user information:', err);
+      navigate('/profile');
+    }
+  };
+
   return (
     <>
       <header className="postlogin-header">
         <nav className="navbar">
-          <div className="header-left logo">RESUMIX</div>
+          <div className="header-left logo">
+            <div className="logo-with-badge">
+              RESUMIX
+              {!loading && (
+                <span className={`subscription-badge ${subscriptionStatus === 'paid' ? 'pro' : 'free'}`}>
+                  {subscriptionStatus === 'paid' ? 'PRO' : 'FREE'}
+                </span>
+              )}
+            </div>
+          </div>
 
           <div className="nav-center">
             <Link to="/resumes">Resumes</Link>
@@ -40,23 +143,25 @@ const PostLoginHeader = () => {
             <div className="user-dropdown" ref={dropdownRef}>
               <div className="user-trigger" onClick={() => setDropdownOpen(!dropdownOpen)}>
                 <span className="user-avatar">
-                  <img src={userIcon} alt="Account Icon" className="account-icon" />
                 </span>
                 <button className="account-button">
-                  MY ACCOUNT 
+                  MY ACCOUNT
                   <span className="dropdown-arrow">▾</span>
                 </button>
               </div>
               {dropdownOpen && (
                 <div className="dropdown-content">
                   <Link to="/dashboard">
-                    <span role="img" aria-label="dashboard">👤</span> Dashboard
+                    <img src="/layout.png" alt="Dashboard" className="dropdown-icon" />
+                    Dashboard
                   </Link>
                   <Link to="/settings">
-                    <span role="img" aria-label="settings">⚙️</span> Settings
+                    <img src="/pro.png" alt="Settings" className="dropdown-icon" />
+                    Account
                   </Link>
                   <Link to="/">
-                    <span role="img" aria-label="signout">↩️</span> Sign Out
+                    <img src="/exit.png" alt="Sign Out" className="dropdown-icon" />
+                    Sign Out
                   </Link>
                 </div>
               )}
@@ -68,12 +173,64 @@ const PostLoginHeader = () => {
       {/* Hero Section */}
       <section className="hero-preview">
         <div className="image-container">
-          <img src="/bg.jpg" alt="Hero Background" />
+          {/* Floating 3-card templates (no CSS file edits; styles are scoped here) */}
+          <style>{`
+  .hero-floating { 
+    position: relative; 
+    width: min(35vw, 530px);   /* was 38vw/560px */
+    height: min(35vw, 530px);  /* was 38vw/560px */
+    pointer-events: none; 
+    margin-top: -70px
+  }
+  .hero-floating .tpl { position: absolute; animation: heroDrift 12s ease-in-out infinite; }
+  .hero-floating .card { background: #fff; border-radius: 8px; padding: 10px; box-shadow: 0 20px 60px rgba(0,0,0,.18); }
+  .hero-floating img { display: block; width: 100%; height: auto; border-radius: 10px; }
+
+  /* reduced individual card widths */
+  .hero-floating .tpl-1 { top: 8%; left: -10%;    width: 59%; } /* was 62% */
+  .hero-floating .tpl-2 { top: 25%; left: 32%;  width: 63%; animation-duration: 13s; animation-delay: -0.6s; } /* was 66% */
+  .hero-floating .tpl-3 { top: 45%; left: -2%;  width: 59%; animation-duration: 15s; animation-delay: -1s; }  /* was 58% */
+
+  /* keep the slight rotations */
+  .hero-floating .tpl-1 .card { transform: rotate(-7.9deg); }
+  .hero-floating .tpl-2 .card { transform: rotate( 7.2deg); }
+  .hero-floating .tpl-3 .card { transform: rotate(-2.5deg); }
+
+  @keyframes heroDrift { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-18px) } }
+
+  @media (max-width: 900px){
+    .hero-floating { width: 80vw; height: 80vw; } /* slightly smaller on mobile too */
+  }
+`}</style>
+
+
+          <div className="hero-floating">
+            <div className="tpl tpl-1">
+              <div className="card">
+                {/* <<< replace src with your first template image >>> */}
+                <img src="/tem3.png" alt="Template 1" loading="lazy" />
+              </div>
+            </div>
+            <div className="tpl tpl-2">
+              <div className="card">
+                {/* <<< replace src with your second template image >>> */}
+                <img src="/tem2.png" alt="Template 2" loading="lazy" />
+              </div>
+            </div>
+            <div className="tpl tpl-3">
+              <div className="card">
+                {/* <<< replace src with your third template image >>> */}
+                <img src="/tem1.png" alt="Template 3" loading="lazy" />
+              </div>
+            </div>
+          </div>
         </div>
+
         <div className="content-container">
           <h1>Create a Job-Ready Resume in Few Minutes</h1>
           <p className="subtext">Create your resume with our free builder and professional templates</p>
-          <Link to="/profile" className="primary-btn">Build Your Resume</Link>
+
+          <button onClick={handleBuildClick} className="primary-btn">Build Your Resume</button>
 
           {/* Live Preview Section */}
           <h1>Quick, Easy And Flexible Editing With Live Preview</h1>
@@ -91,14 +248,14 @@ const PostLoginHeader = () => {
             <img src="/file.png" alt="Pick a Template" />
             <div className="step-label">STEP 1</div>
             <h3>Choose a Free Template</h3>
-            <p>Choose from templates crafted by career professionals to help you land the interview.</p>
+            <p>Choose from templates crafted by us to help you land the interview.</p>
           </div>
 
           <div className="step-card">
             <img src="/applicant.png" alt="Add Expert Content" />
             <div className="step-label">STEP 2</div>
             <h3>Fill in Your Details</h3>
-            <p>With just a few clicks, add tailored, job-specific contents.</p>
+            <p>With just a few clicks update your information.</p>
           </div>
 
           <div className="step-card">

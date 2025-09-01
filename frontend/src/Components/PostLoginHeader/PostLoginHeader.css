@@ -1,11 +1,14 @@
 /* ====== POST LOGIN HEADER ====== */
 .postlogin-header {
   background: white;
-  padding: 14px 40px;
+  padding: 10px 32px;
   border-bottom: 1px solid #eee;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
-  position: sticky;
+   position: fixed;         
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   z-index: 999;
 }
 
@@ -20,6 +23,37 @@
   font-weight: 900;
   color: #656D4A; 
   flex-shrink: 0;
+}
+
+/* Logo container with badge positioning */
+.logo-with-badge {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Subscription Badge Styles */
+.subscription-badge {
+  font-size: 8px;
+  font-weight: bold;
+  padding: 1px 4px;
+  border-radius: 8px;
+  letter-spacing: 0.5px;
+  position: absolute;
+  top: -4px;
+  right: -25px;
+}
+
+.subscription-badge.free {
+  background-color: #c0c5d2;
+  color: rgb(66, 74, 78);
+ 
+}
+
+.subscription-badge.pro {
+  background: #030a57;
+  color: white;
+  
 }
 
 .nav-center {
@@ -38,7 +72,7 @@
 }
 
 .nav-center a:hover {
-  color: #656D4A;
+  color: #98968a;
   text-decoration: underline; 
 }
 
@@ -165,7 +199,7 @@
 }
 
 .primary-btn:hover {
-  background-color: #4d5636;
+  background-color: #a4ac86;
 }
 
 .hero-preview h1:last-of-type {
@@ -329,3 +363,25 @@
   margin-left: 4px;
   margin-right: 1px;
 }
+
+/* size the dropdown icons */
+.dropdown-content .dropdown-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+/* Center nav: Resumes / Templates / Subscription */
+.nav-center a,
+.nav-center a:link,
+.nav-center a:visited {
+  text-decoration: none;
+}
+
+.nav-center a:hover,
+.nav-center a:focus,
+.nav-center a:active {
+  text-decoration: none;     
+  color: #98968a;            /* keep your hover color change */
+}
+

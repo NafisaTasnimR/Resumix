@@ -41,11 +41,40 @@ body {
   cursor: pointer;
 }
 
-.header-center {
-  flex: 1;
+/* Center strip */
+.header-center1 {
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 30px;
+  gap: 58px;                 
+  padding: 8px 0;
+}
+
+.nav-item1 {
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: 500;
+  color: #4d5636;           
+  text-decoration: none;    
+  transition: color 0.3s ease;
+}
+
+/* No underline on all states */
+.nav-item1:hover,
+.nav-item1:focus,
+.nav-item1:active,
+.nav-item1:visited {
+  text-decoration: none;
+}
+
+.nav-item1:hover,
+.nav-item1:focus {
+  color: #98968a;            
+}
+
+.nav-item1.active1 {
+  color: #4d5636;          
+  font-weight: 600;
 }
 
 .header a {
@@ -59,6 +88,19 @@ body {
 .header a:hover {
   color: #6b7a4d;
   text-decoration: underline;
+} 
+
+.header .nav-item1,
+.header .nav-item1:link,
+.header .nav-item1:visited {
+  text-decoration: none;
+}
+
+.header .nav-item1:hover,
+.header .nav-item1:focus,
+.header .nav-item1:active {
+  color: #98968a;       
+  text-decoration: none;
 }
 
 .auth-buttons {
@@ -86,7 +128,7 @@ body {
 
 .login-btn:hover,
 .register-btn:hover {
-  background-color: #6b7a4d;
+  background-color: #a4ac86;
 }
 
 
@@ -152,7 +194,7 @@ body {
 }
 
 .primary-btn:hover {
-  background-color: #6b7a4d;
+  background-color: #a4ac86;
 }
 
 .hero-preview h1:last-of-type {
@@ -300,6 +342,25 @@ body {
 }
 
 .nav-item:hover {
-  color: #6b7a4d; 
+  color: #98968a; 
   text-decoration: underline;
+}
+
+/* No underline for Login/Signup on hover/click/focus/visited */
+.header .auth-buttons a,
+.header .auth-buttons .login-btn,
+.header .auth-buttons .register-btn {
+  text-decoration: none !important;
+}
+
+.header .auth-buttons a:hover,
+.header .auth-buttons a:focus,
+.header .auth-buttons a:active,
+.header .auth-buttons .login-btn:hover,
+.header .auth-buttons .login-btn:focus,
+.header .auth-buttons .login-btn:active,
+.header .auth-buttons .register-btn:hover,
+.header .auth-buttons .register-btn:focus,
+.header .auth-buttons .register-btn:active {
+  text-decoration: none !important;
 }

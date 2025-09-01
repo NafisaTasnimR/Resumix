@@ -90,4 +90,41 @@ body, html {
   overflow-x: hidden;
 }
 
+.a4-sheet { 
+  position: relative !important;
+  overflow: hidden;
+  isolation: isolate;           
+}
+
+.a4-sheet::before,
+.a4-sheet::after {
+  content: "RESUMIX RESUMIX";
+  position: absolute;
+  top: 45%;
+  left: -3%;
+  right: -5%;
+  width: 120%;
+  font-size: 80px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  line-height: 1;
+  transform: rotate(-30deg);
+  transform-origin: center;
+  pointer-events: none;
+  z-index: 9999;
+  user-select: none;
+}
+
+
+.a4-sheet::before {
+  color: rgba(255, 255, 255, 0.22);
+  mix-blend-mode: screen;    
+}
+
+
+.a4-sheet::after {
+  color: rgba(45, 51, 107, 0.10);
+  mix-blend-mode: multiply;    
+}
 

@@ -26,6 +26,30 @@ const UserSchema = new schema({
     default: 'free'
   },
 
+  // Add subscription tracking fields
+  subscriptionStartDate: {
+    type: Date,
+    default: null
+  },
+
+  subscriptionEndDate: {
+    type: Date,
+    default: null
+  },
+
+  isSubscriptionActive: {
+    type: Boolean,
+    default: false
+  },
+
+  paymentHistory: [{
+    paymentIntentId: String,
+    amount: Number,
+    currency: String,
+    paymentDate: Date,
+    subscriptionDuration: Number // in days
+  }],
+
   createdAt: {
     type: Date,
     default: Date.now
@@ -168,9 +192,29 @@ const UserSchema = new schema({
       default: []
     }
   }
-
-
 });
+
+// Method to check if user has active subscription
+UserSchema.methods.hasActiveSubscription = function() {
+  const now = new Date();
+  return this.isSubscriptionActive && this.subscriptionEndDate && this.subscriptionEndDate > now;
+};
+
+// Method to activate subscription
+UserSchema.methods.activateSubscription = function(durationInDays = 14) {
+  const now = new Date();
+  this.userType = 'paid';
+  this.isSubscriptionActive = true;
+  this.subscriptionStartDate = now;
+  this.subscriptionEndDate = new Date(now.getTime() + (durationInDays * 24 * 60 * 60 * 1000));
+};
+
+// Method to deactivate subscription
+UserSchema.methods.deactivateSubscription = function() {
+  this.userType = 'free';
+  this.isSubscriptionActive = false;
+  this.subscriptionEndDate = null;
+};
 
 const UserModel = mongoose.model('User', UserSchema);
 module.exports = UserModel;

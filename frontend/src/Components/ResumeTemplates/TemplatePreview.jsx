@@ -1,4 +1,4 @@
-import { Link,useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './TemplatePreview.css';
 import axios from 'axios';
 
