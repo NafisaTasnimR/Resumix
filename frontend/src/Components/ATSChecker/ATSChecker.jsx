@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import './ATSChecker.css';
 import { useNavigate, useLocation, useSearchParams, useParams } from 'react-router-dom';
 import TopBar from '../ResumeEditorPage/TopBar';
-import { calculateAtsScore, generateScoreData } from './ATSLogic';
+import { calculateAtsScore, generateSuggestions } from './ATSLogic';
 import axios from 'axios';
 
 /* ---------- Donut score ring ---------- */
-const ScoreRing = ({ value = 0, size = 180, thickness = 22, color = '#10B981', track = '#FEF3D7' }) => {
+const ScoreRing = ({ value = 0, size = 140, thickness = 16, color = '#22C55E', track = '#E5F5EA' }) => {
   const v = Math.max(0, Math.min(100, Number(value) || 0));
   const r = (size - thickness) / 2;
   const c = 2 * Math.PI * r;
@@ -27,47 +27,6 @@ const ScoreRing = ({ value = 0, size = 180, thickness = 22, color = '#10B981', t
   );
 };
 
-/* ---------- Helpers ---------- */
-const getColor = (s) => (s >= 80 ? '#10B981' : s >= 60 ? '#F59E0B' : '#EF4444');
-
-const Pill = ({ score }) => {
-  const label = score >= 90 ? 'EXCELLENT' : score >= 75 ? 'GOOD' : score >= 60 ? 'AVERAGE' : 'NEEDS WORK';
-  const bg = score >= 90 ? '#D1FAE5' : score >= 75 ? '#E7F9EF' : score >= 60 ? '#FFEAD5' : '#FEE2E2';
-  const fg = score >= 90 ? '#059669' : score >= 75 ? '#10B981' : score >= 60 ? '#C2410C' : '#B91C1C';
-  return <span className="cat-pill" style={{ background: bg, color: fg }}>{label}</span>;
-};
-
-/* ---------- Category card (with optional chips) ---------- */
-const CategoryCard = ({ title, data, chipsTitle, chips }) => {
-  if (!data) return null;
-  return (
-    <div className="cat-card">
-      <div className="cat-card-head">
-        <h3>{title.toUpperCase()} <span className="qmark">?</span></h3>
-        <ScoreRing value={data.score} size={100} thickness={10} color={getColor(data.score)} track="#F1F5F9" />
-      </div>
-      <Pill score={data.score} />
-      <ul className="cat-items">
-        {data.items.map((it, i) => (
-          <li key={i}>
-            <span className={`metric-score ${it.score >= 9 ? 'ok' : it.score >= 7 ? 'warn' : 'bad'}`}>{it.score}</span>
-            <span className="metric-name">{it.name}</span>
-          </li>
-        ))}
-      </ul>
-
-      {chips?.length ? (
-        <div className="chip-list">
-          <div className="chip-title">{chipsTitle}</div>
-          <div className="chips">
-            {chips.map((c, i) => <span className="chip" key={i}>{c}</span>)}
-          </div>
-        </div>
-      ) : null}
-    </div>
-  );
-};
-
 const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -77,22 +36,20 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
 
   const [resume, setResume] = useState(propResumeData || null);
   const [scoreData, setScoreData] = useState(null);
+  const [suggItems, setSuggItems] = useState([]);
+  const [suggTotalGain, setSuggTotalGain] = useState(0);
   const [loadError, setLoadError] = useState('');
   const [loading, setLoading] = useState(false);
-
   const [leaving, setLeaving] = useState(false);
 
   const backToDashboard = () => {
     setLeaving(true);
     setTimeout(() => {
       navigate('/dashboard', {
-        state: {
-          updatedScore: { id: resolvedId, score: scoreData?.overall ?? 0 }
-        }
+        state: { updatedScore: { id: resolvedId, score: scoreData?.overall ?? 0 } }
       });
     }, 60);
   };
-
 
   // Fetch resume if needed
   useEffect(() => {
@@ -111,23 +68,27 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
       .finally(() => setLoading(false));
   }, [resolvedId, resume, propResumeData]);
 
+  // Compute score + suggestions
   useEffect(() => {
     const data = propResumeData ?? resume?.ResumeData ?? resume ?? null;
     if (!data || !resolvedId) return;
+
     const score = calculateAtsScore(data);
-    setScoreData(generateScoreData(score, data, ''));
+    setScoreData({ overall: score });
 
+    const { items, totalPotentialGain } = generateSuggestions(data);
+    setSuggItems(items || []);
+    setSuggTotalGain(totalPotentialGain || 0);
+
+    // persist strength
     const token = localStorage.getItem('token') || '';
-
     if (Number(resume?.strength) === Number(score)) return;
-
     axios.patch(
       `http://localhost:5000/resume/updateResume/${resolvedId}`,
       { strength: score },
       { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` } }
     ).catch(err => console.error('Error updating strength:', err));
   }, [propResumeData, resume, resolvedId]);
-
 
   if (leaving) {
     return (
@@ -140,7 +101,6 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
       </div>
     );
   }
-
 
   if (!propResumeData && !resolvedId) {
     return (
@@ -187,51 +147,47 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
     );
   }
 
-  const bd = scoreData.breakdown || {}; // expect: impact, brevity, style (soft skills folded into impact)
-
+  
   return (
     <div className="resume-checker">
       <TopBar />
-      <div className="ats-layout">
-        {/* LEFT: donut + actions underneath */}
-        <div className="ats-left">
-          <div className="score-card">
-            <h2>Your Score</h2>
-            <ScoreRing
-              value={scoreData.overall}
-              color={getColor(scoreData.overall)}
-              track="#FEF3D7"
-              size={180}
-              thickness={22}
-            />
-          </div>
 
-          <div className="score-actions under-donut">
-            <button
-              className="edit-resume-btn"
-              onClick={() => navigate(resolvedId ? `/resumebuilder/${resolvedId}` : '/resumebuilder')}
-            >
-              Edit &amp; Fix Resume
-            </button>
-            <button className="delete-data-btn" onClick={backToDashboard}>
-              Back to Dashboard
-            </button>
-          </div>
+      {/* Big Card */}
+      <div className="ats-analysis-card">
+        <div className="ats-card-header">
+          <h2>Analysis Result</h2>
         </div>
 
-        {/* RIGHT: 3-panel breakdown (Impact includes soft skills) */}
-        <div className="ats-right">
-          <div className="breakdown-grid three-cols">
-            <CategoryCard
-              title="Impact"
-              data={bd.impact}
-              chipsTitle="Missing soft skills"
-              chips={(bd.impact?.softskillsMissing || []).slice(0, 6)}
-            />
-            <CategoryCard title="Concise" data={bd.brevity} />
-            <CategoryCard title="Style" data={bd.style} />
+        <div className="ats-card-body">
+          <div className="score-block">
+            <ScoreRing value={scoreData.overall} />
           </div>
+
+         
+          <ul className="analysis-list">
+            {suggItems.map((it, i) => {
+              const passed = !!it.passed;
+              return (
+                <li key={i} className={`analysis-item ${passed ? 'ok' : 'warn'}`}>
+                  <div className="analysis-icon">{passed ? '✓' : '✗'}</div>
+                  <div className="analysis-text">
+                    <div className="analysis-title">{it.title}</div>
+                    <div className="analysis-desc">{it.message}</div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+
         </div>
+      </div>
+
+      {/* Buttons at bottom */}
+      <div className="score-actions">
+    
+        <button className="delete-data-btn" onClick={backToDashboard}>
+          Back to Dashboard
+        </button>
       </div>
     </div>
   );

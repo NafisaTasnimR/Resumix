@@ -220,6 +220,51 @@ const Dashboard = () => {
 
     navigate('/m/atschecker', { state: { resumeId: resume._id } });
   };
+  
+   const hasAnyPersonalInfo = (pi = {}) => {
+    const keys = [
+      'fullName',
+      'professionalEmail',
+      'phone',
+      'address',
+      'city',
+      'district',
+      'country',
+      'zipCode',
+      'dateOfBirth'
+    ];
+    return keys.some(k => {
+      const v = pi?.[k];
+      return v !== undefined && v !== null && String(v).trim() !== '';
+    });
+  };
+
+  const handleCreateNewResumeClick = async () => {
+    try {
+      const token = localStorage.getItem('token') || '';
+      if (!token) {
+        navigate('/profile');
+        return;
+      }
+      const { data } = await axios.get('http://localhost:5000/viewInformation/userInformation', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      const rd = data?.defaultResumeData || {};
+      const hasPI = hasAnyPersonalInfo(rd.personalInfo);
+      const hasEdu = Array.isArray(rd.education) && rd.education.length > 0;
+      const hasExp = Array.isArray(rd.experience) && rd.experience.length > 0;
+
+      if (hasPI || hasEdu || hasExp) {
+        navigate('/templates');   
+      } else {
+        navigate('/profile');
+      }
+    } catch (e) {
+      console.error('Create New Resume routing check failed:', e);
+      navigate('/profile');
+    }
+  };
 
   return (
     <div className="resume-fullpage">
@@ -272,8 +317,11 @@ const Dashboard = () => {
 
       <div className="resume-header" style={{ marginTop: subscriptionStatus === 'free' ? '20px' : '80px' }}>
         <h2>My Resumes</h2>
-        <div className="header-actions">
-          <Link to="/resumebuilder" className="create-btn">Create New Resume</Link>
+         <div className="header-actions">
+          {/* CHANGED: conditional navigation instead of plain Link */}
+          <button type="button" className="create-btn" onClick={handleCreateNewResumeClick}>
+            Create New Resume
+          </button>
         </div>
       </div>
 

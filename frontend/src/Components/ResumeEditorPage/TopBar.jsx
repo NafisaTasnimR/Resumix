@@ -1,10 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import home from '../../assets/icons8-home-48.png'; // keep your original Home icon
+import home from '../../assets/icons8-home-48.png';
+
+const PANEL_WIDTH = 260;   // card width like your screenshot
+const PANEL_GAP   = 12;    // space below the hamburger
 
 const TopBar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [menuPos, setMenuPos] = useState({ top: 0, left: 0 });
+  // close on outside click / ESC
   const [subscriptionStatus, setSubscriptionStatus] = useState('free'); // 'free' or 'paid'
   const [loading, setLoading] = useState(true);
   const menuRef = useRef(null);
@@ -65,17 +70,47 @@ const TopBar = () => {
 
   useEffect(() => {
     const onDocMouseDown = (e) => {
-      // If click is inside menu, do nothing
       if (menuRef.current && menuRef.current.contains(e.target)) return;
-      // If click is on the hamburger button, let its own onClick handle toggle
       if (hamburgerRef.current && hamburgerRef.current.contains(e.target)) return;
       setOpen(false);
     };
-    if (open) document.addEventListener('mousedown', onDocMouseDown);
-    return () => document.removeEventListener('mousedown', onDocMouseDown);
+    const onEsc = (e) => e.key === 'Escape' && setOpen(false);
+    if (open) {
+      document.addEventListener('mousedown', onDocMouseDown);
+      document.addEventListener('keydown', onEsc);
+    }
+    return () => {
+      document.removeEventListener('mousedown', onDocMouseDown);
+      document.removeEventListener('keydown', onEsc);
+    };
   }, [open]);
+  
+  const positionMenu = () => {
+    const btn = hamburgerRef.current?.getBoundingClientRect();
+    if (!btn) return;
+    const vw = window.innerWidth;
 
-  return (
+    // align panel’s right edge to the button’s right edge
+    let left = btn.right - PANEL_WIDTH;
+    // clamp inside viewport with 16px margin
+    left = Math.max(16, Math.min(left, vw - PANEL_WIDTH - 16));
+    const top = btn.bottom + PANEL_GAP;
+
+    setMenuPos({ top, left });
+  };
+
+  const toggleMenu = () => {
+    if (!open) positionMenu();
+    setOpen(v => !v);
+  };
+
+  const go = (path) => {
+    navigate(path);
+    setOpen(false);
+  };
+
+
+return (
     <>
       <div className="top-bar">
         <div className="top-bar-title">
