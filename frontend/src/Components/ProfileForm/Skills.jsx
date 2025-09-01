@@ -50,7 +50,7 @@ const Skills = ({
           <input
             type="text"
             className="input-field"
-            value={currentSkill.skillName}
+            value={currentSkill?.skillName || ''}
 
             onChange={(e) => updateSkill('skillName', e.target.value)}
             placeholder="JavaScript"
@@ -63,7 +63,7 @@ const Skills = ({
             <select
               className="input-field"
 
-              value={currentSkill.proficiencyLevel}
+              value={currentSkill?.proficiencyLevel || ''}
               onChange={(e) => updateSkill('proficiencyLevel', e.target.value)}
 
             >
@@ -78,7 +78,7 @@ const Skills = ({
             <label>Years of Experience:</label>
             <input
               type="number"
-
+              className="input-field"
               value={currentSkill?.yearsOfExperience ?? 0}
               onChange={(e) => updateSkill('yearsOfExperience', Number(e.target.value))}
 

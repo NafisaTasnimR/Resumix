@@ -39,7 +39,7 @@ const AdditionalInfo = ({
           <input
             type="text"
             className="input-field"
-            value={currentInfo.sectionTitle}
+            value={currentInfo?.sectionTitle || ''}
 
             onChange={(e) => updateAdditionalInfo('sectionTitle', e.target.value)}
             placeholder="Languages"
@@ -52,7 +52,7 @@ const AdditionalInfo = ({
           <textarea
             className="input-field textarea-field"
             rows="8"
-            value={currentInfo.content}
+            value={currentInfo?.content || ''}
             onChange={(e) => updateAdditionalInfo('content', e.target.value)}
             placeholder="Write the description here"
           ></textarea>
