@@ -147,13 +147,7 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
     );
   }
 
-  // very lightweight summary line like the SS
-  const summary = scoreData.overall >= 80
-    ? 'The resume is well-structured and highlights relevant experience and skills. Consider adding more quantified achievements.'
-    : scoreData.overall >= 60
-      ? 'Good foundation. Add measurable results, tighten language, and emphasize impact to raise your score.'
-      : 'Core sections are present, but you can significantly improve by adding metrics, clarifying impact, and reducing filler.';
-
+  
   return (
     <div className="resume-checker">
       <TopBar />
@@ -169,10 +163,7 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
             <ScoreRing value={scoreData.overall} />
           </div>
 
-          <p className="analysis-summary" style={{ marginTop: 15, marginBottom: 32 }}>
-            {summary}
-          </p>
-
+         
           <ul className="analysis-list">
             {suggItems.map((it, i) => {
               const passed = !!it.passed;
@@ -193,12 +184,7 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
 
       {/* Buttons at bottom */}
       <div className="score-actions">
-        <button
-          className="edit-resume-btn"
-          onClick={() => navigate(resolvedId ? `/resumebuilder/${resolvedId}` : '/resumebuilder')}
-        >
-          Edit &amp; Fix Resume
-        </button>
+    
         <button className="delete-data-btn" onClick={backToDashboard}>
           Back to Dashboard
         </button>
