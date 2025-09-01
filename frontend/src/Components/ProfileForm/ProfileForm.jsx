@@ -867,9 +867,20 @@ const ProfileForm = () => {
                 ))}
               </div>
               
-              <button className="skip-form-button-slide" onClick={handleSkipForm}>
-                Skip Form
-              </button>
+              <div className="sidebar-buttons">
+                <button 
+                  className="submit-form-button-slide3" 
+                  onClick={() => {
+                    handleSave();
+                    setIsSidebarOpen(false);
+                  }}
+                >
+                  Submit Form
+                </button>
+                <button className="skip-form-button-slide" onClick={handleSkipForm}>
+                  Skip Form
+                </button>
+              </div>
             </div>
           </div>
         </>
