@@ -192,3 +192,10 @@
 }
 
 .resume-serial { font-weight: 500; font-size: 15px; color: #6b7a4d; margin-right: 10px; }
+
+.info-subbox {
+  margin-bottom: 15px;    /* space between entries */
+  padding: 10px;
+  background: #f8f8f6;    /* optional, light background */
+  border-radius: 6px;     /* optional, rounded corners */
+}
