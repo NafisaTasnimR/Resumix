@@ -271,7 +271,8 @@
   background-color: #e8e8e8;
 }
 
-.resume-serial { font-weight: 500; font-size: 15px; color: #6b7a4d; margin-right: 10px; }
+
+
 .resume-serial { font-weight: 500; font-size: 15px; color: #6b7a4d; margin-right: 10px; }
 .resume-table-header {
   grid-template-columns: 80px 1fr 120px 120px 100px 300px; /* Add 60px for NO. column */
@@ -287,3 +288,12 @@
   color: #6b7a4d;
   
 }
+
+
+.info-subbox {
+  margin-bottom: 15px;    /* space between entries */
+  padding: 10px;
+  background: #f8f8f6;    /* optional, light background */
+  border-radius: 6px;     /* optional, rounded corners */
+}
+

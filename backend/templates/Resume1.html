@@ -2,101 +2,217 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>{{personalInfo.fullName}} – Resume</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume Template- 1</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f4f4f4;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 15px auto;
+      padding: 0 15px;
+      max-width: 210mm;
+      line-height: 1.4; /* Reduced line height */
+      color: #333;
+    }
+
+    h1, h2, h3 {
       margin: 0;
-      padding: 40px 0;
     }
 
-    .a4-page {
-      background: white;
-      width: 210mm;
-      min-height: 297mm;
-      margin: auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      padding: 30mm;
-      box-sizing: border-box;
-      border-radius: 8px;
+    .header1 {
+      text-align: left;
+      border-bottom: 2px solid #000;
+      padding-bottom: 8px; 
+      margin-bottom: 10px; 
+      margin-left: 15px; 
     }
 
-    h1, h2 {
-      margin-bottom: 8px;
-      color: #2c3e50;
+    .header1 h1 {
+      font-size: 28px; 
+      margin-bottom: 5px; 
+      margin-top: 50px;
     }
 
-    section {
-      margin-bottom: 24px;
+    .header1 h2 {
+      font-size: 16px; 
+      font-weight: normal;
+      margin-bottom: 15px;
     }
 
-    .field {
-      margin: 6px 0;
-      line-height: 1.5;
+    .contact-info {
+      font-size: 13px; 
+      margin-top: 8px; 
+      margin-left: 15px; 
     }
 
-    .label {
+    .contact-info div {
+      margin-bottom: 3px; 
+    }
+
+    .section {
+      margin-bottom: 18px; 
+      margin-left: 15px; 
+    }
+
+    .section-title {
+      border-bottom: 1px solid #000;
       font-weight: bold;
+      margin-bottom: 4px; 
+      font-size: 16px;
+      margin-top: 2px; 
+      padding-bottom: 3px; 
+    }
+
+    .item-title {
+      font-weight: bold;
+      margin-top: 8px; 
+      margin-bottom: 2px;
+    }
+
+    .sub-info {
+      font-style: italic;
+      font-size: 13px; 
+      color: #555;
+      margin-bottom: 4px; 
+    }
+
+    ul {
+      padding-left: 22px; 
+      margin: 6px 0; 
+    }
+
+    li {
+      margin-bottom: 4px; 
+    }
+
+    .two-columns {
+      display: flex;
+      gap: 25px; 
+    }
+
+    .column {
+      flex: 1;
+    }
+
+    a {
+      color: #0077cc;
+      text-decoration: none;
+    }
+    
+    hr {
+      border: none;
+      border-top: 1px solid #ccc;
+      margin: 15px 0; /* Reduced margin */
     }
   </style>
 </head>
 <body>
-  <div class="a4-page">
 
-    <h1 data-edit-id="personalInfo.fullName">Nafisa</h1>
-    <p class="field" data-edit-id="personalInfo.professionalEmail">nafisa@email.com</p>
-    <p class="field" data-edit-id="personalInfo.phone">012457899377</p>
-    <p class="field" data-edit-id="personalInfo.address">uttara, dhaka, bangladesh – 1230</p>
-
-    <section>
-      <h2>Professional Summary</h2>
-      <p class="field" data-edit-id="additionalInfos[0].content">hardworking student</p>
-    </section>
-
-    <section>
-      <h2>Education</h2>
-      {{#each education}}
-      <div class="field">
-        <span data-edit-id="education[{{@index}}].degree">bsc</span>,
-        <span data-edit-id="education[{{@index}}].fieldOfStudy">cse</span> –
-        <span data-edit-id="education[{{@index}}].institution">iut</span>
-        (<span data-edit-id="education[{{@index}}].startDate">2023</span> to <span data-edit-id="education[{{@index}}].endDate">2027</span>)
-      </div>
-      {{/each}}
-    </section>
-
-    <section>
-      <h2>Experience</h2>
-      {{#each experience}}
-      <div class="field">
-        <span class="label" data-edit-id="experience[{{@index}}].jobTitle">intern</span> –
-        <span data-edit-id="experience[{{@index}}].employerName">bkash</span><br />
-        <span data-edit-id="experience[{{@index}}].startDate">2024</span> to <span data-edit-id="experience[{{@index}}].endDate">2025</span>
-      </div>
-      {{/each}}
-    </section>
-
-    <section>
-      <h2>Skills</h2>
-      <ul>
-        {{#each skills}}
-        <li data-edit-id="skills[{{@index}}].skillName">{{skillName}} – {{proficiencyLevel}}</li>
-        {{/each}}
-      </ul>
-    </section>
-
-    <section>
-      <h2>Projects</h2>
-      {{#each projects}}
-      <div class="field">
-        <span class="label" data-edit-id="projects[{{@index}}].title">hire up</span><br />
-        <span data-edit-id="projects[{{@index}}].description">job post and job apply app</span><br />
-        <a href="{{url}}" target="_blank" data-edit-id="projects[{{@index}}].url">{{url}}</a>
-      </div>
-      {{/each}}
-    </section>
-
+  <div class="header1">
+    <h1 data-edit-id="personalInfo.fullName">SAMIRA ALCARAZ</h1>
+    <h2 data-edit-id="additionalInfos[0].sectionTitle">Mechanical Engineer</h2>
   </div>
+
+  <div class="section">
+    <div class="section-title">CONTACT</div>
+    <div class="contact-info">
+      <div>Phone: <span data-edit-id="personalInfo.phone">+123-456-7890</span></div>
+      <div>Email: <span data-edit-id="personalInfo.professionalEmail">hello@realtygreatsite.com</span></div>
+      <div>Address: <span data-edit-id="personalInfo.address">123 Anywhere St.</span>, <span data-edit-id="personalInfo.city">Any City</span>, <span data-edit-id="personalInfo.district">ST 12345</span></div>
+      <div>Portfolio: <span>www.realtygreatsite.com</span></div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="section">
+    <div class="section-title">PROFESSIONAL EXPERIENCE</div>
+
+    <div class="item-title" data-edit-id="experience[0].employerName">The Innovation Lab</div>
+    <div class="sub-info">
+      <span data-edit-id="experience[0].jobTitle">Research and Development Engines</span> | 
+      <span data-edit-id="experience[0].startDate">2020</span> - 
+      <span data-edit-id="experience[0].endDate">2035</span>
+    </div>
+    <ul>
+      <li>Spearheaded line development of advanced materials, resulting in a 15% increase in product efficiency</li>
+      <li>Conducted comprehensive experiments and data analysis, leading to three published journal papers</li>
+    </ul>
+
+    <div class="item-title" data-edit-id="experience[1].employerName">Science and Tech Co.</div>
+    <div class="sub-info">
+      <span data-edit-id="experience[1].jobTitle">Mechanical Engineer</span> | 
+      <span data-edit-id="experience[1].startDate">2027</span> - 
+      <span data-edit-id="experience[1].endDate">2030</span>
+    </div>
+    <ul>
+      <li>Assisted in optimizing mechanical systems for manufacturing processes, improving production speed by 20%</li>
+      <li>Drafted and implemented quality control procedures, reducing defects and inconsistencies by 30%</li> 
+    </ul>
+  </div>
+
+  <hr>
+
+  <div class="two-columns">
+    <div class="column">
+      <div class="section">
+        <div class="section-title">EDUCATION</div>
+
+        <div class="item-title" data-edit-id="education[0].institution">North State University</div>
+        <div class="sub-info">
+          <span data-edit-id="education[0].degree">Master of Science in Mechanical Engineering</span> | 
+          <span data-edit-id="education[0].startDate">2025</span> - 
+          <span data-edit-id="education[0].endDate">2027</span>
+        </div>
+        <ul>
+          <li>GPA: 3.9</li>
+          <li>Best Thetiad Awardee</li>
+          <li>Recognition for Extended Research Paper</li>
+        </ul>
+
+        <div class="item-title" data-edit-id="education[1].institution">South City College</div>
+        <div class="sub-info">
+          <span data-edit-id="education[1].degree">Bachelor of Science in Mechanical Engineering</span> | 
+          <span data-edit-id="education[1].startDate">2021</span> - 
+          <span data-edit-id="education[1].endDate">2025</span>
+        </div>
+        <ul>
+          <li>GPA: 3.9</li>
+          <li>Editor-in-Chief, SOC Newsletter</li>
+          <li>President, The Innovation Society</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="section">
+        <div class="section-title">CERTIFICATES</div>
+        
+        <div class="item-title">Project Management</div>
+        <div class="sub-info">
+          <span>The Project Management Institute</span> | 
+          <span>2027</span>
+        </div>
+
+        <div class="item-title">System Optimization</div>
+        <div class="sub-info">
+          <span>Scrum Learning Society</span> | 
+          <span>2028</span>
+        </div>
+
+        <div class="item-title">Risk Management and Mitigation</div>
+        <div class="sub-info">
+          <span>Internal Auditors Team</span> | 
+          <span>2028</span>
+        </div>
+
+        <div class="item-title">Vendor Relations</div>
+        <div class="sub-info">
+          <span>South City College</span> | 
+          <span>2030</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>

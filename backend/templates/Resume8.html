@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume template- 8</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 20px auto;
+      padding: 0 20px;
+      max-width: 210mm; /* limit width to A4 */
+      line-height: 1.4; /* Decreased line height */
+      color: #333;
+      background-color: #f9f9f9;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+    }
+
+    .header1 {
+      text-align: center; 
+      border-top: 2px solid #2c3e50;
+      border-bottom: 2px solid #2c3e50;
+      padding-bottom: 10px;
+      margin-top: 25px; 
+      margin-bottom: 30px; 
+    }
+
+    .header1 h1 {
+      font-size: 45px;
+      color: #2c3e50;
+      margin-bottom: 5px;
+      font-weight: bold; 
+      margin-top: 40px;
+    }
+
+    .header1 h2 {
+      font-size: 22px;
+      font-weight: normal;
+      color: #2f3333;
+      margin-top: 5px; 
+      margin-bottom: 40px;
+    }
+
+    .section {
+      margin-bottom: 20px; /* Reduced margin */
+    }
+
+    .section-title {
+      border-bottom: 1px solid #2c3e50;
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 18px;
+      padding-bottom: 5px;
+      color: #2c3e50;
+    }
+
+    .item-title {
+      font-weight: bold;
+      margin-top: 8px; /* Reduced margin */
+    }
+
+    .sub-info {
+      font-style: italic;
+      font-size: 14px;
+      color: #555;
+    }
+
+    ul {
+      padding-left: 20px; /* Reduced padding */
+      margin: 8px 0; /* Reduced margin */
+    }
+
+    li {
+      margin-bottom: 5px; /* Reduced gap between list items */
+    }
+
+    .two-columns {
+      display: flex;
+      gap: 30px;
+      position: relative;
+    }
+
+    .two-columns::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      border-left: 1px solid #ccc;
+    }
+
+    .column {
+      flex: 1;
+    }
+
+    a {
+      color: #0077cc;
+      text-decoration: none;
+    }
+    
+    /* Left column section dividers */
+    .left-section {
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .left-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    
+    /* Right column styling */
+    .right-section {
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .right-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header1">
+    <h1 data-edit-id="personalInfo.fullName">OLIVIA WILSON</h1>
+    <h2 data-edit-id="additionalInfos[0].sectionTitle">MARKETING MANAGER</h2>
+  </div>
+
+  <div class="two-columns">
+    <!-- Left Column -->
+    <div class="column">
+      <!-- Contact Section -->
+      <div class="left-section">
+        <div class="section-title">CONTACT</div>
+        <div>
+          <span data-edit-id="personalInfo.phone">+123-456-7890</span>
+        </div>
+        <div>
+          <span data-edit-id="personalInfo.professionalEmail">help@stultypresslite.com</span>
+        </div>
+        <div>
+          <span data-edit-id="personalInfo.address">123 Anywhere St.</span>, 
+          <span data-edit-id="personalInfo.city">Any City</span>
+        </div>
+        <div>
+          <span>www.stultypresslite.com</span>
+        </div>
+      </div>
+      
+      <!-- Education Section -->
+      <div class="left-section">
+        <div class="section-title">EDUCATION</div>
+        <div class="item-title" data-edit-id="education[0].institution">BORCELLE UNIVERSITY</div>
+        <div class="sub-info">
+          <span data-edit-id="education[0].degree">Master of Business Management</span><br>
+          <span data-edit-id="education[0].startDate">2029</span> - 
+          <span data-edit-id="education[0].endDate">2030</span>
+        </div>
+
+        <div class="item-title" data-edit-id="education[1].institution">BORCELLE UNIVERSITY</div>
+        <div class="sub-info">
+          <span data-edit-id="education[1].degree">Bachelor of Business Management</span><br>
+          <span data-edit-id="education[1].startDate">2025</span> - 
+          <span data-edit-id="education[1].endDate">2029</span>
+        </div>
+        <div>CPA: 3.8 / 4.0</div>
+      </div>
+      
+      <!-- Skills Section -->
+      <div class="left-section">
+        <div class="section-title">SKILLS</div>
+        <ul>
+          <li><span data-edit-id="skills[0].skillName">Project Management</span></li>
+          <li><span data-edit-id="skills[1].skillName">Public Relations</span></li>
+          <li><span data-edit-id="skills[2].skillName">Teamwork</span></li>
+          <li><span data-edit-id="skills[3].skillName">Time Management</span></li>
+          <li><span data-edit-id="skills[4].skillName">Leadership</span></li>
+          <li><span data-edit-id="skills[5].skillName">Effective Communication</span></li>
+          <li><span data-edit-id="skills[6].skillName">Critical Thinking</span></li>
+        </ul>
+      </div>
+      
+      <!-- Languages Section -->
+      <div class="left-section">
+        <div class="section-title">LANGUAGES</div>
+        <ul>
+          <li>English: Native</li>
+          <li>French: Intermediate</li>
+          <li>German: Basics</li>
+          <li>Spanish: Intermediate</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="column">
+    
+      <div class="right-section">
+        <div class="section-title">PROFILE SUMMARY</div>
+        <p data-edit-id="additionalInfos[0].content">Experienced and results-driven Marketing Manager with a proven track record in developing and executing successful marketing strategies. I am seeking a challenging role where I can coordinate my skills in strategic planning, team leadership, and creative problem-solving to achieve business objectives.</p>
+      </div>
+
+      <div class="right-section">
+        <div class="section-title">WORK EXPERIENCE</div>
+
+        <div class="item-title" data-edit-id="experience[0].employerName">Borceille Studio</div>
+        <div class="sub-info">
+          <span data-edit-id="experience[0].jobTitle">Marketing Manager & Specialist</span> | 
+          <span data-edit-id="experience[0].startDate">2020</span> - 
+          <span data-edit-id="experience[0].isCurrentJob">Present</span>
+        </div>
+        <ul>
+          <li>Led marketing strategies increasing brand visibility by 20% and sales by 15%.</li>
+          <li>Managed cross-channel campaigns improving customer acquisition and retention.</li>
+        </ul>
+
+        <div class="item-title" data-edit-id="experience[1].employerName">Facing Studio</div>
+        <div class="sub-info">
+          <span data-edit-id="experience[1].jobTitle">Marketing Manager & Specialist</span> | 
+          <span data-edit-id="experience[1].startDate">2026</span> - 
+          <span data-edit-id="experience[1].endDate">2029</span>
+        </div>
+        <ul>
+          <li>Conducted market research identifying emerging trends and consumer preferences.</li>
+          <li>Oversaw content creation ensuring brand consistency across platforms.</li>
+        </ul>
+
+        <div class="item-title" data-edit-id="experience[2].employerName">Studio Shodwe</div>
+        <div class="sub-info">
+          <span data-edit-id="experience[2].jobTitle">Marketing Manager & Specialist</span> | 
+          <span data-edit-id="experience[2].startDate">2024</span> - 
+          <span data-edit-id="experience[2].endDate">2025</span>
+        </div>
+        <ul>
+          <li>Executed campaigns increasing lead generation by 20%.</li>
+          <li>Improved website traffic by 30% through SEO optimization.</li>
+          <li>Collaborated with sales teams on effective promotional materials.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
