@@ -155,11 +155,6 @@ return (
           <span>Dashboard</span>
         </button>
 
-        <button className="nav-item" onClick={handleResumeClick} role="menuitem">
-          <img className="nav-item-icon" src="/navr.png" alt="Resume" />
-          <span>Resumes</span>
-        </button>
-
         <button className="nav-item" onClick={handleSegmentsClick} role="menuitem">
           <img className="nav-item-icon" src="/stack.png" alt="Segments" />
           <span>Templates</span>
