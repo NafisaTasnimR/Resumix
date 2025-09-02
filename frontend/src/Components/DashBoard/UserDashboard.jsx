@@ -397,11 +397,12 @@ const Dashboard = () => {
 
       <div className="resume-table">
         <div className="resume-table-header">
+          <span>NO.</span>
           <span>MY RESUMES</span>
           <span>MODIFICATION</span>
           <span>CREATION</span>
           <span>STRENGTH</span>
-          <span>ACTIONS</span>
+          <span style={{ textAlign: 'center' }}>ACTIONS</span>
         </div>
 
         {loadingResumes && (
@@ -421,12 +422,14 @@ const Dashboard = () => {
           <div className="resume-table-row"><span>No resumes yet. Create one!</span></div>
         )}
 
-        {!loadingResumes && !resumeError && resumes.map((r) => {
+        {!loadingResumes && !resumeError && resumes.map((r, index) => {
           const canDownload = subscriptionStatus === 'paid' || usageData.downloadsUsed < usageData.downloadLimit;
           const canUseATS = subscriptionStatus === 'paid' || usageData.atsChecksUsed < usageData.atsLimit;
 
           return (
             <div className="resume-table-row" key={r._id}>
+              <span className="resume-serial">{index + 1}</span>
+              
               <button
                 className="resume-name-link"
                 onClick={() => navigate(`/resumeview/${r._id}`)}
@@ -442,7 +445,7 @@ const Dashboard = () => {
                 {Number.isFinite(Number(r?.strength)) ? Number(r.strength) : '—'}
               </span>
               
-              <span className="actions">
+              <span className="actions" style={{ textAlign: 'center' }}>
                 <button 
                   onClick={() => handleDownloadClick(r)}
                   disabled={!canDownload}

@@ -192,3 +192,18 @@
 }
 
 .resume-serial { font-weight: 500; font-size: 15px; color: #6b7a4d; margin-right: 10px; }
+.resume-serial { font-weight: 500; font-size: 15px; color: #6b7a4d; margin-right: 10px; }
+.resume-table-header {
+  grid-template-columns: 80px 1fr 120px 120px 100px 300px; /* Add 60px for NO. column */
+}
+
+.resume-table-row {
+  grid-template-columns: 60px 1fr 120px 120px 100px 300px; /* Match the header */
+}
+
+.resume-serial {
+  font-weight: 600;
+  font-size: 16px;
+  color: #6b7a4d;
+  
+}
