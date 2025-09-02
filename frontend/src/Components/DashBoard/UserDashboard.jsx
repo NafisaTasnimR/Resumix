@@ -16,7 +16,7 @@ const Dashboard = () => {
   const [resumeName, setResumeName] = useState('Nishat_Tasnim_Resume');
   const [downloadLink, setDownloadLink] = useState('https://myresume.com/resume12345.pdf');
   const [user, setUser] = useState(null);
-  
+
   // Subscription and usage tracking
   const [subscriptionStatus, setSubscriptionStatus] = useState('free');
   const [usageData, setUsageData] = useState(() => {
@@ -75,7 +75,7 @@ const Dashboard = () => {
   const fetchSubscriptionStatus = async () => {
     try {
       const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
-      
+
       if (!token) {
         setSubscriptionStatus('free');
         setLoadingSubscription(false);
@@ -89,15 +89,15 @@ const Dashboard = () => {
           'Content-Type': 'application/json'
         }
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         const isPaid = data.hasActiveSubscription;
         const previousStatus = subscriptionStatus;
         setSubscriptionStatus(isPaid ? 'paid' : 'free');
-        
+
         console.log('Dashboard: Subscription check - Previous:', previousStatus, 'Current:', isPaid ? 'paid' : 'free');
-        
+
         // Only reset usage if user ACTUALLY just upgraded (was free, now paid)
         // Not just because we're loading the page for the first time
         if (isPaid && previousStatus === 'free' && previousStatus !== null) {
@@ -248,7 +248,7 @@ const Dashboard = () => {
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
-      
+
       // Update usage count for free users
       if (subscriptionStatus === 'free') {
         setUsageData(prev => ({
@@ -290,8 +290,8 @@ const Dashboard = () => {
 
     navigate('/m/atschecker', { state: { resumeId: resume._id } });
   };
-  
-   const hasAnyPersonalInfo = (pi = {}) => {
+
+  const hasAnyPersonalInfo = (pi = {}) => {
     const keys = [
       'fullName',
       'professionalEmail',
@@ -326,7 +326,7 @@ const Dashboard = () => {
       const hasExp = Array.isArray(rd.experience) && rd.experience.length > 0;
 
       if (hasPI || hasEdu || hasExp) {
-        navigate('/templates');   
+        navigate('/templates');
       } else {
         navigate('/profile');
       }
@@ -339,7 +339,7 @@ const Dashboard = () => {
   return (
     <div className="resume-fullpage">
       <TopBar />
-      
+
       {/* Usage Status Bar for Free Users */}
       {!loadingSubscription && subscriptionStatus === 'free' && (
         <div style={{
@@ -367,7 +367,7 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <button 
+          <button
             onClick={() => navigate('/subscription')}
             style={{
               background: '#6c7a3a',
@@ -387,7 +387,7 @@ const Dashboard = () => {
 
       <div className="resume-header" style={{ marginTop: subscriptionStatus === 'free' ? '20px' : '80px' }}>
         <h2>My Resumes</h2>
-         <div className="header-actions">
+        <div className="header-actions">
           {/* CHANGED: conditional navigation instead of plain Link */}
           <button type="button" className="create-btn" onClick={handleCreateNewResumeClick}>
             Create New Resume
@@ -441,9 +441,9 @@ const Dashboard = () => {
               <span className="strength-badge">
                 {Number.isFinite(Number(r?.strength)) ? Number(r.strength) : '—'}
               </span>
-              
+
               <span className="actions">
-                <button 
+                <button
                   onClick={() => handleDownloadClick(r)}
                   disabled={!canDownload}
                   style={{
@@ -455,10 +455,10 @@ const Dashboard = () => {
                 >
                   {subscriptionStatus === 'paid' ? 'Download ' : `Download (${usageData.downloadLimit - usageData.downloadsUsed} left)`}
                 </button>
-                
+
                 <button onClick={() => handleShareClick(r)}>Link</button>
-                
-                <button 
+
+                <button
                   onClick={() => handleATSCheck(r)}
                   disabled={!canUseATS}
                   style={{
@@ -524,7 +524,7 @@ const Dashboard = () => {
             <div className="info-box" ref={educationRef}>
               <h3>Education Information</h3>
               {user.defaultResumeData?.education?.map((edu, index) => (
-                <div key={index}>
+                <div key={index} className="info-subbox">
                   <div className="info-line">School Name: {edu.institution}</div>
                   <div className="info-line">Degree: {edu.degree}</div>
                   <div className="info-line">Field of Study: {edu.fieldOfStudy}</div>
@@ -541,7 +541,7 @@ const Dashboard = () => {
             <div className="info-box" ref={experienceRef}>
               <h3>Experience</h3>
               {user.defaultResumeData?.experience?.map((exp, index) => (
-                <div key={index}>
+                <div key={index} className="info-subbox">
                   <div className="info-line">Employer Name: {exp.employerName}</div>
                   <div className="info-line">Job Title: {exp.jobTitle}</div>
                   <div className="info-line">City: {exp.city}</div>
@@ -557,7 +557,7 @@ const Dashboard = () => {
             <div className="info-box" ref={skillsRef}>
               <h3>Skills</h3>
               {user.defaultResumeData?.skills?.map((skill, index) => (
-                <div key={index}>
+                <div key={index} className="info-subbox">
                   <div className="info-line">Skill Name: {skill.skillName}</div>
                   <div className="info-line">Proficiency Level: {skill.proficiencyLevel}</div>
                   <div className="info-line">Years of Experience: {skill.yearsOfExperience}</div>
@@ -566,11 +566,12 @@ const Dashboard = () => {
               ))}
             </div>
 
+
             {/* Achievements */}
             <div className="info-box" ref={achievementsRef}>
               <h3>Achievements</h3>
               {user.defaultResumeData?.achievements?.map((ach, index) => (
-                <div key={index}>
+                <div key={index} className="info-subbox">
                   <div className="info-line">Title: {ach.title}</div>
                   <div className="info-line">Organization: {ach.organization}</div>
                   <div className="info-line">Date Received: {ach.dateReceived}</div>
@@ -581,11 +582,12 @@ const Dashboard = () => {
               ))}
             </div>
 
+
             {/* References */}
             <div className="info-box" ref={referencesRef}>
               <h3>References</h3>
               {user.defaultResumeData?.references?.map((ref, index) => (
-                <div key={index}>
+                <div key={index} className="info-subbox">
                   <div className="info-line">First Name: {ref.firstName}</div>
                   <div className="info-line">Last Name: {ref.lastName}</div>
                   <div className="info-line">Job Title: {ref.jobTitle}</div>
@@ -598,11 +600,12 @@ const Dashboard = () => {
               ))}
             </div>
 
+
             {/* Hobbies */}
             <div className="info-box" ref={hobbiesRef}>
               <h3>Hobbies</h3>
               {user.defaultResumeData?.hobbies?.map((hob, index) => (
-                <div key={index}>
+                <div key={index} className="info-subbox">
                   <div className="info-line">Hobby Name: {hob.hobbyName}</div>
                   <div className="info-line">Experience Level: {hob.experienceLevel}</div>
                   <div className="info-line">Years Involved: {hob.yearsInvolved}</div>
@@ -613,11 +616,12 @@ const Dashboard = () => {
               ))}
             </div>
 
+
             {/* Additional Information */}
             <div className="info-box" ref={additonalsRef}>
               <h3>Additional Information</h3>
               {user.defaultResumeData?.additionalInfos?.map((info, index) => (
-                <div key={index}>
+                <div key={index} className="info-subbox">
                   <div className="info-line">Section Title: {info.sectionTitle}</div>
                   <div className="info-line">Information: {info.content}</div>
                 </div>

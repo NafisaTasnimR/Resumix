@@ -155,11 +155,6 @@ return (
           <span>Dashboard</span>
         </button>
 
-        <button className="nav-item" onClick={handleResumeClick} role="menuitem">
-          <img className="nav-item-icon" src="/navr.png" alt="Resume" />
-          <span>Resumes</span>
-        </button>
-
         <button className="nav-item" onClick={handleSegmentsClick} role="menuitem">
           <img className="nav-item-icon" src="/stack.png" alt="Segments" />
           <span>Templates</span>
@@ -171,8 +166,8 @@ return (
         </button>
 
         <button className="nav-item" onClick={handleSettingsClick} role="menuitem">
-          <img className="nav-item-icon" src="/setting.png" alt="Settings" />
-          <span>Settings</span>
+          <img className="nav-item-icon" src="/pro.png" alt="Settings" />
+          <span>Account</span>
         </button>
       </div>
     </>
