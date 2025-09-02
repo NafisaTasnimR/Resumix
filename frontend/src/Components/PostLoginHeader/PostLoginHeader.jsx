@@ -135,7 +135,7 @@ const PostLoginHeader = () => {
           </div>
 
           <div className="nav-center">
-            <Link to="/resumes">Resumes</Link>
+            
             <Link to="/templates">Templates</Link>
             <Link to="/subscription">Subscription</Link>
           </div>

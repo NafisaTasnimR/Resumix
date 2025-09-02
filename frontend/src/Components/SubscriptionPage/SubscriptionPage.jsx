@@ -534,7 +534,7 @@ const SubscriptionPage = () => {
                 color: '#6c757d',
                 lineHeight: 1.6,
                 fontSize: '15px'
-              }}>Unlimited access to ATS Checker that checks more than 30+ common issues and improvements</p>
+              }}>Unlimited access to ATS Checker that checks  common issues and improvements</p>
             </div>
             
             <div style={{
