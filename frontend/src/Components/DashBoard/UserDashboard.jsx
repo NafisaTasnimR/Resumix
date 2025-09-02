@@ -174,6 +174,11 @@ const Dashboard = () => {
 
   // ADD: share handler (does token inline, no helper files)
   const handleShareClick = async (resume) => {
+    if (subscriptionStatus === 'free') {
+      alert('Link sharing is a Pro feature. Please upgrade to use public links.');
+      navigate('/subscription');
+      return;
+    }
     setResumeName(resume.title || "Untitled Resume");
     setShareError("");
     setShareLink("");
@@ -448,7 +453,7 @@ const Dashboard = () => {
         {!loadingResumes && !resumeError && resumes.map((r) => {
           const canDownload = subscriptionStatus === 'paid' || usageData.downloadsUsed < usageData.downloadLimit;
           const canUseATS = subscriptionStatus === 'paid' || usageData.atsChecksUsed < usageData.atsLimit;
-
+          const canShare = subscriptionStatus === 'paid';
           return (
             <div className="resume-table-row" key={r._id}>
               <button
@@ -480,7 +485,18 @@ const Dashboard = () => {
                   {subscriptionStatus === 'paid' ? 'Download ' : `Download (${usageData.downloadLimit - usageData.downloadsUsed} left)`}
                 </button>
 
-                <button onClick={() => handleShareClick(r)}>Link</button>
+                <button
+                  onClick={() => canShare ? handleShareClick(r) : navigate('/subscription')}
+                  disabled={!canShare}
+                  style={{
+                    opacity: canShare ? 1 : 0.5,
+                    cursor: canShare ? 'pointer' : 'not-allowed',
+                    backgroundColor: canShare ? '' : '#e9ecef'
+                  }}
+                  title={canShare ? '' : 'Link sharing is a Pro feature'}
+                >
+                  Link
+                </button>
 
                 <button
                   onClick={() => handleATSCheck(r)}
