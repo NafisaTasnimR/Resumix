@@ -1,6 +1,3 @@
-// ATSLogic.js — scoring + improvements-only suggestions
-
-/** ---------------- Text helpers ---------------- */
 const toText = (v) => (typeof v === "string" ? v.toLowerCase() : "");
 
 const blobFromResume = (rd = {}) => {
