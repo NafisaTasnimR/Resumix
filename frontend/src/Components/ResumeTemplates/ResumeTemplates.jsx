@@ -141,8 +141,8 @@ isPremium: template.isPremium ||
         
       case 'new':
         
-        filtered = filtered.filter(template => isNewTemplate(template));
-        return sortByDate(filtered);
+        const sortedByDate = sortByDate(filtered);
+        return sortedByDate.slice(0, 3);
         
 
         
