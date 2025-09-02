@@ -26,7 +26,7 @@ const Sidebar = ({ onFontButtonClick, onColorPaletteButtonClick }) => {
     };
 
     return (
-        <div className="sidebar">
+        <div className="sidebarR">
             <button onClick={() => navigate('/templates')}>
                 <img src={resume} alt="Template" width="30" height="30" />
                 <span>Template</span>
@@ -38,10 +38,6 @@ const Sidebar = ({ onFontButtonClick, onColorPaletteButtonClick }) => {
             <button onClick={onColorPaletteButtonClick}>
                 <img src={color} alt="Color Palette" width="30" height="30" />
                 <span>Color Palette</span>
-            </button>
-            <button onClick={() => navigate('/m/atschecker')}>
-                <img src={ats_checker} alt="ATS Checker" width="30" height="30" />
-                <span>ATS Checker</span>
             </button>
         </div>
     );
