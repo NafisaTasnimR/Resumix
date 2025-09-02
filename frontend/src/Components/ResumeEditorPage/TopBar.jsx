@@ -171,8 +171,8 @@ return (
         </button>
 
         <button className="nav-item" onClick={handleSettingsClick} role="menuitem">
-          <img className="nav-item-icon" src="/setting.png" alt="Settings" />
-          <span>Settings</span>
+          <img className="nav-item-icon" src="/pro.png" alt="Settings" />
+          <span>Account</span>
         </button>
       </div>
     </>
