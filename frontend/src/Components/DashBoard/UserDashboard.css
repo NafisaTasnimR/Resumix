@@ -69,18 +69,6 @@
   background-color: #f8f0e8;
 }
 
-.delete-btn25 {
-  color: #d63384;
-  font-size: 12px;
-  width: auto;
-  padding: 0 8px;
-  gap: 4px;
-}
-
-.delete-btn25:hover {
-  background-color: #fdf2f5;
-}
-
 /* Update the resume table to accommodate the new action buttons */
 .resume-table-header {
   grid-template-columns: 60px 1fr 120px 120px 100px 200px;
