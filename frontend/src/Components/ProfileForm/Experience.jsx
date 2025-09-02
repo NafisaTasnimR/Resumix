@@ -1,5 +1,42 @@
 import React from 'react';
 
+// VALIDATION FUNCTION WITH FULL LOGIC
+const validateDate = (date, type, relatedDate = null) => {
+  if (!date) return date; // Allow empty dates
+  
+  const selectedDate = new Date(date);
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  
+  switch (type) {
+    case 'startDate':
+      if (selectedDate > today) {
+        alert("Start date cannot be in the future!");
+        return '';
+      }
+      // Check if start date is after existing end date
+      if (relatedDate && selectedDate > new Date(relatedDate)) {
+        alert("Start date cannot be after end date!");
+        return '';
+      }
+      break;
+      
+    case 'endDate':
+      if (relatedDate && selectedDate < new Date(relatedDate)) {
+        alert("End date cannot be before start date!");
+        return relatedDate;
+      }
+      const maxEndDate = new Date(currentYear + 5, 11, 31);
+      if (selectedDate > maxEndDate) {
+        alert("End date seems too far in the future!");
+        return '';
+      }
+      break;
+  }
+  
+  return date;
+};
+
 const Experience = ({ 
   experiences, 
   currentExperienceIndex, 
@@ -9,6 +46,17 @@ const Experience = ({
   removeExperience 
 }) => {
   const currentExp = experiences[currentExperienceIndex];
+
+  // UPDATED HANDLERS WITH VALIDATION
+  const handleStartDateChange = (e) => {
+    const validatedValue = validateDate(e.target.value, 'startDate', currentExp.endDate);
+    updateExperience('startDate', validatedValue);
+  };
+
+  const handleEndDateChange = (e) => {
+    const validatedValue = validateDate(e.target.value, 'endDate', currentExp.startDate);
+    updateExperience('endDate', validatedValue);
+  };
 
   return (
     <>
@@ -86,7 +134,7 @@ const Experience = ({
               type="date" 
               className="input-field" 
               value={currentExp.startDate}
-              onChange={(e) => updateExperience('startDate', e.target.value)}
+              onChange={handleStartDateChange}
             />
           </div>
           <div className="field-group half-width">
@@ -95,7 +143,7 @@ const Experience = ({
               type="date" 
               className={`input-field ${currentExp.isCurrentJob ? 'disabled-field' : ''}`}
               value={currentExp.endDate}
-              onChange={(e) => updateExperience('endDate', e.target.value)}
+              onChange={handleEndDateChange}
               disabled={currentExp.isCurrentJob}
             />
           </div>
