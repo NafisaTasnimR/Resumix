@@ -46,7 +46,7 @@ const sendConfirmationEmail = async (userEmail, userName) => {
           - Unlimited resume edits<br>
           - All premium templates<br>
           - ATS compatibility checker<br>
-          - Priority support</p>
+          
           
           <p>Best regards,<br>
           Resumix </p>
@@ -68,7 +68,7 @@ Premium features included:
 - Unlimited resume edits
 - All premium templates
 - ATS compatibility checker
-- Priority support
+
 Best regards,
 Resumix `
     };
