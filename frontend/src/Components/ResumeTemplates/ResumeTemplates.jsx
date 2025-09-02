@@ -30,10 +30,10 @@ const ResumeTemplates = () => {
          
 isPremium: template.isPremium || 
   index === 2 || 
-  index === 5 || 
-  // Alternative: target by name if templates have consistent naming
-  (template.filename && (template.filename.includes('Resume3') || template.filename.includes('Resume6'))) ||
-  (template.name && (template.name.includes('Resume3') || template.name.includes('Resume6')))
+  index === 6 || 
+  
+  (template.filename && (template.filename.includes('Resume3') || template.filename.includes('Resume7'))) ||
+  (template.name && (template.name.includes('Resume3') || template.name.includes('Resume7')))
         }));
         
         setTemplatesData(templatesWithClicks);
