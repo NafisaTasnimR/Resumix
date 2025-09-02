@@ -18,7 +18,7 @@ const LandingPage = () => {
         <div className="header-left logo">RESUMIX</div>
 
         <div className="header-center1">
-          <span className="nav-item1" onClick={openPopup} style={{ cursor: 'pointer' }}>Resumes</span>
+          
            <Link to="/publictemplates" className="nav-item1 active1">Templates</Link>
           <span className="nav-item1" onClick={openPopup} style={{ cursor: 'pointer' }}>Subscription</span>
         </div>

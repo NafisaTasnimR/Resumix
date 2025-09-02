@@ -3,14 +3,15 @@ import './UserDashboard.css';
 import { Link, useNavigate } from 'react-router-dom';
 import ShareResumeModal from '../ResumeListPage/ShareResumeModal';
 import DownloadResumeModal from '../ResumeListPage/DownloadResumeModal';
+import DeleteConfirmationModal from '../ResumeListPage/DeleteConfirmationModal';
 import TopBar from '../ResumeEditorPage/TopBar';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
 const API_BASE = (import.meta.env && import.meta.env.VITE_API_BASE) || "http://localhost:5000";
 
-
 const Dashboard = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);          // delete confirm
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [resumeName, setResumeName] = useState('Nishat_Tasnim_Resume');
@@ -39,6 +40,11 @@ const Dashboard = () => {
   const [shareLink, setShareLink] = useState("");
   const [shareError, setShareError] = useState("");
   const [shareLoadingId, setShareLoadingId] = useState(null);
+
+  // Delete-related state
+  const [selectedResume, setSelectedResume] = useState(null);     // for delete
+  const [deletingId, setDeletingId] = useState(null);
+  const [deleteError, setDeleteError] = useState('');
 
   const personalRef = useRef(null);
   const educationRef = useRef(null);
@@ -70,6 +76,38 @@ const Dashboard = () => {
       setLocalScores(prev => ({ ...prev, [id]: score }));
     }
   }, [location.state]);
+
+  // Delete functions extracted from ResumeListPage
+  const handleRemoveClick = (resume) => {
+    setSelectedResume(resume);
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = async () => {
+    if (!selectedResume?._id) return;
+
+    setDeleteError('');
+    setDeletingId(selectedResume._id);
+
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`${API_BASE}/resume/${selectedResume._id}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+
+      // Remove from list locally
+      setResumes(prev => prev.filter(x => x._id !== selectedResume._id));
+
+      // Close modal and clear selection
+      setIsModalOpen(false);
+      setSelectedResume(null);
+    } catch (e) {
+      console.error('Delete failed', e);
+      setDeleteError('Could not delete resume. Please try again.');
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   // Fetch subscription status and usage data
   const fetchSubscriptionStatus = async () => {
@@ -207,14 +245,6 @@ const Dashboard = () => {
     }
   };
 
-
-  /*const handleDownloadClick = (resume) => {
-    setResumeName(resume.name);
-    setDownloadLink(`https://myresume.com/${resume.name}_Resume.pdf`);
-
-    setIsDownloadModalOpen(true);
-  };*/
-
   const scrollToSection = (ref) => {
     ref.current.scrollIntoView({ behavior: 'smooth' });
   };
@@ -262,6 +292,7 @@ const Dashboard = () => {
   };
 
   const handleCloseModal = () => {
+    setIsModalOpen(false);
     setIsShareModalOpen(false);
     setIsDownloadModalOpen(false);
 
@@ -275,7 +306,7 @@ const Dashboard = () => {
   const handleATSCheck = (resume) => {
     // Check limits for free users
     if (subscriptionStatus === 'free' && usageData.atsChecksUsed >= usageData.atsLimit) {
-      alert(`You've reached your ATS check limit (${usageData.atsLimit}). Upgrade to Pro for unlimited ATS checks!`);
+      alert(`You've reached your Resumix ATS check limit (${usageData.atsLimit}). Upgrade to Pro for unlimited Resumix ATS checks!`);
       navigate('/subscription');
       return;
     }
@@ -361,7 +392,7 @@ const Dashboard = () => {
               </div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '12px', color: '#856404', fontWeight: 600, marginBottom: '4px' }}>ATS CHECKS</div>
+              <div style={{ fontSize: '12px', color: '#856404', fontWeight: 600, marginBottom: '4px' }}>RESUMIX ATS </div>
               <div style={{ fontSize: '18px', fontWeight: 700, color: '#856404' }}>
                 {usageData.atsChecksUsed}/{usageData.atsLimit}
               </div>
@@ -445,33 +476,43 @@ const Dashboard = () => {
                 {Number.isFinite(Number(r?.strength)) ? Number(r.strength) : '—'}
               </span>
               
-              <span className="actions" style={{ textAlign: 'center' }}>
+              <span className="actions25" style={{ textAlign: 'center' }}>
                 <button 
+                  className="action-btn25 download-btn25"
                   onClick={() => handleDownloadClick(r)}
                   disabled={!canDownload}
-                  style={{
-                    opacity: canDownload ? 1 : 0.5,
-                    cursor: canDownload ? 'pointer' : 'not-allowed',
-                    backgroundColor: canDownload ? '' : '#e9ecef'
-                  }}
-                  title={!canDownload ? `Download limit reached (${usageData.downloadsUsed}/${usageData.downloadLimit})` : ''}
+                  title={!canDownload ? `Download limit reached (${usageData.downloadsUsed}/${usageData.downloadLimit})` : 'Download'}
                 >
-                  {subscriptionStatus === 'paid' ? 'Download ' : `Download (${usageData.downloadLimit - usageData.downloadsUsed} left)`}
+                  <img src="download-icon.png" alt="Download" className="icon25" />
+                  {subscriptionStatus === 'paid' ? '' : ` (${usageData.downloadLimit - usageData.downloadsUsed})`}
                 </button>
                 
-                <button onClick={() => handleShareClick(r)}>Link</button>
+                <button 
+                  className="action-btn25 share-btn25"
+                  onClick={() => handleShareClick(r)}
+                  title="URL"
+                >
+                  <img src="share-icon.png" alt="Share" className="icon25" />
+                </button>
                 
                 <button 
+                  className="action-btn25 ats-btn25"
                   onClick={() => handleATSCheck(r)}
                   disabled={!canUseATS}
-                  style={{
-                    opacity: canUseATS ? 1 : 0.5,
-                    cursor: canUseATS ? 'pointer' : 'not-allowed',
-                    backgroundColor: canUseATS ? '' : '#e9ecef'
-                  }}
-                  title={!canUseATS ? `ATS check limit reached (${usageData.atsChecksUsed}/${usageData.atsLimit})` : ''}
+                  title={!canUseATS ? `Resumix ATS check limit reached (${usageData.atsChecksUsed}/${usageData.atsLimit})` : 'Resumix ATS'}
                 >
-                  {subscriptionStatus === 'paid' ? 'ATS Check ' : `ATS Check (${usageData.atsLimit - usageData.atsChecksUsed} left)`}
+                  <img src="ats-icon.png" alt="ATS Check" className="icon25" />
+                  {subscriptionStatus === 'paid' ? '' : ` (${usageData.atsLimit - usageData.atsChecksUsed})`}
+                </button>
+
+                <button 
+                  className="action-btn25 delete-btn25"
+                  onClick={() => handleRemoveClick(r)} 
+                  disabled={deletingId === r._id}
+                  title="Delete"
+                >
+                  <img src="delete-icon.png" alt="Delete" className="icon25" />
+                  {deletingId === r._id ? 'Removing…' : ''}
                 </button>
               </span>
             </div>
@@ -648,6 +689,17 @@ const Dashboard = () => {
         downloadLink={downloadLink}
         downloadFileName={`${fileSafe(resumeName)}.pdf`}   // filename from title
       />
+      <DeleteConfirmationModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onDelete={handleDelete}
+      >
+        {deleteError && (
+          <p className="error-text" style={{ marginTop: 8 }}>
+            {deleteError}
+          </p>
+        )}
+      </DeleteConfirmationModal>
     </div>
   );
 };
