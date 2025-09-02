@@ -12,6 +12,7 @@ const downloadRouter = require('./routes/DownloadRouter');
 const shareRouter = require('./routes/ShareLinkRoute'); 
 const PaymentRouter = require('./routes/PaymentRouter'); 
 const { initializeSubscriptionCron } = require('./services/subscriptionCron');
+const usageRoutes = require('./routes/UsageRoute');
 
 
 require('./models/Database');
@@ -31,6 +32,7 @@ app.use('/api/payment', PaymentRouter);
 // server.js / app.js
 app.use('/download', downloadRouter);
 app.use('/', shareRouter);
+app.use('/api/usage', usageRoutes);
  
 
 app.use(bodyParser.json()); 

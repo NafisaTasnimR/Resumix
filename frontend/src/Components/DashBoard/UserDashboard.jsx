@@ -12,11 +12,11 @@ const API_BASE = (import.meta.env && import.meta.env.VITE_API_BASE) || "http://l
 
 const Dashboard = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+  /*const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [resumeName, setResumeName] = useState('Nishat_Tasnim_Resume');
-  const [downloadLink, setDownloadLink] = useState('https://myresume.com/resume12345.pdf');
+  const [downloadLink, setDownloadLink] = useState('https://myresume.com/resume12345.pdf');*/
   const [user, setUser] = useState(null);
-  
+
   // Subscription and usage tracking
   const [subscriptionStatus, setSubscriptionStatus] = useState('free');
   const [usageData, setUsageData] = useState(() => {
@@ -54,6 +54,12 @@ const Dashboard = () => {
   const [resumeError, setResumeError] = useState(null);
   const [localScores, setLocalScores] = useState({});
   const navigate = useNavigate();
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+  const [resumeName, setResumeName] = useState('resume');
+  const [downloadLink, setDownloadLink] = useState(''); // for preview or copy
+  const [resumeBlob, setResumeBlob] = useState(null);
+  const [isPreparingDownload, setIsPreparingDownload] = useState(false);
+
 
   const fileSafe = (s) =>
     (s || 'resume')
@@ -75,7 +81,7 @@ const Dashboard = () => {
   const fetchSubscriptionStatus = async () => {
     try {
       const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
-      
+
       if (!token) {
         setSubscriptionStatus('free');
         setLoadingSubscription(false);
@@ -89,15 +95,15 @@ const Dashboard = () => {
           'Content-Type': 'application/json'
         }
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         const isPaid = data.hasActiveSubscription;
         const previousStatus = subscriptionStatus;
         setSubscriptionStatus(isPaid ? 'paid' : 'free');
-        
+
         console.log('Dashboard: Subscription check - Previous:', previousStatus, 'Current:', isPaid ? 'paid' : 'free');
-        
+
         // Only reset usage if user ACTUALLY just upgraded (was free, now paid)
         // Not just because we're loading the page for the first time
         if (isPaid && previousStatus === 'free' && previousStatus !== null) {
@@ -222,44 +228,62 @@ const Dashboard = () => {
   const fmt = (d) => (d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : '—');
 
   const handleDownloadClick = async (resume) => {
-    // Check limits for free users
+    // If a modal is already open or a prepare is in-flight, ignore extra clicks
+    if (isDownloadModalOpen || isPreparingDownload) return;
+
+    // Free plan limit check BEFORE any network call
     if (subscriptionStatus === 'free' && usageData.downloadsUsed >= usageData.downloadLimit) {
       alert(`You've reached your download limit (${usageData.downloadLimit}). Upgrade to Pro for unlimited downloads!`);
       navigate('/subscription');
       return;
     }
+
     try {
+      setIsPreparingDownload(true);
       const token = localStorage.getItem('token') || '';
       const res = await axios.get(`${API_BASE}/download/resume/${resume._id}/pdf`, {
         responseType: 'blob',
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
-      const blobUrl = URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
-      setResumeName(resume.title || 'resume');
-      setDownloadLink(blobUrl);
-      setIsDownloadModalOpen(true);   // <-- show modal now
+      const blob = new Blob([res.data], { type: 'application/pdf' });
+      const blobUrl = URL.createObjectURL(blob);
 
-      const url = URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${(resume.title || 'resume')}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-      
-      // Update usage count for free users
-      if (subscriptionStatus === 'free') {
-        setUsageData(prev => ({
-          ...prev,
-          downloadsUsed: prev.downloadsUsed + 1
-        }));
-      }
+      setResumeName(resume.title || 'resume');
+      setResumeBlob(blob);          // stash for confirm time
+      setDownloadLink(blobUrl);     // optional: show preview or copy link in modal
+      setIsDownloadModalOpen(true); // open modal; DO NOT download yet
     } catch (e) {
-      alert('Could not download PDF');
+      console.error(e);
+      alert('Could not prepare PDF for download');
+    } finally {
+      setIsPreparingDownload(false);
     }
   };
+
+  // Add this new function to handle the actual download from the modal
+  const handleConfirmDownload = () => {
+    if (!resumeBlob) return;
+
+    const url = URL.createObjectURL(resumeBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${(resumeName || 'resume')}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+
+    // Increment usage after a successful download (free tier only)
+    if (subscriptionStatus === 'free') {
+      setUsageData(prev => ({ ...prev, downloadsUsed: prev.downloadsUsed + 1 }));
+    }
+
+    // Clean up and close
+    setResumeBlob(null);
+    handleCloseModal();
+  };
+
 
   const handleCloseModal = () => {
     setIsShareModalOpen(false);
@@ -290,8 +314,8 @@ const Dashboard = () => {
 
     navigate('/m/atschecker', { state: { resumeId: resume._id } });
   };
-  
-   const hasAnyPersonalInfo = (pi = {}) => {
+
+  const hasAnyPersonalInfo = (pi = {}) => {
     const keys = [
       'fullName',
       'professionalEmail',
@@ -326,7 +350,7 @@ const Dashboard = () => {
       const hasExp = Array.isArray(rd.experience) && rd.experience.length > 0;
 
       if (hasPI || hasEdu || hasExp) {
-        navigate('/templates');   
+        navigate('/templates');
       } else {
         navigate('/profile');
       }
@@ -339,7 +363,7 @@ const Dashboard = () => {
   return (
     <div className="resume-fullpage">
       <TopBar />
-      
+
       {/* Usage Status Bar for Free Users */}
       {!loadingSubscription && subscriptionStatus === 'free' && (
         <div style={{
@@ -367,7 +391,7 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <button 
+          <button
             onClick={() => navigate('/subscription')}
             style={{
               background: '#6c7a3a',
@@ -387,7 +411,7 @@ const Dashboard = () => {
 
       <div className="resume-header" style={{ marginTop: subscriptionStatus === 'free' ? '20px' : '80px' }}>
         <h2>My Resumes</h2>
-         <div className="header-actions">
+        <div className="header-actions">
           {/* CHANGED: conditional navigation instead of plain Link */}
           <button type="button" className="create-btn" onClick={handleCreateNewResumeClick}>
             Create New Resume
@@ -441,9 +465,9 @@ const Dashboard = () => {
               <span className="strength-badge">
                 {Number.isFinite(Number(r?.strength)) ? Number(r.strength) : '—'}
               </span>
-              
+
               <span className="actions">
-                <button 
+                <button
                   onClick={() => handleDownloadClick(r)}
                   disabled={!canDownload}
                   style={{
@@ -455,10 +479,10 @@ const Dashboard = () => {
                 >
                   {subscriptionStatus === 'paid' ? 'Download ' : `Download (${usageData.downloadLimit - usageData.downloadsUsed} left)`}
                 </button>
-                
+
                 <button onClick={() => handleShareClick(r)}>Link</button>
-                
-                <button 
+
+                <button
                   onClick={() => handleATSCheck(r)}
                   disabled={!canUseATS}
                   style={{
@@ -641,10 +665,12 @@ const Dashboard = () => {
       <DownloadResumeModal
         isOpen={isDownloadModalOpen}
         onClose={handleCloseModal}
+        onConfirmDownload={handleConfirmDownload}
         resumeName={resumeName}
         downloadLink={downloadLink}
-        downloadFileName={`${fileSafe(resumeName)}.pdf`}   // filename from title
+        downloadFileName={`${fileSafe(resumeName)}.pdf`}
       />
+
     </div>
   );
 };
