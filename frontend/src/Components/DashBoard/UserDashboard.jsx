@@ -262,8 +262,8 @@ const Dashboard = () => {
 
   const fmt = (d) => (d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : '—');
 
+  // CLICK on "Download" -> prefetch only, open modal (NO download here)
   const handleDownloadClick = async (resume) => {
-    // If a modal is already open or a prepare is in-flight, ignore extra clicks
     if (isDownloadModalOpen || isPreparingDownload) return;
 
     // Free plan limit check BEFORE any network call
@@ -285,26 +285,12 @@ const Dashboard = () => {
       const blobUrl = URL.createObjectURL(blob);
 
       setResumeName(resume.title || 'resume');
-      setResumeBlob(blob);          // stash for confirm time
-      setDownloadLink(blobUrl);     // optional: show preview or copy link in modal
-      setIsDownloadModalOpen(true); // open modal; DO NOT download yet
+      setResumeBlob(blob);          // stash Blob for confirm
+      setDownloadLink(blobUrl);     // (optional) preview/copy in modal
+      setIsDownloadModalOpen(true); // <-- open modal ONLY
 
-      const url = URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${(resume.title || 'resume')}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-
-      // Update usage count for free users
-      if (subscriptionStatus === 'free') {
-        setUsageData(prev => ({
-          ...prev,
-          downloadsUsed: prev.downloadsUsed + 1
-        }));
-      }
+      // ❌ DO NOT download here
+      // ❌ DO NOT increment usage here
     } catch (e) {
       console.error(e);
       alert('Could not prepare PDF for download');
@@ -313,7 +299,7 @@ const Dashboard = () => {
     }
   };
 
-  // Add this new function to handle the actual download from the modal
+  // CONFIRM in modal -> actually download ONCE and increment usage
   const handleConfirmDownload = () => {
     if (!resumeBlob) return;
 
@@ -326,15 +312,18 @@ const Dashboard = () => {
     a.remove();
     URL.revokeObjectURL(url);
 
-    // Increment usage after a successful download (free tier only)
+    // Increment usage AFTER successful download (free only)
     if (subscriptionStatus === 'free') {
-      setUsageData(prev => ({ ...prev, downloadsUsed: prev.downloadsUsed + 1 }));
+      setUsageData(prev => ({ ...prev, downloadsUsed: (prev.downloadsUsed || 0) + 1 }));
     }
 
-    // Clean up and close
+    // Clean up and close modal (also revoke preview link if set)
+    if (downloadLink) URL.revokeObjectURL(downloadLink);
+    setDownloadLink('');
     setResumeBlob(null);
     handleCloseModal();
   };
+
 
 
   const handleCloseModal = () => {
@@ -625,11 +614,12 @@ const Dashboard = () => {
                   <div className="info-line">School Name: {edu.institution}</div>
                   <div className="info-line">Degree: {edu.degree}</div>
                   <div className="info-line">Field of Study: {edu.fieldOfStudy}</div>
-                  <div className="info-line">Graduation: {edu.graduationDate}</div>
+                  <div className="info-line">Graduation: {new Date(edu.graduationDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
+
                   <div className="info-line">City: {edu.city}</div>
                   <div className="info-line">State: {edu.state}</div>
-                  <div className="info-line">Start Date: {edu.startDate}</div>
-                  <div className="info-line">End Date: {edu.endDate}</div>
+                  <div className="info-line">Start Date: {new Date(edu.startDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
+                  <div className="info-line">End Date: {new Date(edu.endDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
                 </div>
               ))}
             </div>
@@ -643,8 +633,8 @@ const Dashboard = () => {
                   <div className="info-line">Job Title: {exp.jobTitle}</div>
                   <div className="info-line">City: {exp.city}</div>
                   <div className="info-line">State: {exp.state}</div>
-                  <div className="info-line">Start Date: {exp.startDate}</div>
-                  <div className="info-line">End Date: {exp.endDate}</div>
+                  <div className="info-line">Start Date: {new Date(exp.startDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
+                  <div className="info-line">End Date: {new Date(exp.endDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
                   <div className="info-line">Job Description: {exp.description}</div>
                 </div>
               ))}
@@ -671,7 +661,7 @@ const Dashboard = () => {
                 <div key={index} className="info-subbox">
                   <div className="info-line">Title: {ach.title}</div>
                   <div className="info-line">Organization: {ach.organization}</div>
-                  <div className="info-line">Date Received: {ach.dateReceived}</div>
+                  <div className="info-line">Date Received: {new Date(ach.dateReceived).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
                   <div className="info-line">Category: {ach.category}</div>
                   <div className="info-line">Description: {ach.description}</div>
                   <div className="info-line">Link: {ach.website}</div>

@@ -2,6 +2,7 @@
 const puppeteer = require('puppeteer');
 const Resume = require('../models/Resume');
 const { prepareTemplateHtml } = require('../services/TemplateRenderService');
+const { formatDatesDeep } = require('../middlewares/FormatDateMiddleware');
 
 // (Optional) reuse a single browser for performance
 let browserPromise;
@@ -29,10 +30,11 @@ const downloadResumePdf = async (req, res) => {
     const templateId = resume.templateId || resume.templateSlug;
     if (!templateId) return res.status(400).send('Template id/slug missing on resume');
 
+    const dataForTemplate = formatDatesDeep(resume.ResumeData || {});
     const { finalHtml } = await prepareTemplateHtml(
       templateId,
-      resume.ResumeData || {},
-      templateId // used to make the scope class unique per template
+      dataForTemplate,
+      templateId
     );
 
     // 4) Render to PDF with Puppeteer
@@ -57,7 +59,7 @@ const downloadResumePdf = async (req, res) => {
     return res.status(500).send('Failed to generate PDF');
   } finally {
     if (page) {
-      try { await page.close(); } catch {}
+      try { await page.close(); } catch { }
     }
   }
 };
