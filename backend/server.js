@@ -12,6 +12,8 @@ const downloadRouter = require('./routes/DownloadRouter');
 const shareRouter = require('./routes/ShareLinkRoute'); 
 const PaymentRouter = require('./routes/PaymentRouter'); 
 const { initializeSubscriptionCron } = require('./services/subscriptionCron');
+const { formatDateMiddleware } = require('./middlewares/FormatDateMiddleware');
+app.use(formatDateMiddleware); // Apply the date formatting middleware
 
 
 require('./models/Database');
