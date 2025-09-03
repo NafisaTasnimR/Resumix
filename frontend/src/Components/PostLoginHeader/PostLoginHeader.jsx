@@ -187,9 +187,9 @@ const PostLoginHeader = () => {
   .hero-floating img { display: block; width: 100%; height: auto; border-radius: 10px; }
 
   /* reduced individual card widths */
-  .hero-floating .tpl-1 { top: 8%; left: -4%;    width: 59%; } 
-  .hero-floating .tpl-2 { top: 25%; left: 40%;  width: 63%; animation-duration: 4s; animation-delay: -0.6s; } 
-  .hero-floating .tpl-3 { top: 45%; left: 8%;  width: 59%; animation-duration: 4s; animation-delay: -1s; }  
+  .hero-floating .tpl-1 { top: 14%; left: -4%;    width: 59%; } 
+  .hero-floating .tpl-2 { top: 26%; left: 40%;  width: 63%; animation-duration: 4s; animation-delay: -0.6s; } 
+  .hero-floating .tpl-3 { top: 46%; left: 8%;  width: 59%; animation-duration: 4s; animation-delay: -1s; }  
 
   /* keep the slight rotations */
   .hero-floating .tpl-1 .card { transform: rotate(-12deg); }

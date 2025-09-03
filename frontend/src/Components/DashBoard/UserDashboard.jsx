@@ -506,7 +506,7 @@ const Dashboard = () => {
           return (
             <div className="resume-table-row" key={r._id}>
               <span className="resume-serial">{index + 1}</span>
-              
+
               <button
                 className="resume-name-link"
                 onClick={() => navigate(`/resumeview/${r._id}`)}
@@ -521,9 +521,9 @@ const Dashboard = () => {
               <span className="strength-badge">
                 {Number.isFinite(Number(r?.strength)) ? Number(r.strength) : '—'}
               </span>
-              
+
               <span className="actions25" style={{ textAlign: 'center' }}>
-                <button 
+                <button
                   className="action-btn25 download-btn25"
 
                   onClick={() => handleDownloadClick(r)}
@@ -544,11 +544,11 @@ const Dashboard = () => {
                     backgroundColor: canShare ? '' : '#e9ecef'
                   }}
                   title={canShare ? 'URL' : 'Link sharing is a Pro feature'}
-                  <img src="share-icon.png" alt="Share" className="icon25" />
                 >
-                  Link
-                </button>  
-                <button 
+                  <img src="share-icon.png" alt="Share" className="icon25" />
+                </button>
+
+                <button
                   className="action-btn25 ats-btn25"
                   onClick={() => handleATSCheck(r)}
                   disabled={!canUseATS}
@@ -558,9 +558,9 @@ const Dashboard = () => {
                   {subscriptionStatus === 'paid' ? '' : ` (${usageData.atsLimit - usageData.atsChecksUsed})`}
                 </button>
 
-                <button 
+                <button
                   className="action-btn25 delete-btn25"
-                  onClick={() => handleRemoveClick(r)} 
+                  onClick={() => handleRemoveClick(r)}
                   disabled={deletingId === r._id}
                   title="Delete"
                 >
