@@ -191,7 +191,7 @@ const PaymentForm = () => {
         <div className="terms-section">
           <p>
             By clicking "Get My Subscription" below you agree to be charged <strong>$1.70</strong> 
-            (which includes unlimited edits, downloads, and emails). You also agree to our Terms of 
+            (which includes unlimited edits, downloads). You also agree to our Terms of 
             Use and Privacy Policy.
           </p>
         </div>

@@ -265,8 +265,8 @@ const PostLoginHeader = () => {
           <div className="step-card">
             <img src="/download1.png" alt="Download" />
             <div className="step-label">STEP 4</div>
-            <h3>Share as PDF or Web</h3>
-            <p>Download your polished resume in the preferred file format.</p>
+            <h3>Share as PDF or URL</h3>
+            <p>Download your polished resume in PDF format.</p>
           </div>
         </div>
       </section>

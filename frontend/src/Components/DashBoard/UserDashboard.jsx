@@ -475,7 +475,7 @@ const Dashboard = () => {
       <div className="resume-table">
         <div className="resume-table-header">
           <span>NO.</span>
-          <span>MY RESUMES</span>
+          <span>RESUME TITLE</span>
           <span>MODIFICATION</span>
           <span>CREATION</span>
           <span>STRENGTH</span>
