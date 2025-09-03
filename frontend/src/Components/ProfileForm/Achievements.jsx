@@ -1,5 +1,20 @@
 import React from 'react';
 
+// ADD VALIDATION FUNCTION AT THE TOP
+const validateDate = (date, type) => {
+  if (!date) return date; // Allow empty dates
+  
+  const selectedDate = new Date(date);
+  const today = new Date();
+  
+  if (type === 'achievementDate' && selectedDate > today) {
+    alert("Achievement date cannot be in the future!");
+    return '';
+  }
+  
+  return date;
+};
+
 const Achievements = ({
   achievements,
   currentAchievementIndex,
@@ -17,6 +32,11 @@ const Achievements = ({
     website: ''
   };
 
+  // UPDATED HANDLER WITH VALIDATION
+  const handleDateReceivedChange = (e) => {
+    const validatedValue = validateDate(e.target.value, 'achievementDate');
+    updateAchievement('dateReceived', validatedValue);
+  };
 
   return (
     <>
@@ -48,20 +68,17 @@ const Achievements = ({
             type="text" 
             className="input-field" 
             value={currentAchievement.title}
-
             onChange={(e) => updateAchievement('title', e.target.value)}
             placeholder="Forbes 30 Under 30"
           />
         </div>
 
         <div className="field-group">
-
           <label className="required">Organization/Institution:</label>
           <input 
             type="text" 
             className="input-field" 
             value={currentAchievement.organization}
-
             onChange={(e) => updateAchievement('organization', e.target.value)}
             placeholder="Forbes Magazine"
           />
@@ -74,7 +91,7 @@ const Achievements = ({
               type="date"
               className="input-field"
               value={currentAchievement?.dateReceived ?? ''}
-              onChange={(e) => updateAchievement('dateReceived', e.target.value)}
+              onChange={handleDateReceivedChange}
             />
           </div>
           <div className="field-group half-width">

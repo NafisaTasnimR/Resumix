@@ -68,7 +68,7 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
       .finally(() => setLoading(false));
   }, [resolvedId, resume, propResumeData]);
 
-  // Compute score + suggestions
+  // Compute score + suggestions and persist strength
   useEffect(() => {
     const data = propResumeData ?? resume?.ResumeData ?? resume ?? null;
     if (!data || !resolvedId) return;
@@ -77,10 +77,12 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
     setScoreData({ overall: score });
 
     const { items, totalPotentialGain } = generateSuggestions(data);
-    setSuggItems(items || []);
+    // Only improvements are returned by our ATSLogic; sort again just in case
+    const sorted = (items || []).slice().sort((a, b) => (b.potentialGain || 0) - (a.potentialGain || 0));
+    setSuggItems(sorted);
     setSuggTotalGain(totalPotentialGain || 0);
 
-    // persist strength
+    // Persist strength (score) to backend if changed
     const token = localStorage.getItem('token') || '';
     if (Number(resume?.strength) === Number(score)) return;
     axios.patch(
@@ -116,6 +118,7 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
       </div>
     );
   }
+
   if (loading) {
     return (
       <div className="resume-checker loading-screen">
@@ -124,6 +127,7 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
       </div>
     );
   }
+
   if (loadError) {
     return (
       <div className="resume-checker">
@@ -138,6 +142,7 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
       </div>
     );
   }
+
   if (!scoreData) {
     return (
       <div className="resume-checker loading-screen">
@@ -147,7 +152,8 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
     );
   }
 
-  
+  const improvements = suggItems; 
+
   return (
     <div className="resume-checker">
       <TopBar />
@@ -163,28 +169,47 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
             <ScoreRing value={scoreData.overall} />
           </div>
 
-         
+          <div className="improve-header" style={{ marginBottom: 10 }}>
+            <p style={{ opacity: 0.8 }}>
+              Top ways to increase your ATS score
+              {Number.isFinite(suggTotalGain) && suggTotalGain > 0 && (
+                <> (estimated max gain: +{suggTotalGain})</>
+              )}
+            </p>
+          </div>
+
+          {/* Suggestions: only improvements (no green checks) */}
           <ul className="analysis-list">
-            {suggItems.map((it, i) => {
-              const passed = !!it.passed;
-              return (
-                <li key={i} className={`analysis-item ${passed ? 'ok' : 'warn'}`}>
-                  <div className="analysis-icon">{passed ? '✓' : '✗'}</div>
+            {improvements.length === 0 ? (
+              <li className="analysis-item ok">
+                <div className="analysis-icon">✓</div>
+                <div className="analysis-text">
+                  <div className="analysis-title">Looks solid</div>
+                  <div className="analysis-desc">No critical improvements detected.</div>
+                </div>
+              </li>
+            ) : (
+              improvements.map((it, i) => (
+                <li key={i} className="analysis-item warn">
+                  <div className="analysis-icon">✗</div>
                   <div className="analysis-text">
-                    <div className="analysis-title">{it.title}</div>
+                    <div className="analysis-title">
+                      {it.title}{' '}
+                      {Number.isFinite(it.potentialGain) && (
+                        <span style={{ opacity: 0.7, fontWeight: 400 }}>(est. +{it.potentialGain})</span>
+                      )}
+                    </div>
                     <div className="analysis-desc">{it.message}</div>
                   </div>
                 </li>
-              );
-            })}
+              ))
+            )}
           </ul>
-
         </div>
       </div>
 
       {/* Buttons at bottom */}
       <div className="score-actions">
-    
         <button className="delete-data-btn" onClick={backToDashboard}>
           Back to Dashboard
         </button>

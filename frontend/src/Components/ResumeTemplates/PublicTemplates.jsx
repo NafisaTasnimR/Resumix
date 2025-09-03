@@ -119,13 +119,13 @@ const PublicTemplates = () => {
           isPremium:
             template.isPremium ||
             index === 2 ||
-            index === 5 ||
+            index === 6 ||
             (template.filename &&
               (template.filename.includes("Resume3") ||
-                template.filename.includes("Resume6"))) ||
+                template.filename.includes("Resume7"))) ||
             (template.name &&
               (template.name.includes("Resume3") ||
-                template.name.includes("Resume6"))),
+                template.name.includes("Resume7"))),
         }));
 
         setTemplatesData(withClicks);
@@ -173,9 +173,10 @@ const PublicTemplates = () => {
       case "popular":
         filtered = filtered.filter((t) => (t.clickCount || 0) > 0);
         return sortByPopularity(filtered);
-      case "new":
-        filtered = filtered.filter((t) => isNewTemplate(t));
-        return sortByDate(filtered);
+      case 'new':
+        
+        const sortedByDate = sortByDate(filtered);
+        return sortedByDate.slice(0, 3);
       case "all":
       default:
         return sortByPopularity(filtered);

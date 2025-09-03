@@ -1,5 +1,50 @@
 import React from 'react';
 
+// VALIDATION FUNCTION WITH FULL LOGIC
+const validateDate = (date, type, relatedDate = null) => {
+  if (!date) return date; // Allow empty dates
+  
+  const selectedDate = new Date(date);
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  
+  switch (type) {
+    case 'startDate':
+      if (selectedDate > today) {
+        alert("Start date cannot be in the future!");
+        return '';
+      }
+      // Check if start date is after existing end date
+      if (relatedDate && selectedDate > new Date(relatedDate)) {
+        alert("Start date cannot be after end date!");
+        return '';
+      }
+      break;
+      
+    case 'endDate':
+      if (relatedDate && selectedDate < new Date(relatedDate)) {
+        alert("End date cannot be before start date!");
+        return relatedDate;
+      }
+      const maxEndDate = new Date(currentYear + 5, 11, 31);
+      if (selectedDate > maxEndDate) {
+        alert("End date seems too far in the future!");
+        return '';
+      }
+      break;
+      
+    case 'graduationDate':
+      const maxGradDate = new Date(currentYear + 6, 11, 31);
+      if (selectedDate > maxGradDate) {
+        alert("Graduation date seems too far in the future!");
+        return '';
+      }
+      break;
+  }
+  
+  return date;
+};
+
 const Education = ({ 
   educations, 
   currentEducationIndex, 
@@ -9,6 +54,22 @@ const Education = ({
   removeEducation 
 }) => {
   const currentEdu = educations[currentEducationIndex];
+
+  // UPDATED HANDLERS WITH VALIDATION
+  const handleStartDateChange = (e) => {
+    const validatedValue = validateDate(e.target.value, 'startDate', currentEdu.endDate);
+    updateEducation('startDate', validatedValue);
+  };
+
+  const handleEndDateChange = (e) => {
+    const validatedValue = validateDate(e.target.value, 'endDate', currentEdu.startDate);
+    updateEducation('endDate', validatedValue);
+  };
+
+  const handleGraduationDateChange = (e) => {
+    const validatedValue = validateDate(e.target.value, 'graduationDate');
+    updateEducation('graduationDate', validatedValue);
+  };
 
   return (
     <>
@@ -73,7 +134,7 @@ const Education = ({
             type="date" 
             className="input-field" 
             value={currentEdu.graduationDate}
-            onChange={(e) => updateEducation('graduationDate', e.target.value)}
+            onChange={handleGraduationDateChange}
           />
         </div>
 
@@ -107,7 +168,7 @@ const Education = ({
               type="date" 
               className="input-field" 
               value={currentEdu.startDate}
-              onChange={(e) => updateEducation('startDate', e.target.value)}
+              onChange={handleStartDateChange}
             />
           </div>
           <div className="field-group half-width">
@@ -116,7 +177,7 @@ const Education = ({
               type="date" 
               className={`input-field ${currentEdu.isCurrentInstitution ? 'disabled-field' : ''}`}
               value={currentEdu.endDate}
-              onChange={(e) => updateEducation('endDate', e.target.value)}
+              onChange={handleEndDateChange}
               disabled={currentEdu.isCurrentInstitution}
             />
           </div>

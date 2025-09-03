@@ -1,3 +1,83 @@
+/* New classes with 25 suffix to avoid conflicts */
+.actions25 {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.action-btn25 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  background-color: #f5f5f5;
+}
+
+.action-btn25:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.action-btn25:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.action-btn25:disabled:hover {
+  box-shadow: none;
+  transform: none;
+}
+
+.icon25 {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.download-btn25 {
+  color: #4d5636;
+  font-size: 12px;
+  width: auto;
+  padding: 0 8px;
+  gap: 4px;
+}
+
+.download-btn25:hover {
+  background-color: #e8efe8;
+}
+
+.share-btn25:hover {
+  background-color: #e8f0f8;
+}
+
+.ats-btn25 {
+  color: #8b5a2b;
+  font-size: 12px;
+  width: auto;
+  padding: 0 8px;
+  gap: 4px;
+}
+
+.ats-btn25:hover {
+  background-color: #f8f0e8;
+}
+
+/* Update the resume table to accommodate the new action buttons */
+.resume-table-header {
+  grid-template-columns: 60px 1fr 120px 120px 100px 200px;
+}
+
+.resume-table-row {
+  grid-template-columns: 60px 1fr 120px 120px 100px 200px;
+}
+
 .dashboard-content {
   display: flex;
   margin-top: 40px;
@@ -191,4 +271,29 @@
   background-color: #e8e8e8;
 }
 
+
+
 .resume-serial { font-weight: 500; font-size: 15px; color: #6b7a4d; margin-right: 10px; }
+.resume-table-header {
+  grid-template-columns: 80px 1fr 120px 120px 100px 300px; /* Add 60px for NO. column */
+}
+
+.resume-table-row {
+  grid-template-columns: 60px 1fr 120px 120px 100px 300px; /* Match the header */
+}
+
+.resume-serial {
+  font-weight: 600;
+  font-size: 16px;
+  color: #6b7a4d;
+  
+}
+
+
+.info-subbox {
+  margin-bottom: 15px;    /* space between entries */
+  padding: 10px;
+  background: #f8f8f6;    /* optional, light background */
+  border-radius: 6px;     /* optional, rounded corners */
+}
+
