@@ -13,9 +13,9 @@ const API_BASE = (import.meta.env && import.meta.env.VITE_API_BASE) || "http://l
 const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);          // delete confirm
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+  /*const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [resumeName, setResumeName] = useState('Nishat_Tasnim_Resume');
-  const [downloadLink, setDownloadLink] = useState('https://myresume.com/resume12345.pdf');
+  const [downloadLink, setDownloadLink] = useState('https://myresume.com/resume12345.pdf');*/
   const [user, setUser] = useState(null);
 
   // Subscription and usage tracking
@@ -60,6 +60,12 @@ const Dashboard = () => {
   const [resumeError, setResumeError] = useState(null);
   const [localScores, setLocalScores] = useState({});
   const navigate = useNavigate();
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+  const [resumeName, setResumeName] = useState('resume');
+  const [downloadLink, setDownloadLink] = useState(''); // for preview or copy
+  const [resumeBlob, setResumeBlob] = useState(null);
+  const [isPreparingDownload, setIsPreparingDownload] = useState(false);
+
 
   const fileSafe = (s) =>
     (s || 'resume')
@@ -206,6 +212,11 @@ const Dashboard = () => {
 
   // ADD: share handler (does token inline, no helper files)
   const handleShareClick = async (resume) => {
+    if (subscriptionStatus === 'free') {
+      alert('Link sharing is a Pro feature. Please upgrade to use public links.');
+      navigate('/subscription');
+      return;
+    }
     setResumeName(resume.title || "Untitled Resume");
     setShareError("");
     setShareLink("");
@@ -252,23 +263,31 @@ const Dashboard = () => {
   const fmt = (d) => (d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : '—');
 
   const handleDownloadClick = async (resume) => {
-    // Check limits for free users
+    // If a modal is already open or a prepare is in-flight, ignore extra clicks
+    if (isDownloadModalOpen || isPreparingDownload) return;
+
+    // Free plan limit check BEFORE any network call
     if (subscriptionStatus === 'free' && usageData.downloadsUsed >= usageData.downloadLimit) {
       alert(`You've reached your download limit (${usageData.downloadLimit}). Upgrade to Pro for unlimited downloads!`);
       navigate('/subscription');
       return;
     }
+
     try {
+      setIsPreparingDownload(true);
       const token = localStorage.getItem('token') || '';
       const res = await axios.get(`${API_BASE}/download/resume/${resume._id}/pdf`, {
         responseType: 'blob',
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
-      const blobUrl = URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
+      const blob = new Blob([res.data], { type: 'application/pdf' });
+      const blobUrl = URL.createObjectURL(blob);
+
       setResumeName(resume.title || 'resume');
-      setDownloadLink(blobUrl);
-      setIsDownloadModalOpen(true);   // <-- show modal now
+      setResumeBlob(blob);          // stash for confirm time
+      setDownloadLink(blobUrl);     // optional: show preview or copy link in modal
+      setIsDownloadModalOpen(true); // open modal; DO NOT download yet
 
       const url = URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
       const a = document.createElement('a');
@@ -287,9 +306,36 @@ const Dashboard = () => {
         }));
       }
     } catch (e) {
-      alert('Could not download PDF');
+      console.error(e);
+      alert('Could not prepare PDF for download');
+    } finally {
+      setIsPreparingDownload(false);
     }
   };
+
+  // Add this new function to handle the actual download from the modal
+  const handleConfirmDownload = () => {
+    if (!resumeBlob) return;
+
+    const url = URL.createObjectURL(resumeBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${(resumeName || 'resume')}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+
+    // Increment usage after a successful download (free tier only)
+    if (subscriptionStatus === 'free') {
+      setUsageData(prev => ({ ...prev, downloadsUsed: prev.downloadsUsed + 1 }));
+    }
+
+    // Clean up and close
+    setResumeBlob(null);
+    handleCloseModal();
+  };
+
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -456,7 +502,7 @@ const Dashboard = () => {
         {!loadingResumes && !resumeError && resumes.map((r, index) => {
           const canDownload = subscriptionStatus === 'paid' || usageData.downloadsUsed < usageData.downloadLimit;
           const canUseATS = subscriptionStatus === 'paid' || usageData.atsChecksUsed < usageData.atsLimit;
-
+          const canShare = subscriptionStatus === 'paid';
           return (
             <div className="resume-table-row" key={r._id}>
               <span className="resume-serial">{index + 1}</span>
@@ -475,7 +521,6 @@ const Dashboard = () => {
               <span className="strength-badge">
                 {Number.isFinite(Number(r?.strength)) ? Number(r.strength) : '—'}
               </span>
-
               
               <span className="actions25" style={{ textAlign: 'center' }}>
                 <button 
@@ -489,18 +534,22 @@ const Dashboard = () => {
                   {subscriptionStatus === 'paid' ? '' : ` (${usageData.downloadLimit - usageData.downloadsUsed})`}
                 </button>
 
-                
-                <button 
+                <button
                   className="action-btn25 share-btn25"
-                  onClick={() => handleShareClick(r)}
-                  title="URL"
-                >
+                  onClick={() => canShare ? handleShareClick(r) : navigate('/subscription')}
+                  disabled={!canShare}
+                  style={{
+                    opacity: canShare ? 1 : 0.5,
+                    cursor: canShare ? 'pointer' : 'not-allowed',
+                    backgroundColor: canShare ? '' : '#e9ecef'
+                  }}
+                  title={canShare ? 'URL' : 'Link sharing is a Pro feature'}
                   <img src="share-icon.png" alt="Share" className="icon25" />
-                </button>
-                
+                >
+                  Link
+                </button>  
                 <button 
                   className="action-btn25 ats-btn25"
-
                   onClick={() => handleATSCheck(r)}
                   disabled={!canUseATS}
                   title={!canUseATS ? `Resumix ATS check limit reached (${usageData.atsChecksUsed}/${usageData.atsLimit})` : 'Resumix ATS'}
@@ -693,9 +742,10 @@ const Dashboard = () => {
       <DownloadResumeModal
         isOpen={isDownloadModalOpen}
         onClose={handleCloseModal}
+        onConfirmDownload={handleConfirmDownload}
         resumeName={resumeName}
         downloadLink={downloadLink}
-        downloadFileName={`${fileSafe(resumeName)}.pdf`}   // filename from title
+        downloadFileName={`${fileSafe(resumeName)}.pdf`}
       />
       <DeleteConfirmationModal
         isOpen={isModalOpen}

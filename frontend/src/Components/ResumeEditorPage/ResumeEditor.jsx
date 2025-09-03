@@ -5,6 +5,16 @@ import axios from 'axios';
 import QuestionBox from './QuestionBox';
 import Preview from './Preview';
 import ProgressLine from './ProgressLine';
+// Add near the top of ResumeEditor.jsx (adjust paths/names to your assets)
+import icPersonal     from '../../assets/icons8-account-48.png';
+import icEducation    from '../../assets/icons8-graduation-cap-48.png';
+import icExperience   from '../../assets/icons8-briefcase-48.png';
+import icSkills       from '../../assets/icons8-bulleted-list-48.png';
+import icAchievements from '../../assets/icons8-trophy-48.png';
+import icReferences   from '../../assets/icons8-address-book-48.png';
+import icHobbies      from '../../assets/icons8-joystick-48.png';
+import icAdditional   from '../../assets/icons8-document-48.png';
+
 
 /* ---------------------------------------------
    Field indexes (maps backend fields → question order)
@@ -20,24 +30,24 @@ const FIELD_INDEX = {
   additional: { content: 0, sectionTitle: 0 }
 };
 /* Questions per section*/
-const personalQuestions = ["Full Name?", "Professional Email?", "Date of Birth?", "Phone?", "Address?", "City?", "District?", "Country?", "Zip Code?"];
-const educationQuestions = ["Your Degree?", "Your Field of Study?", "Your Institution?", "Start Date of Education?", "End Date of Education?", "Current Status of Education?"];
-const experienceQuestions = ["Job Title?", "Employer Name?", "Job Location?", "Start Date of Job?", "End Date of Job?", "Is this your current job?", "Your Responsibilities?"];
+const personalQuestions = ["Full Name?", "Professional Email?", "Date of Birth? (yyyy-mm-dd)", "Phone?", "Address?", "City?", "District?", "Country?", "Zip Code?"];
+const educationQuestions = ["Your Degree?", "Your Field of Study?", "Your Institution?", "Start Date of Education? (yyyy-mm-dd)", "End Date of Education? (yyyy-mm-dd)", "Current Status of Education?"];
+const experienceQuestions = ["Job Title?", "Employer Name?", "Job Location?", "Start Date of Job? (yyyy-mm-dd)", "End Date of Job? (yyyy-mm-dd)", "Is this your current job?", "Your Responsibilities?"];
 const skillQuestions = ["Skill Name?", "Skill Proficiency?", "Years of Experience?", "Skills Description?"];
-const achievementQuestions = ["Achievement Title?", "Organization (optional)?", "Date Received?", "Category (e.g., Award, Certification)?", "Description?", "Website (optional)?"];
+const achievementQuestions = ["Achievement Title?", "Organization (optional)?", "Date Received? (yyyy-mm-dd)", "Category (e.g., Award, Certification)?", "Description?", "Website (optional)?"];
 const referenceQuestions = ["Referee Name?", "Referee Designation?", "Referee Organization?", "Referee Email?", "Referee Phone?"];
 const hobbyQuestions = ["Your Hobbies?"];
 const additionalInfoQuestions = ["Additional Information?"];
 
 const SECTION_LIST = [
-  { key: "personal", label: "Personal", repeatable: false, qs: personalQuestions },
-  { key: "education", label: "Education", repeatable: true, qs: educationQuestions },
-  { key: "experience", label: "Experience", repeatable: true, qs: experienceQuestions },
-  { key: "skills", label: "Skills", repeatable: true, qs: skillQuestions },
-  { key: "achievements", label: "Achievements", repeatable: true, qs: achievementQuestions },
-  { key: "references", label: "References", repeatable: true, qs: referenceQuestions },
-  { key: "hobbies", label: "Hobbies", repeatable: true, qs: hobbyQuestions },
-  { key: "additional", label: "Additional", repeatable: true, qs: additionalInfoQuestions },
+  { key: "personal",    label: "Personal",    repeatable: false, icon: icPersonal,     qs: personalQuestions },
+  { key: "education",   label: "Education",   repeatable: true,  icon: icEducation,    qs: educationQuestions },
+  { key: "experience",  label: "Experience",  repeatable: true,  icon: icExperience,   qs: experienceQuestions },
+  { key: "skills",      label: "Skills",      repeatable: true,  icon: icSkills,       qs: skillQuestions },
+  { key: "achievements",label: "Achievements",repeatable: true,  icon: icAchievements, qs: achievementQuestions },
+  { key: "references",  label: "References",  repeatable: true,  icon: icReferences,   qs: referenceQuestions },
+  { key: "hobbies",     label: "Hobbies",     repeatable: true,  icon: icHobbies,      qs: hobbyQuestions },
+  { key: "additional",  label: "Additional",  repeatable: true,  icon: icAdditional,   qs: additionalInfoQuestions },
 ];
 
 /* ---------------------------------------------
@@ -785,7 +795,7 @@ const ResumeEditor = () => {
           {titleDropdownOpen && (
             <div className="title-edit-dropdown active" id="titleDropdown">
               <input type="text" id="titleInput" defaultValue={title} />
-              <button className="edit-btn1" onClick={saveTitle}>Edit</button>
+              <button className="edit-btn1" onClick={saveTitle}>Confirm</button>
             </div>
           )}
         </div>
