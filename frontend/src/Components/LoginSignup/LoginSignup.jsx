@@ -206,11 +206,7 @@ const LoginSignup = ({ mode }) => {
           </div>
         </div>
 
-        {action === "Sign Up" ? null : (
-          <div className="forgot-password">
-            Forgot Password? <span>Click Here!</span>
-          </div>
-        )}
+        
 
         <div className="divider">
           <hr />

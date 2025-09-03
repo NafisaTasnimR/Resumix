@@ -462,9 +462,12 @@ const SubscriptionPage = () => {
               justifyContent: 'flex-start'
             }}>
               <div style={{
-                fontSize: '3rem',
-                marginBottom: '20px'
-              }}>📝</div>
+                marginBottom: '20px',
+                display: 'flex',
+                justifyContent: 'center'
+              }}>
+                <img src="Edit-Icon.png" alt="Unlimited Edits" style={{ width: '60px', height: '60px' }} />
+              </div>
               <h3 style={{
                 fontSize: '1.3rem',
                 fontWeight: 700,
@@ -491,16 +494,19 @@ const SubscriptionPage = () => {
               justifyContent: 'flex-start'
             }}>
               <div style={{
-                fontSize: '3rem',
-                marginBottom: '20px'
-              }}>📄</div>
+                marginBottom: '20px',
+                display: 'flex',
+                justifyContent: 'center'
+              }}>
+                <img src="template-icon.png" alt="All Templates" style={{ width: '60px', height: '60px' }} />
+              </div>
               <h3 style={{
                 fontSize: '1.3rem',
                 fontWeight: 700,
                 color: '#212529',
                 marginBottom: '16px',
                 lineHeight: 1.3
-              }}>All Templates &  Designs</h3>
+              }}>All Templates & Designs</h3>
               <p style={{
                 color: '#6c757d',
                 lineHeight: 1.6,
@@ -520,9 +526,12 @@ const SubscriptionPage = () => {
               justifyContent: 'flex-start'
             }}>
               <div style={{
-                fontSize: '3rem',
-                marginBottom: '20px'
-              }}>✅</div>
+                marginBottom: '20px',
+                display: 'flex',
+                justifyContent: 'center'
+              }}>
+                <img src="resumix-check-icon.png" alt="Resume Check" style={{ width: '60px', height: '60px' }} />
+              </div>
               <h3 style={{
                 fontSize: '1.3rem',
                 fontWeight: 700,
@@ -534,7 +543,7 @@ const SubscriptionPage = () => {
                 color: '#6c757d',
                 lineHeight: 1.6,
                 fontSize: '15px'
-              }}>Unlimited access to ATS Checker that checks  common issues and improvements</p>
+              }}>Unlimited access to ATS Checker that checks common issues and improvements</p>
             </div>
             
             <div style={{
@@ -549,9 +558,12 @@ const SubscriptionPage = () => {
               justifyContent: 'flex-start'
             }}>
               <div style={{
-                fontSize: '3rem',
-                marginBottom: '20px'
-              }}>🔗</div>
+                marginBottom: '20px',
+                display: 'flex',
+                justifyContent: 'center'
+              }}>
+                <img src="url-icon.png" alt="Personalized URL" style={{ width: '60px', height: '60px' }} />
+              </div>
               <h3 style={{
                 fontSize: '1.3rem',
                 fontWeight: 700,
