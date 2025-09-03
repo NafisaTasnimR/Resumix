@@ -20,20 +20,16 @@ const ResumeTemplates = () => {
       try {
         const res = await axios.get('http://localhost:5000/preview/api/templates');
         
-      
         const storedClicks = JSON.parse(localStorage.getItem('templateClicks') || '{}');
-        
         
         const templatesWithClicks = (res.data || []).map((template, index) => ({
           ...template,
           clickCount: storedClicks[template._id || template.id] || template.clickCount || 0,
-         
-isPremium: template.isPremium || 
-  index === 2 || 
-  index === 6 || 
-  
-  (template.filename && (template.filename.includes('Resume3') || template.filename.includes('Resume7'))) ||
-  (template.name && (template.name.includes('Resume3') || template.name.includes('Resume7')))
+          isPremium: template.isPremium || 
+            index === 2 || 
+            index === 6 || 
+            (template.filename && (template.filename.includes('Resume3') || template.filename.includes('Resume7'))) ||
+            (template.name && (template.name.includes('Resume3') || template.name.includes('Resume7')))
         }));
         
         setTemplatesData(templatesWithClicks);
@@ -48,7 +44,6 @@ isPremium: template.isPremium ||
     fetchTemplates();
   }, []);
 
- 
   useEffect(() => {
     const refreshClickCounts = () => {
       const storedClicks = JSON.parse(localStorage.getItem('templateClicks') || '{}');
@@ -60,12 +55,10 @@ isPremium: template.isPremium ||
       );
     };
 
-    
     const handlePopState = () => {
       setTimeout(refreshClickCounts, 100);
     };
 
-    
     const handleVisibilityChange = () => {
       if (!document.hidden) {
         refreshClickCounts();
@@ -87,22 +80,6 @@ isPremium: template.isPremium ||
     };
   }, []);
 
-  
-  const isNewTemplate = (template) => {
-    if (!template.createdAt && !template.dateAdded) return false;
-    
-    const templateDate = new Date(template.createdAt || template.dateAdded);
-    const now = new Date();
-    const daysAgo = Math.floor((now - templateDate) / (1000 * 60 * 60 * 24));
-    
-   
-    const totalTemplates = templatesData.length;
-    const newThreshold = Math.max(7, Math.ceil(totalTemplates * 0.15)); 
-    
-    return daysAgo <= newThreshold;
-  };
-
-  
   const sortByPopularity = (templates) => {
     return [...templates].sort((a, b) => {
       const aClicks = a.clickCount || 0;
@@ -111,18 +88,18 @@ isPremium: template.isPremium ||
     });
   };
 
- 
-  const sortByDate = (templates) => {
+  const sortByNameDescending = (templates) => {
     return [...templates].sort((a, b) => {
-      const aDate = new Date(a.createdAt || a.dateAdded || 0);
-      const bDate = new Date(b.createdAt || b.dateAdded || 0);
-      return bDate - aDate;
+      // Sort by name/filename in descending order (Template3, Template2, Template1)
+      const aName = a.filename || a.name || '';
+      const bName = b.filename || b.name || '';
+      return bName.localeCompare(aName);
     });
   };
   
   const getFilteredAndSortedTemplates = () => {
     let filtered = templatesData.filter(template => {
-      
+      // Search filter
       const matchesSearch =
         searchTerm === '' ||
         (template.filename && template.filename.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -131,27 +108,39 @@ isPremium: template.isPremium ||
       return matchesSearch;
     });
 
-
-    
     switch (currentFilter) {
       case 'popular':
+        // Sort all templates by popularity first
+        const sortedByPopularity = sortByPopularity(filtered);
         
-        filtered = filtered.filter(template => (template.clickCount || 0) > 0);
-        return sortByPopularity(filtered);
+        // Only show templates that have been clicked AND are in top 60%
+        const clickedTemplates = sortedByPopularity.filter(template => (template.clickCount || 0) > 0);
+        
+        if (clickedTemplates.length === 0) {
+          return []; // No clicked templates yet
+        }
+        
+        // Calculate top 60% (minimum 1 template, maximum available)
+        const topPercentage = Math.max(1, Math.ceil(clickedTemplates.length * 0.6));
+        
+        return clickedTemplates.slice(0, topPercentage);
         
       case 'new':
+        // Sort by name in descending order and take fixed number
+        const sortedByName = sortByNameDescending(filtered);
         
-        const sortedByDate = sortByDate(filtered);
-        return sortedByDate.slice(0, 3);
+        // Take the 4 most recent templates by name (you can change to 3 if preferred)
+        const numberOfNewTemplates = 4;
         
-
+        return sortedByName.slice(0, numberOfNewTemplates);
         
       case 'all':
       default:
-       
+        // Sort by popularity for 'all' view
         return sortByPopularity(filtered);
     }
   };
+
   const filteredTemplates = getFilteredAndSortedTemplates();
   
   const visibleTemplates = searchTerm
@@ -167,9 +156,7 @@ isPremium: template.isPremium ||
     setVisibleCount(prev => prev + 3);
   };
 
-  
   const handleTemplateClick = (e, template) => {
-    
     if (isNavigating) return;
     
     e.preventDefault();
@@ -180,7 +167,7 @@ isPremium: template.isPremium ||
     const templateId = template._id || template.id;
     const newClickCount = (template.clickCount || 0) + 1;
     
-    
+    // Update local state
     setTemplatesData(prevTemplates => 
       prevTemplates.map(t => 
         (t._id || t.id) === templateId 
@@ -189,13 +176,11 @@ isPremium: template.isPremium ||
       )
     );
 
-    
+    // Update localStorage
     const storedClicks = JSON.parse(localStorage.getItem('templateClicks') || '{}');
     storedClicks[templateId] = newClickCount;
     localStorage.setItem('templateClicks', JSON.stringify(storedClicks));
 
-  
-    
     setTimeout(() => setIsNavigating(false), 1000);
   };
 
@@ -233,9 +218,9 @@ isPremium: template.isPremium ||
         ) : visibleTemplates.length === 0 ? (
           <div>
             {currentFilter === 'popular' 
-              ? 'No popular templates at the moment.' 
+              ? 'No popular templates yet. Templates need to be used by multiple people to appear here.' 
               : currentFilter === 'new' 
-              ? 'No new templates found.' 
+              ? 'No new templates available.' 
               : 'No templates found.'
             }
           </div>
