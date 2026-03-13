@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useRef, useState, useCallback } from "react"
 import axios from "axios";
 import "./Preview.css";
 
+const API_BASE = process.env.REACT_APP_API_URL || '';
+
 const sanitizeHtml = (html) => {
   if (!html) return "";
   return String(html)
@@ -83,7 +85,7 @@ const Preview = ({
       // 1) try processed HTML
       try {
         const res = await axios.post(
-          `http://localhost:5000/preview/api/template/preview/${templateId}`,
+          `${API_BASE}/preview/api/template/preview/${templateId}`,
           resumeData || {},
           {
             headers: { "Content-Type": "application/json", Accept: "text/html" },
@@ -100,7 +102,7 @@ const Preview = ({
       // 2) fetch CSS parts (used if processed doesn't include styles)
       try {
         const parts = await axios.get(
-          `http://localhost:5000/preview/api/template/parts/${templateId}`
+          `${API_BASE}/preview/api/template/parts/${templateId}`
         );
         if (!cancelled) {
           setPartsCss(parts.data?.templateCss || "");

@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useMemo, useRef } from "react";
 import axios from "axios";
 
+const API_BASE = process.env.REACT_APP_API_URL || '';
+
 /* ------------------------- tiny helpers ------------------------- */
 
 // Strip scripts/inline handlers so we don’t execute anything while injecting HTML
@@ -84,7 +86,7 @@ const ResumeRenderer = ({ resume }) => {
       // 1) processed HTML (server-rendered with data)
       try {
         const res = await axios.post(
-          `http://localhost:5000/preview/api/template/preview/${templateId}`,
+          `${API_BASE}/preview/api/template/preview/${templateId}`,
           resumeData,
           {
             headers: { "Content-Type": "application/json", Accept: "text/html" },
@@ -101,7 +103,7 @@ const ResumeRenderer = ({ resume }) => {
       // 2) parts (raw template + CSS) for fallback
       try {
         const parts = await axios.get(
-          `http://localhost:5000/preview/api/template/parts/${templateId}`
+          `${API_BASE}/preview/api/template/parts/${templateId}`
         );
         if (!cancelled) {
           setTemplateCss(parts.data?.templateCss || "");
@@ -135,7 +137,7 @@ const ResumeRenderer = ({ resume }) => {
     if (hex && containerRef.current) {
       applyAccentToDocument(containerRef.current, hex);
     }
-  }, [safeProcessed, safeRaw, templateCss, resume?.ResumeData?.theme?.accent]);
+  }, [safeProcessed, safeRaw, templateCss, resume?.ResumeData?.theme?.accent, resume?.theme?.accent]);
 
   /* ----------------------------- render ----------------------------- */
   // Prefer processed HTML (A4-ready). Otherwise show fallback (raw + CSS).

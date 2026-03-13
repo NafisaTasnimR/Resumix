@@ -10,6 +10,8 @@ import {
 import TopBar from '../ResumeEditorPage/TopBar';
 import './PaymentInfo.css';
 
+const API_BASE = process.env.REACT_APP_API_URL || '';
+
 const stripePromise = loadStripe('pk_test_51RzCd02YB6wMhtYr69r6wqhdRtBOqLSL5aPzPdhe9BJekE99TVZpNmeuDoB5tIqkLZIHiBZoHs2ErIvxR7bCT38D00EgvxLbGd');
 
 const PaymentForm = () => {
@@ -17,7 +19,7 @@ const PaymentForm = () => {
   const elements = useElements();
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [clientSecret, setClientSecret] = useState('');
@@ -40,10 +42,10 @@ const PaymentForm = () => {
   const createPaymentIntent = async () => {
     try {
       const token = localStorage.getItem('token');
-      
-      const response = await fetch('http://localhost:5000/api/payment/create-payment-intent', {
+
+      const response = await fetch(`${API_BASE}/api/payment/create-payment-intent`, {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
@@ -51,10 +53,10 @@ const PaymentForm = () => {
       });
 
       const data = await response.json();
-      
+
       if (response.ok) {
         setClientSecret(data.clientSecret);
-        
+
         // Update user info with the REAL email from database (for backend use)
         if (data.userEmail && data.userName) {
           setUser({
@@ -109,7 +111,7 @@ const PaymentForm = () => {
       // Payment succeeded - now confirm it and send email
       try {
         const token = localStorage.getItem('token');
-        await fetch('http://localhost:5000/api/payment/confirm-payment', {
+        await fetch(`${API_BASE}/api/payment/confirm-payment`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -119,13 +121,13 @@ const PaymentForm = () => {
             paymentIntentId: paymentIntent.id
           })
         });
-        
+
         console.log('Payment confirmed and email sent');
       } catch (confirmError) {
         console.error('Error confirming payment:', confirmError);
         // Don't block navigation if confirmation fails
       }
-      
+
       navigate('/m/final', { state: { paymentSuccess: true } });
     }
   };
@@ -151,10 +153,10 @@ const PaymentForm = () => {
           </div>
         </div>
       )}
-      
+
       <form onSubmit={handleSubmit} className="payment-form">
         <h2>Payment Information</h2>
-        
+
         <div className="card-section">
           <div className="section-header">
             <span>Card Information</span>
@@ -190,13 +192,13 @@ const PaymentForm = () => {
 
         <div className="terms-section">
           <p>
-            By clicking "Get My Subscription" below you agree to be charged <strong>$1.70</strong> 
-            (which includes unlimited edits, downloads). You also agree to our Terms of 
+            By clicking "Get My Subscription" below you agree to be charged <strong>$1.70</strong>
+            (which includes unlimited edits, downloads). You also agree to our Terms of
             Use and Privacy Policy.
           </p>
         </div>
 
-        <button 
+        <button
           className="subscribe-btn"
           disabled={!stripe || processing}
         >
@@ -221,26 +223,26 @@ const PaymentInfo = () => {
   return (
     <div className="payment-container">
       <TopBar />
-      
+
       <div className="progress-steps">
-        <div 
+        <div
           className="step completed"
           onClick={() => navigate('/postlogin/')}
-          style={{cursor: 'pointer'}}
+          style={{ cursor: 'pointer' }}
         >
           <div className="step-icon">✓</div>
           <span>Home page</span>
         </div>
-        <div 
+        <div
           className="step completed"
           onClick={() => navigate('/subscription')}
-          style={{cursor: 'pointer'}}
+          style={{ cursor: 'pointer' }}
         >
           <div className="step-icon">✓</div>
           <span>Choose Access</span>
         </div>
-        <div className="step active" style={{color: '#007bff'}}>
-          <div className="step-number" style={{backgroundColor: '#007bff', color: 'white'}}>3</div>
+        <div className="step active" style={{ color: '#007bff' }}>
+          <div className="step-number" style={{ backgroundColor: '#007bff', color: 'white' }}>3</div>
           <span>Payment Details</span>
         </div>
         <div className="step">

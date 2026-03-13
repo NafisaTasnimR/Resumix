@@ -4,6 +4,8 @@ import axios from "axios";
 import "./ResumeTemplates.css";
 import "./TemplatePreview.css";
 
+const API_BASE = process.env.REACT_APP_API_URL || '';
+
 const BackTopBar = () => {
   const navigate = useNavigate();
   const [imgOk, setImgOk] = React.useState(true);
@@ -47,10 +49,10 @@ const BackTopBar = () => {
     <header style={barStyle}>
       {imgOk ? (
         <img
-          src="/arrow.png"           
+          src="/arrow.png"
           alt="Go back"
           style={iconImgStyle}
-          onClick={goBack}       
+          onClick={goBack}
           onError={() => setImgOk(false)}
           title="Go back"
         />
@@ -85,7 +87,7 @@ const TemplatePreviewGuest = ({ id, template }) => {
     <div className="template-preview" onClick={handleClick}>
       <div className="iframe-container">
         <iframe
-          src={`http://localhost:5000/preview/api/template/${id}`}
+          src={`${API_BASE}/preview/api/template/${id}`}
           title={template?.name || "Template"}
           className="preview-iframe"
           scrolling="no"
@@ -106,7 +108,7 @@ const PublicTemplates = () => {
   useEffect(() => {
     const fetchTemplates = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/preview/api/templates");
+        const res = await axios.get(`${API_BASE}/preview/api/templates`);
 
         const storedClicks = JSON.parse(localStorage.getItem("templateClicks") || "{}");
 
@@ -174,7 +176,7 @@ const PublicTemplates = () => {
         filtered = filtered.filter((t) => (t.clickCount || 0) > 0);
         return sortByPopularity(filtered);
       case 'new':
-        
+
         const sortedByDate = sortByDate(filtered);
         return sortedByDate.slice(0, 3);
       case "all":
@@ -233,8 +235,8 @@ const PublicTemplates = () => {
             {currentFilter === "popular"
               ? "No popular templates at the moment."
               : currentFilter === "new"
-              ? "No new templates found."
-              : "No templates found."}
+                ? "No new templates found."
+                : "No templates found."}
           </div>
         ) : (
           visibleTemplates.map((template) => (

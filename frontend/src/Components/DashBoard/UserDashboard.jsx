@@ -8,7 +8,7 @@ import TopBar from '../ResumeEditorPage/TopBar';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
-const API_BASE = (import.meta.env && import.meta.env.VITE_API_BASE) || "http://localhost:5000";
+const API_BASE = process.env.REACT_APP_API_URL || '';
 
 const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);          // delete confirm
@@ -126,7 +126,7 @@ const Dashboard = () => {
         return;
       }
 
-      const response = await fetch('http://localhost:5000/api/payment/subscription-status', {
+      const response = await fetch(`${API_BASE}/api/payment/subscription-status`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -173,7 +173,7 @@ const Dashboard = () => {
 
     const fetchUser = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/viewInformation/userInformation', {
+        const res = await axios.get(`${API_BASE}/viewInformation/userInformation`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -189,7 +189,7 @@ const Dashboard = () => {
         setLoadingResumes(true);
         setResumeError(null);
 
-        const res = await axios.get('http://localhost:5000/resume/all', {
+        const res = await axios.get(`${API_BASE}/resume/all`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {}
         });
 
@@ -382,7 +382,7 @@ const Dashboard = () => {
         navigate('/profile');
         return;
       }
-      const { data } = await axios.get('http://localhost:5000/viewInformation/userInformation', {
+      const { data } = await axios.get(`${API_BASE}/viewInformation/userInformation`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 

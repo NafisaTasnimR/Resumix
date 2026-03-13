@@ -5,6 +5,8 @@ import TopBar from '../ResumeEditorPage/TopBar';
 import { calculateAtsScore, generateSuggestions } from './ATSLogic';
 import axios from 'axios';
 
+const API_BASE = process.env.REACT_APP_API_URL || '';
+
 /* ---------- Donut score ring ---------- */
 const ScoreRing = ({ value = 0, size = 140, thickness = 16, color = '#22C55E', track = '#E5F5EA' }) => {
   const v = Math.max(0, Math.min(100, Number(value) || 0));
@@ -56,7 +58,7 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
     if (resume || !resolvedId || propResumeData) return;
     setLoading(true);
     const token = localStorage.getItem('token') || '';
-    axios.get(`http://localhost:5000/resume/${resolvedId}`, { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(`${API_BASE}/resume/${resolvedId}`, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => setResume(res.data))
       .catch(err => {
         const st = err?.response?.status;
@@ -86,7 +88,7 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
     const token = localStorage.getItem('token') || '';
     if (Number(resume?.strength) === Number(score)) return;
     axios.patch(
-      `http://localhost:5000/resume/updateResume/${resolvedId}`,
+      `${API_BASE}/resume/updateResume/${resolvedId}`,
       { strength: score },
       { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` } }
     ).catch(err => console.error('Error updating strength:', err));
@@ -152,7 +154,7 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
     );
   }
 
-  const improvements = suggItems; 
+  const improvements = suggItems;
 
   return (
     <div className="resume-checker">

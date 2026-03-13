@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { signInWithPopup } from 'firebase/auth';
 import { auth, provider } from '../../utils/Firebase'; // Adjust path as needed
 
+const API_BASE = process.env.REACT_APP_API_URL || '';
+
 const LoginSignup = ({ mode }) => {
   const [action, setAction] = useState(mode === "login" ? "Login" : "Sign Up");
   const [email, setEmail] = useState('');
@@ -56,7 +58,7 @@ const LoginSignup = ({ mode }) => {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/auth${endpoint}`,
+        `${API_BASE}/auth${endpoint}`,
         body,
         {
           headers: {
@@ -102,7 +104,7 @@ const LoginSignup = ({ mode }) => {
       }
 
       const response = await axios.post(
-        `http://localhost:5000/auth${endpoint}`,
+        `${API_BASE}/auth${endpoint}`,
         body,
         {
           headers: {
@@ -113,7 +115,7 @@ const LoginSignup = ({ mode }) => {
       setMessage(response.data.message || 'Google Sign-In successful!');
       setEmail('');
       localStorage.setItem('token', response.data.token);
-      navigate('/postlogin/');     
+      navigate('/postlogin/');
     } catch (err) {
       setError('Google sign-in failed. Please try again.');
       console.error('Google Sign-In error:', err);
@@ -206,7 +208,7 @@ const LoginSignup = ({ mode }) => {
           </div>
         </div>
 
-        
+
 
         <div className="divider">
           <hr />

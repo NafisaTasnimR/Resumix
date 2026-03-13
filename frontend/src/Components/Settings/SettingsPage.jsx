@@ -3,6 +3,8 @@ import './SettingsPage.css';
 import TopBar from '../ResumeEditorPage/TopBar';
 import axios from 'axios';
 
+const API_BASE = process.env.REACT_APP_API_URL || '';
+
 // Decode JWT to fall back to account email if backend omits it
 function decodeJwt(token) {
   try {
@@ -16,7 +18,6 @@ function decodeJwt(token) {
 const SettingsPage = () => {
   const [profile, setProfile] = useState({ username: '', email: '', userType: 'free' });
   const [subscriptionStatus, setSubscriptionStatus] = useState('free');
-  const [subscriptionData, setSubscriptionData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState('');
 
@@ -24,24 +25,23 @@ const SettingsPage = () => {
   const fetchSubscriptionStatus = async () => {
     try {
       const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
-      
+
       if (!token) {
         setSubscriptionStatus('free');
         return;
       }
 
-      const response = await fetch('http://localhost:5000/api/payment/subscription-status', {
+      const response = await fetch(`${API_BASE}/api/payment/subscription-status`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         setSubscriptionStatus(data.hasActiveSubscription ? 'paid' : 'free');
-        setSubscriptionData(data);
       } else {
         setSubscriptionStatus('free');
       }
@@ -58,7 +58,7 @@ const SettingsPage = () => {
 
     const loadUser = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/info/userInformation', {
+        const res = await axios.get(`${API_BASE}/info/userInformation`, {
           headers: {
             'Content-Type': 'application/json',
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -84,17 +84,6 @@ const SettingsPage = () => {
 
     loadUser();
   }, []);
-
-  const pretty = (v) => (v ? String(v).toUpperCase() : '—');
-
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
 
   return (
     <div className="settings-container">

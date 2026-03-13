@@ -2,8 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import home from '../../assets/icons8-home-48.png';
 
+const API_BASE = process.env.REACT_APP_API_URL || '';
+
 const PANEL_WIDTH = 260;   // card width like your screenshot
-const PANEL_GAP   = 12;    // space below the hamburger
+const PANEL_GAP = 12;    // space below the hamburger
 
 const TopBar = () => {
   const navigate = useNavigate();
@@ -24,7 +26,7 @@ const TopBar = () => {
     try {
       const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
       console.log(' TopBar - Token found:', token ? 'Yes' : 'No');
-      
+
       if (!token) {
         console.log(' TopBar - No token found, setting to free');
         setSubscriptionStatus('free');
@@ -33,7 +35,7 @@ const TopBar = () => {
       }
 
       console.log(' TopBar - Fetching subscription status...');
-      const response = await fetch('http://localhost:5000/api/payment/subscription-status', {
+      const response = await fetch(`${API_BASE}/api/payment/subscription-status`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -42,7 +44,7 @@ const TopBar = () => {
       });
 
       console.log(' TopBar - Response status:', response.status);
-      
+
       if (response.ok) {
         const data = await response.json();
         console.log(' TopBar - Subscription data:', data);
@@ -84,7 +86,7 @@ const TopBar = () => {
       document.removeEventListener('keydown', onEsc);
     };
   }, [open]);
-  
+
   const positionMenu = () => {
     const btn = hamburgerRef.current?.getBoundingClientRect();
     if (!btn) return;
@@ -110,7 +112,7 @@ const TopBar = () => {
   };
 
 
-return (
+  return (
     <>
       <div className="top-bar">
         <div className="top-bar-title">

@@ -1,16 +1,16 @@
 require('dotenv').config();
-require('./models/Database'); 
+require('./models/Database');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const authRouter = require('./routes/AuthRouter'); 
+const authRouter = require('./routes/AuthRouter');
 const infoUpdateRouter = require('./routes/InfoUpdateRouter');
 const previewRouter = require('./routes/TemplateRouter');
 const resumeRouter = require('./routes/ResumeRouter');
 const downloadRouter = require('./routes/DownloadRouter');
-const shareRouter = require('./routes/ShareLinkRoute'); 
-const PaymentRouter = require('./routes/PaymentRouter'); 
+const shareRouter = require('./routes/ShareLinkRoute');
+const PaymentRouter = require('./routes/PaymentRouter');
 const { initializeSubscriptionCron } = require('./services/subscriptionCron');
 const { formatDateMiddleware } = require('./middlewares/FormatDateMiddleware');
 app.use(formatDateMiddleware); // Apply the date formatting middleware
@@ -20,28 +20,35 @@ require('./models/Database');
 
 
 const PORT = process.env.PORT || 3000;
+const CLIENT_URL = process.env.CLIENT_URL || '';
+const corsOptions = CLIENT_URL
+  ? {
+    origin: CLIENT_URL,
+    credentials: true,
+  }
+  : undefined;
 
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors(corsOptions));
 
-app.use('/auth',authRouter);
+app.use('/auth', authRouter);
 app.use('/info', infoUpdateRouter);
 app.use('/viewInformation', infoUpdateRouter);
-app.use('/preview',previewRouter);
+app.use('/preview', previewRouter);
 app.use('/resume', resumeRouter);
-app.use('/api/payment', PaymentRouter);  
+app.use('/api/payment', PaymentRouter);
 // server.js / app.js
 app.use('/download', downloadRouter);
 app.use('/', shareRouter);
- 
 
-app.use(bodyParser.json()); 
-app.use(cors());  
+
+app.use(bodyParser.json());
+app.use(cors(corsOptions));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
+  res.json({
+    status: 'OK',
     timestamp: new Date().toISOString(),
     uptime: process.uptime()
   });
@@ -50,10 +57,10 @@ app.get('/health', (req, res) => {
 // Initialize cron jobs after server setup
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  
+
   // Initialize subscription cron jobs
   initializeSubscriptionCron();
-  
+
   console.log('Server setup complete');
 });
 

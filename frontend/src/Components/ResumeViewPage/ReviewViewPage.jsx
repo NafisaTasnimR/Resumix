@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import TopBar from '../ResumeEditorPage/TopBar';
 import ErrorBoundary from './ErrorBoundary';
 
+const API_BASE = process.env.REACT_APP_API_URL || '';
+
 const ResumePreview = () => {
   const { id } = useParams();               // <-- read :id
   const [resume, setResume] = useState(null);
@@ -17,7 +19,7 @@ const ResumePreview = () => {
 
     const fetchResume = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/resume/${id}`, {
+        const res = await axios.get(`${API_BASE}/resume/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
           },

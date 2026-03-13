@@ -3,6 +3,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const API_BASE = process.env.REACT_APP_API_URL || '';
+
 const PostLoginHeader = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [subscriptionStatus, setSubscriptionStatus] = useState('free'); // 'free' or 'paid'
@@ -19,7 +21,7 @@ const PostLoginHeader = () => {
     try {
       const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
       console.log(' Token found:', token ? 'Yes' : 'No');
-      
+
       if (!token) {
         console.log(' No token found, setting to free');
         setSubscriptionStatus('free');
@@ -28,7 +30,7 @@ const PostLoginHeader = () => {
       }
 
       console.log(' Fetching subscription status...');
-      const response = await fetch('http://localhost:5000/api/payment/subscription-status', {
+      const response = await fetch(`${API_BASE}/api/payment/subscription-status`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -37,7 +39,7 @@ const PostLoginHeader = () => {
       });
 
       console.log(' Response status:', response.status);
-      
+
       if (response.ok) {
         const data = await response.json();
         console.log(' Subscription data:', data);
@@ -99,7 +101,7 @@ const PostLoginHeader = () => {
         return;
       }
 
-      const { data } = await axios.get('http://localhost:5000/info/userInformation', {
+      const { data } = await axios.get(`${API_BASE}/info/userInformation`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -109,7 +111,7 @@ const PostLoginHeader = () => {
       const hasExp = Array.isArray(rd.experience) && rd.experience.length > 0;
 
       if (hasPI || hasEdu || hasExp) {
-        navigate('/templates'); 
+        navigate('/templates');
       } else {
         navigate('/profile');
       }
@@ -135,7 +137,7 @@ const PostLoginHeader = () => {
           </div>
 
           <div className="nav-center">
-            
+
             <Link to="/templates">Templates</Link>
             <Link to="/subscription">Subscription</Link>
           </div>

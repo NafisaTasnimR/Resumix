@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import './TemplatePreview.css';
 import axios from 'axios';
 
+const API_BASE = process.env.REACT_APP_API_URL || '';
+
 const TemplatePreview = ({ id, template }) => {
   const navigate = useNavigate();
   const [subscriptionStatus, setSubscriptionStatus] = useState('free');
@@ -12,20 +14,20 @@ const TemplatePreview = ({ id, template }) => {
     const fetchSubscriptionStatus = async () => {
       try {
         const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
-        
+
         if (!token) {
           setSubscriptionStatus('free');
           return;
         }
 
-        const response = await fetch('http://localhost:5000/api/payment/subscription-status', {
+        const response = await fetch(`${API_BASE}/api/payment/subscription-status`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         });
-        
+
         if (response.ok) {
           const data = await response.json();
           const isPaid = data.hasActiveSubscription;
@@ -51,7 +53,7 @@ const TemplatePreview = ({ id, template }) => {
 
     try {
       // Fetch raw HTML from backend
-      const res = await axios.get(`http://localhost:5000/preview/api/template/parts/${id}`);
+      const res = await axios.get(`${API_BASE}/preview/api/template/parts/${id}`);
       const rawHTML = res.data.rawTemplate;
       const templateCss = res.data.templateCss || "";
 
@@ -71,14 +73,14 @@ const TemplatePreview = ({ id, template }) => {
 
   return (
     <div className="template-preview" onClick={handleClick}>
-        <div className="iframe-container">
-          <iframe
-            src={`http://localhost:5000/preview/api/template/${id}`}
-            title={template.name}
-            className="preview-iframe"
-            scrolling="no"
-          ></iframe>
-        </div>
+      <div className="iframe-container">
+        <iframe
+          src={`${API_BASE}/preview/api/template/${id}`}
+          title={template.name}
+          className="preview-iframe"
+          scrolling="no"
+        ></iframe>
+      </div>
       <p>{template.name}</p>
     </div>
   );
