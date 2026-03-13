@@ -30,13 +30,6 @@ const ResumeListPage = () => {
 
   const navigate = useNavigate();
 
-  const fileSafe = (s) =>
-    (s || 'resume')
-      .replace(/[/\\?%*:|"<>]/g, '-')  // illegal filename chars
-      .replace(/\s+/g, ' ')
-      .trim();
-
-
   useEffect(() => {
     const fetchResumes = async () => {
       try {

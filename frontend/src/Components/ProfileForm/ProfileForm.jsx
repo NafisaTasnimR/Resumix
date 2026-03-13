@@ -8,7 +8,6 @@ import Achievements from './Achievements';
 import References from './References';
 import Hobbies from './Hobbies';
 import AdditionalInfo from './AdditionalInfo';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import TopBar from '../ResumeEditorPage/TopBar';
 import { useNavigate } from 'react-router-dom';
@@ -316,11 +315,6 @@ const ProfileForm = () => {
     }
     // Scroll after state update
     setTimeout(() => window.scrollTo(0, 0), 100);
-  };
-
-  const handleSubmit = () => {
-    window.scrollTo(0, 0);
-    alert('Resume submitted successfully!');
   };
 
   // Experience functions

@@ -3,11 +3,11 @@ import React from 'react';
 // VALIDATION FUNCTION WITH FULL LOGIC
 const validateDate = (date, type, relatedDate = null) => {
   if (!date) return date; // Allow empty dates
-  
+
   const selectedDate = new Date(date);
   const today = new Date();
   const currentYear = today.getFullYear();
-  
+
   switch (type) {
     case 'startDate':
       if (selectedDate > today) {
@@ -20,7 +20,7 @@ const validateDate = (date, type, relatedDate = null) => {
         return '';
       }
       break;
-      
+
     case 'endDate':
       if (relatedDate && selectedDate < new Date(relatedDate)) {
         alert("End date cannot be before start date!");
@@ -32,18 +32,21 @@ const validateDate = (date, type, relatedDate = null) => {
         return '';
       }
       break;
+
+    default:
+      break;
   }
-  
+
   return date;
 };
 
-const Experience = ({ 
-  experiences, 
-  currentExperienceIndex, 
-  setCurrentExperienceIndex, 
-  updateExperience, 
-  addNewExperience, 
-  removeExperience 
+const Experience = ({
+  experiences,
+  currentExperienceIndex,
+  setCurrentExperienceIndex,
+  updateExperience,
+  addNewExperience,
+  removeExperience
 }) => {
   const currentExp = experiences[currentExperienceIndex];
 
@@ -84,45 +87,45 @@ const Experience = ({
 
         <div className="field-group">
           <label className="required">Employer Name:</label>
-          <input 
-            type="text" 
-            className="input-field" 
+          <input
+            type="text"
+            className="input-field"
             value={currentExp.employerName}
             onChange={(e) => updateExperience('employerName', e.target.value)}
-            placeholder="Khan Academy" 
+            placeholder="Khan Academy"
           />
         </div>
 
         <div className="field-group">
           <label className="required">Job Title:</label>
-          <input 
-            type="text" 
-            className="input-field" 
+          <input
+            type="text"
+            className="input-field"
             value={currentExp.jobTitle}
             onChange={(e) => updateExperience('jobTitle', e.target.value)}
-            placeholder="Founder & CEO" 
+            placeholder="Founder & CEO"
           />
         </div>
 
         <div className="field-row">
           <div className="field-group half-width">
             <label>City:</label>
-            <input 
-              type="text" 
-              className="input-field" 
+            <input
+              type="text"
+              className="input-field"
               value={currentExp.city}
               onChange={(e) => updateExperience('city', e.target.value)}
-              placeholder="Mountain View" 
+              placeholder="Mountain View"
             />
           </div>
           <div className="field-group half-width">
             <label>State:</label>
-            <input 
-              type="text" 
-              className="input-field" 
+            <input
+              type="text"
+              className="input-field"
               value={currentExp.state}
               onChange={(e) => updateExperience('state', e.target.value)}
-              placeholder="California" 
+              placeholder="California"
             />
           </div>
         </div>
@@ -130,17 +133,17 @@ const Experience = ({
         <div className="field-row">
           <div className="field-group half-width">
             <label className="required">Start Date</label>
-            <input 
-              type="date" 
-              className="input-field" 
+            <input
+              type="date"
+              className="input-field"
               value={currentExp.startDate}
               onChange={handleStartDateChange}
             />
           </div>
           <div className="field-group half-width">
             <label>End Date:</label>
-            <input 
-              type="date" 
+            <input
+              type="date"
               className={`input-field ${currentExp.isCurrentJob ? 'disabled-field' : ''}`}
               value={currentExp.endDate}
               onChange={handleEndDateChange}
@@ -151,10 +154,10 @@ const Experience = ({
 
         <div className="field-group">
           <div className="current-job-checkbox">
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               id={`currentJob${currentExperienceIndex}`}
-              className="checkbox-input" 
+              className="checkbox-input"
               checked={currentExp.isCurrentJob}
               onChange={(e) => updateExperience('isCurrentJob', e.target.checked)}
             />
@@ -164,9 +167,9 @@ const Experience = ({
 
         <div className="field-group">
           <label>Job Description</label>
-          <textarea 
-            className="input-field textarea-field" 
-            rows="4" 
+          <textarea
+            className="input-field textarea-field"
+            rows="4"
             value={currentExp.description}
             onChange={(e) => updateExperience('description', e.target.value)}
             placeholder="Founded and led Khan Academy, a non-profit educational organization..."
@@ -178,8 +181,8 @@ const Experience = ({
             + Add Another Experience
           </button>
           {experiences.length > 1 && (
-            <button 
-              className="remove-button" 
+            <button
+              className="remove-button"
               onClick={() => removeExperience(currentExperienceIndex)}
             >
               Remove This Experience

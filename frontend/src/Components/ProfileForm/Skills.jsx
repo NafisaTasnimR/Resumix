@@ -2,14 +2,6 @@ import React from 'react';
 
 const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 
-const normalizeLevel = (v = '') => {
-  const t = String(v).trim().toLowerCase();
-  if (t === 'intermidiate') return 'Intermediate'; // typo -> correct
-  const found = SKILL_LEVELS.find(l => l.toLowerCase() === t);
-  return found || 'Beginner';
-};
-
-
 const Skills = ({
   skills,
   currentSkillIndex,

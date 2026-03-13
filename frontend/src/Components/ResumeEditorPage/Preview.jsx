@@ -35,9 +35,12 @@ const Preview = ({
   const [partsCss, setPartsCss] = useState("");
 
   // ---------- utilities ----------
-  const tokensFromPath = (path) => String(path).split(/[\.\[\]]/).filter(Boolean);
+  const tokensFromPath = useCallback(
+    (path) => String(path).replace(/\[(\d+)\]/g, '.$1').split('.').filter(Boolean),
+    []
+  );
 
-  const getByPath = (root, path) => {
+  const getByPath = useCallback((root, path) => {
     if (!root || !path) return undefined;
     const parts = tokensFromPath(path);
     let cur = root;
@@ -47,7 +50,7 @@ const Preview = ({
       cur = cur[key];
     }
     return cur;
-  };
+  }, [tokensFromPath]);
 
   const formatValue = (v) => {
     if (v == null) return "";
@@ -417,7 +420,7 @@ const Preview = ({
         img.removeEventListener("error", done);
       });
     };
-  }, [htmlBodyToWrite, headHtmlToWrite, onSectionClick, resumeData, applyAccentToDoc]);
+  }, [htmlBodyToWrite, headHtmlToWrite, onSectionClick, resumeData, applyAccentToDoc, getByPath, tokensFromPath]);
 
   // re-populate on resume data change without rewriting DOM
   useEffect(() => {
