@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './UserDashboard.css';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ShareResumeModal from '../ResumeListPage/ShareResumeModal';
 import DownloadResumeModal from '../ResumeListPage/DownloadResumeModal';
 import DeleteConfirmationModal from '../ResumeListPage/DeleteConfirmationModal';
