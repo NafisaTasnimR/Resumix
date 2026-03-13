@@ -20,13 +20,31 @@ require('./models/Database');
 
 
 const PORT = process.env.PORT || 3000;
-const CLIENT_URL = process.env.CLIENT_URL || '';
-const corsOptions = CLIENT_URL
-  ? {
-    origin: CLIENT_URL,
-    credentials: true,
-  }
-  : undefined;
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
+
+// CORS configuration - allow deployed frontend and localhost
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allowed origins
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://resumix-ten.vercel.app',
+      process.env.CLIENT_URL,
+    ].filter(Boolean);
+
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn(`CORS blocked origin: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
 
 app.use(bodyParser.json());
 app.use(cors(corsOptions));
@@ -40,10 +58,6 @@ app.use('/api/payment', PaymentRouter);
 // server.js / app.js
 app.use('/download', downloadRouter);
 app.use('/', shareRouter);
-
-
-app.use(bodyParser.json());
-app.use(cors(corsOptions));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
