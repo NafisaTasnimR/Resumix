@@ -65,7 +65,6 @@ const TopBar = () => {
   // Handlers
   const handleHomeClick = () => { navigate('/postlogin/'); };
   const handleDashboardClick = () => { navigate('/dashboard'); };
-  const handleResumeClick = () => { navigate('/resumes'); };
   const handleSegmentsClick = () => { navigate('/templates'); };
   const handleAccountClick = () => { navigate('/subscription'); };
   const handleSettingsClick = () => { navigate('/settings'); };
@@ -101,15 +100,7 @@ const TopBar = () => {
     setMenuPos({ top, left });
   };
 
-  const toggleMenu = () => {
-    if (!open) positionMenu();
-    setOpen(v => !v);
-  };
 
-  const go = (path) => {
-    navigate(path);
-    setOpen(false);
-  };
 
 
   return (

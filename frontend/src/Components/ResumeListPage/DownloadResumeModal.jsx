@@ -2,7 +2,7 @@ import React from 'react';
 import './DownloadResumeModal.css';
 
 const safe = (s) =>
-  (s || 'resume').replace(/[\/\\?%*:|"<>]/g, '-').replace(/\s+/g, ' ').trim();
+  (s || 'resume').replace(/[/\\?%*:|"<>]/g, '-').replace(/\s+/g, ' ').trim();
 
 const DownloadResumeModal = ({ isOpen, onClose, resumeName, downloadLink, imgSrc }) => {
   if (!isOpen) return null;

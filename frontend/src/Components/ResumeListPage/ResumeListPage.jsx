@@ -28,15 +28,11 @@ const ResumeListPage = () => {
   const [deletingId, setDeletingId] = useState(null);
   const [deleteError, setDeleteError] = useState('');
 
-  const [downloadFileName, setDownloadFileName] = useState('resume.pdf');
-
-
-
   const navigate = useNavigate();
 
   const fileSafe = (s) =>
     (s || 'resume')
-      .replace(/[\/\\?%*:|"<>]/g, '-')  // illegal filename chars
+      .replace(/[/\\?%*:|"<>]/g, '-')  // illegal filename chars
       .replace(/\s+/g, ' ')
       .trim();
 
@@ -157,7 +153,6 @@ const ResumeListPage = () => {
 
       setResumeName(resume.title || 'resume');                      // already there
       setDownloadLink(blobUrl);                                     // already there
-      setDownloadFileName(`${fileSafe(resume.title || 'resume')}.pdf`);  // NEW
       setIsDownloadModalOpen(true);                                 // already there
     } catch (e) {
       alert('Could not download PDF.');

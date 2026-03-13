@@ -99,7 +99,7 @@ const TemplatePreviewGuest = ({ id, template }) => {
 };
 
 const PublicTemplates = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm] = useState("");
   const [currentFilter, setCurrentFilter] = useState("all");
   const [visibleCount, setVisibleCount] = useState(3);
   const [templatesData, setTemplatesData] = useState([]);
@@ -141,15 +141,6 @@ const PublicTemplates = () => {
 
     fetchTemplates();
   }, []);
-
-  const isNewTemplate = (template) => {
-    if (!template.createdAt && !template.dateAdded) return false;
-    const templateDate = new Date(template.createdAt || template.dateAdded);
-    const daysAgo = Math.floor((Date.now() - templateDate.getTime()) / 86400000);
-    const total = templatesData.length;
-    const newThreshold = Math.max(7, Math.ceil(total * 0.15));
-    return daysAgo <= newThreshold;
-  };
 
   const sortByPopularity = (templates) =>
     [...templates].sort((a, b) => (b.clickCount || 0) - (a.clickCount || 0));
