@@ -6,7 +6,6 @@ const blobFromResume = (rd = {}) => {
   const EXP = Array.isArray(rd.experience) ? rd.experience : [];
   const SK = Array.isArray(rd.skills) ? rd.skills : [];
   const ACH = Array.isArray(rd.achievements) ? rd.achievements : [];
-  const REF = Array.isArray(rd.references) ? rd.references : [];
   const PRJ = Array.isArray(rd.projects) ? rd.projects : [];
   const ADD = Array.isArray(rd.additionalInfos) ? rd.additionalInfos : [];
 

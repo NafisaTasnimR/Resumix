@@ -27,58 +27,56 @@ const PaymentForm = () => {
   const [loading, setLoading] = useState(true);
   const [paymentProcessing, setPaymentProcessing] = useState(false);
 
-  const selectedPlan = location.state?.selectedPlan || '14-day';
-
   useEffect(() => {
+    const createPaymentIntent = async () => {
+      try {
+        const token = localStorage.getItem('token');
+
+        const response = await fetch(`${API_BASE}/api/payment/create-payment-intent`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({})
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          setClientSecret(data.clientSecret);
+
+          // Update user info with the REAL email from database (for backend use)
+          if (data.userEmail && data.userName) {
+            setUser({
+              name: data.userName,
+              email: data.userEmail
+            });
+          }
+        } else {
+          throw new Error(data.error || 'Payment initialization failed');
+        }
+      } catch (error) {
+        console.error('Payment intent error:', error);
+        setError('Failed to initialize payment');
+        // Set fallback values if API fails
+        setUser({
+          name: 'Demo User',
+          email: 'demo@example.com'
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchUserData = async () => {
+      // Add some realistic delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      createPaymentIntent();
+    };
+
     fetchUserData();
   }, []);
-
-  const fetchUserData = async () => {
-    // Add some realistic delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    createPaymentIntent();
-  };
-
-  const createPaymentIntent = async () => {
-    try {
-      const token = localStorage.getItem('token');
-
-      const response = await fetch(`${API_BASE}/api/payment/create-payment-intent`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({})
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setClientSecret(data.clientSecret);
-
-        // Update user info with the REAL email from database (for backend use)
-        if (data.userEmail && data.userName) {
-          setUser({
-            name: data.userName,
-            email: data.userEmail
-          });
-        }
-      } else {
-        throw new Error(data.error || 'Payment initialization failed');
-      }
-    } catch (error) {
-      console.error('Payment intent error:', error);
-      setError('Failed to initialize payment');
-      // Set fallback values if API fails
-      setUser({
-        name: 'Demo User',
-        email: 'demo@example.com'
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();

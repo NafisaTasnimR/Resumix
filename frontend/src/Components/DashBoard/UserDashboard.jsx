@@ -1,12 +1,11 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './UserDashboard.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ShareResumeModal from '../ResumeListPage/ShareResumeModal';
 import DownloadResumeModal from '../ResumeListPage/DownloadResumeModal';
 import DeleteConfirmationModal from '../ResumeListPage/DeleteConfirmationModal';
 import TopBar from '../ResumeEditorPage/TopBar';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
 
 const API_BASE = process.env.REACT_APP_API_URL || '';
 
@@ -39,7 +38,7 @@ const Dashboard = () => {
 
   const [shareLink, setShareLink] = useState("");
   const [shareError, setShareError] = useState("");
-  const [shareLoadingId, setShareLoadingId] = useState(null);
+  const [, setShareLoadingId] = useState(null);
 
   // Delete-related state
   const [selectedResume, setSelectedResume] = useState(null);     // for delete
@@ -58,7 +57,6 @@ const Dashboard = () => {
   const [resumes, setResumes] = useState([]);
   const [loadingResumes, setLoadingResumes] = useState(true);
   const [resumeError, setResumeError] = useState(null);
-  const [localScores, setLocalScores] = useState({});
   const navigate = useNavigate();
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [resumeName, setResumeName] = useState('resume');
@@ -69,20 +67,11 @@ const Dashboard = () => {
 
   const fileSafe = (s) =>
     (s || 'resume')
-      .replace(/[\/\\?%*:|"<>]/g, '-')  // illegal filename chars
+      .replace(/[/\\?%*:|"<>]/g, '-')  // illegal filename chars
       .replace(/\s+/g, ' ')
       .trim();
 
   const buildFrontendPublicUrl = (token) => `${window.location.origin}/public/resume/${token}`;
-
-  const location = useLocation();
-  useEffect(() => {
-    if (location.state?.updatedScore) {
-      const { id, score } = location.state.updatedScore;
-      setLocalScores(prev => ({ ...prev, [id]: score }));
-    }
-  }, [location.state]);
-
   // Delete functions extracted from ResumeListPage
   const handleRemoveClick = (resume) => {
     setSelectedResume(resume);
@@ -112,59 +101,6 @@ const Dashboard = () => {
       setDeleteError('Could not delete resume. Please try again.');
     } finally {
       setDeletingId(null);
-    }
-  };
-
-  // Fetch subscription status and usage data
-  const fetchSubscriptionStatus = async () => {
-    try {
-      const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
-
-      if (!token) {
-        setSubscriptionStatus('free');
-        setLoadingSubscription(false);
-        return;
-      }
-
-      const response = await fetch(`${API_BASE}/api/payment/subscription-status`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const isPaid = data.hasActiveSubscription;
-        const previousStatus = subscriptionStatus;
-        setSubscriptionStatus(isPaid ? 'paid' : 'free');
-
-        console.log('Dashboard: Subscription check - Previous:', previousStatus, 'Current:', isPaid ? 'paid' : 'free');
-
-        // Only reset usage if user ACTUALLY just upgraded (was free, now paid)
-        // Not just because we're loading the page for the first time
-        if (isPaid && previousStatus === 'free' && previousStatus !== null) {
-          console.log('Dashboard: User upgraded to pro, resetting usage data');
-          const resetUsage = {
-            downloadsUsed: 0,
-            atsChecksUsed: 0,
-            downloadLimit: 3,
-            atsLimit: 1
-          };
-          setUsageData(resetUsage);
-          localStorage.setItem('usageData', JSON.stringify(resetUsage));
-        } else {
-          console.log('Dashboard: Keeping existing usage data');
-        }
-      } else {
-        setSubscriptionStatus('free');
-      }
-    } catch (error) {
-      console.error('Error fetching subscription status:', error);
-      setSubscriptionStatus('free');
-    } finally {
-      setLoadingSubscription(false);
     }
   };
 
@@ -200,6 +136,50 @@ const Dashboard = () => {
         setResumeError('Could not load your resumes.');
       } finally {
         setLoadingResumes(false);
+      }
+    };
+
+    const fetchSubscriptionStatus = async () => {
+      try {
+        const subToken = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
+
+        if (!subToken) {
+          setSubscriptionStatus('free');
+          setLoadingSubscription(false);
+          return;
+        }
+
+        const response = await fetch(`${API_BASE}/api/payment/subscription-status`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${subToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const isPaid = data.hasActiveSubscription;
+          setSubscriptionStatus(isPaid ? 'paid' : 'free');
+
+          if (isPaid) {
+            const resetUsage = {
+              downloadsUsed: 0,
+              atsChecksUsed: 0,
+              downloadLimit: 3,
+              atsLimit: 1
+            };
+            setUsageData(resetUsage);
+            localStorage.setItem('usageData', JSON.stringify(resetUsage));
+          }
+        } else {
+          setSubscriptionStatus('free');
+        }
+      } catch (error) {
+        console.error('Error fetching subscription status:', error);
+        setSubscriptionStatus('free');
+      } finally {
+        setLoadingSubscription(false);
       }
     };
 
@@ -339,59 +319,27 @@ const Dashboard = () => {
   };
 
   const handleATSCheck = (resume) => {
-    // Check limits for free users
-    if (subscriptionStatus === 'free' && usageData.atsChecksUsed >= usageData.atsLimit) {
-      alert(`You've reached your Resumix ATS check limit (${usageData.atsLimit}). Upgrade to Pro for unlimited Resumix ATS checks!`);
-      navigate('/subscription');
-      return;
-    }
+    if (!resume?._id) return;
 
-    // Update usage count for free users
     if (subscriptionStatus === 'free') {
-      setUsageData(prev => ({
-        ...prev,
-        atsChecksUsed: prev.atsChecksUsed + 1
-      }));
+      setUsageData(prev => ({ ...prev, atsChecksUsed: (prev.atsChecksUsed || 0) + 1 }));
     }
 
-    navigate('/m/atschecker', { state: { resumeId: resume._id } });
-  };
-
-  const hasAnyPersonalInfo = (pi = {}) => {
-    const keys = [
-      'fullName',
-      'professionalEmail',
-      'phone',
-      'address',
-      'city',
-      'district',
-      'country',
-      'zipCode',
-      'dateOfBirth'
-    ];
-    return keys.some(k => {
-      const v = pi?.[k];
-      return v !== undefined && v !== null && String(v).trim() !== '';
+    navigate('/m/atschecker', {
+      state: { resumeId: resume._id }
     });
   };
 
   const handleCreateNewResumeClick = async () => {
     try {
       const token = localStorage.getItem('token') || '';
-      if (!token) {
-        navigate('/profile');
-        return;
-      }
-      const { data } = await axios.get(`${API_BASE}/viewInformation/userInformation`, {
-        headers: { Authorization: `Bearer ${token}` }
+      const res = await axios.get(`${API_BASE}/viewInformation/userInformation`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
       });
 
-      const rd = data?.defaultResumeData || {};
-      const hasPI = hasAnyPersonalInfo(rd.personalInfo);
-      const hasEdu = Array.isArray(rd.education) && rd.education.length > 0;
-      const hasExp = Array.isArray(rd.experience) && rd.experience.length > 0;
+      const hasProfileData = Boolean(res.data) && Object.keys(res.data).length > 0;
 
-      if (hasPI || hasEdu || hasExp) {
+      if (hasProfileData) {
         navigate('/templates');
       } else {
         navigate('/profile');
