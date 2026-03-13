@@ -4,6 +4,7 @@ import { useNavigate, useLocation, useSearchParams, useParams } from 'react-rout
 import TopBar from '../ResumeEditorPage/TopBar';
 import { calculateAtsScore, generateSuggestions } from './ATSLogic';
 import axios from 'axios';
+import { getAuthToken } from '../../utils/auth';
 
 const API_BASE = process.env.REACT_APP_API_URL || '';
 
@@ -57,7 +58,7 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
   useEffect(() => {
     if (resume || !resolvedId || propResumeData) return;
     setLoading(true);
-    const token = localStorage.getItem('token') || '';
+    const token = getAuthToken();
     axios.get(`${API_BASE}/resume/${resolvedId}`, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => setResume(res.data))
       .catch(err => {
@@ -85,7 +86,7 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
     setSuggTotalGain(totalPotentialGain || 0);
 
     // Persist strength (score) to backend if changed
-    const token = localStorage.getItem('token') || '';
+    const token = getAuthToken();
     if (Number(resume?.strength) === Number(score)) return;
     axios.patch(
       `${API_BASE}/resume/updateResume/${resolvedId}`,

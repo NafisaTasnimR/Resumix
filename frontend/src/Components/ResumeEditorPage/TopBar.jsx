@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import home from '../../assets/icons8-home-48.png';
+import { getAuthToken } from '../../utils/auth';
 
 const API_BASE = process.env.REACT_APP_API_URL || '';
 
@@ -20,7 +21,7 @@ const TopBar = () => {
 
   const fetchSubscriptionStatus = async () => {
     try {
-      const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
+      const token = getAuthToken();
       console.log(' TopBar - Token found:', token ? 'Yes' : 'No');
 
       if (!token) {

@@ -6,6 +6,7 @@ import DownloadResumeModal from '../ResumeListPage/DownloadResumeModal';
 import DeleteConfirmationModal from '../ResumeListPage/DeleteConfirmationModal';
 import TopBar from '../ResumeEditorPage/TopBar';
 import axios from 'axios';
+import { clearAuthTokens, getAuthToken, isAuthError } from '../../utils/auth';
 
 const API_BASE = process.env.REACT_APP_API_URL || '';
 
@@ -85,7 +86,7 @@ const Dashboard = () => {
     setDeletingId(selectedResume._id);
 
     try {
-      const token = localStorage.getItem('token');
+      const token = getAuthToken();
       await axios.delete(`${API_BASE}/resume/${selectedResume._id}`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
@@ -105,17 +106,31 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = getAuthToken();
+
+    const handleInvalidToken = () => {
+      clearAuthTokens();
+      navigate('/login');
+    };
 
     const fetchUser = async () => {
       try {
+        if (!token) {
+          handleInvalidToken();
+          return;
+        }
+
         const res = await axios.get(`${API_BASE}/viewInformation/userInformation`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         setUser(res.data);
       } catch (err) {
+        if (isAuthError(err)) {
+          handleInvalidToken();
+          return;
+        }
         console.error("Failed to fetch user:", err);
       }
     };
@@ -125,6 +140,11 @@ const Dashboard = () => {
         setLoadingResumes(true);
         setResumeError(null);
 
+        if (!token) {
+          handleInvalidToken();
+          return;
+        }
+
         const res = await axios.get(`${API_BASE}/resume/all`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {}
         });
@@ -132,6 +152,10 @@ const Dashboard = () => {
         const list = Array.isArray(res.data?.resumes) ? res.data.resumes : res.data;
         setResumes(Array.isArray(list) ? list : []);
       } catch (err) {
+        if (isAuthError(err)) {
+          handleInvalidToken();
+          return;
+        }
         console.error('Failed to fetch resumes:', err);
         setResumeError('Could not load your resumes.');
       } finally {
@@ -141,11 +165,10 @@ const Dashboard = () => {
 
     const fetchSubscriptionStatus = async () => {
       try {
-        const subToken = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
+        const subToken = getAuthToken();
 
         if (!subToken) {
-          setSubscriptionStatus('free');
-          setLoadingSubscription(false);
+          handleInvalidToken();
           return;
         }
 
@@ -173,6 +196,10 @@ const Dashboard = () => {
             localStorage.setItem('usageData', JSON.stringify(resetUsage));
           }
         } else {
+          if (isAuthError(response.status)) {
+            handleInvalidToken();
+            return;
+          }
           setSubscriptionStatus('free');
         }
       } catch (error) {
@@ -186,7 +213,7 @@ const Dashboard = () => {
     fetchUser();
     fetchResumes();
     fetchSubscriptionStatus();
-  }, []);
+  }, [navigate]);
 
   if (!user) return <p>Loading...</p>;
 
@@ -202,7 +229,7 @@ const Dashboard = () => {
     setShareLink("");
     setShareLoadingId(resume._id);
 
-    const token = localStorage.getItem("token");
+    const token = getAuthToken();
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     try {
@@ -255,7 +282,7 @@ const Dashboard = () => {
 
     try {
       setIsPreparingDownload(true);
-      const token = localStorage.getItem('token') || '';
+      const token = getAuthToken();
       const res = await axios.get(`${API_BASE}/download/resume/${resume._id}/pdf`, {
         responseType: 'blob',
         headers: token ? { Authorization: `Bearer ${token}` } : {},
@@ -332,7 +359,7 @@ const Dashboard = () => {
 
   const handleCreateNewResumeClick = async () => {
     try {
-      const token = localStorage.getItem('token') || '';
+      const token = getAuthToken();
       const res = await axios.get(`${API_BASE}/viewInformation/userInformation`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {}
       });

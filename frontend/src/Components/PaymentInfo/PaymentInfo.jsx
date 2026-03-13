@@ -8,6 +8,7 @@ import {
   useElements
 } from '@stripe/react-stripe-js';
 import TopBar from '../ResumeEditorPage/TopBar';
+import { getAuthToken } from '../../utils/auth';
 import './PaymentInfo.css';
 
 const API_BASE = process.env.REACT_APP_API_URL || '';
@@ -29,7 +30,7 @@ const PaymentForm = () => {
   useEffect(() => {
     const createPaymentIntent = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = getAuthToken();
 
         const response = await fetch(`${API_BASE}/api/payment/create-payment-intent`, {
           method: 'POST',
@@ -107,7 +108,7 @@ const PaymentForm = () => {
     } else if (paymentIntent.status === 'succeeded') {
       // Payment succeeded - now confirm it and send email
       try {
-        const token = localStorage.getItem('token');
+        const token = getAuthToken();
         await fetch(`${API_BASE}/api/payment/confirm-payment`, {
           method: 'POST',
           headers: {

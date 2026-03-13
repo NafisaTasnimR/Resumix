@@ -2,6 +2,7 @@ import './PostLoginHeader.css';
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { getAuthToken } from '../../utils/auth';
 
 const API_BASE = process.env.REACT_APP_API_URL || '';
 
@@ -19,7 +20,7 @@ const PostLoginHeader = () => {
 
   const fetchSubscriptionStatus = async () => {
     try {
-      const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
+      const token = getAuthToken();
       console.log(' Token found:', token ? 'Yes' : 'No');
 
       if (!token) {
@@ -95,7 +96,7 @@ const PostLoginHeader = () => {
 
   const handleBuildClick = async () => {
     try {
-      const token = localStorage.getItem('token') || '';
+      const token = getAuthToken();
       if (!token) {
         navigate('/profile');
         return;

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './SettingsPage.css';
 import TopBar from '../ResumeEditorPage/TopBar';
 import axios from 'axios';
+import { getAuthToken } from '../../utils/auth';
 
 const API_BASE = process.env.REACT_APP_API_URL || '';
 
@@ -24,7 +25,7 @@ const SettingsPage = () => {
   // Fetch subscription status
   const fetchSubscriptionStatus = async () => {
     try {
-      const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
+      const token = getAuthToken();
 
       if (!token) {
         setSubscriptionStatus('free');
@@ -52,8 +53,7 @@ const SettingsPage = () => {
   };
 
   useEffect(() => {
-    const token =
-      localStorage.getItem('token') || sessionStorage.getItem('token');
+    const token = getAuthToken();
     const tokenEmail = token ? decodeJwt(token)?.email : '';
 
     const loadUser = async () => {

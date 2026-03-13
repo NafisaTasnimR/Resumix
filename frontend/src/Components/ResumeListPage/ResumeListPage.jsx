@@ -6,6 +6,7 @@ import DownloadResumeModal from './DownloadResumeModal';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 import TopBar from '../ResumeEditorPage/TopBar';
 import axios from 'axios';
+import { getAuthToken } from '../../utils/auth';
 
 const API_BASE = process.env.REACT_APP_API_URL || '';
 
@@ -35,7 +36,7 @@ const ResumeListPage = () => {
       try {
         setLoadingResumes(true);
         setResumeError('');
-        const token = localStorage.getItem('token');
+        const token = getAuthToken();
         const res = await axios.get(`${API_BASE}/resume/all`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
@@ -71,7 +72,7 @@ const ResumeListPage = () => {
     setDeletingId(selectedResume._id);
 
     try {
-      const token = localStorage.getItem('token');
+      const token = getAuthToken();
       await axios.delete(`${API_BASE}/resume/${selectedResume._id}`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
@@ -97,7 +98,7 @@ const ResumeListPage = () => {
     setShareLink('');
     setShareLoadingId(resume._id);
 
-    const token = localStorage.getItem('token');
+    const token = getAuthToken();
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     try {
@@ -136,7 +137,7 @@ const ResumeListPage = () => {
 
   const handleDownloadClick = async (resume) => {
     try {
-      const token = localStorage.getItem('token') || '';
+      const token = getAuthToken();
       const res = await axios.get(`${API_BASE}/download/resume/${resume._id}/pdf`, {
         responseType: 'blob',
         headers: { Authorization: `Bearer ${token}` },

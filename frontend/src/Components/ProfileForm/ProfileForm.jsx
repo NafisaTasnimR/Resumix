@@ -11,6 +11,7 @@ import AdditionalInfo from './AdditionalInfo';
 import axios from 'axios';
 import TopBar from '../ResumeEditorPage/TopBar';
 import { useNavigate } from 'react-router-dom';
+import { clearAuthTokens, getAuthToken } from '../../utils/auth';
 
 const API_BASE = process.env.REACT_APP_API_URL || '';
 
@@ -640,9 +641,10 @@ const ProfileForm = () => {
 
   const handleSave = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = getAuthToken();
       if (!token) {
         alert("No token found, please log in again.");
+        navigate('/login');
         return;
       }
 
@@ -699,6 +701,12 @@ const ProfileForm = () => {
 
     } catch (error) {
       console.error(error);
+      if (error?.response?.status === 400 || error?.response?.status === 401) {
+        clearAuthTokens();
+        alert("Your session expired. Please log in again.");
+        navigate('/login');
+        return;
+      }
       if (error.response && error.response.data && error.response.data.errors) {
         alert("Validation errors: " + error.response.data.errors.join(", "));
       } else {
@@ -710,10 +718,16 @@ const ProfileForm = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        const token = getAuthToken();
+        if (!token) {
+          navigate('/login');
+          return;
+        }
+
         await new Promise((res) => setTimeout(res, 1000));
         const response = await axios.get(`${API_BASE}/viewInformation/userInformation`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         const resume = response?.data?.defaultResumeData;
@@ -806,11 +820,15 @@ const ProfileForm = () => {
         }
       } catch (err) {
         console.error('Error fetching user:', err);
+        if (err?.response?.status === 400 || err?.response?.status === 401) {
+          clearAuthTokens();
+          navigate('/login');
+        }
       }
     };
 
     fetchUserData();
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="resume-container">

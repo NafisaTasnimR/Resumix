@@ -5,6 +5,7 @@ import axios from 'axios';
 import QuestionBox from './QuestionBox';
 import Preview from './Preview';
 import ProgressLine from './ProgressLine';
+import { getAuthToken } from '../../utils/auth';
 // Add near the top of ResumeEditor.jsx (adjust paths/names to your assets)
 import icPersonal from '../../assets/icons8-account-48.png';
 import icEducation from '../../assets/icons8-graduation-cap-48.png';
@@ -249,7 +250,7 @@ const ResumeEditor = () => {
     const loadDefault = async () => {
       try {
         const res = await axios.get(`${API_BASE}/viewInformation/userInformation`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token') || ''}` }
+          headers: { Authorization: `Bearer ${getAuthToken()}` }
         });
         const d = res?.data?.defaultResumeData || {};
 
@@ -366,7 +367,7 @@ const ResumeEditor = () => {
     const resumeId = location.state?.resumeId;
     if (!resumeId) return;
 
-    const token = localStorage.getItem("token") || "";
+    const token = getAuthToken();
     let cancelled = false;
 
     (async () => {
@@ -706,7 +707,7 @@ const ResumeEditor = () => {
     if (saving) return;
     try {
       setSaving(true);
-      const token = localStorage.getItem('token') || '';
+      const token = getAuthToken();
 
       // Schema-only payload and correct template source
       const payload = {
@@ -750,7 +751,7 @@ const ResumeEditor = () => {
     if (saving) return;
     try {
       setSaving(true);
-      const token = localStorage.getItem('token') || '';
+      const token = getAuthToken();
       const resumeId = location.state?.resumeId;
 
       const payload = {

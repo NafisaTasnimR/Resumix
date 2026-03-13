@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './TemplatePreview.css';
 import axios from 'axios';
+import { getAuthToken } from '../../utils/auth';
 
 const API_BASE = process.env.REACT_APP_API_URL || '';
 
@@ -13,7 +14,7 @@ const TemplatePreview = ({ id, template }) => {
   useEffect(() => {
     const fetchSubscriptionStatus = async () => {
       try {
-        const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
+        const token = getAuthToken();
 
         if (!token) {
           setSubscriptionStatus('free');

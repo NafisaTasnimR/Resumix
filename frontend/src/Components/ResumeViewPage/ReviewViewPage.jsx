@@ -6,6 +6,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import TopBar from '../ResumeEditorPage/TopBar';
 import ErrorBoundary from './ErrorBoundary';
+import { getAuthToken } from '../../utils/auth';
 
 const API_BASE = process.env.REACT_APP_API_URL || '';
 
@@ -21,7 +22,7 @@ const ResumePreview = () => {
       try {
         const res = await axios.get(`${API_BASE}/resume/${id}`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+            Authorization: `Bearer ${getAuthToken()}`,
           },
         });
         setResume(res.data);
