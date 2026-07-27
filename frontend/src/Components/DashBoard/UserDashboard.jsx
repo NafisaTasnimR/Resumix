@@ -7,7 +7,11 @@ import TopBar from '../ResumeEditorPage/TopBar';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
-const API_BASE = (import.meta.env && import.meta.env.VITE_API_BASE) || "http://localhost:5000";
+// NOTE: this app runs on CRA/webpack, not Vite, so `import.meta.env` is
+// never defined here; that made this always evaluate to the fallback
+// below anyway. Simplified to the same effective value (also makes the
+// file parseable by Jest's CommonJS transform, which chokes on `import.meta`).
+const API_BASE = "http://localhost:5000";
 
 
 const Dashboard = () => {
