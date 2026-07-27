@@ -8,10 +8,12 @@ import Achievements from './Achievements';
 import References from './References';
 import Hobbies from './Hobbies';
 import AdditionalInfo from './AdditionalInfo';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import TopBar from '../ResumeEditorPage/TopBar';
 import { useNavigate } from 'react-router-dom';
+import { clearAuthTokens, getAuthToken } from '../../utils/auth';
+
+const API_BASE = process.env.REACT_APP_API_URL || '';
 
 const ProfileForm = () => {
   // Move scroll to useEffect to only run on mount
@@ -138,51 +140,51 @@ const ProfileForm = () => {
 
   // Define navigation sections with Flaticon icons
   const navigationSections = [
-    { 
-      id: 'personal', 
-      name: 'Personal Information', 
+    {
+      id: 'personal',
+      name: 'Personal Information',
       icon: '/personal-info_icon.png',  // Path to your Flaticon
       alt: 'Personal Information Icon'
     },
-    { 
-      id: 'experience', 
-      name: 'Experience', 
+    {
+      id: 'experience',
+      name: 'Experience',
       icon: '/experience_icon.png',     // Path to your Flaticon
       alt: 'Experience Icon'
     },
-    { 
-      id: 'education', 
-      name: 'Education', 
+    {
+      id: 'education',
+      name: 'Education',
       icon: '/education_icon.png',      // Path to your Flaticon
       alt: 'Education Icon'
     },
-    { 
-      id: 'skills', 
-      name: 'Skills', 
+    {
+      id: 'skills',
+      name: 'Skills',
       icon: '/skills_icon.png',         // Path to your Flaticon
       alt: 'Skills Icon'
     },
-    { 
-      id: 'achievements', 
-      name: 'Achievements', 
+    {
+      id: 'achievements',
+      name: 'Achievements',
       icon: '/achievements_icon.png',   // Path to your Flaticon
       alt: 'Achievements Icon'
     },
-    { 
-      id: 'references', 
-      name: 'References', 
+    {
+      id: 'references',
+      name: 'References',
       icon: '/references_icon.png',     // Path to your Flaticon
       alt: 'References Icon'
     },
-    { 
-      id: 'hobbies', 
-      name: 'Hobbies', 
+    {
+      id: 'hobbies',
+      name: 'Hobbies',
       icon: '/hobbies_icon.png',        // Path to your Flaticon
       alt: 'Hobbies Icon'
     },
-    { 
-      id: 'additional', 
-      name: 'Additional Information', 
+    {
+      id: 'additional',
+      name: 'Additional Information',
       icon: '/additional_icon.png',     // Path to your Flaticon
       alt: 'Additional Info Icon'
     }
@@ -191,25 +193,25 @@ const ProfileForm = () => {
   // Validation functions for each section
   const isPersonalInfoComplete = () => {
     if (isUpdateMode) return true; // No validation in update mode
-    return personalInfo.fullName.trim() && 
-           personalInfo.professionalEmail.trim() && 
-           personalInfo.phone.trim();
+    return personalInfo.fullName.trim() &&
+      personalInfo.professionalEmail.trim() &&
+      personalInfo.phone.trim();
   };
 
   const isExperienceComplete = () => {
     if (isUpdateMode) return true;
     // Check if at least one experience has required fields filled
-    return experiences.some(exp => 
-      exp.employerName.trim() && 
-      exp.jobTitle.trim() && 
+    return experiences.some(exp =>
+      exp.employerName.trim() &&
+      exp.jobTitle.trim() &&
       exp.startDate.trim()
     );
   };
 
   const isEducationComplete = () => {
     if (isUpdateMode) return true;
-    return educations.some(edu => 
-      edu.institution.trim() && 
+    return educations.some(edu =>
+      edu.institution.trim() &&
       edu.degree.trim()
     );
   };
@@ -221,17 +223,17 @@ const ProfileForm = () => {
 
   const isAchievementsComplete = () => {
     if (isUpdateMode) return true;
-    return achievements.some(ach => 
-      ach.title.trim() && 
+    return achievements.some(ach =>
+      ach.title.trim() &&
       ach.organization.trim()
     );
   };
 
   const isReferencesComplete = () => {
     if (isUpdateMode) return true;
-    return references.some(ref => 
-      ref.firstName.trim() && 
-      ref.lastName.trim() && 
+    return references.some(ref =>
+      ref.firstName.trim() &&
+      ref.lastName.trim() &&
       ref.company.trim()
     );
   };
@@ -243,8 +245,8 @@ const ProfileForm = () => {
 
   const isAdditionalInfoComplete = () => {
     if (isUpdateMode) return true;
-    return additionalInfos.some(info => 
-      info.sectionTitle.trim() && 
+    return additionalInfos.some(info =>
+      info.sectionTitle.trim() &&
       info.content.trim()
     );
   };
@@ -314,11 +316,6 @@ const ProfileForm = () => {
     }
     // Scroll after state update
     setTimeout(() => window.scrollTo(0, 0), 100);
-  };
-
-  const handleSubmit = () => {
-    window.scrollTo(0, 0);
-    alert('Resume submitted successfully!');
   };
 
   // Experience functions
@@ -644,9 +641,10 @@ const ProfileForm = () => {
 
   const handleSave = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = getAuthToken();
       if (!token) {
         alert("No token found, please log in again.");
+        navigate('/login');
         return;
       }
 
@@ -687,7 +685,7 @@ const ProfileForm = () => {
       };
 
       const response = await axios.patch(
-        'http://localhost:5000/info/update',
+        `${API_BASE}/info/update`,
         payload,
         {
           headers: {
@@ -703,6 +701,12 @@ const ProfileForm = () => {
 
     } catch (error) {
       console.error(error);
+      if (error?.response?.status === 400 || error?.response?.status === 401) {
+        clearAuthTokens();
+        alert("Your session expired. Please log in again.");
+        navigate('/login');
+        return;
+      }
       if (error.response && error.response.data && error.response.data.errors) {
         alert("Validation errors: " + error.response.data.errors.join(", "));
       } else {
@@ -714,10 +718,16 @@ const ProfileForm = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        const token = getAuthToken();
+        if (!token) {
+          navigate('/login');
+          return;
+        }
+
         await new Promise((res) => setTimeout(res, 1000));
-        const response = await axios.get('http://localhost:5000/viewInformation/userInformation', {
+        const response = await axios.get(`${API_BASE}/viewInformation/userInformation`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         const resume = response?.data?.defaultResumeData;
@@ -810,16 +820,20 @@ const ProfileForm = () => {
         }
       } catch (err) {
         console.error('Error fetching user:', err);
+        if (err?.response?.status === 400 || err?.response?.status === 401) {
+          clearAuthTokens();
+          navigate('/login');
+        }
       }
     };
 
     fetchUserData();
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="resume-container">
       {/* Hamburger Menu Button */}
-      <button 
+      <button
         className="hamburger-menu"
         onClick={() => setIsSidebarOpen(true)}
       >
@@ -831,21 +845,21 @@ const ProfileForm = () => {
       {/* Sliding Sidebar */}
       {isSidebarOpen && (
         <>
-          <div 
-            className="sidebar-overlay" 
+          <div
+            className="sidebar-overlay"
             onClick={() => setIsSidebarOpen(false)}
           ></div>
           <div className="sliding-sidebar">
             <div className="sidebar-header">
               <h3>Navigation</h3>
-              <button 
+              <button
                 className="close-sidebar"
                 onClick={() => setIsSidebarOpen(false)}
               >
                 ×
               </button>
             </div>
-            
+
             <div className="sidebar-content">
               <div className="nav-sections-slide">
                 {navigationSections.map((section) => (
@@ -857,8 +871,8 @@ const ProfileForm = () => {
                       setIsSidebarOpen(false);
                     }}
                   >
-                    <img 
-                      src={section.icon} 
+                    <img
+                      src={section.icon}
                       alt={section.alt}
                       className="nav-icon-img"
                     />
@@ -866,10 +880,21 @@ const ProfileForm = () => {
                   </div>
                 ))}
               </div>
-              
-              <button className="skip-form-button-slide" onClick={handleSkipForm}>
-                Skip Form
-              </button>
+
+              <div className="sidebar-buttons">
+                <button
+                  className="submit-form-button-slide3"
+                  onClick={() => {
+                    handleSave();
+                    setIsSidebarOpen(false);
+                  }}
+                >
+                  Submit Form
+                </button>
+                <button className="skip-form-button-slide" onClick={handleSkipForm}>
+                  Skip Form
+                </button>
+              </div>
             </div>
           </div>
         </>
@@ -885,15 +910,15 @@ const ProfileForm = () => {
             {navigationSections.map((section) => {
               const isCompleted = getSectionCompletionStatus(section.id);
               const isCurrent = currentPage === section.id;
-              
+
               return (
                 <div key={section.id} className="progress-step3">
-                  <div 
+                  <div
                     className={`step-circle3 ${isCompleted ? 'completed3' : ''} ${isCurrent ? 'current3' : ''}`}
                     title={section.name}
                   >
-                    <img 
-                      src={section.icon} 
+                    <img
+                      src={section.icon}
                       alt={section.alt}
                       className="progress-icon"
                     />

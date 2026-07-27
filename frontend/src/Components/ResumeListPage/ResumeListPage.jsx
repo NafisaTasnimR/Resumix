@@ -6,8 +6,9 @@ import DownloadResumeModal from './DownloadResumeModal';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 import TopBar from '../ResumeEditorPage/TopBar';
 import axios from 'axios';
+import { getAuthToken } from '../../utils/auth';
 
-const API_BASE = (import.meta.env && import.meta.env.VITE_API_BASE) || 'http://localhost:5000';
+const API_BASE = process.env.REACT_APP_API_URL || '';
 
 const ResumeListPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);          // delete confirm (UNCHANGED)
@@ -28,25 +29,14 @@ const ResumeListPage = () => {
   const [deletingId, setDeletingId] = useState(null);
   const [deleteError, setDeleteError] = useState('');
 
-  const [downloadFileName, setDownloadFileName] = useState('resume.pdf');
-
-
-
   const navigate = useNavigate();
-
-  const fileSafe = (s) =>
-    (s || 'resume')
-      .replace(/[\/\\?%*:|"<>]/g, '-')  // illegal filename chars
-      .replace(/\s+/g, ' ')
-      .trim();
-
 
   useEffect(() => {
     const fetchResumes = async () => {
       try {
         setLoadingResumes(true);
         setResumeError('');
-        const token = localStorage.getItem('token');
+        const token = getAuthToken();
         const res = await axios.get(`${API_BASE}/resume/all`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
@@ -82,7 +72,7 @@ const ResumeListPage = () => {
     setDeletingId(selectedResume._id);
 
     try {
-      const token = localStorage.getItem('token');
+      const token = getAuthToken();
       await axios.delete(`${API_BASE}/resume/${selectedResume._id}`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
@@ -108,7 +98,7 @@ const ResumeListPage = () => {
     setShareLink('');
     setShareLoadingId(resume._id);
 
-    const token = localStorage.getItem('token');
+    const token = getAuthToken();
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     try {
@@ -147,7 +137,7 @@ const ResumeListPage = () => {
 
   const handleDownloadClick = async (resume) => {
     try {
-      const token = localStorage.getItem('token') || '';
+      const token = getAuthToken();
       const res = await axios.get(`${API_BASE}/download/resume/${resume._id}/pdf`, {
         responseType: 'blob',
         headers: { Authorization: `Bearer ${token}` },
@@ -157,7 +147,6 @@ const ResumeListPage = () => {
 
       setResumeName(resume.title || 'resume');                      // already there
       setDownloadLink(blobUrl);                                     // already there
-      setDownloadFileName(`${fileSafe(resume.title || 'resume')}.pdf`);  // NEW
       setIsDownloadModalOpen(true);                                 // already there
     } catch (e) {
       alert('Could not download PDF.');

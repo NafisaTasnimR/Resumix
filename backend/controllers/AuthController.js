@@ -12,7 +12,17 @@ const signup = async (req, res) => {
         const userModel = new UserModel({ username, email, password });
         userModel.password = await bcrypt.hash(password, 10);
         await userModel.save();
-        res.status(201).json({ message: 'User registered successfully', user: { username } });
+        const jwtToken = jwt.sign(
+            { userId: userModel._id, email: userModel.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        res.status(201).json({
+            message: 'User registered successfully',
+            user: { username: userModel.username, email: userModel.email },
+            token: jwtToken
+        });
     } catch (error) {
         console.error("Signup Error:", error);
         res.status(500).json({ message: 'Internal server error', error: error.message });
@@ -32,14 +42,14 @@ const login = async (req, res) => {
             return res.status(403).json({ message: 'Authentication Failed! Email or Password is wrong' });
         }
         const jwtToken = jwt.sign(
-            { userId: user._id, email: user.email }, 
-            process.env.JWT_SECRET, 
+            { userId: user._id, email: user.email },
+            process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
         res.status(200).json(
-            { 
+            {
                 message: 'Login successful',
-                token: jwtToken 
+                token: jwtToken
             }
         );
     }
@@ -50,6 +60,6 @@ const login = async (req, res) => {
 
 
 module.exports = {
-    signup, 
+    signup,
     login
 };

@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './UserDashboard.css';
 import { Link, useNavigate } from 'react-router-dom';
 import ShareResumeModal from '../ResumeListPage/ShareResumeModal';
 import DownloadResumeModal from '../ResumeListPage/DownloadResumeModal';
+import DeleteConfirmationModal from '../ResumeListPage/DeleteConfirmationModal';
 import TopBar from '../ResumeEditorPage/TopBar';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
@@ -11,14 +12,18 @@ import { useLocation } from 'react-router-dom';
 // never defined here; that made this always evaluate to the fallback
 // below anyway. Simplified to the same effective value (also makes the
 // file parseable by Jest's CommonJS transform, which chokes on `import.meta`).
-const API_BASE = "http://localhost:5000";
 
+import { clearAuthTokens, getAuthToken, isAuthError } from '../../utils/auth';
+
+
+const API_BASE = process.env.REACT_APP_API_URL || '';
 
 const Dashboard = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);          // delete confirm
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+  /*const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [resumeName, setResumeName] = useState('Nishat_Tasnim_Resume');
-  const [downloadLink, setDownloadLink] = useState('https://myresume.com/resume12345.pdf');
+  const [downloadLink, setDownloadLink] = useState('https://myresume.com/resume12345.pdf');*/
   const [user, setUser] = useState(null);
 
   // Subscription and usage tracking
@@ -42,7 +47,12 @@ const Dashboard = () => {
 
   const [shareLink, setShareLink] = useState("");
   const [shareError, setShareError] = useState("");
-  const [shareLoadingId, setShareLoadingId] = useState(null);
+  const [, setShareLoadingId] = useState(null);
+
+  // Delete-related state
+  const [selectedResume, setSelectedResume] = useState(null);     // for delete
+  const [deletingId, setDeletingId] = useState(null);
+  const [deleteError, setDeleteError] = useState('');
 
   const personalRef = useRef(null);
   const educationRef = useRef(null);
@@ -56,90 +66,79 @@ const Dashboard = () => {
   const [resumes, setResumes] = useState([]);
   const [loadingResumes, setLoadingResumes] = useState(true);
   const [resumeError, setResumeError] = useState(null);
-  const [localScores, setLocalScores] = useState({});
   const navigate = useNavigate();
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+  const [resumeName, setResumeName] = useState('resume');
+  const [downloadLink, setDownloadLink] = useState(''); // for preview or copy
+  const [resumeBlob, setResumeBlob] = useState(null);
+  const [isPreparingDownload, setIsPreparingDownload] = useState(false);
+
 
   const fileSafe = (s) =>
     (s || 'resume')
-      .replace(/[\/\\?%*:|"<>]/g, '-')  // illegal filename chars
+      .replace(/[/\\?%*:|"<>]/g, '-')  // illegal filename chars
       .replace(/\s+/g, ' ')
       .trim();
 
   const buildFrontendPublicUrl = (token) => `${window.location.origin}/public/resume/${token}`;
+  // Delete functions extracted from ResumeListPage
+  const handleRemoveClick = (resume) => {
+    setSelectedResume(resume);
+    setIsModalOpen(true);
+  };
 
-  const location = useLocation();
-  useEffect(() => {
-    if (location.state?.updatedScore) {
-      const { id, score } = location.state.updatedScore;
-      setLocalScores(prev => ({ ...prev, [id]: score }));
-    }
-  }, [location.state]);
+  const handleDelete = async () => {
+    if (!selectedResume?._id) return;
 
-  // Fetch subscription status and usage data
-  const fetchSubscriptionStatus = async () => {
+    setDeleteError('');
+    setDeletingId(selectedResume._id);
+
     try {
-      const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
-
-      if (!token) {
-        setSubscriptionStatus('free');
-        setLoadingSubscription(false);
-        return;
-      }
-
-      const response = await fetch('http://localhost:5000/api/payment/subscription-status', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+      const token = getAuthToken();
+      await axios.delete(`${API_BASE}/resume/${selectedResume._id}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        const isPaid = data.hasActiveSubscription;
-        const previousStatus = subscriptionStatus;
-        setSubscriptionStatus(isPaid ? 'paid' : 'free');
+      // Remove from list locally
+      setResumes(prev => prev.filter(x => x._id !== selectedResume._id));
 
-        console.log('Dashboard: Subscription check - Previous:', previousStatus, 'Current:', isPaid ? 'paid' : 'free');
-
-        // Only reset usage if user ACTUALLY just upgraded (was free, now paid)
-        // Not just because we're loading the page for the first time
-        if (isPaid && previousStatus === 'free' && previousStatus !== null) {
-          console.log('Dashboard: User upgraded to pro, resetting usage data');
-          const resetUsage = {
-            downloadsUsed: 0,
-            atsChecksUsed: 0,
-            downloadLimit: 3,
-            atsLimit: 1
-          };
-          setUsageData(resetUsage);
-          localStorage.setItem('usageData', JSON.stringify(resetUsage));
-        } else {
-          console.log('Dashboard: Keeping existing usage data');
-        }
-      } else {
-        setSubscriptionStatus('free');
-      }
-    } catch (error) {
-      console.error('Error fetching subscription status:', error);
-      setSubscriptionStatus('free');
+      // Close modal and clear selection
+      setIsModalOpen(false);
+      setSelectedResume(null);
+    } catch (e) {
+      console.error('Delete failed', e);
+      setDeleteError('Could not delete resume. Please try again.');
     } finally {
-      setLoadingSubscription(false);
+      setDeletingId(null);
     }
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = getAuthToken();
+
+    const handleInvalidToken = () => {
+      clearAuthTokens();
+      navigate('/login');
+    };
 
     const fetchUser = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/viewInformation/userInformation', {
+        if (!token) {
+          handleInvalidToken();
+          return;
+        }
+
+        const res = await axios.get(`${API_BASE}/viewInformation/userInformation`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         setUser(res.data);
       } catch (err) {
+        if (isAuthError(err)) {
+          handleInvalidToken();
+          return;
+        }
         console.error("Failed to fetch user:", err);
       }
     };
@@ -149,13 +148,22 @@ const Dashboard = () => {
         setLoadingResumes(true);
         setResumeError(null);
 
-        const res = await axios.get('http://localhost:5000/resume/all', {
+        if (!token) {
+          handleInvalidToken();
+          return;
+        }
+
+        const res = await axios.get(`${API_BASE}/resume/all`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {}
         });
 
         const list = Array.isArray(res.data?.resumes) ? res.data.resumes : res.data;
         setResumes(Array.isArray(list) ? list : []);
       } catch (err) {
+        if (isAuthError(err)) {
+          handleInvalidToken();
+          return;
+        }
         console.error('Failed to fetch resumes:', err);
         setResumeError('Could not load your resumes.');
       } finally {
@@ -163,21 +171,73 @@ const Dashboard = () => {
       }
     };
 
+    const fetchSubscriptionStatus = async () => {
+      try {
+        const subToken = getAuthToken();
+
+        if (!subToken) {
+          handleInvalidToken();
+          return;
+        }
+
+        const response = await fetch(`${API_BASE}/api/payment/subscription-status`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${subToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const isPaid = data.hasActiveSubscription;
+          setSubscriptionStatus(isPaid ? 'paid' : 'free');
+
+          if (isPaid) {
+            const resetUsage = {
+              downloadsUsed: 0,
+              atsChecksUsed: 0,
+              downloadLimit: 3,
+              atsLimit: 1
+            };
+            setUsageData(resetUsage);
+            localStorage.setItem('usageData', JSON.stringify(resetUsage));
+          }
+        } else {
+          if (isAuthError(response.status)) {
+            handleInvalidToken();
+            return;
+          }
+          setSubscriptionStatus('free');
+        }
+      } catch (error) {
+        console.error('Error fetching subscription status:', error);
+        setSubscriptionStatus('free');
+      } finally {
+        setLoadingSubscription(false);
+      }
+    };
+
     fetchUser();
     fetchResumes();
     fetchSubscriptionStatus();
-  }, []);
+  }, [navigate]);
 
   if (!user) return <p>Loading...</p>;
 
   // ADD: share handler (does token inline, no helper files)
   const handleShareClick = async (resume) => {
+    if (subscriptionStatus === 'free') {
+      alert('Link sharing is a Pro feature. Please upgrade to use public links.');
+      navigate('/subscription');
+      return;
+    }
     setResumeName(resume.title || "Untitled Resume");
     setShareError("");
     setShareLink("");
     setShareLoadingId(resume._id);
 
-    const token = localStorage.getItem("token");
+    const token = getAuthToken();
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     try {
@@ -211,61 +271,78 @@ const Dashboard = () => {
     }
   };
 
-
-  /*const handleDownloadClick = (resume) => {
-    setResumeName(resume.name);
-    setDownloadLink(`https://myresume.com/${resume.name}_Resume.pdf`);
-
-    setIsDownloadModalOpen(true);
-  };*/
-
   const scrollToSection = (ref) => {
     ref.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   const fmt = (d) => (d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : '—');
 
+  // CLICK on "Download" -> prefetch only, open modal (NO download here)
   const handleDownloadClick = async (resume) => {
-    // Check limits for free users
+    if (isDownloadModalOpen || isPreparingDownload) return;
+
+    // Free plan limit check BEFORE any network call
     if (subscriptionStatus === 'free' && usageData.downloadsUsed >= usageData.downloadLimit) {
       alert(`You've reached your download limit (${usageData.downloadLimit}). Upgrade to Pro for unlimited downloads!`);
       navigate('/subscription');
       return;
     }
+
     try {
-      const token = localStorage.getItem('token') || '';
+      setIsPreparingDownload(true);
+      const token = getAuthToken();
       const res = await axios.get(`${API_BASE}/download/resume/${resume._id}/pdf`, {
         responseType: 'blob',
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
-      const blobUrl = URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
+      const blob = new Blob([res.data], { type: 'application/pdf' });
+      const blobUrl = URL.createObjectURL(blob);
+
       setResumeName(resume.title || 'resume');
-      setDownloadLink(blobUrl);
-      setIsDownloadModalOpen(true);   // <-- show modal now
+      setResumeBlob(blob);          // stash Blob for confirm
+      setDownloadLink(blobUrl);     // (optional) preview/copy in modal
+      setIsDownloadModalOpen(true); // <-- open modal ONLY
 
-      const url = URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${(resume.title || 'resume')}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-
-      // Update usage count for free users
-      if (subscriptionStatus === 'free') {
-        setUsageData(prev => ({
-          ...prev,
-          downloadsUsed: prev.downloadsUsed + 1
-        }));
-      }
+      // ❌ DO NOT download here
+      // ❌ DO NOT increment usage here
     } catch (e) {
-      alert('Could not download PDF');
+      console.error(e);
+      alert('Could not prepare PDF for download');
+    } finally {
+      setIsPreparingDownload(false);
     }
   };
 
+  // CONFIRM in modal -> actually download ONCE and increment usage
+  const handleConfirmDownload = () => {
+    if (!resumeBlob) return;
+
+    const url = URL.createObjectURL(resumeBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${(resumeName || 'resume')}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+
+    // Increment usage AFTER successful download (free only)
+    if (subscriptionStatus === 'free') {
+      setUsageData(prev => ({ ...prev, downloadsUsed: (prev.downloadsUsed || 0) + 1 }));
+    }
+
+    // Clean up and close modal (also revoke preview link if set)
+    if (downloadLink) URL.revokeObjectURL(downloadLink);
+    setDownloadLink('');
+    setResumeBlob(null);
+    handleCloseModal();
+  };
+
+
+
   const handleCloseModal = () => {
+    setIsModalOpen(false);
     setIsShareModalOpen(false);
     setIsDownloadModalOpen(false);
 
@@ -277,59 +354,27 @@ const Dashboard = () => {
   };
 
   const handleATSCheck = (resume) => {
-    // Check limits for free users
-    if (subscriptionStatus === 'free' && usageData.atsChecksUsed >= usageData.atsLimit) {
-      alert(`You've reached your ATS check limit (${usageData.atsLimit}). Upgrade to Pro for unlimited ATS checks!`);
-      navigate('/subscription');
-      return;
-    }
+    if (!resume?._id) return;
 
-    // Update usage count for free users
     if (subscriptionStatus === 'free') {
-      setUsageData(prev => ({
-        ...prev,
-        atsChecksUsed: prev.atsChecksUsed + 1
-      }));
+      setUsageData(prev => ({ ...prev, atsChecksUsed: (prev.atsChecksUsed || 0) + 1 }));
     }
 
-    navigate('/m/atschecker', { state: { resumeId: resume._id } });
-  };
-
-  const hasAnyPersonalInfo = (pi = {}) => {
-    const keys = [
-      'fullName',
-      'professionalEmail',
-      'phone',
-      'address',
-      'city',
-      'district',
-      'country',
-      'zipCode',
-      'dateOfBirth'
-    ];
-    return keys.some(k => {
-      const v = pi?.[k];
-      return v !== undefined && v !== null && String(v).trim() !== '';
+    navigate('/m/atschecker', {
+      state: { resumeId: resume._id }
     });
   };
 
   const handleCreateNewResumeClick = async () => {
     try {
-      const token = localStorage.getItem('token') || '';
-      if (!token) {
-        navigate('/profile');
-        return;
-      }
-      const { data } = await axios.get('http://localhost:5000/viewInformation/userInformation', {
-        headers: { Authorization: `Bearer ${token}` }
+      const token = getAuthToken();
+      const res = await axios.get(`${API_BASE}/viewInformation/userInformation`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
       });
 
-      const rd = data?.defaultResumeData || {};
-      const hasPI = hasAnyPersonalInfo(rd.personalInfo);
-      const hasEdu = Array.isArray(rd.education) && rd.education.length > 0;
-      const hasExp = Array.isArray(rd.experience) && rd.experience.length > 0;
+      const hasProfileData = Boolean(res.data) && Object.keys(res.data).length > 0;
 
-      if (hasPI || hasEdu || hasExp) {
+      if (hasProfileData) {
         navigate('/templates');
       } else {
         navigate('/profile');
@@ -365,7 +410,7 @@ const Dashboard = () => {
               </div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '12px', color: '#856404', fontWeight: 600, marginBottom: '4px' }}>ATS CHECKS</div>
+              <div style={{ fontSize: '12px', color: '#856404', fontWeight: 600, marginBottom: '4px' }}>RESUMIX ATS </div>
               <div style={{ fontSize: '18px', fontWeight: 700, color: '#856404' }}>
                 {usageData.atsChecksUsed}/{usageData.atsLimit}
               </div>
@@ -401,11 +446,12 @@ const Dashboard = () => {
 
       <div className="resume-table">
         <div className="resume-table-header">
-          <span>MY RESUMES</span>
+          <span>NO.</span>
+          <span>RESUME TITLE</span>
           <span>MODIFICATION</span>
           <span>CREATION</span>
           <span>STRENGTH</span>
-          <span>ACTIONS</span>
+          <span style={{ textAlign: 'center' }}>ACTIONS</span>
         </div>
 
         {loadingResumes && (
@@ -425,12 +471,14 @@ const Dashboard = () => {
           <div className="resume-table-row"><span>No resumes yet. Create one!</span></div>
         )}
 
-        {!loadingResumes && !resumeError && resumes.map((r) => {
+        {!loadingResumes && !resumeError && resumes.map((r, index) => {
           const canDownload = subscriptionStatus === 'paid' || usageData.downloadsUsed < usageData.downloadLimit;
           const canUseATS = subscriptionStatus === 'paid' || usageData.atsChecksUsed < usageData.atsLimit;
-
+          const canShare = subscriptionStatus === 'paid';
           return (
             <div className="resume-table-row" key={r._id}>
+              <span className="resume-serial">{index + 1}</span>
+
               <button
                 className="resume-name-link"
                 onClick={() => navigate(`/resumeview/${r._id}`)}
@@ -446,33 +494,50 @@ const Dashboard = () => {
                 {Number.isFinite(Number(r?.strength)) ? Number(r.strength) : '—'}
               </span>
 
-              <span className="actions">
+              <span className="actions25" style={{ textAlign: 'center' }}>
                 <button
+                  className="action-btn25 download-btn25"
+
                   onClick={() => handleDownloadClick(r)}
                   disabled={!canDownload}
-                  style={{
-                    opacity: canDownload ? 1 : 0.5,
-                    cursor: canDownload ? 'pointer' : 'not-allowed',
-                    backgroundColor: canDownload ? '' : '#e9ecef'
-                  }}
-                  title={!canDownload ? `Download limit reached (${usageData.downloadsUsed}/${usageData.downloadLimit})` : ''}
+                  title={!canDownload ? `Download limit reached (${usageData.downloadsUsed}/${usageData.downloadLimit})` : 'Download'}
                 >
-                  {subscriptionStatus === 'paid' ? 'Download ' : `Download (${usageData.downloadLimit - usageData.downloadsUsed} left)`}
+                  <img src="download-icon.png" alt="Download" className="icon25" />
+                  {subscriptionStatus === 'paid' ? '' : ` (${usageData.downloadLimit - usageData.downloadsUsed})`}
                 </button>
 
-                <button onClick={() => handleShareClick(r)}>Link</button>
+                <button
+                  className="action-btn25 share-btn25"
+                  onClick={() => canShare ? handleShareClick(r) : navigate('/subscription')}
+                  disabled={!canShare}
+                  style={{
+                    opacity: canShare ? 1 : 0.5,
+                    cursor: canShare ? 'pointer' : 'not-allowed',
+                    backgroundColor: canShare ? '' : '#e9ecef'
+                  }}
+                  title={canShare ? 'URL' : 'Link sharing is a Pro feature'}
+                >
+                  <img src="share-icon.png" alt="Share" className="icon25" />
+                </button>
 
                 <button
+                  className="action-btn25 ats-btn25"
                   onClick={() => handleATSCheck(r)}
                   disabled={!canUseATS}
-                  style={{
-                    opacity: canUseATS ? 1 : 0.5,
-                    cursor: canUseATS ? 'pointer' : 'not-allowed',
-                    backgroundColor: canUseATS ? '' : '#e9ecef'
-                  }}
-                  title={!canUseATS ? `ATS check limit reached (${usageData.atsChecksUsed}/${usageData.atsLimit})` : ''}
+                  title={!canUseATS ? `Resumix ATS check limit reached (${usageData.atsChecksUsed}/${usageData.atsLimit})` : 'Resumix ATS'}
                 >
-                  {subscriptionStatus === 'paid' ? 'ATS Check ' : `ATS Check (${usageData.atsLimit - usageData.atsChecksUsed} left)`}
+                  <img src="ats-icon.png" alt="ATS Check" className="icon25" />
+                  {subscriptionStatus === 'paid' ? '' : ` (${usageData.atsLimit - usageData.atsChecksUsed})`}
+                </button>
+
+                <button
+                  className="action-btn25 delete-btn25"
+                  onClick={() => handleRemoveClick(r)}
+                  disabled={deletingId === r._id}
+                  title="Delete"
+                >
+                  <img src="delete-icon.png" alt="Delete" className="icon25" />
+                  {deletingId === r._id ? 'Removing…' : ''}
                 </button>
               </span>
             </div>
@@ -532,11 +597,12 @@ const Dashboard = () => {
                   <div className="info-line">School Name: {edu.institution}</div>
                   <div className="info-line">Degree: {edu.degree}</div>
                   <div className="info-line">Field of Study: {edu.fieldOfStudy}</div>
-                  <div className="info-line">Graduation: {edu.graduationDate}</div>
+                  <div className="info-line">Graduation: {new Date(edu.graduationDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
+
                   <div className="info-line">City: {edu.city}</div>
                   <div className="info-line">State: {edu.state}</div>
-                  <div className="info-line">Start Date: {edu.startDate}</div>
-                  <div className="info-line">End Date: {edu.endDate}</div>
+                  <div className="info-line">Start Date: {new Date(edu.startDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
+                  <div className="info-line">End Date: {new Date(edu.endDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
                 </div>
               ))}
             </div>
@@ -550,8 +616,8 @@ const Dashboard = () => {
                   <div className="info-line">Job Title: {exp.jobTitle}</div>
                   <div className="info-line">City: {exp.city}</div>
                   <div className="info-line">State: {exp.state}</div>
-                  <div className="info-line">Start Date: {exp.startDate}</div>
-                  <div className="info-line">End Date: {exp.endDate}</div>
+                  <div className="info-line">Start Date: {new Date(exp.startDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
+                  <div className="info-line">End Date: {new Date(exp.endDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
                   <div className="info-line">Job Description: {exp.description}</div>
                 </div>
               ))}
@@ -578,7 +644,7 @@ const Dashboard = () => {
                 <div key={index} className="info-subbox">
                   <div className="info-line">Title: {ach.title}</div>
                   <div className="info-line">Organization: {ach.organization}</div>
-                  <div className="info-line">Date Received: {ach.dateReceived}</div>
+                  <div className="info-line">Date Received: {new Date(ach.dateReceived).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
                   <div className="info-line">Category: {ach.category}</div>
                   <div className="info-line">Description: {ach.description}</div>
                   <div className="info-line">Link: {ach.website}</div>
@@ -649,10 +715,22 @@ const Dashboard = () => {
       <DownloadResumeModal
         isOpen={isDownloadModalOpen}
         onClose={handleCloseModal}
+        onConfirmDownload={handleConfirmDownload}
         resumeName={resumeName}
         downloadLink={downloadLink}
-        downloadFileName={`${fileSafe(resumeName)}.pdf`}   // filename from title
+        downloadFileName={`${fileSafe(resumeName)}.pdf`}
       />
+      <DeleteConfirmationModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onDelete={handleDelete}
+      >
+        {deleteError && (
+          <p className="error-text" style={{ marginTop: 8 }}>
+            {deleteError}
+          </p>
+        )}
+      </DeleteConfirmationModal>
     </div>
   );
 };

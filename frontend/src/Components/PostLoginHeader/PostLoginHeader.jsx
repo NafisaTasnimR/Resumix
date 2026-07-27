@@ -2,6 +2,9 @@ import './PostLoginHeader.css';
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { getAuthToken } from '../../utils/auth';
+
+const API_BASE = process.env.REACT_APP_API_URL || '';
 
 const PostLoginHeader = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -17,9 +20,9 @@ const PostLoginHeader = () => {
 
   const fetchSubscriptionStatus = async () => {
     try {
-      const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
+      const token = getAuthToken();
       console.log(' Token found:', token ? 'Yes' : 'No');
-      
+
       if (!token) {
         console.log(' No token found, setting to free');
         setSubscriptionStatus('free');
@@ -28,7 +31,7 @@ const PostLoginHeader = () => {
       }
 
       console.log(' Fetching subscription status...');
-      const response = await fetch('http://localhost:5000/api/payment/subscription-status', {
+      const response = await fetch(`${API_BASE}/api/payment/subscription-status`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -37,7 +40,7 @@ const PostLoginHeader = () => {
       });
 
       console.log(' Response status:', response.status);
-      
+
       if (response.ok) {
         const data = await response.json();
         console.log(' Subscription data:', data);
@@ -93,13 +96,13 @@ const PostLoginHeader = () => {
 
   const handleBuildClick = async () => {
     try {
-      const token = localStorage.getItem('token') || '';
+      const token = getAuthToken();
       if (!token) {
         navigate('/profile');
         return;
       }
 
-      const { data } = await axios.get('http://localhost:5000/info/userInformation', {
+      const { data } = await axios.get(`${API_BASE}/info/userInformation`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -109,7 +112,7 @@ const PostLoginHeader = () => {
       const hasExp = Array.isArray(rd.experience) && rd.experience.length > 0;
 
       if (hasPI || hasEdu || hasExp) {
-        navigate('/templates'); 
+        navigate('/templates');
       } else {
         navigate('/profile');
       }
@@ -135,7 +138,7 @@ const PostLoginHeader = () => {
           </div>
 
           <div className="nav-center">
-            <Link to="/resumes">Resumes</Link>
+
             <Link to="/templates">Templates</Link>
             <Link to="/subscription">Subscription</Link>
           </div>
@@ -187,9 +190,9 @@ const PostLoginHeader = () => {
   .hero-floating img { display: block; width: 100%; height: auto; border-radius: 10px; }
 
   /* reduced individual card widths */
-  .hero-floating .tpl-1 { top: 8%; left: -4%;    width: 59%; } 
-  .hero-floating .tpl-2 { top: 25%; left: 40%;  width: 63%; animation-duration: 4s; animation-delay: -0.6s; } 
-  .hero-floating .tpl-3 { top: 45%; left: 8%;  width: 59%; animation-duration: 4s; animation-delay: -1s; }  
+  .hero-floating .tpl-1 { top: 14%; left: -4%;    width: 59%; } 
+  .hero-floating .tpl-2 { top: 26%; left: 40%;  width: 63%; animation-duration: 4s; animation-delay: -0.6s; } 
+  .hero-floating .tpl-3 { top: 46%; left: 8%;  width: 59%; animation-duration: 4s; animation-delay: -1s; }  
 
   /* keep the slight rotations */
   .hero-floating .tpl-1 .card { transform: rotate(-12deg); }
@@ -265,8 +268,8 @@ const PostLoginHeader = () => {
           <div className="step-card">
             <img src="/download1.png" alt="Download" />
             <div className="step-label">STEP 4</div>
-            <h3>Share as PDF or Web</h3>
-            <p>Download your polished resume in the preferred file format.</p>
+            <h3>Share as PDF or URL</h3>
+            <p>Download your polished resume in PDF format.</p>
           </div>
         </div>
       </section>

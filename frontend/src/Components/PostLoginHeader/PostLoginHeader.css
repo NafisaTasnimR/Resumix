@@ -144,8 +144,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 60px 20px;
+  padding: 70px 18px 135px;
   color: black;
+  background: #fff;
+}
+
+@media (max-width: 900px) {
+  .hero-preview {
+    padding-bottom: 180px;    /* a bit more space on small screens */
+  }
 }
 
 .image-container {
@@ -385,3 +392,11 @@
   color: #98968a;            /* keep your hover color change */
 }
 
+/* Add extra space before the first hero headline */
+.content-container h1:first-of-type {
+  margin-top: 50px;   /* adjust this number until it looks centered */
+}
+
+.content-container {
+  padding-top: 80px;   /* increases space before the first line */
+}

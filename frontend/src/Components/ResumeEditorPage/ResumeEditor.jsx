@@ -5,6 +5,19 @@ import axios from 'axios';
 import QuestionBox from './QuestionBox';
 import Preview from './Preview';
 import ProgressLine from './ProgressLine';
+import { getAuthToken } from '../../utils/auth';
+// Add near the top of ResumeEditor.jsx (adjust paths/names to your assets)
+import icPersonal from '../../assets/icons8-account-48.png';
+import icEducation from '../../assets/icons8-graduation-cap-48.png';
+import icExperience from '../../assets/icons8-briefcase-48.png';
+import icSkills from '../../assets/icons8-bulleted-list-48.png';
+import icAchievements from '../../assets/icons8-trophy-48.png';
+import icReferences from '../../assets/icons8-address-book-48.png';
+import icHobbies from '../../assets/icons8-joystick-48.png';
+import icAdditional from '../../assets/icons8-document-48.png';
+
+const API_BASE = process.env.REACT_APP_API_URL || '';
+
 
 /* ---------------------------------------------
    Field indexes (maps backend fields → question order)
@@ -20,24 +33,24 @@ const FIELD_INDEX = {
   additional: { content: 0, sectionTitle: 0 }
 };
 /* Questions per section*/
-const personalQuestions = ["Full Name?", "Professional Email?", "Date of Birth?", "Phone?", "Address?", "City?", "District?", "Country?", "Zip Code?"];
-const educationQuestions = ["Your Degree?", "Your Field of Study?", "Your Institution?", "Start Date of Education?", "End Date of Education?", "Current Status of Education?"];
-const experienceQuestions = ["Job Title?", "Employer Name?", "Job Location?", "Start Date of Job?", "End Date of Job?", "Is this your current job?", "Your Responsibilities?"];
+const personalQuestions = ["Full Name?", "Professional Email?", "Date of Birth? (yyyy-mm-dd)", "Phone?", "Address?", "City?", "District?", "Country?", "Zip Code?"];
+const educationQuestions = ["Your Degree?", "Your Field of Study?", "Your Institution?", "Start Date of Education? (yyyy-mm-dd)", "End Date of Education? (yyyy-mm-dd)", "Current Status of Education?"];
+const experienceQuestions = ["Job Title?", "Employer Name?", "Job Location?", "Start Date of Job? (yyyy-mm-dd)", "End Date of Job? (yyyy-mm-dd)", "Is this your current job?", "Your Responsibilities?"];
 const skillQuestions = ["Skill Name?", "Skill Proficiency?", "Years of Experience?", "Skills Description?"];
-const achievementQuestions = ["Achievement Title?", "Organization (optional)?", "Date Received?", "Category (e.g., Award, Certification)?", "Description?", "Website (optional)?"];
+const achievementQuestions = ["Achievement Title?", "Organization (optional)?", "Date Received? (yyyy-mm-dd)", "Category (e.g., Award, Certification)?", "Description?", "Website (optional)?"];
 const referenceQuestions = ["Referee Name?", "Referee Designation?", "Referee Organization?", "Referee Email?", "Referee Phone?"];
 const hobbyQuestions = ["Your Hobbies?"];
 const additionalInfoQuestions = ["Additional Information?"];
 
 const SECTION_LIST = [
-  { key: "personal", label: "Personal", repeatable: false, qs: personalQuestions },
-  { key: "education", label: "Education", repeatable: true, qs: educationQuestions },
-  { key: "experience", label: "Experience", repeatable: true, qs: experienceQuestions },
-  { key: "skills", label: "Skills", repeatable: true, qs: skillQuestions },
-  { key: "achievements", label: "Achievements", repeatable: true, qs: achievementQuestions },
-  { key: "references", label: "References", repeatable: true, qs: referenceQuestions },
-  { key: "hobbies", label: "Hobbies", repeatable: true, qs: hobbyQuestions },
-  { key: "additional", label: "Additional", repeatable: true, qs: additionalInfoQuestions },
+  { key: "personal", label: "Personal", repeatable: false, icon: icPersonal, qs: personalQuestions },
+  { key: "education", label: "Education", repeatable: true, icon: icEducation, qs: educationQuestions },
+  { key: "experience", label: "Experience", repeatable: true, icon: icExperience, qs: experienceQuestions },
+  { key: "skills", label: "Skills", repeatable: true, icon: icSkills, qs: skillQuestions },
+  { key: "achievements", label: "Achievements", repeatable: true, icon: icAchievements, qs: achievementQuestions },
+  { key: "references", label: "References", repeatable: true, icon: icReferences, qs: referenceQuestions },
+  { key: "hobbies", label: "Hobbies", repeatable: true, icon: icHobbies, qs: hobbyQuestions },
+  { key: "additional", label: "Additional", repeatable: true, icon: icAdditional, qs: additionalInfoQuestions },
 ];
 
 /* ---------------------------------------------
@@ -236,8 +249,8 @@ const ResumeEditor = () => {
 
     const loadDefault = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/viewInformation/userInformation', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token') || ''}` }
+        const res = await axios.get(`${API_BASE}/viewInformation/userInformation`, {
+          headers: { Authorization: `Bearer ${getAuthToken()}` }
         });
         const d = res?.data?.defaultResumeData || {};
 
@@ -354,12 +367,12 @@ const ResumeEditor = () => {
     const resumeId = location.state?.resumeId;
     if (!resumeId) return;
 
-    const token = localStorage.getItem("token") || "";
+    const token = getAuthToken();
     let cancelled = false;
 
     (async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5000/resume/${resumeId}`, {
+        const { data } = await axios.get(`${API_BASE}/resume/${resumeId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -449,7 +462,7 @@ const ResumeEditor = () => {
 
         // 2) fetch template parts by templateId (for initial preview)
         if (data?.templateId) {
-          const parts = await axios.get(`http://localhost:5000/preview/api/template/parts/${data.templateId}`, {
+          const parts = await axios.get(`${API_BASE}/preview/api/template/parts/${data.templateId}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           if (cancelled) return;
@@ -694,7 +707,7 @@ const ResumeEditor = () => {
     if (saving) return;
     try {
       setSaving(true);
-      const token = localStorage.getItem('token') || '';
+      const token = getAuthToken();
 
       // Schema-only payload and correct template source
       const payload = {
@@ -713,7 +726,7 @@ const ResumeEditor = () => {
           hobbies: (resumeData.hobbies || []).map(e => ({ ...e })),
           additionalInfos: (resumeData.additionalInfos || []).map(e => ({ ...e })),
           projects: [],
-          theme: { 
+          theme: {
             accent: accentColor || resumeData?.theme?.accent || '',
             fontFamily: fontFamily || resumeData?.theme?.fontFamily || '',
             fontCssUrl: fontCssUrl || resumeData?.theme?.fontCssUrl || ''
@@ -722,7 +735,7 @@ const ResumeEditor = () => {
       };
 
       await axios.post(
-        'http://localhost:5000/resume/create',
+        `${API_BASE}/resume/create`,
         payload,
         { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` } }
       );
@@ -738,7 +751,7 @@ const ResumeEditor = () => {
     if (saving) return;
     try {
       setSaving(true);
-      const token = localStorage.getItem('token') || '';
+      const token = getAuthToken();
       const resumeId = location.state?.resumeId;
 
       const payload = {
@@ -747,16 +760,16 @@ const ResumeEditor = () => {
         templateId: (location.state?.templateId ?? templateId),
         ResumeData: {
           ...resumeData,
-          theme: { 
+          theme: {
             accent: accentColor || resumeData?.theme?.accent || '',
             fontFamily: fontFamily || resumeData?.theme?.fontFamily || '',
-            fontCssUrl: fontCssUrl || resumeData?.theme?.fontCssUrl || '' 
+            fontCssUrl: fontCssUrl || resumeData?.theme?.fontCssUrl || ''
           }
         }
       };
 
       await axios.patch(
-        `http://localhost:5000/resume/updateResume/${resumeId}`,
+        `${API_BASE}/resume/updateResume/${resumeId}`,
         payload,
         { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` } }
       );
@@ -785,7 +798,7 @@ const ResumeEditor = () => {
           {titleDropdownOpen && (
             <div className="title-edit-dropdown active" id="titleDropdown">
               <input type="text" id="titleInput" defaultValue={title} />
-              <button className="edit-btn1" onClick={saveTitle}>Edit</button>
+              <button className="edit-btn1" onClick={saveTitle}>Confirm</button>
             </div>
           )}
         </div>
@@ -841,12 +854,12 @@ const ResumeEditor = () => {
         rawTemplate={templateHtml}
         templateCss={templateCss}
         resumeData={{
-           ...resumeData,
-           theme: {
-              accent: accentColor || resumeData?.theme?.accent || '',
-              fontFamily: fontFamily || resumeData?.theme?.fontFamily || '',
-              fontCssUrl: fontCssUrl || resumeData?.theme?.fontCssUrl || '' 
-            }
+          ...resumeData,
+          theme: {
+            accent: accentColor || resumeData?.theme?.accent || '',
+            fontFamily: fontFamily || resumeData?.theme?.fontFamily || '',
+            fontCssUrl: fontCssUrl || resumeData?.theme?.fontCssUrl || ''
+          }
         }}
         onSectionClick={handleSectionClick}
       />
