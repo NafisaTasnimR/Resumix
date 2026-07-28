@@ -6,7 +6,15 @@ import DownloadResumeModal from '../ResumeListPage/DownloadResumeModal';
 import DeleteConfirmationModal from '../ResumeListPage/DeleteConfirmationModal';
 import TopBar from '../ResumeEditorPage/TopBar';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
+
+// NOTE: this app runs on CRA/webpack, not Vite, so `import.meta.env` is
+// never defined here; that made this always evaluate to the fallback
+// below anyway. Simplified to the same effective value (also makes the
+// file parseable by Jest's CommonJS transform, which chokes on `import.meta`).
+
 import { clearAuthTokens, getAuthToken, isAuthError } from '../../utils/auth';
+
 
 const API_BASE = process.env.REACT_APP_API_URL || '';
 
