@@ -1,16 +1,3 @@
-/**
- * TODO-7: Failed to initialize payment when attempting to purchase a Pro
- * subscription (Due: 20 Aug 2026, medium).
- *
- * Source: frontend/src/Components/PaymentInfo/PaymentInfo.jsx -> createPaymentIntent()
- * Any non-ok response (missing/invalid token, Stripe error, server 500,
- * network failure) from POST /api/payment/create-payment-intent is caught
- * and rendered as the generic "Failed to initialize payment" message, with
- * no retry action and a silent fallback to a fake "Demo User".
- *
- * See also: backend/tests/todo7.payment-init.test.js for the server-side
- * contract this screen depends on.
- */
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
@@ -66,8 +53,6 @@ describe('TODO-7: payment initialization failure handling', () => {
 
     await screen.findByText(/Failed to initialize payment/i, {}, { timeout: 3000 });
 
-    // BUG: the user is silently handed a checkout form pretending to be
-    // "Demo User" / demo@example.com instead of being blocked or offered a retry.
     expect(screen.getByRole('button', { name: /Get My Subscription/i })).toBeInTheDocument();
   });
 
@@ -80,8 +65,6 @@ describe('TODO-7: payment initialization failure handling', () => {
     renderPaymentInfo();
     await screen.findByText(/Failed to initialize payment/i, {}, { timeout: 3000 });
 
-    // Encodes desired UX: a "Retry" / "Try again" affordance once TODO-7 is
-    // addressed, instead of a dead-end error with a demo-mode checkout form.
     expect(screen.queryByRole('button', { name: /retry|try again/i })).toBeInTheDocument();
   });
 

@@ -1,21 +1,3 @@
-/**
- * TODO-7: Failed to initialize payment when attempting to purchase a Pro
- * subscription (Due: 20 Aug 2026, medium).
- *
- * Source: backend/routes/PaymentRouter.js -> POST /api/payment/create-payment-intent
- * and frontend/src/Components/PaymentInfo/PaymentInfo.jsx -> createPaymentIntent()
- * which shows "Failed to initialize payment" whenever the fetch throws or
- * `response.ok` is false (e.g. bad/missing STRIPE_SECRET_KEY, Stripe API
- * error, or an already-active subscription).
- *
- * PaymentRouter.js declares its handlers inline on the router (not as
- * separately exported functions), so instead of supertest/HTTP we pull the
- * middleware chain straight off the Router instance with `getRouteHandlers`
- * and run it with the hand-built req/res helper (see tests/helpers/callRoute.js).
- *
- * See also: frontend/src/tests/todo7.PaymentInfo.test.jsx for the client
- * side of this same bug.
- */
 process.env.JWT_SECRET = process.env.JWT_SECRET || 'test-jwt-secret';
 process.env.STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || 'sk_test_dummy';
 
@@ -33,13 +15,10 @@ const UserModel = require('../models/User');
 const stripeFactory = require('stripe');
 const paymentRouter = require('../routes/PaymentRouter');
 
-// PaymentRouter.js constructs its Stripe client once at require-time
-// (`stripe(process.env.STRIPE_SECRET_KEY)`), and Node caches the module, so
-// there is exactly one mocked Stripe instance for the whole file.
 const stripeInstance = stripeFactory.mock.results[0].value;
 const CHAIN = getRouteHandlers(paymentRouter, 'POST', '/create-payment-intent');
 
-describe('TODO-7: create-payment-intent', () => {
+describe('create-payment-intent', () => {
   let token;
 
   beforeEach(() => {
