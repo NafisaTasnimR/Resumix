@@ -135,6 +135,7 @@ const LoginSignup = ({ mode }) => {
         <div className="inputs">
           <div className="input">
             <input
+              id="email"
               type="email"
               placeholder="Email"
               value={email}
@@ -144,6 +145,7 @@ const LoginSignup = ({ mode }) => {
 
           <div className="password-input-wrapper">
             <input
+              id="password"
               type={showPassword ? "text" : "password"}
               placeholder="Password"
               value={password}
@@ -178,6 +180,7 @@ const LoginSignup = ({ mode }) => {
 
               <div className="password-input-wrapper">
                 <input
+                  id="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm Password"
                   value={confirmPassword}
@@ -198,13 +201,13 @@ const LoginSignup = ({ mode }) => {
           )}
 
           {isMismatch && (
-            <div className="error-text">Passwords do not match</div>
+            <div id="mismatchError" className="error-text">Passwords do not match</div>
           )}
-          {error && <div className="error-text">{error}</div>}
-          {message && <div className="success-text">{message}</div>}
+          {error && <div id="errorMessage" className="error-text">{error}</div>}
+          {message && <div id="successMessage" className="success-text">{message}</div>}
 
           <div className="submit-container">
-            <div className="submit" onClick={handleSubmit}>Submit</div>
+            <div id="submitBtn" className="submit" onClick={handleSubmit}>Submit</div>
           </div>
         </div>
 
@@ -228,9 +231,9 @@ const LoginSignup = ({ mode }) => {
 
         <div className="switch-action">
           {action === "Sign Up" ? (
-            <p>Already have an account? <span onClick={() => setAction("Login")}>Login</span></p>
+            <p>Already have an account? <span id="switchToLogin" onClick={() => setAction("Login")}>Login</span></p>
           ) : (
-            <p>Don't have an account? <span onClick={() => setAction("Sign Up")}>Sign Up</span></p>
+            <p>Don't have an account? <span id="switchToSignup" onClick={() => setAction("Sign Up")}>Sign Up</span></p>
           )}
         </div>
       </div>
