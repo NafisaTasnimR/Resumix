@@ -1,0 +1,14 @@
+{
+  "name": "resumix-selenium-tests",
+  "version": "1.0.0",
+  "description": "End-to-end Selenium WebDriver tests for the Resumix web app",
+  "private": true,
+  "scripts": {
+    "test": "mocha tests/**/*.test.js"
+  },
+  "dependencies": {
+    "selenium-webdriver": "^4.27.0",
+    "mocha": "^10.7.3",
+    "dotenv": "^16.4.5"
+  }
+}
