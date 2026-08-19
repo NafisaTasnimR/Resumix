@@ -26,7 +26,6 @@ const UserSchema = new schema({
     default: 'free'
   },
 
-  // Add subscription tracking fields
   subscriptionStartDate: {
     type: Date,
     default: null
@@ -47,8 +46,11 @@ const UserSchema = new schema({
     amount: Number,
     currency: String,
     paymentDate: Date,
-    subscriptionDuration: Number // in days
+    subscriptionDuration: Number 
   }],
+
+  downloadCount: { type: Number, default: 0 },
+  atsCheckCount: { type: Number, default: 0 },
 
   createdAt: {
     type: Date,
@@ -58,9 +60,9 @@ const UserSchema = new schema({
   defaultResumeData: {
     personalInfo: {
       fullName: { type: String, default: '' },
-      professionalEmail: { type: String, default: ''},
+      professionalEmail: { type: String, default: '' },
       dateOfBirth: { type: Date },
-      phone: { type: String},
+      phone: { type: String },
       address: { type: String, default: '' },
       city: { type: String, default: '' },
       district: { type: String, default: '' },
@@ -195,13 +197,13 @@ const UserSchema = new schema({
 });
 
 // Method to check if user has active subscription
-UserSchema.methods.hasActiveSubscription = function() {
+UserSchema.methods.hasActiveSubscription = function () {
   const now = new Date();
   return this.isSubscriptionActive && this.subscriptionEndDate && this.subscriptionEndDate > now;
 };
 
 // Method to activate subscription
-UserSchema.methods.activateSubscription = function(durationInDays = 14) {
+UserSchema.methods.activateSubscription = function (durationInDays = 14) {
   const now = new Date();
   this.userType = 'paid';
   this.isSubscriptionActive = true;
@@ -210,7 +212,7 @@ UserSchema.methods.activateSubscription = function(durationInDays = 14) {
 };
 
 // Method to deactivate subscription
-UserSchema.methods.deactivateSubscription = function() {
+UserSchema.methods.deactivateSubscription = function () {
   this.userType = 'free';
   this.isSubscriptionActive = false;
   this.subscriptionEndDate = null;

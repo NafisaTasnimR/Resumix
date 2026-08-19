@@ -4,11 +4,10 @@ const { prepareTemplateHtml } = require('../services/TemplateRenderService');
 
 // Utility: build a frontend-facing URL for outsiders to open
 function buildPublicUrl(req, token) {
-  // Prefer explicit env var; fallback to same host as API
-  const base =
-    process.env.PUBLIC_VIEW_BASE || // e.g., http://localhost:5173/public/resume
-    `${req.protocol}://${req.get('host')}/public/resume`;
-  return `${base}/${token}`;
+  const clientUrl = (process.env.CLIENT_URL || '').replace(/\/$/, '');
+  const base = clientUrl || `${req.protocol}://${req.get('host')}`;
+  const publicBase = `${base}/public/resume`;
+  return `${publicBase}/${token}`;
 }
 
 // POST /resume/:id/share  (auth) -> create or rotate a token

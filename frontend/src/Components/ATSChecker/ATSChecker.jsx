@@ -4,6 +4,9 @@ import { useNavigate, useLocation, useSearchParams, useParams } from 'react-rout
 import TopBar from '../ResumeEditorPage/TopBar';
 import { calculateAtsScore, generateSuggestions } from './ATSLogic';
 import axios from 'axios';
+import { getAuthToken } from '../../utils/auth';
+
+const API_BASE = process.env.REACT_APP_API_URL || '';
 
 /* ---------- Donut score ring ---------- */
 const ScoreRing = ({ value = 0, size = 140, thickness = 16, color = '#22C55E', track = '#E5F5EA' }) => {
@@ -55,8 +58,8 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
   useEffect(() => {
     if (resume || !resolvedId || propResumeData) return;
     setLoading(true);
-    const token = localStorage.getItem('token') || '';
-    axios.get(`http://localhost:5000/resume/${resolvedId}`, { headers: { Authorization: `Bearer ${token}` } })
+    const token = getAuthToken();
+    axios.get(`${API_BASE}/resume/${resolvedId}`, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => setResume(res.data))
       .catch(err => {
         const st = err?.response?.status;
@@ -83,10 +86,10 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
     setSuggTotalGain(totalPotentialGain || 0);
 
     // Persist strength (score) to backend if changed
-    const token = localStorage.getItem('token') || '';
+    const token = getAuthToken();
     if (Number(resume?.strength) === Number(score)) return;
     axios.patch(
-      `http://localhost:5000/resume/updateResume/${resolvedId}`,
+      `${API_BASE}/resume/updateResume/${resolvedId}`,
       { strength: score },
       { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` } }
     ).catch(err => console.error('Error updating strength:', err));
@@ -152,7 +155,7 @@ const ATSChecker = ({ resumeData: propResumeData, resumeId: propResumeId }) => {
     );
   }
 
-  const improvements = suggItems; 
+  const improvements = suggItems;
 
   return (
     <div className="resume-checker">

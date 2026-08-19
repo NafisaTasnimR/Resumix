@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import './SettingsPage.css';
 import TopBar from '../ResumeEditorPage/TopBar';
 import axios from 'axios';
+import { getAuthToken } from '../../utils/auth';
+
+const API_BASE = process.env.REACT_APP_API_URL || '';
 
 // Decode JWT to fall back to account email if backend omits it
 function decodeJwt(token) {
@@ -15,17 +18,47 @@ function decodeJwt(token) {
 
 const SettingsPage = () => {
   const [profile, setProfile] = useState({ username: '', email: '', userType: 'free' });
+  const [subscriptionStatus, setSubscriptionStatus] = useState('free');
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState('');
 
+  // Fetch subscription status
+  const fetchSubscriptionStatus = async () => {
+    try {
+      const token = getAuthToken();
+
+      if (!token) {
+        setSubscriptionStatus('free');
+        return;
+      }
+
+      const response = await fetch(`${API_BASE}/api/payment/subscription-status`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setSubscriptionStatus(data.hasActiveSubscription ? 'paid' : 'free');
+      } else {
+        setSubscriptionStatus('free');
+      }
+    } catch (error) {
+      console.error('Error fetching subscription status:', error);
+      setSubscriptionStatus('free');
+    }
+  };
+
   useEffect(() => {
-    const token =
-      localStorage.getItem('token') || sessionStorage.getItem('token');
+    const token = getAuthToken();
     const tokenEmail = token ? decodeJwt(token)?.email : '';
 
     const loadUser = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/info/userInformation', {
+        const res = await axios.get(`${API_BASE}/info/userInformation`, {
           headers: {
             'Content-Type': 'application/json',
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -39,6 +72,9 @@ const SettingsPage = () => {
           email: u?.email || tokenEmail || '',
           userType: u?.userType || 'free',
         });
+
+        // Fetch actual subscription status
+        await fetchSubscriptionStatus();
       } catch (e) {
         setErr(e.response?.data?.message || e.message || 'Failed to load');
       } finally {
@@ -48,8 +84,6 @@ const SettingsPage = () => {
 
     loadUser();
   }, []);
-
-  const pretty = (v) => (v ? String(v).toUpperCase() : '—');
 
   return (
     <div className="settings-container">
@@ -80,7 +114,9 @@ const SettingsPage = () => {
 
             <div className="settings-row">
               <span className="label">SUBSCRIPTION:</span>
-              <span className="value">{pretty(profile.userType)}</span>
+              <span className="value">
+                {subscriptionStatus === 'paid' ? 'PRO' : 'FREE'}
+              </span>
             </div>
           </>
         )}

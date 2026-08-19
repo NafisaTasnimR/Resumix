@@ -1,14 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import home from '../../assets/icons8-home-48.png';
+import { getAuthToken } from '../../utils/auth';
 
-const PANEL_WIDTH = 260;   // card width like your screenshot
-const PANEL_GAP   = 12;    // space below the hamburger
+const API_BASE = process.env.REACT_APP_API_URL || '';
 
 const TopBar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [menuPos, setMenuPos] = useState({ top: 0, left: 0 });
   // close on outside click / ESC
   const [subscriptionStatus, setSubscriptionStatus] = useState('free'); // 'free' or 'paid'
   const [loading, setLoading] = useState(true);
@@ -22,9 +21,9 @@ const TopBar = () => {
 
   const fetchSubscriptionStatus = async () => {
     try {
-      const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
+      const token = getAuthToken();
       console.log(' TopBar - Token found:', token ? 'Yes' : 'No');
-      
+
       if (!token) {
         console.log(' TopBar - No token found, setting to free');
         setSubscriptionStatus('free');
@@ -33,7 +32,7 @@ const TopBar = () => {
       }
 
       console.log(' TopBar - Fetching subscription status...');
-      const response = await fetch('http://localhost:5000/api/payment/subscription-status', {
+      const response = await fetch(`${API_BASE}/api/payment/subscription-status`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -42,7 +41,7 @@ const TopBar = () => {
       });
 
       console.log(' TopBar - Response status:', response.status);
-      
+
       if (response.ok) {
         const data = await response.json();
         console.log(' TopBar - Subscription data:', data);
@@ -63,7 +62,6 @@ const TopBar = () => {
   // Handlers
   const handleHomeClick = () => { navigate('/postlogin/'); };
   const handleDashboardClick = () => { navigate('/dashboard'); };
-  const handleResumeClick = () => { navigate('/resumes'); };
   const handleSegmentsClick = () => { navigate('/templates'); };
   const handleAccountClick = () => { navigate('/subscription'); };
   const handleSettingsClick = () => { navigate('/settings'); };
@@ -84,33 +82,8 @@ const TopBar = () => {
       document.removeEventListener('keydown', onEsc);
     };
   }, [open]);
-  
-  const positionMenu = () => {
-    const btn = hamburgerRef.current?.getBoundingClientRect();
-    if (!btn) return;
-    const vw = window.innerWidth;
 
-    // align panel’s right edge to the button’s right edge
-    let left = btn.right - PANEL_WIDTH;
-    // clamp inside viewport with 16px margin
-    left = Math.max(16, Math.min(left, vw - PANEL_WIDTH - 16));
-    const top = btn.bottom + PANEL_GAP;
-
-    setMenuPos({ top, left });
-  };
-
-  const toggleMenu = () => {
-    if (!open) positionMenu();
-    setOpen(v => !v);
-  };
-
-  const go = (path) => {
-    navigate(path);
-    setOpen(false);
-  };
-
-
-return (
+  return (
     <>
       <div className="top-bar">
         <div className="top-bar-title">

@@ -1,16 +1,41 @@
 import React from 'react';
 import CountryDropdown from './CountryDropdown';
 
+
+const validateDate = (date, type) => {
+  if (!date) return date; // Allow empty dates
+  
+  const selectedDate = new Date(date);
+  const today = new Date();
+  
+  if (type === 'birthDate' && selectedDate > today) {
+    alert("Birth date cannot be in the future!");
+    return '';
+  }
+  
+  return date;
+};
 const PersonalInfo = ({
   showAddressDetails,
   setShowAddressDetails,
   personalInfo,
   setPersonalInfo
 }) => {
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  // In PersonalInfo.jsx, update the handleChange function:
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  
+  // Add validation for birth date
+  if (name === 'dateOfBirth') {
+    const validatedValue = validateDate(value, 'birthDate');
+    if (validatedValue !== value) {
+      e.target.value = validatedValue; // Reset the input field
+    }
+    setPersonalInfo((prev) => ({ ...prev, [name]: validatedValue }));
+  } else {
     setPersonalInfo((prev) => ({ ...prev, [name]: value }));
-  };
+  }
+};
 
   const handleAddressClick = () => {
     setShowAddressDetails(true);

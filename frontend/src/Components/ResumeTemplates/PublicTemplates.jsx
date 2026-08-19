@@ -4,6 +4,8 @@ import axios from "axios";
 import "./ResumeTemplates.css";
 import "./TemplatePreview.css";
 
+const API_BASE = process.env.REACT_APP_API_URL || '';
+
 const BackTopBar = () => {
   const navigate = useNavigate();
   const [imgOk, setImgOk] = React.useState(true);
@@ -47,10 +49,10 @@ const BackTopBar = () => {
     <header style={barStyle}>
       {imgOk ? (
         <img
-          src="/arrow.png"           
+          src="/arrow.png"
           alt="Go back"
           style={iconImgStyle}
-          onClick={goBack}       
+          onClick={goBack}
           onError={() => setImgOk(false)}
           title="Go back"
         />
@@ -85,7 +87,7 @@ const TemplatePreviewGuest = ({ id, template }) => {
     <div className="template-preview" onClick={handleClick}>
       <div className="iframe-container">
         <iframe
-          src={`http://localhost:5000/preview/api/template/${id}`}
+          src={`${API_BASE}/preview/api/template/${id}`}
           title={template?.name || "Template"}
           className="preview-iframe"
           scrolling="no"
@@ -97,7 +99,7 @@ const TemplatePreviewGuest = ({ id, template }) => {
 };
 
 const PublicTemplates = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm] = useState("");
   const [currentFilter, setCurrentFilter] = useState("all");
   const [visibleCount, setVisibleCount] = useState(3);
   const [templatesData, setTemplatesData] = useState([]);
@@ -106,7 +108,7 @@ const PublicTemplates = () => {
   useEffect(() => {
     const fetchTemplates = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/preview/api/templates");
+        const res = await axios.get(`${API_BASE}/preview/api/templates`);
 
         const storedClicks = JSON.parse(localStorage.getItem("templateClicks") || "{}");
 
@@ -119,13 +121,13 @@ const PublicTemplates = () => {
           isPremium:
             template.isPremium ||
             index === 2 ||
-            index === 5 ||
+            index === 6 ||
             (template.filename &&
               (template.filename.includes("Resume3") ||
-                template.filename.includes("Resume6"))) ||
+                template.filename.includes("Resume7"))) ||
             (template.name &&
               (template.name.includes("Resume3") ||
-                template.name.includes("Resume6"))),
+                template.name.includes("Resume7"))),
         }));
 
         setTemplatesData(withClicks);
@@ -139,15 +141,6 @@ const PublicTemplates = () => {
 
     fetchTemplates();
   }, []);
-
-  const isNewTemplate = (template) => {
-    if (!template.createdAt && !template.dateAdded) return false;
-    const templateDate = new Date(template.createdAt || template.dateAdded);
-    const daysAgo = Math.floor((Date.now() - templateDate.getTime()) / 86400000);
-    const total = templatesData.length;
-    const newThreshold = Math.max(7, Math.ceil(total * 0.15));
-    return daysAgo <= newThreshold;
-  };
 
   const sortByPopularity = (templates) =>
     [...templates].sort((a, b) => (b.clickCount || 0) - (a.clickCount || 0));
@@ -173,9 +166,10 @@ const PublicTemplates = () => {
       case "popular":
         filtered = filtered.filter((t) => (t.clickCount || 0) > 0);
         return sortByPopularity(filtered);
-      case "new":
-        filtered = filtered.filter((t) => isNewTemplate(t));
-        return sortByDate(filtered);
+      case 'new':
+
+        const sortedByDate = sortByDate(filtered);
+        return sortedByDate.slice(0, 3);
       case "all":
       default:
         return sortByPopularity(filtered);
@@ -232,8 +226,8 @@ const PublicTemplates = () => {
             {currentFilter === "popular"
               ? "No popular templates at the moment."
               : currentFilter === "new"
-              ? "No new templates found."
-              : "No templates found."}
+                ? "No new templates found."
+                : "No templates found."}
           </div>
         ) : (
           visibleTemplates.map((template) => (

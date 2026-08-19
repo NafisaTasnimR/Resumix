@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import TopBar from '../ResumeEditorPage/TopBar';
+import { getAuthToken } from '../../utils/auth';
+
+const API_BASE = process.env.REACT_APP_API_URL || '';
 
 const SubscriptionPage = () => {
   const [selectedPlan, setSelectedPlan] = useState('free');
   const [subscriptionStatus, setSubscriptionStatus] = useState('free');
   const [subscriptionData, setSubscriptionData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   // Fetch subscription status on component mount
   useEffect(() => {
@@ -16,22 +19,22 @@ const SubscriptionPage = () => {
 
   const fetchSubscriptionStatus = async () => {
     try {
-      const token = localStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('token');
-      
+      const token = getAuthToken();
+
       if (!token) {
         setSubscriptionStatus('free');
         setLoading(false);
         return;
       }
 
-      const response = await fetch('http://localhost:5000/api/payment/subscription-status', {
+      const response = await fetch(`${API_BASE}/api/payment/subscription-status`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         setSubscriptionStatus(data.hasActiveSubscription ? 'paid' : 'free');
@@ -46,7 +49,7 @@ const SubscriptionPage = () => {
       setLoading(false);
     }
   };
-  
+
   const handleContinue = () => {
     navigate('/m/payment', { state: { selectedPlan } });
   };
@@ -77,9 +80,9 @@ const SubscriptionPage = () => {
       margin: 0,
       padding: 0
     }}>
-    
+
       <TopBar />
-      
+
       {/* Progress Bar - Only show for FREE users */}
       {subscriptionStatus === 'free' && (
         <div style={{
@@ -92,7 +95,7 @@ const SubscriptionPage = () => {
           backgroundColor: '#f8f9fa',
           marginTop: '80px'
         }}>
-          <div 
+          <div
             onClick={() => navigate('/postlogin/')}
             style={{
               display: 'flex',
@@ -119,7 +122,7 @@ const SubscriptionPage = () => {
             }}>✓</div>
             <span>Home Page</span>
           </div>
-          
+
           <div style={{
             display: 'flex',
             alignItems: 'center',
@@ -143,7 +146,7 @@ const SubscriptionPage = () => {
             }}>2</div>
             <span>Choose Access</span>
           </div>
-          
+
           <div style={{
             display: 'flex',
             alignItems: 'center',
@@ -167,7 +170,7 @@ const SubscriptionPage = () => {
             }}>3</div>
             <span>Payment Details</span>
           </div>
-          
+
           <div style={{
             display: 'flex',
             alignItems: 'center',
@@ -201,7 +204,7 @@ const SubscriptionPage = () => {
         padding: '20px 20px 60px 20px',
         marginTop: subscriptionStatus === 'paid' ? '100px' : '0'
       }}>
-        
+
         {/* Title changes based on subscription status */}
         <h1 style={{
           textAlign: 'center',
@@ -213,7 +216,7 @@ const SubscriptionPage = () => {
         }}>
           {subscriptionStatus === 'paid' ? 'Your Subscription' : 'Subscription Plans'}
         </h1>
-        
+
         {/* FOR PRO USERS - Show current subscription details */}
         {subscriptionStatus === 'paid' && subscriptionData && (
           <div style={{
@@ -242,14 +245,14 @@ const SubscriptionPage = () => {
               }}>
                 ACTIVE SUBSCRIPTION
               </div>
-              
+
               <h2 style={{
                 fontSize: '2.5rem',
                 fontWeight: 700,
                 color: '#212529',
                 margin: '20px 0 10px 0'
               }}>PRO Access</h2>
-              
+
               <p style={{
                 fontSize: '1.1rem',
                 color: '#6c757d',
@@ -299,7 +302,7 @@ const SubscriptionPage = () => {
             flexWrap: 'wrap'
           }}>
             {/* Free User Plan */}
-            <div 
+            <div
               style={{
                 background: 'white',
                 borderRadius: '16px',
@@ -323,7 +326,7 @@ const SubscriptionPage = () => {
                   margin: '20px 0 30px 0',
                   textAlign: 'center'
                 }}>Free User</h2>
-                
+
                 <div style={{
                   fontSize: '4rem',
                   fontWeight: 800,
@@ -338,7 +341,7 @@ const SubscriptionPage = () => {
                 <div>
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', fontSize: '16px', lineHeight: 1.5, color: '#495057' }}>
                     <span style={{ color: '#28a745', fontWeight: 'bold', fontSize: '18px', marginTop: '2px' }}>✓</span>
-                    Basic resume builder access 
+                    Basic resume builder access
                   </div>
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', fontSize: '16px', lineHeight: 1.5, color: '#495057' }}>
                     <span style={{ color: '#28a745', fontWeight: 'bold', fontSize: '18px', marginTop: '2px' }}>✓</span>
@@ -356,7 +359,7 @@ const SubscriptionPage = () => {
             </div>
 
             {/* 14-Day Access Plan */}
-            <div 
+            <div
               style={{
                 background: 'white',
                 borderRadius: '16px',
@@ -380,7 +383,7 @@ const SubscriptionPage = () => {
                   margin: '20px 0 30px 0',
                   textAlign: 'center'
                 }}>14-Day Access</h2>
-                
+
                 <div style={{
                   fontSize: '4rem',
                   fontWeight: 800,
@@ -406,7 +409,7 @@ const SubscriptionPage = () => {
                 </div>
               </div>
 
-              <button 
+              <button
                 style={{
                   width: '100%',
                   padding: '16px 24px',
@@ -421,9 +424,9 @@ const SubscriptionPage = () => {
                   color: selectedPlan === '14-day' ? 'white' : '#6c757d'
                 }}
                 onClick={(e) => {
-                  e.stopPropagation(); 
+                  e.stopPropagation();
                   setSelectedPlan('14-day');
-                  handleContinue(); 
+                  handleContinue();
                 }}
               >
                 CONTINUE
@@ -442,7 +445,7 @@ const SubscriptionPage = () => {
           }}>
             {subscriptionStatus === 'paid' ? 'Your Pro Features' : 'What You Get With Your Subscription'}
           </h2>
-          
+
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
@@ -462,9 +465,12 @@ const SubscriptionPage = () => {
               justifyContent: 'flex-start'
             }}>
               <div style={{
-                fontSize: '3rem',
-                marginBottom: '20px'
-              }}>📝</div>
+                marginBottom: '20px',
+                display: 'flex',
+                justifyContent: 'center'
+              }}>
+                <img src="Edit-Icon.png" alt="Unlimited Edits" style={{ width: '60px', height: '60px' }} />
+              </div>
               <h3 style={{
                 fontSize: '1.3rem',
                 fontWeight: 700,
@@ -478,7 +484,7 @@ const SubscriptionPage = () => {
                 fontSize: '15px'
               }}>Edit and download your resume in PDF.</p>
             </div>
-            
+
             <div style={{
               background: 'white',
               padding: '30px 20px',
@@ -491,23 +497,26 @@ const SubscriptionPage = () => {
               justifyContent: 'flex-start'
             }}>
               <div style={{
-                fontSize: '3rem',
-                marginBottom: '20px'
-              }}>📄</div>
+                marginBottom: '20px',
+                display: 'flex',
+                justifyContent: 'center'
+              }}>
+                <img src="template-icon.png" alt="All Templates" style={{ width: '60px', height: '60px' }} />
+              </div>
               <h3 style={{
                 fontSize: '1.3rem',
                 fontWeight: 700,
                 color: '#212529',
                 marginBottom: '16px',
                 lineHeight: 1.3
-              }}>All Templates &  Designs</h3>
+              }}>All Templates & Designs</h3>
               <p style={{
                 color: '#6c757d',
                 lineHeight: 1.6,
                 fontSize: '15px'
               }}>Choose from professionally designed templates optimized to beat ATS systems</p>
             </div>
-            
+
             <div style={{
               background: 'white',
               padding: '30px 20px',
@@ -520,9 +529,12 @@ const SubscriptionPage = () => {
               justifyContent: 'flex-start'
             }}>
               <div style={{
-                fontSize: '3rem',
-                marginBottom: '20px'
-              }}>✅</div>
+                marginBottom: '20px',
+                display: 'flex',
+                justifyContent: 'center'
+              }}>
+                <img src="resumix-check-icon.png" alt="Resume Check" style={{ width: '60px', height: '60px' }} />
+              </div>
               <h3 style={{
                 fontSize: '1.3rem',
                 fontWeight: 700,
@@ -534,9 +546,9 @@ const SubscriptionPage = () => {
                 color: '#6c757d',
                 lineHeight: 1.6,
                 fontSize: '15px'
-              }}>Unlimited access to ATS Checker that checks more than 30+ common issues and improvements</p>
+              }}>Unlimited access to ATS Checker that checks common issues and improvements</p>
             </div>
-            
+
             <div style={{
               background: 'white',
               padding: '30px 20px',
@@ -549,9 +561,12 @@ const SubscriptionPage = () => {
               justifyContent: 'flex-start'
             }}>
               <div style={{
-                fontSize: '3rem',
-                marginBottom: '20px'
-              }}>🔗</div>
+                marginBottom: '20px',
+                display: 'flex',
+                justifyContent: 'center'
+              }}>
+                <img src="url-icon.png" alt="Personalized URL" style={{ width: '60px', height: '60px' }} />
+              </div>
               <h3 style={{
                 fontSize: '1.3rem',
                 fontWeight: 700,
