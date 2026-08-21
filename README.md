@@ -5,11 +5,11 @@
 <p align="center">
   <img src="https://img.shields.io/badge/MERN-Stack-green" alt="MERN Stack" />
   <img src="https://img.shields.io/badge/Status-Deployed-brightgreen" alt="Status" />
-  <img src="https://img.shields.io/badge/License-MIT-blue" alt="License" />
 </p>
 
 <p align="center">
   <a href="#live-demo"><strong>Live Demo</strong></a> ·
+  <a href="#screenshots"><strong>Screenshots</strong></a> ·
   <a href="#features"><strong>Features</strong></a> ·
   <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
   <a href="#getting-started"><strong>Getting Started</strong></a>
@@ -37,30 +37,67 @@
 - [API Overview](#api-overview)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
-- [License](#license)
 - [Contact](#contact)
 
 ---
 
 ## Live Demo
 
-[View the deployed application](#) <!-- Replace # with your deployment link -->
+[View the deployed application](https://resumix-ten.vercel.app/)
 
 ---
 
 ## Screenshots
 
-<!-- Add screenshots of key pages below. Example format: -->
+A walkthrough of the core Resumix experience, from landing page to final resume export.
 
-| Landing Page | Dashboard |
-|:---:|:---:|
-| ![Landing Page](#) | ![Dashboard](#) |
+### 1. Landing Page
 
-| Resume Editor | Template Selection |
-|:---:|:---:|
-| ![Resume Editor](#) | ![Template Selection](#) |
+The entry point to Resumix, introducing the platform and its core value proposition.
 
-<!-- Replace the # links with actual image URLs or relative paths, e.g. ./assets/screenshots/dashboard.png -->
+![Landing Page](pages/landing-page.png)
+
+### 2. Dashboard
+
+A centralized overview of all resumes created by the user, along with account and subscription status.
+
+![Dashboard](pages/dashboard.png)
+
+### 3. Personal Information Entry
+
+Structured forms for capturing personal details, education, experience, skills, and achievements.
+
+![Add Info](pages/add-info.png)
+
+### 4. Template Selection
+
+A gallery of professional resume templates that users can preview and switch between instantly.
+
+![Templates](pages/templates.png)
+
+### 5. Resume Editor
+
+The core workspace where users edit resume content with a real-time preview of changes.
+
+![Resume Edit](pages/resume-edit.png)
+
+### 6. ATS Check
+
+Built-in ATS optimization that scores resume strength and provides actionable feedback.
+
+![ATS Check](pages/ats-check.png)
+
+### 7. Subscription Management
+
+Interface for viewing and upgrading subscription plans to unlock premium features.
+
+![Subscription](pages/subscription.png)
+
+### 8. Resume Preview & Share
+
+Final resume preview with options to download as PDF or share via a public, token-based link.
+
+![View Resume](pages/view-resume.png)
 
 ---
 
@@ -112,6 +149,7 @@
 **Testing**
 - Selenium — End-to-end automation tests
 
+
 ---
 
 ## Project Structure
@@ -134,8 +172,6 @@ Resumix/
 │       └── utils/            # Helper functions (Auth, API calls)
 └── selenium-tests/          # End-to-End Automation Tests
 ```
-
----
 
 
 ---
@@ -275,10 +311,3 @@ GitHub: [NishatTasnimPreownti](https://github.com/NishatTasnimPreownti)
 GitHub: [Mrittika150](https://github.com/Mrittika150)
 
 ---
-
-<p align="center">Built with the MERN Stack</p>
-
-
----
-
-## Project Structure
