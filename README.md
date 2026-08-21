@@ -307,7 +307,7 @@ GitHub: [NafisaTasnimR](https://github.com/NafisaTasnimR)
 **Nishat Tasnim**
 GitHub: [NishatTasnimPreownti](https://github.com/NishatTasnimPreownti)
 
-**Nishat Tasnim**
+**Mrittika Jahan**
 GitHub: [Mrittika150](https://github.com/Mrittika150)
 
 ---
